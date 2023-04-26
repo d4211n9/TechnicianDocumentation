@@ -4,7 +4,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import util.StylePaths;
 import util.ViewPaths;
 
 public class Main extends Application {
@@ -17,7 +16,6 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewPaths.LOGIN_VIEW));
         Parent root = loader.load();
         primaryStage.setScene(new Scene(root));
-        primaryStage.getScene().getStylesheets().add(StylePaths.LOGIN);
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
     }

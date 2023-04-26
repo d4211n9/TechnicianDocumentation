@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../stylesheets/Login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginController">
    <children>
       <Label fx:id="sideField" alignment="CENTER" contentDisplay="CENTER" layoutY="-1.0" prefHeight="400.0" prefWidth="243.0" />
       <ImageView fx:id="ivLogo" fitHeight="225.0" fitWidth="225.0" layoutX="14.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />

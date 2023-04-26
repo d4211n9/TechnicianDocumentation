@@ -12,7 +12,6 @@
 
 .button {
     -fx-background-color: #90AED6;
-    -fx-border-radius: 50;
 }
 
 .text-field, .password-field {
