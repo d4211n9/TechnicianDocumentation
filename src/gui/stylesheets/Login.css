@@ -1,0 +1,22 @@
+.root {
+    -fx-background-color: #333333;
+}
+
+.label {
+    -fx-text-fill: #90AED6;
+}
+
+#sideField {
+    -fx-background-color: #FFFFFF;
+}
+
+.button {
+    -fx-background-color: #90AED6;
+    -fx-border-radius: 50;
+}
+
+.text-field, .password-field {
+    -fx-background-color: #D9D9D9;
+    -fx-prompt-text-fill: #90AED6;
+    -fx-text-fill: #333333;
+}
