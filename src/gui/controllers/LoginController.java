@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController extends BaseController implements Initializable {
     @FXML
     private ImageView ivLogo;
     @FXML
@@ -37,17 +37,7 @@ public class LoginController implements Initializable {
 
     public void handleLogin(ActionEvent actionEvent) {
         //TODO Tjek for korrekt login før MainView loades
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewPaths.MAIN_VIEW));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            //TODO ErrorDisplayer
-        }
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        //stage.getScene().getStylesheets().add(StylePaths.LOGIN);
-        stage.show();
+        openStage(ViewPaths.MAIN_VIEW, "");
         close();
     }
 
