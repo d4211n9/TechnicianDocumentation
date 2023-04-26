@@ -2,19 +2,29 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="@../stylesheets/Main.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MainViewController">
    <left>
       <VBox fx:id="sidebar" prefHeight="200.0" prefWidth="120.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-            <JFXButton prefWidth="100.0" text="Log out">
+            <ImageView fx:id="ivLogo" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" top="10.0" />
+                  <Insets left="20.0" right="20.0" top="10.0" />
                </VBox.margin>
+            </ImageView>
+            <Pane VBox.vgrow="ALWAYS" />
+            <JFXButton onAction="#handleLogout" prefHeight="60.0" prefWidth="120.0" text="🚪 Log out" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </JFXButton>
          </children>
       </VBox>

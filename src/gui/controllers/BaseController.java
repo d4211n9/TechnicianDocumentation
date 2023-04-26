@@ -39,6 +39,26 @@ public class BaseController {
         return loader;
     }
 
+    /**
+     * Loads a new view to show in center
+     *
+     * @param fxmlPath, the path of the FXML to load
+     * @return FXMLLoader, in case a handle to the new controller is needed
+     */
+    public FXMLLoader loadView(String fxmlPath) {
+        //Load the new stage & view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        Parent root = null;
+
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            displayError(new GUIException("Failed to load view", e));
+        }
+
+        return loader;
+    }
+
     public void displayError(Throwable throwable) {
         FXMLLoader loader = openStage(ViewPaths.ERROR_DISPLAYER, "Error");
         ErrorDisplayController controller = loader.getController();

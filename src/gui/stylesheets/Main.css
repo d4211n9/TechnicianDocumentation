@@ -2,10 +2,28 @@
     -fx-background-color: #333333;
 }
 
+#sidebar {
+    -fx-background-color: #FFFFFF;
+}
+
 .label {
     -fx-text-fill: #90AED6;
 }
 
 .button {
-    -fx-background-color: #90AED6;
+    -fx-background-color: #000000;
+    -fx-text-fill: #FFFFFF;
+
+    -fx-padding: 10px;
+    -fx-border-insets: 10px;
+    -fx-background-insets: 10px;
+}
+
+.button:hover {
+    -fx-background-color: #000000;
+    -fx-text-fill: #90AED6;
+
+    -fx-padding: 10px;
+    -fx-border-insets: 10px;
+    -fx-background-insets: 10px;
 }
