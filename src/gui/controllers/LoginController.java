@@ -3,6 +3,7 @@ package gui.controllers;
 import be.SystemUser;
 import exceptions.DALException;
 import gui.models.ModelsHandler;
+import gui.util.MainControllerHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -52,7 +53,7 @@ public class LoginController extends BaseController implements Initializable {
 
         try {
             if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user) != null) {
-                openStage(ViewPaths.MAIN_VIEW, "");
+                MainControllerHandler.getInstance().getController();
                 close();
             } else {
                 //TODO Vis at noget gik galt

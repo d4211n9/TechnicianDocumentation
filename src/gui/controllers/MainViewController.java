@@ -20,16 +20,18 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 public class MainViewController extends BaseController implements Initializable {
     @FXML
     private VBox sidebar;
     @FXML
-    private BorderPane mainBorderPane;
+    public BorderPane mainBorderPane;
     @FXML
     private ImageView ivLogo;
 
     private NodeAccessLevel buttonAccessLevel;
+    private Stack<Node> viewHistory = new Stack<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,6 +100,14 @@ public class MainViewController extends BaseController implements Initializable 
         button.setOnAction(e -> mainBorderPane.setCenter(loadView(fxmlPath).getRoot()));
 
         return button;
+    }
+
+    public void saveLastView(Node node) {
+        viewHistory.push(node);
+    }
+
+    public Node getLastView() {
+        return viewHistory.pop();
     }
 
     private void loadImages() {

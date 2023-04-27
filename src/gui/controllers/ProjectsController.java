@@ -4,6 +4,7 @@ import be.Client;
 import be.Enum.SystemRole;
 import be.Project;
 import com.jfoenix.controls.JFXButton;
+import gui.util.MainControllerHandler;
 import gui.util.NodeAccessLevel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import util.ViewPaths;
 
@@ -22,6 +24,8 @@ import java.net.URL;
 import java.util.*;
 
 public class ProjectsController extends BaseController implements Initializable {
+    @FXML
+    private VBox projectsView;
     @FXML
     private HBox buttonArea;
     @FXML
@@ -71,11 +75,11 @@ public class ProjectsController extends BaseController implements Initializable 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
-        //TODO Slet, testing
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("👥 Users", ViewPaths.USERS_VIEW),
-                Arrays.asList(SystemRole.Administrator));
+                loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW),
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
 
+        //TODO Slet, testing
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("👥 Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
@@ -91,7 +95,12 @@ public class ProjectsController extends BaseController implements Initializable 
         button.setFont(Font.font(16));
         button.setPrefWidth(150);
         button.setPrefHeight(60);
-        //button.setOnAction(e -> mainBorderPane.setCenter(loadView(fxmlPath).getRoot()));
+
+        MainViewController mainViewController = MainControllerHandler.getInstance().getController();
+        button.setOnAction(e -> {
+            mainViewController.saveLastView(projectsView);
+            mainViewController.mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
+        });
 
         return button;
     }
