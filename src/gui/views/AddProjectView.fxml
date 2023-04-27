@@ -22,7 +22,7 @@
             <Insets left="10.0" />
          </padding>
          <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets />
          </VBox.margin>
       </Label>
       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
@@ -55,17 +55,17 @@
       </GridPane>
       <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">
          <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" />
+            <Insets left="10.0" right="10.0" />
          </VBox.margin>
          <children>
-            <JFXButton prefHeight="60.0" prefWidth="150.0" text="Confirm">
+            <JFXButton prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </HBox.margin>
             </JFXButton>
-            <JFXButton onAction="#handleCancel" prefHeight="60.0" prefWidth="150.0" text="Cancel">
+            <JFXButton onAction="#handleCancel" prefHeight="60.0" prefWidth="150.0" text="❌ Cancel">
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </HBox.margin>
             </JFXButton>
          </children>

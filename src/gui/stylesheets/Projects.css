@@ -39,3 +39,15 @@
     -fx-background-color: #90AED6;
     -fx-text-fill: #000000;
 }
+
+#btnSearch {
+    -fx-padding: 0px;
+    -fx-border-insets: 0px;
+    -fx-background-insets: 0px;
+}
+
+#txtfSearch {
+    -fx-background-color: #D9D9D9;
+    -fx-prompt-text-fill: #90AED6;
+    -fx-text-fill: #333333;
+}
