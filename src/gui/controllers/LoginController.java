@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import util.InputValidator;
 import util.StylePaths;
 import util.SymbolPaths;
 import util.ViewPaths;
@@ -37,7 +38,7 @@ public class LoginController extends BaseController implements Initializable {
 
     private void easyLogin() {
         txtfEmail.setText("micdra01@easv365.dk");
-        pwfPassword.setText("password");
+        pwfPassword.setText("P4$$word");
     }
 
     private void showLogo() {
@@ -48,21 +49,25 @@ public class LoginController extends BaseController implements Initializable {
     public void handleLogin(ActionEvent actionEvent) {
         String email = txtfEmail.getText();
         String password = pwfPassword.getText();
-        SystemUser user = new SystemUser(email, password);
-
-        try {
-            if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user) != null) {
-                openStage(ViewPaths.MAIN_VIEW, "");
-                close();
-            } else {
-                //TODO Vis at noget gik galt
-                lblEmail.setText("Email* Wrong email or password, please try again");
-                txtfEmail.requestFocus();
-
+        if(InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
+            SystemUser user = new SystemUser(email, password);
+            try {
+                if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user)) {
+                    openStage(ViewPaths.MAIN_VIEW, "");
+                    close();
+                } else {
+                    //TODO Vis at noget gik galt
+                    lblEmail.setText("Email* Wrong email or password, please try again");
+                    txtfEmail.requestFocus();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                displayError(new DALException("Failed to login", e));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            displayError(new DALException("Failed to login", e));
+        } else {
+            //TODO Vis at noget gik galt
+            lblEmail.setText("Email* Wrong email or password, please try again");
+            txtfEmail.requestFocus();
         }
     }
 

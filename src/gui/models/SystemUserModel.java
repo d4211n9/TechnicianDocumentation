@@ -17,9 +17,9 @@ public class SystemUserModel {
         systemUserManager = new SystemUserManager();
     }
 
-    public SystemUser SystemUserValidLogin(SystemUser user) throws Exception {
+    public boolean SystemUserValidLogin(SystemUser user) throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
-        return loggedInSystemUser.getValue();
+        return loggedInSystemUser.get() != null;
     }
 
     public ObservableValue<SystemUser> getLoggedInSystemUser() {
