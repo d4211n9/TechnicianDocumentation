@@ -1,0 +1,13 @@
+.table-view {
+    -fx-background-color: #D9D9D9;
+}
+
+.table-view .column-header, .table-view .column-header-background .filler {
+    -fx-background-color: #90AED6;
+}
+
+.table-view .column-header .label {
+    -fx-alignment:CENTER_LEFT;
+    -fx-padding: 5px 0 5px 0;
+    -fx-text-fill: black;
+}

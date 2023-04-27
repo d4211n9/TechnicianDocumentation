@@ -36,8 +36,8 @@ public class LoginController extends BaseController implements Initializable {
     }
 
     private void easyLogin() {
-        txtfEmail.setText("micdra01@easv365.dk");
-        pwfPassword.setText("password");
+        txtfEmail.setText("Kennidamkier@gmail.com");
+        pwfPassword.setText("P4$$word");
     }
 
     private void showLogo() {

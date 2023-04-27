@@ -82,8 +82,12 @@ public class MainViewController extends BaseController implements Initializable 
         buttonAccessLevel = new NodeAccessLevel();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("Users", ViewPaths.USERS_VIEW),
+                loadButton("👥 Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
+
+        buttonAccessLevel.addNodeAccessLevel(
+                loadButton("📄 Projects", ViewPaths.PROJECTS_VIEW),
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 
     private Button loadButton(String text, String fxmlPath) {
