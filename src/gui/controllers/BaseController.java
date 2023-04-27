@@ -1,6 +1,7 @@
 package gui.controllers;
 
 import exceptions.GUIException;
+import gui.models.ModelsHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,6 +12,9 @@ import util.ViewPaths;
 import java.io.IOException;
 
 public class BaseController {
+    public ModelsHandler getModelsHandler() throws Exception {
+        return ModelsHandler.getInstance();
+    }
 
     /**
      * Opens a new window

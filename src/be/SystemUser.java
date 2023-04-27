@@ -10,9 +10,9 @@ public class SystemUser {
 
     private String password;
 
-    public SystemUser(String email, SystemRole role){
+    public SystemUser(String email, String password){
         this.email = email;
-        this.role = role;
+        this.password = password;
     }
 
     public SystemUser(String email, String password, SystemRole role){
