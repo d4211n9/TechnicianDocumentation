@@ -14,7 +14,7 @@
    <children>
       <HBox>
          <children>
-            <Label prefHeight="40.0" prefWidth="840.0" text="Projects">
+            <Label prefHeight="45.0" prefWidth="840.0" text="Projects" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -22,12 +22,12 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Search...">
+            <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Search..." HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets right="10.0" top="10.0" />
                </HBox.margin>
             </TextField>
-            <JFXButton fx:id="btnSearch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" text="🔍" textOverrun="CLIP" wrapText="true">
+            <JFXButton fx:id="btnSearch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" text="🔍" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
                <HBox.margin>
                   <Insets right="10.0" top="10.0" />
                </HBox.margin>

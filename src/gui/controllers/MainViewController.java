@@ -88,7 +88,7 @@ public class MainViewController extends BaseController implements Initializable 
                 Arrays.asList(SystemRole.Administrator));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("📄 Projects", ViewPaths.PROJECTS_VIEW),
+                loadButton("📁 Projects", ViewPaths.PROJECTS_VIEW),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 

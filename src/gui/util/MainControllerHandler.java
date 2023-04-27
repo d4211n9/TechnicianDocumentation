@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import util.StylePaths;
 import util.ViewPaths;
 
 import java.io.IOException;
@@ -25,8 +27,9 @@ public class MainControllerHandler {
         }
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.getScene().getStylesheets().add(getClass().getResource("/gui/stylesheets/Main.css").toExternalForm());
-        //stage.initModality(Modality.APPLICATION_MODAL);
+        stage.getScene().getStylesheets().add(getClass().getResource(StylePaths.MAIN).toExternalForm());
+        stage.initModality(Modality.APPLICATION_MODAL);
+        //stage.initStyle(StageStyle.UNDECORATED); //TODO Fjern outcommenting når resizing spiller?
         stage.show();
 
         mainController = loader.getController();
