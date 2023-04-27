@@ -41,13 +41,13 @@ public class MainViewController extends BaseController implements Initializable 
         initializeButtonAccessLevels();
 
         try {
-            SystemRole loggedInUserRole = getModelsHandler()
+            SystemRole loggedInUserRole = getModelsHandler()//gets logged in user role
                     .getSystemUserModel()
                     .getLoggedInSystemUser()
                     .getValue()
                     .getRole();
 
-            for (Button button : buttonAccessLevel.getButtons()) {
+            for (Button button : buttonAccessLevel.getButtons()) { //checks if the users has access to the btn, and adds it
                 List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForButton(button);
                 if(accessLevel.contains(loggedInUserRole)){
                     sidebar.getChildren().add(1, button);
@@ -63,7 +63,7 @@ public class MainViewController extends BaseController implements Initializable 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new ButtonAccessLevel();
 
-        buttonAccessLevel.addButtonAccessLevel(
+        buttonAccessLevel.addButtonAccessLevel( //todo make guide for adding btns
                 loadButton("Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
     }
