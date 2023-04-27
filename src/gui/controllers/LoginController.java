@@ -1,5 +1,8 @@
 package gui.controllers;
 
+import be.SystemUser;
+import exceptions.DALException;
+import gui.models.ModelsHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +21,8 @@ import java.util.ResourceBundle;
 
 public class LoginController extends BaseController implements Initializable {
     @FXML
+    private Label lblEmail;
+    @FXML
     private ImageView ivLogo;
     @FXML
     private TextField txtfEmail;
@@ -27,6 +32,12 @@ public class LoginController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         showLogo();
+        easyLogin();
+    }
+
+    private void easyLogin() {
+        txtfEmail.setText("micdra01@easv365.dk");
+        pwfPassword.setText("password");
     }
 
     private void showLogo() {
@@ -37,9 +48,22 @@ public class LoginController extends BaseController implements Initializable {
     public void handleLogin(ActionEvent actionEvent) {
         String email = txtfEmail.getText();
         String password = pwfPassword.getText();
-        //TODO Tjek for korrekt login før MainView loades
-        openStage(ViewPaths.MAIN_VIEW, "");
-        close();
+        SystemUser user = new SystemUser(email, password);
+
+        try {
+            if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user) != null) {
+                openStage(ViewPaths.MAIN_VIEW, "");
+                close();
+            } else {
+                //TODO Vis at noget gik galt
+                lblEmail.setText("Email* Wrong email or password, please try again");
+                txtfEmail.requestFocus();
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            displayError(new DALException("Failed to login", e));
+        }
     }
 
     private void close() {
