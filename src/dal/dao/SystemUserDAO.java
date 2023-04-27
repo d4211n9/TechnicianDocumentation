@@ -1,16 +1,17 @@
 package dal.dao;
 
+import be.Enum.SystemRole;
 import be.SystemUser;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
+import dal.interfaces.ISystemUserDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
-public class SystemUserDAO {
+public class SystemUserDAO implements ISystemUserDAO {
 
     private AbstractConnector connector;
 
@@ -22,7 +23,7 @@ public class SystemUserDAO {
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
         SystemUser systemUser = null;
 
-        String sql = "SELECT * FROM SystemUsers WHERE Email = ?";
+        String sql = "SELECT * FROM SystemUser WHERE Email = ?";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -32,20 +33,18 @@ public class SystemUserDAO {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String firstName = resultSet.getString("FirstName");
-                String lastName = resultSet.getString("LastName");
+                String email = resultSet.getString("Email");
                 String password = resultSet.getString("Password");
-                //todo create systemuser
+                String role = resultSet.getString("RoleName");
 
-               // List<Role> systemUsersRoles = retrieveRolesForSystemUser(conn, systemUser);
-
-                //systemUser.getRoles().addAll(systemUsersRoles);
+                SystemRole systemRole = SystemRole.valueOf(role);
+                systemUser = new SystemUser(email, password, systemRole);
             }
 
             return systemUser;
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();//todo wait for patricks error catcher
             throw new Exception("Failed to validate login", e);
         }
     }
