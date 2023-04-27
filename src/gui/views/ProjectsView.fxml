@@ -12,7 +12,7 @@
    <children>
       <Label prefHeight="40.0" prefWidth="840.0" text="Projects" VBox.vgrow="ALWAYS">
          <font>
-            <Font size="20.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
          <padding>
             <Insets left="10.0" />
@@ -32,7 +32,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
       </TableView>
-      <HBox fx:id="buttonArea" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">
+      <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>

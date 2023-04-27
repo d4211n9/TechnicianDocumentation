@@ -3,26 +3,26 @@ package be;
 import java.util.Date;
 
 public class Project {
-    private String client, projectName, location;
+    private String clientName, clientLocation, projectName;
     private Date created;
 
-    public Project(String client, String projectName, String location, Date created) {
-        this.client = client;
+    public Project(Client client, String projectName, Date created) {
+        clientName = client.getName();
+        clientLocation = client.getLocation();
         this.projectName = projectName;
-        this.location = location;
         this.created = created;
     }
 
     public String getClient() {
-        return client;
+        return clientName;
+    }
+
+    public String getLocation() {
+        return clientLocation;
     }
 
     public String getProjectName() {
         return projectName;
-    }
-
-    public String getLocation() {
-        return location;
     }
 
     public Date getCreated() {

@@ -67,5 +67,6 @@ public class BaseController {
         FXMLLoader loader = openStage(ViewPaths.ERROR_DISPLAYER, "Error");
         ErrorDisplayController controller = loader.getController();
         controller.setContent(throwable);
+        throwable.printStackTrace(); //TODO Slet når vi kan logge fejl?
     }
 }

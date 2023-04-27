@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Client;
 import be.Enum.SystemRole;
 import be.Project;
 import com.jfoenix.controls.JFXButton;
@@ -83,9 +84,6 @@ public class ProjectsController extends BaseController implements Initializable 
                 loadButton("👥 Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
 
-        buttonAccessLevel.addNodeAccessLevel(
-                loadButton("👥 Users", ViewPaths.USERS_VIEW),
-                Arrays.asList(SystemRole.Administrator));
     }
 
     private Button loadButton(String text, String fxmlPath) {
@@ -106,10 +104,14 @@ public class ProjectsController extends BaseController implements Initializable 
 
         //TODO Slet, testing
         Calendar date = Calendar.getInstance();
-        Project p1 = new Project("EASV", "Lobby", "Esbjerg", date.getTime());
-        Project p2 = new Project("EASV", "Lobby", "Sønderborg", date.getTime());
+        Client c1 = new Client("EASV", "Spangsbjerg Kirkevej 103, 6700 Esbjerg", "info@easv365.dk", "76133200");
+        Client c2 = new Client("EASV", "Alsion 4, 6400 Sønderborg", "info@easv365.dk", "74403200");
+        Project p1 = new Project(c1, "C3 Vindue", date.getTime());
+        Project p2 = new Project(c1, "Innovatorium", date.getTime());
+        Project p3 = new Project(c2, "Lobby", date.getTime());
         allProjects.add(p1);
         allProjects.add(p2);
+        allProjects.add(p3);
         tvProjects.setItems(allProjects);
     }
 }
