@@ -2,9 +2,10 @@ package gui.controllers;
 
 import be.Enum.SystemRole;
 import com.jfoenix.controls.JFXButton;
-import gui.util.ButtonAccessLevel;
+import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +17,6 @@ import util.SymbolPaths;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -29,7 +29,7 @@ public class MainViewController extends BaseController implements Initializable 
     @FXML
     private ImageView ivLogo;
 
-    private ButtonAccessLevel buttonAccessLevel;
+    private NodeAccessLevel nodeAccessLevel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,8 +47,8 @@ public class MainViewController extends BaseController implements Initializable 
                     .getValue()
                     .getRole();
 
-            for (Button button : buttonAccessLevel.getButtons()) { //checks if the users has access to the btn, and adds it
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForButton(button);
+            for (Node button : nodeAccessLevel.getNodes()) { //checks if the users has access to the btn, and adds it
+                List<SystemRole> accessLevel = nodeAccessLevel.getAccessLevelsForNode(button);
                 if(accessLevel.contains(loggedInUserRole)){
                     sidebar.getChildren().add(1, button);
                 }
@@ -61,9 +61,9 @@ public class MainViewController extends BaseController implements Initializable 
     }
 
     private void initializeButtonAccessLevels() {
-        buttonAccessLevel = new ButtonAccessLevel();
+        nodeAccessLevel = new NodeAccessLevel();
 
-        buttonAccessLevel.addButtonAccessLevel( //todo make guide for adding btns
+        nodeAccessLevel.addButtonAccessLevel( //todo make guide for adding btns
                 loadButton("Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
     }
