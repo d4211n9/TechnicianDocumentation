@@ -29,7 +29,7 @@ public class MainViewController extends BaseController implements Initializable 
     @FXML
     private ImageView ivLogo;
 
-    private NodeAccessLevel nodeAccessLevel;
+    private NodeAccessLevel buttonAccessLevel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,33 +37,51 @@ public class MainViewController extends BaseController implements Initializable 
         addLoadedButtons();
     }
 
+    private void addButtonToSidebar(Button button) {
+        sidebar.getChildren().add(1, button);
+    }
+
+    /**
+     * Adds buttons in the sidebar menu,
+     * based on the logged-in user's role.
+     */
     private void addLoadedButtons() {
         initializeButtonAccessLevels();
 
         try {
-            SystemRole loggedInUserRole = getModelsHandler()//gets logged in user role
+            //Gets the logged-in user's role
+            SystemRole loggedInUserRole = getModelsHandler()
                     .getSystemUserModel()
                     .getLoggedInSystemUser()
                     .getValue()
                     .getRole();
 
-            for (Node button : nodeAccessLevel.getNodes()) { //checks if the users has access to the btn, and adds it
-                List<SystemRole> accessLevel = nodeAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)){
-                    sidebar.getChildren().add(1, button);
-                }
+            // Loops through the buttons and adds them to the sidebar if the user has the right access level
+            for (Node button : buttonAccessLevel.getNodes()) {
+
+                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
+
+                if(accessLevel.contains(loggedInUserRole)) addButtonToSidebar((Button) button);
             }
         } catch (Exception e) {
             displayError(e);
         }
-
-
     }
 
+    /**
+     * Adds all buttons to the buttonAccessLevel variable
+     *
+     * HOW TO USE:
+     * To add a new button with given access levels:
+     * buttonAccessLevel.addNodeAccessLevel(
+     *                      loadButton("*button text*",
+     *                      *path of the view to open when clicked*),
+     *                      Arrays.asList(*what roles you want to access this button*, ...))
+     */
     private void initializeButtonAccessLevels() {
-        nodeAccessLevel = new NodeAccessLevel();
+        buttonAccessLevel = new NodeAccessLevel();
 
-        nodeAccessLevel.addButtonAccessLevel( //todo make guide for adding btns
+        buttonAccessLevel.addNodeAccessLevel(
                 loadButton("Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
     }

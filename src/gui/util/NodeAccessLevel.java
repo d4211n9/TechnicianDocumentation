@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages given nodes' access levels (SystemRole)
+ */
 public class NodeAccessLevel {
 
     private List<Node> nodes;
@@ -19,7 +22,7 @@ public class NodeAccessLevel {
         accessLevel = new HashMap<>();
     }
 
-    public void addButtonAccessLevel(Node node, List<SystemRole> accessLevel) {
+    public void addNodeAccessLevel(Node node, List<SystemRole> accessLevel) {
         nodes.add(node);
 
         this.accessLevel.put(node, accessLevel);
