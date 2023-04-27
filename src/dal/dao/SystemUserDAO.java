@@ -36,9 +36,10 @@ public class SystemUserDAO implements ISystemUserDAO {
                 String email = resultSet.getString("Email");
                 String password = resultSet.getString("Password");
                 String role = resultSet.getString("RoleName");
+                String userName = resultSet.getString("UserName");
 
                 SystemRole systemRole = SystemRole.valueOf(role);
-                systemUser = new SystemUser(email, password, systemRole);
+                systemUser = new SystemUser(email, password, systemRole, userName);
             }
 
             return systemUser;

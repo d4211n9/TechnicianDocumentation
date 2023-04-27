@@ -9,16 +9,18 @@ public class SystemUser {
     private SystemRole role;
 
     private String password;
+    private String name;
 
     public SystemUser(String email, String password){
         this.email = email;
         this.password = password;
     }
 
-    public SystemUser(String email, String password, SystemRole role){
+    public SystemUser(String email, String password, SystemRole role, String name){
         this.email = email;
         this.password = password;
         this.role = role;
+        this.name = name;
     }
 
     public String getEmail() {
