@@ -10,15 +10,25 @@ public class SystemUser {
 
     private String password;
 
+    private String name;
+
     public SystemUser(String email, String password){
         this.email = email;
         this.password = password;
     }
 
-    public SystemUser(String email, String password, SystemRole role){
+    public SystemUser(String email, String password, SystemRole role, String name){
         this.email = email;
         this.password = password;
         this.role = role;
+        this.name = name;
+    }
+
+    public SystemUser(String email, SystemRole role, String name){
+        this.email = email;
+        this.role = role;
+        this.name = name;
+
     }
 
     public String getEmail() {
@@ -27,6 +37,8 @@ public class SystemUser {
     public SystemRole getRole() {
         return role;
     }
+
+    public String getName() {return name;}
 
 
 }

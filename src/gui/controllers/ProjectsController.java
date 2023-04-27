@@ -63,12 +63,7 @@ public class ProjectsController extends BaseController implements Initializable 
         initializeButtonAccessLevels();
 
         try {
-            //Gets the logged-in user's role
-            SystemRole loggedInUserRole = getModelsHandler()
-                    .getSystemUserModel()
-                    .getLoggedInSystemUser()
-                    .getValue()
-                    .getRole();
+            SystemRole loggedInUserRole = getLoggedInUser();
 
             // Loops through the buttons and adds them to the sidebar if the user has the right access level
             for (Node button : buttonAccessLevel.getNodes()) {
@@ -90,33 +85,18 @@ public class ProjectsController extends BaseController implements Initializable 
         buttonAccessLevel = new NodeAccessLevel();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW),
+                loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
 
         //TODO Slet, testing
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("👥 Users", ViewPaths.USERS_VIEW),
+                loadButton("👥 Users", ViewPaths.USERS_VIEW, projectsView),
                 Arrays.asList(SystemRole.Administrator));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("👥 Users", ViewPaths.USERS_VIEW),
+                loadButton("👥 Users", ViewPaths.USERS_VIEW, projectsView),
                 Arrays.asList(SystemRole.Administrator));
 
-    }
-
-    private Button loadButton(String text, String fxmlPath) {
-        JFXButton button = new JFXButton(text);
-        button.setFont(Font.font(16));
-        button.setPrefWidth(150);
-        button.setPrefHeight(60);
-
-        MainViewController mainViewController = MainControllerHandler.getInstance().getController();
-        button.setOnAction(e -> {
-            mainViewController.saveLastView(projectsView);
-            mainViewController.mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
-        });
-
-        return button;
     }
 
     private void loadTableView() {

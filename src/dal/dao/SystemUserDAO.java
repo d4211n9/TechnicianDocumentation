@@ -6,10 +6,9 @@ import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.ISystemUserDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SystemUserDAO implements ISystemUserDAO {
 
@@ -35,10 +34,13 @@ public class SystemUserDAO implements ISystemUserDAO {
             if (resultSet.next()) {
                 String email = resultSet.getString("Email");
                 String password = resultSet.getString("Password");
-                String role = resultSet.getString("RoleName");
 
+                String role = resultSet.getString("RoleName");
                 SystemRole systemRole = SystemRole.valueOf(role);
-                systemUser = new SystemUser(email, password, systemRole);
+
+                String name = resultSet.getString("UserName");
+
+                systemUser = new SystemUser(email, password, systemRole, name);
             }
 
             return systemUser;
@@ -48,4 +50,31 @@ public class SystemUserDAO implements ISystemUserDAO {
             throw new Exception("Failed to validate login", e);
         }
     }
+
+    public List<SystemUser> getAllSystemUsers() throws Exception {
+
+        ArrayList<SystemUser> allUsers = new ArrayList<>();
+
+        try (Connection connection = connector.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            String sql = "SELECT * FROM SystemUser;";
+
+            ResultSet rs = statement.executeQuery(sql);
+
+            while(rs.next()) {
+                String email = rs.getString("Email");
+                String role = rs.getString("RoleName");
+                SystemRole systemRole = SystemRole.valueOf(role);
+
+                String name= rs.getString("UserName");
+                SystemUser systemUser = new SystemUser(email, systemRole, name);
+                allUsers.add(systemUser);
+            }
+        } catch (Exception e){
+            throw new Exception("Failed to retrieve all Users", e);
+        }
+        return allUsers;
+    }
+
 }

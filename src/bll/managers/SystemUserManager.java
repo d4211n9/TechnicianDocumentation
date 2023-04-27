@@ -5,6 +5,8 @@ import bll.interfaces.ISystemUserManager;
 import dal.dao.SystemUserDAO;
 import dal.interfaces.ISystemUserDAO;
 
+import java.util.List;
+
 public class SystemUserManager implements ISystemUserManager {
     ISystemUserDAO systemUserDAO;
 
@@ -16,5 +18,10 @@ public class SystemUserManager implements ISystemUserManager {
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
         return systemUserDAO.systemUserValidLogin(user);
         //todo should check the encryption with b crypt from this method.
+    }
+
+    @Override
+    public List<SystemUser> getAllSystemUsers() throws Exception {
+        return systemUserDAO.getAllSystemUsers();
     }
 }

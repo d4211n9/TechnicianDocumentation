@@ -1,10 +1,16 @@
 package gui.controllers;
 
+import be.Enum.SystemRole;
+import com.jfoenix.controls.JFXButton;
 import exceptions.GUIException;
 import gui.models.ModelsHandler;
+import gui.util.MainControllerHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -70,5 +76,33 @@ public class BaseController {
         ErrorDisplayController controller = loader.getController();
         controller.setContent(throwable);
         throwable.printStackTrace(); //TODO Slet når vi kan logge fejl?
+    }
+
+    public SystemRole getLoggedInUser(){
+        //Gets the logged-in user's role
+        try {
+            SystemRole loggedInUserRole = getModelsHandler()
+                    .getSystemUserModel()
+                    .getLoggedInSystemUser()
+                    .getValue()
+                    .getRole();
+            return loggedInUserRole;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public Button loadButton(String text, String fxmlPath, Node pageNode) {
+        JFXButton button = new JFXButton(text);
+        button.setFont(Font.font(16));
+        button.setPrefWidth(150);
+        button.setPrefHeight(60);
+
+        MainViewController mainViewController = MainControllerHandler.getInstance().getController();
+        button.setOnAction(e -> {
+            mainViewController.saveLastView(pageNode);
+            mainViewController.mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
+        });
+
+        return button;
     }
 }
