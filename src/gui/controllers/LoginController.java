@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import util.InputValidator;
 import util.StylePaths;
@@ -46,7 +48,7 @@ public class LoginController extends BaseController implements Initializable {
         ivLogo.setImage(logo);
     }
 
-    public void handleLogin(ActionEvent actionEvent) {
+    public void handleLogin() {
         String email = txtfEmail.getText();
         String password = pwfPassword.getText();
         if(InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
@@ -68,6 +70,12 @@ public class LoginController extends BaseController implements Initializable {
             //TODO Vis at noget gik galt
             lblEmail.setText("Email* Wrong email or password, please try again");
             txtfEmail.requestFocus();
+        }
+    }
+
+    public void handleEnter(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            handleLogin();
         }
     }
 
