@@ -34,34 +34,38 @@ public class MainViewController extends BaseController implements Initializable 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadImages();
-        //loadButton("➕ New User", ViewPaths.LOGIN_VIEW);
-        //loadButton("👥 All Users", ViewPaths.LOGIN_VIEW);
-        //loadButton("📄 All Projects", ViewPaths.LOGIN_VIEW);
-        initializeButtonAccessLevels();
+        addLoadedButtons();
     }
 
     private void addLoadedButtons() {
-        for (Button button : buttonAccessLevel.getButtons()) {
-            List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForButton(button);
-            
-            //if (TODO get logged in system user from models handler)
+        initializeButtonAccessLevels();
+
+        try {
+            SystemRole loggedInUserRole = getModelsHandler()
+                    .getSystemUserModel()
+                    .getLoggedInSystemUser()
+                    .getValue()
+                    .getRole();
+
+            for (Button button : buttonAccessLevel.getButtons()) {
+                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForButton(button);
+                if(accessLevel.contains(loggedInUserRole)){
+                    sidebar.getChildren().add(1, button);
+                }
+            }
+        } catch (Exception e) {
+            displayError(e);
         }
+
+
     }
 
     private void initializeButtonAccessLevels() {
-        List<Button> buttons = loadButtons();
+        buttonAccessLevel = new ButtonAccessLevel();
 
-        List<List<SystemRole>> accessLevel = new ArrayList<>();
-        accessLevel.add(Arrays.asList(SystemRole.Administrator));
-
-        buttonAccessLevel = new ButtonAccessLevel(buttons, accessLevel);
-    }
-
-    private List<Button> loadButtons() {
-        List<Button> buttons = new ArrayList<>();
-        buttons.add(loadButton("Users", ViewPaths.USERS_VIEW));
-
-        return buttons;
+        buttonAccessLevel.addButtonAccessLevel(
+                loadButton("Users", ViewPaths.USERS_VIEW),
+                Arrays.asList(SystemRole.Administrator));
     }
 
     private Button loadButton(String text, String fxmlPath) {
@@ -72,7 +76,6 @@ public class MainViewController extends BaseController implements Initializable 
         button.setOnAction(e -> mainBorderPane.setCenter(loadView(fxmlPath).getRoot()));
 
         return button;
-        //sidebar.getChildren().add(1, button);
     }
 
     private void loadImages() {

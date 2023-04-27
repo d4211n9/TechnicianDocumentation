@@ -3,6 +3,7 @@ package gui.util;
 import be.Enum.SystemRole;
 import javafx.scene.control.Button;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,15 +14,15 @@ public class ButtonAccessLevel {
 
     private Map<Button, List<SystemRole>> accessLevel;
 
-    public ButtonAccessLevel(List<Button> buttons, List<List<SystemRole>> accessLevel) {
-        this.buttons = buttons;
-        this.accessLevel = new HashMap<>();
+    public ButtonAccessLevel() {
+        buttons = new ArrayList<>();
+        accessLevel = new HashMap<>();
+    }
 
-        for (int i = 0; i < buttons.size(); i++) {
-            for (SystemRole systemRole: accessLevel.get(i)) {
-                this.accessLevel.put(buttons.get(i), accessLevel.get(i));
-            }
-        }
+    public void addButtonAccessLevel(Button button, List<SystemRole> accessLevel) {
+        buttons.add(button);
+
+        this.accessLevel.put(button, accessLevel);
     }
 
     public List<Button> getButtons() {
