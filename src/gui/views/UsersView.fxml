@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="usersView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.UsersController">
+<VBox fx:id="usersView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.UsersController">
     <children>
         <HBox>
             <children>
@@ -35,9 +39,9 @@
         </HBox>
         <TableView fx:id="tvUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="tcCName" prefWidth="200.0" text="Name" />
+                <TableColumn fx:id="tcName" prefWidth="200.0" text="Name" />
                 <TableColumn fx:id="tcEmail" prefWidth="400.0" text="Email" />
-                <TableColumn fx:id="tcAccessLevel" prefWidth="200.0" text="Function" />
+                <TableColumn fx:id="tcRole" prefWidth="200.0" text="Role" />
             </columns>
             <VBox.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" />

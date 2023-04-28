@@ -12,7 +12,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
-
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -20,8 +19,8 @@ import java.util.ResourceBundle;
 
 public class UsersController extends BaseController implements Initializable {
     public TableView tvUsers;
-    public TableColumn<SystemUser, String>  tcCName, tcEmail;
-    public TableColumn<SystemUser, SystemRole> tcAccessLevel;
+    public TableColumn<SystemUser, String> tcName, tcEmail;
+    public TableColumn<SystemUser, SystemRole> tcRole;
     public HBox buttonArea;
     public VBox usersView;
     NodeAccessLevel buttonAccessLevel;
@@ -44,14 +43,17 @@ public class UsersController extends BaseController implements Initializable {
 
                 List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
 
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
+                if(accessLevel.contains(loggedInUserRole))
+                    addButton((Button) button);
             }
         } catch (Exception e) {
             displayError(e);
         }
     }
 
-    private void addButton(Button button) {buttonArea.getChildren().add(0, button);}
+    private void addButton(Button button) {
+        buttonArea.getChildren().add(0, button);
+    }
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
@@ -61,14 +63,14 @@ public class UsersController extends BaseController implements Initializable {
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕👥 Delete User", ViewPaths.ADD_PROJECT_VIEW, usersView),
+                loadButton("➖👥 Delete User", ViewPaths.ADD_PROJECT_VIEW, usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
-    private void loadTableView(){
-        tcCName.setCellValueFactory(new PropertyValueFactory<>("name"));
+    private void loadTableView() {
+        tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        tcAccessLevel.setCellValueFactory(new PropertyValueFactory<>("role"));
+        tcRole.setCellValueFactory(new PropertyValueFactory<>("role"));
 
         try {
             tvUsers.setItems(getModelsHandler().getSystemUserModel().getAllUsers());

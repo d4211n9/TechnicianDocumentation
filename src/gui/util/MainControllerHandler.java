@@ -1,12 +1,11 @@
 package gui.util;
 
-import gui.controllers.MainViewController;
+import gui.controllers.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import util.StylePaths;
 import util.ViewPaths;
 
@@ -14,7 +13,7 @@ import java.io.IOException;
 
 public class MainControllerHandler {
     private static MainControllerHandler handler;
-    private MainViewController mainController;
+    private MainController mainController;
 
     private MainControllerHandler(){
         //Load the new stage & view
@@ -41,7 +40,7 @@ public class MainControllerHandler {
         }
         return handler;
     }
-    public MainViewController getController() {
+    public MainController getController() {
         return mainController;
     }
 

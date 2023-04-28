@@ -24,7 +24,6 @@ public class NodeAccessLevel {
 
     public void addNodeAccessLevel(Node node, List<SystemRole> accessLevel) {
         nodes.add(node);
-
         this.accessLevel.put(node, accessLevel);
     }
 

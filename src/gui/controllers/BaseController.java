@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import util.ViewPaths;
 
 import java.io.IOException;
@@ -97,10 +96,10 @@ public class BaseController {
         button.setPrefWidth(150);
         button.setPrefHeight(60);
 
-        MainViewController mainViewController = MainControllerHandler.getInstance().getController();
+        MainController mainController = MainControllerHandler.getInstance().getController();
         button.setOnAction(e -> {
-            mainViewController.saveLastView(pageNode);
-            mainViewController.mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
+            mainController.saveLastView(pageNode);
+            mainController.mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
         });
 
         return button;

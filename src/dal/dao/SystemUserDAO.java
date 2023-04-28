@@ -5,7 +5,6 @@ import be.SystemUser;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.ISystemUserDAO;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

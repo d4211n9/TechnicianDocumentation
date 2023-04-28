@@ -8,15 +8,12 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.util.List;
 
 public class SystemUserModel {
 
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
-
-
     private ObservableList<SystemUser> allUsers;
 
     public SystemUserModel() throws Exception {

@@ -4,7 +4,6 @@ import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import dal.dao.SystemUserDAO;
 import dal.interfaces.ISystemUserDAO;
-
 import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {

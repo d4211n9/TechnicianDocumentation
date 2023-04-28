@@ -4,7 +4,7 @@ import gui.util.MainControllerHandler;
 
 public class AddProjectController extends BaseController {
     public void handleCancel() {
-        MainViewController mainViewController = MainControllerHandler.getInstance().getController();
-        mainViewController.mainBorderPane.setCenter(mainViewController.getLastView());
+        MainController mainController = MainControllerHandler.getInstance().getController();
+        mainController.mainBorderPane.setCenter(mainController.getLastView());
     }
 }

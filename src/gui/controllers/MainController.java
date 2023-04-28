@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
-public class MainViewController extends BaseController implements Initializable {
+public class MainController extends BaseController implements Initializable {
     @FXML
     private VBox sidebar;
     @FXML
