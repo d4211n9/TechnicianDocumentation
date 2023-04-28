@@ -10,7 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
@@ -25,6 +27,7 @@ public class UsersController extends BaseController implements Initializable {
     public TableColumn<SystemUser, SystemRole> tcRole;
     public HBox buttonArea;
     public VBox usersView;
+    public TextField txtfSearch;
     NodeAccessLevel buttonAccessLevel;
 
     @Override
@@ -81,8 +84,17 @@ public class UsersController extends BaseController implements Initializable {
         }
     }
 
+<<<<<<< Updated upstream
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
+=======
+    public void handleSearch(KeyEvent keyEvent) {
+        try {
+            getModelsHandler().getSystemUserModel().search(txtfSearch.getText());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+>>>>>>> Stashed changes
     }
 }

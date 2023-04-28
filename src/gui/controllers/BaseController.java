@@ -81,6 +81,7 @@ public class BaseController {
         throwable.printStackTrace(); //TODO Slet når vi kan logge fejl?
     }
 
+
     public SystemRole getLoggedInUser(){
         //Gets the logged-in user's role
         try {

@@ -8,19 +8,37 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+<<<<<<< Updated upstream
+=======
+
+import java.util.ArrayList;
+import java.util.Arrays;
+>>>>>>> Stashed changes
 import java.util.List;
+import java.util.Objects;
 
 public class SystemUserModel {
 
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
+<<<<<<< Updated upstream
     private ObservableList<SystemUser> allUsers;
+=======
+
+
+    private List<SystemUser> allUsers;
+
+    private ObservableList<SystemUser> filteredUserList;
+>>>>>>> Stashed changes
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
 
-        allUsers = FXCollections.observableList(retrieveAllUsers());
+        allUsers = retrieveAllUsers();
+        List<SystemUser> copyAllUsers = new ArrayList<>();
+        allUsers.forEach(systemUser -> copyAllUsers.add(systemUser));
+        filteredUserList = FXCollections.observableList(copyAllUsers);
     }
 
     public List<SystemUser> retrieveAllUsers() throws Exception {
@@ -37,6 +55,20 @@ public class SystemUserModel {
     }
 
     public ObservableList<SystemUser> getAllUsers() {
-        return allUsers;
+        return filteredUserList;
+    }
+
+    public void search(String query){
+
+        filteredUserList.clear();
+
+        System.out.println(allUsers.size());
+        if (!query.isBlank()) {
+            filteredUserList.addAll(systemUserManager.search(allUsers, query));
+        }
+        else {
+            filteredUserList.addAll(allUsers);
+        }
+
     }
 }

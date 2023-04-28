@@ -2,15 +2,24 @@ package bll.managers;
 
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
+import bll.util.Search;
 import dal.dao.SystemUserDAO;
 import dal.interfaces.ISystemUserDAO;
+<<<<<<< Updated upstream
+=======
+
+import java.util.Collections;
+>>>>>>> Stashed changes
 import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {
     ISystemUserDAO systemUserDAO;
-
+    Search search;
     public SystemUserManager() throws Exception {
         systemUserDAO = new SystemUserDAO();
+        search = new Search();
+
+
     }
 
     @Override
@@ -23,4 +32,11 @@ public class SystemUserManager implements ISystemUserManager {
     public List<SystemUser> getAllSystemUsers() throws Exception {
         return systemUserDAO.getAllSystemUsers();
     }
+
+    @Override
+    public List<SystemUser> search(List<SystemUser> allUsers, String query) {
+        return search.searchForString(allUsers, query);
+    }
+
+
 }
