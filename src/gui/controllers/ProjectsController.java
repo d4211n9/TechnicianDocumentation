@@ -69,7 +69,6 @@ public class ProjectsController extends BaseController implements Initializable 
             for (Node button : buttonAccessLevel.getNodes()) {
 
                 List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-
                 if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
             }
         } catch (Exception e) {
@@ -77,9 +76,7 @@ public class ProjectsController extends BaseController implements Initializable 
         }
     }
 
-    private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);
-    }
+    private void addButton(Button button) {buttonArea.getChildren().add(0, button);}
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
@@ -96,7 +93,6 @@ public class ProjectsController extends BaseController implements Initializable 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("👥 Users", ViewPaths.USERS_VIEW, projectsView),
                 Arrays.asList(SystemRole.Administrator));
-
     }
 
     private void loadTableView() {
