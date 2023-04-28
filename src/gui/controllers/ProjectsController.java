@@ -8,6 +8,7 @@ import gui.util.MainControllerHandler;
 import gui.util.NodeAccessLevel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -101,5 +102,10 @@ public class ProjectsController extends BaseController implements Initializable 
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("projectName"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
         tvProjects.setItems(allProjects);
+    }
+
+    public void handleBack() {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+        getMainController().saveLastView(projectsView);
     }
 }

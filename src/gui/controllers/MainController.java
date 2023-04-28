@@ -24,7 +24,7 @@ import java.util.Stack;
 
 public class MainController extends BaseController implements Initializable {
     @FXML
-    private VBox sidebar;
+    private VBox sidebar, homeView;
     @FXML
     public BorderPane mainBorderPane;
     @FXML
@@ -97,7 +97,10 @@ public class MainController extends BaseController implements Initializable {
         button.setFont(Font.font(16));
         button.setPrefWidth(120);
         button.setPrefHeight(60);
-        button.setOnAction(e -> mainBorderPane.setCenter(loadView(fxmlPath).getRoot()));
+        button.setOnAction(e -> {
+            mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
+            saveLastView(homeView);
+        });
 
         return button;
     }

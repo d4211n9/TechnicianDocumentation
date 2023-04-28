@@ -14,20 +14,28 @@
     <children>
         <HBox>
             <children>
-                <Label prefHeight="45.0" prefWidth="840.0" text="Users" HBox.hgrow="ALWAYS">
+            <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="35.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </JFXButton>
+                <Label prefHeight="35.0" prefWidth="840.0" text="Users" HBox.hgrow="ALWAYS">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                     <padding>
                         <Insets left="10.0" />
                     </padding>
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
                 </Label>
-                <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Search..." HBox.hgrow="ALWAYS">
+                <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="200.0" promptText="Search..." HBox.hgrow="ALWAYS">
                     <HBox.margin>
                         <Insets right="10.0" top="10.0" />
                     </HBox.margin>
                 </TextField>
-                <JFXButton fx:id="btnSearch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" text="🔍" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
+                <JFXButton fx:id="btnSearch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="35.0" text="🔍" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
                     <HBox.margin>
                         <Insets right="10.0" top="10.0" />
                     </HBox.margin>
@@ -36,6 +44,9 @@
                     </font>
                 </JFXButton>
             </children>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
         </HBox>
         <TableView fx:id="tvUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <columns>

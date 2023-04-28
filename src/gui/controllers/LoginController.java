@@ -58,7 +58,7 @@ public class LoginController extends BaseController implements Initializable {
             SystemUser user = new SystemUser(email, password);
             try {
                 if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user)) {
-                    openStage(ViewPaths.MAIN_VIEW, "");
+                    MainControllerHandler.getInstance().getController();
                     close();
 
                     return;

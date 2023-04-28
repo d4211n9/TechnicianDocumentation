@@ -12,19 +12,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AddProjectController">
+<VBox fx:id="addProjectView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AddProjectController">
    <children>
-      <Label prefHeight="45.0" prefWidth="840.0" text="Add Project" VBox.vgrow="ALWAYS">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
+      <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="840.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
-            <Insets />
+            <Insets bottom="10.0" />
          </VBox.margin>
-      </Label>
+         <children>
+            <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="35.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </JFXButton>
+            <Label prefHeight="35.0" prefWidth="840.0" text="Add Project" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

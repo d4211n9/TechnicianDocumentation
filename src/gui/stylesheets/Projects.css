@@ -40,7 +40,7 @@
     -fx-text-fill: #000000;
 }
 
-#btnSearch {
+#btnSearch, #btnBack {
     -fx-padding: 0px;
     -fx-border-insets: 0px;
     -fx-background-insets: 0px;

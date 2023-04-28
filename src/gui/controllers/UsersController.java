@@ -2,7 +2,9 @@ package gui.controllers;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
+import gui.util.MainControllerHandler;
 import gui.util.NodeAccessLevel;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -77,5 +79,10 @@ public class UsersController extends BaseController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void handleBack() {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+        getMainController().saveLastView(usersView);
     }
 }

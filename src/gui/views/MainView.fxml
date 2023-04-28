@@ -29,4 +29,7 @@
          </children>
       </VBox>
    </left>
+   <center>
+      <VBox fx:id="homeView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="540.0" prefWidth="840.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

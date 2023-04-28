@@ -22,6 +22,10 @@ public class BaseController {
         return ModelsHandler.getInstance();
     }
 
+    public MainController getMainController() {
+        return MainControllerHandler.getInstance().getController();
+    }
+
     /**
      * Opens a new window
      *
