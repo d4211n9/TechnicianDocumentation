@@ -15,7 +15,6 @@ public class SystemUserModel {
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
     private ObservableList<SystemUser> allUsers;
-    private ObservableObjectValue<SystemUser> loggedInSystemUser;
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
