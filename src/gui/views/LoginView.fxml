@@ -32,7 +32,7 @@
                         <Insets left="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="txtfEmail" prefHeight="26.0" prefWidth="172.0" promptText="Email">
+                  <TextField fx:id="txtfEmail" onKeyPressed="#handleEnter" prefHeight="26.0" prefWidth="172.0" promptText="Email">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></TextField>
@@ -45,7 +45,7 @@
                         <Insets left="5.0" />
                      </VBox.margin>
                   </Label>
-                  <PasswordField fx:id="pwfPassword" promptText="Password" />
+                  <PasswordField fx:id="pwfPassword" onKeyPressed="#handleEnter" promptText="Password" />
                </children>
             </VBox>
             <JFXButton buttonType="RAISED" onAction="#handleLogin" prefHeight="40.0" prefWidth="100.0" text="Login">

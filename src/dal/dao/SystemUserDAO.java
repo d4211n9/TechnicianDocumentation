@@ -8,6 +8,12 @@ import dal.interfaces.ISystemUserDAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import exceptions.DALException;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class SystemUserDAO implements ISystemUserDAO {
 
@@ -17,7 +23,11 @@ public class SystemUserDAO implements ISystemUserDAO {
         connector = new SqlConnector();
     }
 
+    public SystemUserDAO(AbstractConnector connector) {
+        this.connector = connector;
+    }
 
+    @Override
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
         SystemUser systemUser = null;
 
@@ -35,18 +45,19 @@ public class SystemUserDAO implements ISystemUserDAO {
                 String password = resultSet.getString("Password");
 
                 String role = resultSet.getString("RoleName");
+                String userName = resultSet.getString("UserName");
+
                 SystemRole systemRole = SystemRole.valueOf(role);
 
-                String name = resultSet.getString("UserName");
-
-                systemUser = new SystemUser(email, password, systemRole, name);
+                systemUser = new SystemUser(email, password, systemRole, userName);
             }
 
             return systemUser;
         }
         catch (SQLException e) {
-            e.printStackTrace();//todo wait for patricks error catcher
-            throw new Exception("Failed to validate login", e);
+            DALException dalException = new DALException("Failed to validate login", e);
+            dalException.printStackTrace(); //TODO Log error in database
+            throw dalException;
         }
     }
 

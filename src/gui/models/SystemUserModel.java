@@ -15,6 +15,7 @@ public class SystemUserModel {
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
     private ObservableList<SystemUser> allUsers;
+    private ObservableObjectValue<SystemUser> loggedInSystemUser;
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
@@ -27,9 +28,9 @@ public class SystemUserModel {
         return systemUserManager.getAllSystemUsers();
     }
 
-    public SystemUser SystemUserValidLogin(SystemUser user) throws Exception {
+    public boolean SystemUserValidLogin(SystemUser user) throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
-        return loggedInSystemUser.getValue();
+        return loggedInSystemUser.get() != null;
     }
 
     public ObservableValue<SystemUser> getLoggedInSystemUser() {
