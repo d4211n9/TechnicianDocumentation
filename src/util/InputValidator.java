@@ -8,10 +8,7 @@ public class InputValidator {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
 
-        if(mat.matches() && !email.isEmpty()){
-            return true;
-        }
-        return false;
+        return mat.matches() && !email.isEmpty();
     }
 
     /**
@@ -33,10 +30,7 @@ public class InputValidator {
         Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$");
         Matcher mat = pattern.matcher(password);
 
-        if(mat.matches() && !password.isEmpty()){
-            return true;
-        }
-        return false;
+        return mat.matches() && !password.isEmpty();
     }
 
 }

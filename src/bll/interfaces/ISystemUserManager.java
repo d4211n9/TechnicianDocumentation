@@ -5,5 +5,5 @@ import be.SystemUser;
 public interface ISystemUserManager {
 
 
-    public SystemUser systemUserValidLogin(SystemUser user) throws Exception;
+    SystemUser systemUserValidLogin(SystemUser user) throws Exception;
 }

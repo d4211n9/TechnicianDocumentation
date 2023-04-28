@@ -10,7 +10,7 @@ import javafx.beans.value.ObservableValue;
 public class SystemUserModel {
 
     private ISystemUserManager systemUserManager;
-    private static ObservableObjectValue<SystemUser> loggedInSystemUser;
+    private ObservableObjectValue<SystemUser> loggedInSystemUser;
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);

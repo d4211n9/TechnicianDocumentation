@@ -38,6 +38,7 @@ public class LoginController extends BaseController implements Initializable {
         easyLogin();
     }
 
+    //TODO Remove before publishing
     private void easyLogin() {
         txtfEmail.setText("micdra01@easv365.dk");
         pwfPassword.setText("P4$$word");
@@ -48,7 +49,8 @@ public class LoginController extends BaseController implements Initializable {
         ivLogo.setImage(logo);
     }
 
-    public void handleLogin() {
+    @FXML
+    private void handleLogin() {
         String email = txtfEmail.getText();
         String password = pwfPassword.getText();
         if(InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
@@ -57,23 +59,21 @@ public class LoginController extends BaseController implements Initializable {
                 if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user)) {
                     openStage(ViewPaths.MAIN_VIEW, "");
                     close();
-                } else {
-                    //TODO Vis at noget gik galt
-                    lblEmail.setText("Email* Wrong email or password, please try again");
-                    txtfEmail.requestFocus();
+
+                    return;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                displayError(new DALException("Failed to login", e));
+                displayError(e);
             }
-        } else {
-            //TODO Vis at noget gik galt
-            lblEmail.setText("Email* Wrong email or password, please try again");
-            txtfEmail.requestFocus();
         }
+
+        //TODO Show that something went wrong
+        lblEmail.setText("Email* Wrong email or password, please try again");
+        txtfEmail.requestFocus();
     }
 
-    public void handleEnter(KeyEvent keyEvent) {
+    @FXML
+    private void handleEnter(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             handleLogin();
         }

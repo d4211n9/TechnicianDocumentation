@@ -5,6 +5,7 @@ import be.SystemUser;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.ISystemUserDAO;
+import exceptions.DALException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +20,11 @@ public class SystemUserDAO implements ISystemUserDAO {
         connector = new SqlConnector();
     }
 
+    public SystemUserDAO(AbstractConnector connector) {
+        this.connector = connector;
+    }
 
+    @Override
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
         SystemUser systemUser = null;
 
@@ -44,8 +49,9 @@ public class SystemUserDAO implements ISystemUserDAO {
             return systemUser;
         }
         catch (SQLException e) {
-            e.printStackTrace();//todo wait for patricks error catcher
-            throw new Exception("Failed to validate login", e);
+            DALException dalException = new DALException("Failed to validate login", e);
+            dalException.printStackTrace(); //TODO Log error in database
+            throw dalException;
         }
     }
 }
