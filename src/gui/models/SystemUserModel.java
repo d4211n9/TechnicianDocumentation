@@ -10,16 +10,16 @@ import javafx.beans.value.ObservableValue;
 public class SystemUserModel {
 
     private ISystemUserManager systemUserManager;
-    private static ObservableObjectValue<SystemUser> loggedInSystemUser;
+    private ObservableObjectValue<SystemUser> loggedInSystemUser;
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
     }
 
-    public SystemUser SystemUserValidLogin(SystemUser user) throws Exception {
+    public boolean SystemUserValidLogin(SystemUser user) throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
-        return loggedInSystemUser.getValue();
+        return loggedInSystemUser.get() != null;
     }
 
     public ObservableValue<SystemUser> getLoggedInSystemUser() {
