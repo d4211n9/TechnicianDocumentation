@@ -30,11 +30,7 @@
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
                 </Label>
-<<<<<<< Updated upstream
-                <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="200.0" promptText="Search..." HBox.hgrow="ALWAYS">
-=======
                 <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="25.0" prefWidth="200.0" promptText="Search..." HBox.hgrow="ALWAYS">
->>>>>>> Stashed changes
                     <HBox.margin>
                         <Insets right="10.0" top="10.0" />
                     </HBox.margin>

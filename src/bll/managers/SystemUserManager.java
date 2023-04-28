@@ -5,11 +5,9 @@ import bll.interfaces.ISystemUserManager;
 import bll.util.Search;
 import dal.dao.SystemUserDAO;
 import dal.interfaces.ISystemUserDAO;
-<<<<<<< Updated upstream
-=======
+
 
 import java.util.Collections;
->>>>>>> Stashed changes
 import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {

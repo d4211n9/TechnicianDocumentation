@@ -8,12 +8,10 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-<<<<<<< Updated upstream
-=======
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
->>>>>>> Stashed changes
 import java.util.List;
 import java.util.Objects;
 
@@ -21,15 +19,10 @@ public class SystemUserModel {
 
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
-<<<<<<< Updated upstream
-    private ObservableList<SystemUser> allUsers;
-=======
-
 
     private List<SystemUser> allUsers;
 
     private ObservableList<SystemUser> filteredUserList;
->>>>>>> Stashed changes
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);

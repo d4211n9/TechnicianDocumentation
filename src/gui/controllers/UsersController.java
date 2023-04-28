@@ -84,17 +84,17 @@ public class UsersController extends BaseController implements Initializable {
         }
     }
 
-<<<<<<< Updated upstream
+
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
-=======
+
+    }
     public void handleSearch(KeyEvent keyEvent) {
         try {
             getModelsHandler().getSystemUserModel().search(txtfSearch.getText());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
->>>>>>> Stashed changes
     }
 }
