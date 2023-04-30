@@ -51,3 +51,8 @@
     -fx-prompt-text-fill: #90AED6;
     -fx-text-fill: #333333;
 }
+
+#loginInformation{
+    -fx-border-color: Gray;
+    -fx-border-width: 2;
+}
