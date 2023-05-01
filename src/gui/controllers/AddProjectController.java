@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class AddProjectController extends BaseController implements Initializable {
     @FXML
-    private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity;
+    private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity, txtfSearch;
     @FXML
     private ComboBox cbRoles;
 
@@ -65,5 +65,20 @@ public class AddProjectController extends BaseController implements Initializabl
     //TODO, valider input
     private boolean validateInput() {
         return true;
+    }
+
+    public void handleAddClient() {
+    }
+
+    public void handleSearch() {
+        try {
+            getModelsHandler().getClientModel().search(txtfSearch.getText());
+            cbRoles.setItems(getModelsHandler().getClientModel().getAllClients());
+            if(cbRoles.getItems().size() == 1) {
+                cbRoles.getSelectionModel().select(0);
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 }

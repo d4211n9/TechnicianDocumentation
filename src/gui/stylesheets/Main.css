@@ -33,3 +33,7 @@
     -fx-border-insets: 0px;
     -fx-background-insets: 0px;
 }
+
+#cbRoles {
+    -fx-font-size: 14;
+}
