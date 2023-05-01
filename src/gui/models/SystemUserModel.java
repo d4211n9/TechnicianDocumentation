@@ -65,7 +65,12 @@ public class SystemUserModel {
     }
 
     public SystemUser createSystemUser(SystemUser user) throws Exception {
-        return systemUserManager.createSystemUser(user);
+        SystemUser createdUser = systemUserManager.createSystemUser(user);
+        if(createdUser != null){
+            allUsers.add(createdUser);
+            filteredUserList.add(createdUser);
+        }
+        return createdUser;
     }
 
     public ObservableList<SystemRole> getAllRoles(){

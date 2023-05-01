@@ -91,7 +91,7 @@ public class SystemUserDAO implements ISystemUserDAO {
     @Override
     public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
         SystemUser user = null;
-        String sql = "INSERT INTO SystemUsers " +
+        String sql = "INSERT INTO SystemUser " +
                 "(Email, Password, RoleName, UserName)" +
                 "VALUES (?, ?, ?, ?)";
 
@@ -99,8 +99,10 @@ public class SystemUserDAO implements ISystemUserDAO {
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
             statement.setString(1, systemUser.getEmail());
+            System.out.println(systemUser.getEmail());
             statement.setString(2, systemUser.getPassword());
-            statement.setString(3, systemUser.getRole().name());
+
+            statement.setString(3, systemUser.getRole().getRole());
             statement.setString(4, systemUser.getName());
             statement.executeUpdate();
             user = systemUser;
