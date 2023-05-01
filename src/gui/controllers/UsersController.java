@@ -2,9 +2,7 @@ package gui.controllers;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
-import gui.util.MainControllerHandler;
 import gui.util.NodeAccessLevel;
-import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -16,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
+
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -80,7 +79,7 @@ public class UsersController extends BaseController implements Initializable {
         try {
             tvUsers.setItems(getModelsHandler().getSystemUserModel().getAllUsers());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            displayError(e);
         }
     }
 
@@ -94,7 +93,7 @@ public class UsersController extends BaseController implements Initializable {
         try {
             getModelsHandler().getSystemUserModel().search(txtfSearch.getText());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            displayError(e);
         }
     }
 }
