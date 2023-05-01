@@ -1,9 +1,12 @@
 package gui.controllers;
 
+import be.Enum.SystemRole;
+import be.SystemUser;
 import gui.util.AutoCompleteBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -13,7 +16,9 @@ public class CreateUserController extends BaseController implements Initializabl
 
 
     public VBox loginInformation;
-    public ComboBox cbRoles;
+    public ComboBox<SystemRole> cbRoles;
+    public TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
+
 
 
     @Override
@@ -36,5 +41,16 @@ public class CreateUserController extends BaseController implements Initializabl
 
     public void handleConfirm(ActionEvent actionEvent) {
 
+
+    }
+
+    private SystemUser createSystemUserFromFields() {
+
+        String name = txtfName.getText();
+        SystemRole role = cbRoles.getValue();
+        String email = txtfEmail.getText();
+        String password = txtfPassword.getText();
+
+        return new SystemUser(password, name, role, email);
     }
 }
