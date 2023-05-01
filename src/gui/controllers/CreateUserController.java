@@ -4,6 +4,7 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import gui.util.AutoCompleteBox;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -15,9 +16,12 @@ import java.util.ResourceBundle;
 public class CreateUserController extends BaseController implements Initializable {
 
 
-    public VBox loginInformation;
-    public ComboBox<SystemRole> cbRoles;
-    public TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
+    @FXML
+    private VBox loginInformation;
+    @FXML
+    private ComboBox<SystemRole> cbRoles;
+    @FXML
+    private TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
 
 
 
@@ -26,9 +30,10 @@ public class CreateUserController extends BaseController implements Initializabl
         try {
             cbRoles.setItems(getModelsHandler().getSystemUserModel().getAllRoles());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            displayError(e);
         }
-        AutoCompleteBox a = new AutoCompleteBox(cbRoles);
+
+        new AutoCompleteBox(cbRoles);
     }
 
 
