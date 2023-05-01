@@ -21,6 +21,9 @@
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </JFXButton>
             <Label fx:id="lblCreateProject" prefHeight="35.0" prefWidth="840.0" text="Create Project" HBox.hgrow="ALWAYS">
                <font>
@@ -62,14 +65,17 @@
                            </font></Label>
                         <Label prefHeight="18.0" prefWidth="96.0" text="Client" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
-                              <Font size="14.0" />
+                              <Font size="16.0" />
                            </font></Label>
                         <TextField fx:id="txtfName" prefHeight="30.0" prefWidth="220.0" GridPane.columnIndex="2">
                            <font>
                               <Font size="14.0" />
                            </font></TextField>
                         <ComboBox fx:id="cbRoles" prefHeight="30.0" prefWidth="258.0" promptText="Choose from existing..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="30.0" prefWidth="200.0" promptText="Search from existing..." GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="30.0" prefWidth="200.0" promptText="Search from existing..." GridPane.columnIndex="2" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextField>
                         <HBox GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <children>
                               <Label text="... or ">
@@ -77,13 +83,16 @@
                                     <Font size="14.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="10.0" right="10.0" top="10.0" />
+                                    <Insets left="10.0" right="10.0" top="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddClient" prefHeight="40.0" prefWidth="130.0" text="➕📄 Add Client">
+                              <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddClient" prefHeight="60.0" prefWidth="150.0" text="➕💰 Add Client">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
                               </JFXButton>
                            </children>
                         </HBox>

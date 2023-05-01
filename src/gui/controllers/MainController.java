@@ -92,7 +92,7 @@ public class MainController extends BaseController implements Initializable {
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("🎅 Clients", ViewPaths.CLIENTS_VIEW),
+                loadButton("💰 Clients", ViewPaths.CLIENTS_VIEW),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 
