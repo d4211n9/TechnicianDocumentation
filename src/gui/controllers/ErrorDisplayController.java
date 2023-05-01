@@ -21,17 +21,12 @@ public class ErrorDisplayController extends BaseController implements Initializa
     @FXML
     private ImageView headerImageView;
     @FXML
-    private Text headerText;
-    @FXML
-    private Text errorMessageText;
-    @FXML
-    private Text contactSupportText;
+    private Text headerText, errorMessageText, contactSupportText;
 
     private Throwable throwable;
 
     public void setContent(Throwable throwable) {
         this.throwable = throwable;
-
         if (throwable != null) errorMessageText.setText(throwable.getMessage());
     }
 
