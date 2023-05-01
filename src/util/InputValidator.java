@@ -33,8 +33,10 @@ public class InputValidator {
         return mat.matches() && !password.isEmpty();
     }
 
+
+    //todo make validation
     public static boolean isName(String name){
-        return name.matches( "[A-Z]+([ '-][a-zA-Z]+)*" );
+        return true;
     }
 
 }
