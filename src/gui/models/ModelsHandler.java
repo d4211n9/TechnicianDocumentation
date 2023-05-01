@@ -3,10 +3,12 @@ package gui.models;
 public class ModelsHandler {
     private static ModelsHandler modelsHandler;
     private SystemUserModel systemUserModel;
+    private ProjectModel projectModel;
 
 
     private ModelsHandler() throws Exception {
         systemUserModel = new SystemUserModel();
+        projectModel = new ProjectModel();
     }
 
     public static ModelsHandler getInstance() throws Exception {
@@ -18,4 +20,9 @@ public class ModelsHandler {
     public SystemUserModel getSystemUserModel() {
         return systemUserModel;
     }
+
+    public ProjectModel getProjectModel() {
+        return projectModel;
+    }
+
 }
