@@ -57,4 +57,7 @@ public class SystemUser implements Searchable<SystemUser> {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
