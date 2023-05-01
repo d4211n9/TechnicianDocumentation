@@ -45,4 +45,8 @@ public class Client {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "#" + ID + ": " + name + " (" + type + ")";
+    }
 }

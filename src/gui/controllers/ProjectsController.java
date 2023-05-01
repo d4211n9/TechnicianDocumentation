@@ -105,6 +105,5 @@ public class ProjectsController extends BaseController implements Initializable 
 
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
-        getMainController().saveLastView(projectsView);
     }
 }

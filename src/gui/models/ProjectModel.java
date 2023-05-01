@@ -16,6 +16,10 @@ public class ProjectModel {
 
     public ProjectModel() throws Exception {
         projectManager = new ProjectManager();
+        loadProjects();
+    }
+
+    public void loadProjects() throws Exception {
         List<Project> copyAllProjects = new ArrayList<>();
         allProjects = retrieveAllProjects();
         allProjects.forEach(project -> copyAllProjects.add(project));
@@ -23,7 +27,9 @@ public class ProjectModel {
     }
 
     public Project createProject(Project project) throws Exception {
-        return projectManager.createProject(project);
+        Project createdProject = projectManager.createProject(project);
+        loadProjects();
+        return createdProject;
     }
 
     public List<Project> retrieveAllProjects() throws Exception {
