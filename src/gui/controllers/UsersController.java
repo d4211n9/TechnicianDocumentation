@@ -63,11 +63,11 @@ public class UsersController extends BaseController implements Initializable {
         buttonAccessLevel = new NodeAccessLevel();
         //TODO Slet, testing
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕👥 Add User", "/gui/views/CreateUserView.fxml", usersView),
+                loadButton("➕👤 Add User", "/gui/views/CreateUserView.fxml", usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➖👥 Delete User", ViewPaths.ADD_PROJECT_VIEW, usersView),
+                loadButton("➖👤 Delete User", ViewPaths.ADD_PROJECT_VIEW, usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
