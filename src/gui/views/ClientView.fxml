@@ -18,6 +18,9 @@
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </JFXButton>
             <Label prefHeight="35.0" prefWidth="840.0" text="Clients" HBox.hgrow="ALWAYS">
                <font>
@@ -39,6 +42,9 @@
                <HBox.margin>
                   <Insets right="10.0" top="10.0" />
                </HBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
          </children>
          <VBox.margin>
