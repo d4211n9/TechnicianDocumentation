@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 public class ClientController extends BaseController implements Initializable {
     @FXML
-    private TableView tvProjects;
+    private TableView tvClients;
     @FXML
     private TableColumn<Client, String> tcName, tcLocation, tcEmail, tcPhone;
 
@@ -47,11 +47,11 @@ public class ClientController extends BaseController implements Initializable {
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        //tcLocation.setCellValueFactory(new PropertyValueFactory<>("location")); //TODO Add location til BE.Client og i Client tabel i DB
+        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         try {
-            tvProjects.setItems(getModelsHandler().getClientModel().getAllClients());
+            tvClients.setItems(getModelsHandler().getClientModel().getAllClients());
         } catch (Exception e) {
             displayError(e);
         }

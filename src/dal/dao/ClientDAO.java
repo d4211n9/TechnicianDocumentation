@@ -28,16 +28,17 @@ public class ClientDAO implements IClientDAO {
              PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, client.getName());
-            statement.setString(2, client.getEmail());
-            statement.setString(3, client.getPhone());
-            statement.setString(4, client.getType());
+            statement.setString(2, client.getLocation());
+            statement.setString(3, client.getEmail());
+            statement.setString(4, client.getPhone());
+            statement.setString(5, client.getType());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
 
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
-                newClient = new Client(id, client.getName(), client.getEmail(), client.getPhone(), client.getType());
+                newClient = new Client(id, client.getName(), client.getLocation(), client.getEmail(), client.getPhone(), client.getType());
             }
         }
         catch (Exception e) {
@@ -61,11 +62,12 @@ public class ClientDAO implements IClientDAO {
                 //Mapping the client
                 int clientID = resultSet.getInt(1);
                 String clientName = resultSet.getString(2);
-                String email = resultSet.getString(3);
-                String phone = resultSet.getString(4);
-                String type = resultSet.getString(5);
+                String clientLocation = resultSet.getString(3);
+                String email = resultSet.getString(4);
+                String phone = resultSet.getString(5);
+                String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, email, phone, type);
+                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
 
                 allClients.add(client);
             }

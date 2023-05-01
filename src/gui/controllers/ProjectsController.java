@@ -41,23 +41,9 @@ public class ProjectsController extends BaseController implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadTestData(); //TODO Slet eventually
         loadTableView();
         addLoadedButtons();
 
-    }
-
-    private void loadTestData() {
-        //TODO Slet, testing
-        Calendar date = Calendar.getInstance();
-        Client c1 = new Client("EASV", "Spangsbjerg Kirkevej 103, 6700 Esbjerg", "info@easv365.dk", "76133200");
-        Client c2 = new Client("EASV", "Alsion 4, 6400 Sønderborg", "info@easv365.dk", "74403200");
-        Project p1 = new Project(c1, "C3 Vindue", date.getTime());
-        Project p2 = new Project(c1, "Innovatorium", date.getTime());
-        Project p3 = new Project(c2, "Lobby", date.getTime());
-        allProjects.add(p1);
-        allProjects.add(p2);
-        allProjects.add(p3);
     }
 
     private void addLoadedButtons() {
