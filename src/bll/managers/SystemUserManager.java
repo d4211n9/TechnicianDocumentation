@@ -23,15 +23,14 @@ public class SystemUserManager implements ISystemUserManager {
 
     @Override
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
-        return systemUserDAO.systemUserValidLogin(user);
-        /** TODO Enable når vi har oprettet en bruger med krypterede credentials
+
         SystemUser systemUser = systemUserDAO.systemUserValidLogin(user);
 
         if(BCrypt.checkpw(user.getPassword(), systemUser.getPassword())){
             return systemUser;
         }
 
-        return null;*/
+        return null;
     }
 
     @Override
