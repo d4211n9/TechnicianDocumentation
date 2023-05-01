@@ -3,6 +3,8 @@ package gui.controllers;
 import be.Enum.SystemRole;
 import be.SystemUser;
 import gui.util.NodeAccessLevel;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -13,7 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import util.ViewPaths;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class UsersController extends BaseController implements Initializable {
-    public TableView tvUsers;
+    public TableView<SystemUser> tvUsers;
     public TableColumn<SystemUser, String> tcName, tcEmail;
     public TableColumn<SystemUser, SystemRole> tcRole;
     public HBox buttonArea;
@@ -65,10 +66,6 @@ public class UsersController extends BaseController implements Initializable {
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("➕👥 Add User", "/gui/views/CreateUserView.fxml", usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
-
-        buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➖👥 Delete User", ViewPaths.ADD_PROJECT_VIEW, usersView),
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
     private void loadTableView() {
@@ -95,5 +92,13 @@ public class UsersController extends BaseController implements Initializable {
         } catch (Exception e) {
             displayError(e);
         }
+    }
+
+    public void handleDelete(ActionEvent actionEvent) {
+       SystemUser user = tvUsers.getSelectionModel().getSelectedItem();
+
+       FXMLLoader loader = openStage("/gui/views/DeleteUserConfirmView.fxml", "delete");
+       DeleteConfirmController controller = loader.getController();
+       controller.setContent(user);
     }
 }

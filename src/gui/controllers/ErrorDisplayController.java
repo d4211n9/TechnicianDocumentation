@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -33,5 +34,11 @@ public class ErrorDisplayController extends BaseController implements Initializa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         headerImageView.setImage(new Image(SymbolPaths.LOGO_NO_BG));
+    }
+
+    public void handleDelete(ActionEvent actionEvent) {//todo
+    }
+
+    public void handleCancel(ActionEvent actionEvent) {//todo
     }
 }
