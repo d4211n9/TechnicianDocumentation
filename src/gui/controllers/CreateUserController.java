@@ -16,10 +16,6 @@ public class CreateUserController extends BaseController implements Initializabl
     public ComboBox cbRoles;
 
 
-    public void handleBack(ActionEvent actionEvent) {
-    }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {//todo test content 
@@ -28,5 +24,17 @@ public class CreateUserController extends BaseController implements Initializabl
             throw new RuntimeException(e);
         }
         AutoCompleteBox a = new AutoCompleteBox(cbRoles);
+    }
+
+
+    public void handleBack() {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+    }
+    public void handleCancel() {
+        handleBack();
+    }
+
+    public void handleConfirm(ActionEvent actionEvent) {
+
     }
 }
