@@ -2,24 +2,31 @@ package gui.controllers;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
+import com.jfoenix.controls.JFXButton;
 import gui.util.NodeAccessLevel;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.controlsfx.glyphfont.FontAwesome;
 
+import java.io.IOException;
 import java.net.URL;
+import java.net.http.WebSocket;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
 
 public class UsersController extends BaseController implements Initializable {
     public TableView<SystemUser> tvUsers;
@@ -28,12 +35,31 @@ public class UsersController extends BaseController implements Initializable {
     public HBox buttonArea;
     public VBox usersView;
     public TextField txtfSearch;
+    public JFXButton btnDelete;
     NodeAccessLevel buttonAccessLevel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
             loadTableView();
             addLoadedButtons();
+           tvListener();
+    }
+
+    private void tvListener() {
+        tvUsers.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(isTvSelected()){
+                    btnDelete.setDisable(false);
+                }else {
+                    btnDelete.setDisable(true);
+                }
+            }
+        });
+    }
+
+    private boolean isTvSelected() {
+        return tvUsers.getSelectionModel().getSelectedItem() != null;
     }
 
     private void addLoadedButtons() {
@@ -80,7 +106,6 @@ public class UsersController extends BaseController implements Initializable {
         }
     }
 
-
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
@@ -94,11 +119,10 @@ public class UsersController extends BaseController implements Initializable {
         }
     }
 
-    public void handleDelete(ActionEvent actionEvent) {
-       SystemUser user = tvUsers.getSelectionModel().getSelectedItem();
-
-       FXMLLoader loader = openStage("/gui/views/DeleteUserConfirmView.fxml", "delete");
-       DeleteConfirmController controller = loader.getController();
-       controller.setContent(user);
+    public void handleDelete(ActionEvent actionEvent) throws IOException {
+       Object user = tvUsers.getSelectionModel().getSelectedItem();
+        if(showQuestionDialog(user.toString(), true)){
+            System.out.println("delete " + user.toString());
+        }
     }
 }

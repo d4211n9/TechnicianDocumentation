@@ -9,13 +9,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.ViewPaths;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class BaseController {
     public ModelsHandler getModelsHandler() throws Exception {
@@ -108,5 +112,19 @@ public class BaseController {
         });
 
         return button;
+    }
+
+    public boolean showQuestionDialog(String message, boolean defaultYes) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+        alert.setContentText(message);
+        alert.setHeaderText("Are you sure you wanna delete");
+        Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
+        Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
+        noButton.setDefaultButton(!defaultYes);
+        yesButton.setDefaultButton(defaultYes);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.YES;
     }
 }
