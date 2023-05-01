@@ -32,9 +32,9 @@ public class ProjectsController extends BaseController implements Initializable 
     @FXML
     private TableView tvProjects;
     @FXML
-    private TableColumn<Project, String> tcLocation, tcProjectName;
+    private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
     @FXML
-    private TableColumn<Project, Integer> tcClient;
+    private TableColumn<Project, Integer> tcID;
     @FXML
     private TableColumn<Project, Date> tcCreated;
     private NodeAccessLevel buttonAccessLevel;
@@ -82,7 +82,8 @@ public class ProjectsController extends BaseController implements Initializable 
     }
 
     private void loadTableView() {
-        tcClient.setCellValueFactory(new PropertyValueFactory<>("clientID")); //TODO Ændre fra at vise ID til kundens navn
+        tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
         tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));

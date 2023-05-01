@@ -5,31 +5,38 @@ import util.Searchable;
 import java.util.Date;
 
 public class Project implements Searchable<Project> {
-    private String location, name;
-    private int ID, clientID;
+    private String location, name, clientName;
+    private int ID;
     private Date created;
+    private Client client;
 
-    public Project(String name, int clientID, String location, Date created) {
+    public Project(String name, Client client, String location, Date created) {
+        this.client = client;
         this.name = name;
-        this.clientID = clientID;
+        this.clientName = client.getName();
         this.location = location;
         this.created = created;
     }
 
-    public Project(int ID, String name, int clientID, String location, Date created) {
+    public Project(int ID, String name, Client client, String location, Date created) {
         this.ID = ID;
+        this.client = client;
         this.name = name;
-        this.clientID = clientID;
+        this.clientName = client.getName();
         this.location = location;
         this.created = created;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public String getClientName() {
+        return clientName;
     }
 
     public int getID() {
         return ID;
-    }
-
-    public int getClientID() {
-        return clientID;
     }
 
     public String getLocation() {
@@ -46,7 +53,7 @@ public class Project implements Searchable<Project> {
 
     @Override
     public Project search(String query) {
-        String searchableFields = (clientID + name + location + created).toLowerCase();
+        String searchableFields = (ID + name + clientName + location + created).toLowerCase();
         String lowerCaseQuery = query.toLowerCase();
 
         if (searchableFields.contains(lowerCaseQuery)) return this;

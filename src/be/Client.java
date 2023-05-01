@@ -18,4 +18,24 @@ public class Client {
         this.phone = phone;
         this.type = type;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getID() {
+        return ID;
+    }
 }
