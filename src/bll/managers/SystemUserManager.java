@@ -2,6 +2,7 @@ package bll.managers;
 
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
+import bll.util.BCrypt;
 import bll.util.Search;
 import dal.dao.SystemUserDAO;
 import dal.interfaces.ISystemUserDAO;
@@ -23,7 +24,14 @@ public class SystemUserManager implements ISystemUserManager {
     @Override
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
         return systemUserDAO.systemUserValidLogin(user);
-        //todo should check the encryption with b crypt from this method.
+        /** TODO Enable når vi har oprettet en bruger med krypterede credentials
+        SystemUser systemUser = systemUserDAO.systemUserValidLogin(user);
+
+        if(BCrypt.checkpw(user.getPassword(), systemUser.getPassword())){
+            return systemUser;
+        }
+
+        return null;*/
     }
 
     @Override
@@ -38,6 +46,10 @@ public class SystemUserManager implements ISystemUserManager {
 
     @Override
     public SystemUser createSystemUser(SystemUser user) throws Exception {
+        String salt = BCrypt.gensalt(10);
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
+        user.setPassword(hashedPassword);
+
         return systemUserDAO.createSystemUser(user);
     }
 
