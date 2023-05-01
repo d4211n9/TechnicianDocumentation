@@ -1,10 +1,16 @@
 package gui.controllers;
 
+import be.Enum.SystemRole;
+import com.jfoenix.controls.JFXButton;
 import exceptions.GUIException;
 import gui.models.ModelsHandler;
+import gui.util.MainControllerHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.ViewPaths;
@@ -14,6 +20,10 @@ import java.io.IOException;
 public class BaseController {
     public ModelsHandler getModelsHandler() throws Exception {
         return ModelsHandler.getInstance();
+    }
+
+    public MainController getMainController() {
+        return MainControllerHandler.getInstance().getController();
     }
 
     /**
@@ -38,6 +48,7 @@ public class BaseController {
         stage.setScene(new Scene(root));
         stage.setTitle(sceneTitle);
         stage.initModality(Modality.APPLICATION_MODAL);
+        //stage.initStyle(StageStyle.UNDECORATED); //TODO Fjern outcommenting når resizing spiller?
         stage.show();
 
         return loader;
@@ -67,5 +78,35 @@ public class BaseController {
         FXMLLoader loader = openStage(ViewPaths.ERROR_DISPLAYER, "Error");
         ErrorDisplayController controller = loader.getController();
         controller.setContent(throwable);
+        throwable.printStackTrace(); //TODO Slet når vi kan logge fejl?
+    }
+
+
+    public SystemRole getLoggedInUser(){
+        //Gets the logged-in user's role
+        try {
+            SystemRole loggedInUserRole = getModelsHandler()
+                    .getSystemUserModel()
+                    .getLoggedInSystemUser()
+                    .getValue()
+                    .getRole();
+            return loggedInUserRole;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public Button loadButton(String text, String fxmlPath, Node pageNode) {
+        JFXButton button = new JFXButton(text);
+        button.setFont(Font.font(16));
+        button.setPrefWidth(150);
+        button.setPrefHeight(60);
+
+        MainController mainController = MainControllerHandler.getInstance().getController();
+        button.setOnAction(e -> {
+            mainController.saveLastView(pageNode);
+            mainController.mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
+        });
+
+        return button;
     }
 }

@@ -20,16 +20,18 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
-public class MainViewController extends BaseController implements Initializable {
+public class MainController extends BaseController implements Initializable {
     @FXML
-    private VBox sidebar;
+    private VBox sidebar, homeView;
     @FXML
-    private BorderPane mainBorderPane;
+    public BorderPane mainBorderPane;
     @FXML
     private ImageView ivLogo;
 
     private NodeAccessLevel buttonAccessLevel;
+    private Stack<Node> viewHistory = new Stack<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,8 +84,12 @@ public class MainViewController extends BaseController implements Initializable 
         buttonAccessLevel = new NodeAccessLevel();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("Users", ViewPaths.USERS_VIEW),
+                loadButton("👥 Users", ViewPaths.USERS_VIEW),
                 Arrays.asList(SystemRole.Administrator));
+
+        buttonAccessLevel.addNodeAccessLevel(
+                loadButton("📁 Projects", ViewPaths.PROJECTS_VIEW),
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 
     private Button loadButton(String text, String fxmlPath) {
@@ -91,9 +97,20 @@ public class MainViewController extends BaseController implements Initializable 
         button.setFont(Font.font(16));
         button.setPrefWidth(120);
         button.setPrefHeight(60);
-        button.setOnAction(e -> mainBorderPane.setCenter(loadView(fxmlPath).getRoot()));
+        button.setOnAction(e -> {
+            mainBorderPane.setCenter(loadView(fxmlPath).getRoot());
+            saveLastView(homeView);
+        });
 
         return button;
+    }
+
+    public void saveLastView(Node node) {
+        viewHistory.push(node);
+    }
+
+    public Node getLastView() {
+        return viewHistory.pop();
     }
 
     private void loadImages() {

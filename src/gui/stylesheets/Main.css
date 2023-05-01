@@ -27,3 +27,9 @@
     -fx-border-insets: 10px;
     -fx-background-insets: 10px;
 }
+
+#btnBack {
+    -fx-padding: 0px;
+    -fx-border-insets: 0px;
+    -fx-background-insets: 0px;
+}

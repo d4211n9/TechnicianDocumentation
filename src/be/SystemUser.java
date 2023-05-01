@@ -2,13 +2,15 @@ package be;
 
 
 import be.Enum.SystemRole;
+import util.Searchable;
 
-public class SystemUser {
+public class SystemUser implements Searchable<SystemUser> {
 
     private String email;
     private SystemRole role;
 
     private String password;
+
     private String name;
 
     public SystemUser(String email, String password){
@@ -23,6 +25,13 @@ public class SystemUser {
         this.name = name;
     }
 
+    public SystemUser(String email, SystemRole role, String name){
+        this.email = email;
+        this.role = role;
+        this.name = name;
+
+    }
+
     public String getEmail() {
         return email;
     }
@@ -30,5 +39,16 @@ public class SystemUser {
         return role;
     }
 
+    public String getName() {return name;}
 
+
+    @Override
+    public SystemUser search(String query) {
+        String searchableFields = (email + name + role.getRole()).toLowerCase();
+        String lowerCaseQuery = query.toLowerCase();
+
+        if (searchableFields.contains(lowerCaseQuery)) return this;
+
+        return null;
+    }
 }

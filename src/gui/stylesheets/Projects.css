@@ -1,0 +1,58 @@
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #D9D9D9;
+    -fx-border-radius: 2;
+}
+
+.table-view .table-cell {
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header, .table-view .column-header-background, .table-view .column-header-background .filler {
+    -fx-background-color: #D9D9D9;
+    -fx-border-width: 0;
+}
+
+.table-view .column-header .label {
+    -fx-alignment:CENTER_LEFT;
+    -fx-padding: 5px 0 5px 0;
+    -fx-text-fill: #333333;
+    -fx-font-size: 16;
+}
+
+.table-row-cell {
+    -fx-font-size: 14;
+    -fx-background-color: transparent;
+    -fx-text-background-color: #D9D9D9;
+}
+
+.table-row-cell:selected {
+    -fx-text-background-color: #90AED6;
+}
+
+.button {
+    -fx-background-color: #90AED6;
+    -fx-text-fill: #333333;
+}
+
+.button:hover {
+    -fx-background-color: #90AED6;
+    -fx-text-fill: #000000;
+}
+
+#btnSearch, #btnBack {
+    -fx-padding: 0px;
+    -fx-border-insets: 0px;
+    -fx-background-insets: 0px;
+}
+
+#txtfSearch {
+    -fx-background-color: #D9D9D9;
+    -fx-prompt-text-fill: #90AED6;
+    -fx-text-fill: #333333;
+}
+
+#loginInformation{
+    -fx-border-color: Gray;
+    -fx-border-width: 2;
+}
