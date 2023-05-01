@@ -47,10 +47,14 @@ public class ClientController extends BaseController implements Initializable {
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        tcProjectName.setCellValueFactory(new PropertyValueFactory<>("projectName"));
-        tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
-        tvProjects.setItems(allProjects);
+        //tcLocation.setCellValueFactory(new PropertyValueFactory<>("location")); //TODO Add location til BE.Client og i Client tabel i DB
+        tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        try {
+            tvProjects.setItems(getModelsHandler().getClientModel().getAllClients());
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
 
