@@ -31,10 +31,6 @@ public class AddProjectController extends BaseController implements Initializabl
         } catch (Exception e) {
             displayError(e);
         }
-        JFXButton btn = new JFXButton("create Client");
-        btn.setPrefSize(210, 25);
-        cbRoles.getItems().add(btn);
-
     }
 
     public void handleCancel() {

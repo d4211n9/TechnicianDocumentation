@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.CreateClientController">
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.CreateClientController">
     <children>
         <HBox>
             <children>
@@ -38,11 +31,11 @@
                 <Insets bottom="10.0" />
             </VBox.margin>
         </HBox>
-        <VBox alignment="CENTER" prefHeight="599.0" prefWidth="840.0">
+        <VBox fx:id="backgground" alignment="CENTER" prefHeight="599.0" prefWidth="840.0">
             <children>
-                <HBox alignment="CENTER" prefHeight="167.0" prefWidth="840.0">
+                <HBox alignment="CENTER" prefHeight="198.0" prefWidth="840.0">
                     <children>
-                        <GridPane prefHeight="117.0" prefWidth="840.0">
+                        <GridPane prefHeight="171.0" prefWidth="840.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="10.0" prefWidth="170.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.59999618530276" minWidth="10.0" prefWidth="140.0" />
@@ -54,12 +47,15 @@
                                 <RowConstraints maxHeight="37.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="33.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Label prefHeight="18.0" prefWidth="70.0" text="Name" GridPane.columnIndex="1" />
-                                <Label prefHeight="18.0" prefWidth="96.0" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <Label prefHeight="18.0" prefWidth="96.0" text="Email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <TextField fx:id="txtfName" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" />
-                                <ComboBox fx:id="cbRoles" prefHeight="25.0" prefWidth="258.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtfPhone" layoutX="307.0" layoutY="15.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Label layoutX="173.0" layoutY="89.0" prefHeight="18.0" prefWidth="96.0" text="Phone" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtfEmail" layoutX="307.0" layoutY="15.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                             </children>
                             <HBox.margin>
                                 <Insets top="20.0" />
@@ -72,7 +68,7 @@
                         <Insets left="50.0" right="200.0" top="20.0" />
                     </VBox.margin>
                     <children>
-                        <Label fx:id="lblLoginDetails" prefHeight="60.0" prefWidth="222.0" text="Login details">
+                        <Label fx:id="lblLoginDetails" prefHeight="60.0" prefWidth="222.0" text="Location Details">
                             <VBox.margin>
                                 <Insets left="100.0" />
                             </VBox.margin>
@@ -93,12 +89,12 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label prefHeight="18.0" prefWidth="70.0" text="Email" GridPane.columnIndex="1" />
-                                <Label prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <TextField fx:id="txtfPassword" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                <TextField fx:id="txtfEmail" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
-                                <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                <TextField fx:id="txtfConfirmPassword" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                <Label prefHeight="18.0" prefWidth="70.0" text="City" GridPane.columnIndex="1" />
+                                <Label fx:id="Address" prefHeight="18.0" prefWidth="96.0" text="Street" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <TextField fx:id="txtfAddress" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <TextField fx:id="txtfCity" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
+                                <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Postal Code" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <TextField fx:id="txtfPostalCode" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                             </children>
                         </GridPane>
                     </children>

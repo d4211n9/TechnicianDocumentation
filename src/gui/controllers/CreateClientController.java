@@ -1,14 +1,50 @@
 package gui.controllers;
 
+import be.Client;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
-public class CreateClientController {
-    public void handleCancel(ActionEvent actionEvent) {
-    }
+public class CreateClientController extends BaseController{
+    public TextField txtfName;
+    public TextField txtfPhone;
+    public TextField txtfEmail;
+    public TextField txtfAddress;
+    public TextField txtfCity;
+    public TextField txtfPostalCode;
+
 
     public void handleConfirm(ActionEvent actionEvent) {
+        if(isTextFieldInfoValid()){
+            String name = txtfName.getText();
+            String email = txtfEmail.getText();
+            String phone = txtfPhone.getText();
+
+            String city = txtfCity.getText();
+            String street = txtfAddress.getText();
+            String postalCode = txtfPostalCode.getText();
+            String location = street + " " +city + " " + postalCode;
+
+            Client client = new Client(name, location,email, phone, "b2b");
+            try {
+                getModelsHandler().getClientModel().createClient(client);
+                handleCancel();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private boolean isTextFieldInfoValid() {
+        return true;
+    }
+
+    public void handleCancel() {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
     public void handleBack(ActionEvent actionEvent) {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 }

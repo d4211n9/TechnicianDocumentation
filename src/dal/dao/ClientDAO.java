@@ -22,7 +22,7 @@ public class ClientDAO implements IClientDAO {
     @Override
     public Client createClient(Client client) throws Exception {
         Client newClient = null;
-        String sql = "INSERT INTO Client (Name, Email, Phone, Type) VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO Client (Name, ClientLocation, Email, Phone, Type) VALUES (?, ?, ?, ?, ?);";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
