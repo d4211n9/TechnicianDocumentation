@@ -77,7 +77,8 @@ public class ProjectsController extends BaseController implements Initializable 
         }
     }
 
-    private void addButton(Button button) {buttonArea.getChildren().add(0, button);}
+    private void addButton(Button button) {
+        buttonArea.getChildren().add(0, button);}
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();

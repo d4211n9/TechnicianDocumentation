@@ -9,6 +9,7 @@ public class SystemUser implements Searchable<SystemUser> {
     private String email;
     private SystemRole role;
 
+
     private String password;
 
     private String name;
@@ -50,5 +51,13 @@ public class SystemUser implements Searchable<SystemUser> {
         if (searchableFields.contains(lowerCaseQuery)) return this;
 
         return null;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

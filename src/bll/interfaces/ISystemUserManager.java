@@ -10,4 +10,6 @@ public interface ISystemUserManager {
     List<SystemUser> getAllSystemUsers() throws Exception;
 
     List<SystemUser> search(List<SystemUser> allUsers, String query);
+
+    SystemUser createSystemUser(SystemUser user) throws Exception;
 }
