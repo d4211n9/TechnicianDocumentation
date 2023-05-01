@@ -1,6 +1,8 @@
 package be;
 
-public class Client {
+import util.Searchable;
+
+public class Client implements Searchable {
     private String name, location, email, phone, type;
     private int ID;
 
@@ -48,5 +50,15 @@ public class Client {
     @Override
     public String toString() {
         return "#" + ID + ": " + name + " (" + type + ")";
+    }
+
+    @Override
+    public Object search(String query) {
+        String searchableFields = ("#" + ID + ": " + name + "(" + type + ")").toLowerCase();
+        String lowerCaseQuery = query.toLowerCase();
+
+        if (searchableFields.contains(lowerCaseQuery)) return this;
+
+        return null;
     }
 }

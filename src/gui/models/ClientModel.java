@@ -34,4 +34,15 @@ public class ClientModel {
     public ObservableList<Client> getAllClients() {
         return filteredClients;
     }
+
+    public void search(String query) throws Exception {
+        filteredClients.clear();
+
+        if (!query.isBlank()) {
+            filteredClients.addAll(clientManager.search(allClients, query));
+        }
+        else {
+            filteredClients.addAll(allClients);
+        }
+    }
 }
