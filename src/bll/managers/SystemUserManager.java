@@ -36,5 +36,10 @@ public class SystemUserManager implements ISystemUserManager {
         return search.searchForString(allUsers, query);
     }
 
+    @Override
+    public SystemUser createSystemUser(SystemUser user) throws Exception {
+        return systemUserDAO.createSystemUser(user);
+    }
+
 
 }

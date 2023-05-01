@@ -9,6 +9,7 @@ public class SystemUser implements Searchable<SystemUser> {
     private String email;
     private SystemRole role;
 
+
     private String password;
 
     private String name;
@@ -51,4 +52,9 @@ public class SystemUser implements Searchable<SystemUser> {
 
         return null;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
 }

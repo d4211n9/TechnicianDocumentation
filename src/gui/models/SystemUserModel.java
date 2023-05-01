@@ -52,7 +52,6 @@ public class SystemUserModel {
     }
 
     public void search(String query){
-
         filteredUserList.clear();
 
         System.out.println(allUsers.size());
@@ -62,6 +61,9 @@ public class SystemUserModel {
         else {
             filteredUserList.addAll(allUsers);
         }
+    }
 
+    public SystemUser createSystemUser(SystemUser user) throws Exception {
+        return systemUserManager.createSystemUser(user);
     }
 }
