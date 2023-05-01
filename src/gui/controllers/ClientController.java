@@ -62,7 +62,7 @@ public class ClientController extends BaseController implements Initializable {
         buttonAccessLevel = new NodeAccessLevel();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕📄 Add Client", ViewPaths.CLIENTS_VIEW, clientView),
+                loadButton("➕📄 Add Client", ViewPaths.CREATE_CLIENTS_VIEW, clientView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 

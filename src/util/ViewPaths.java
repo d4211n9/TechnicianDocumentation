@@ -8,6 +8,7 @@ public class ViewPaths {
     public static final String PROJECTS_VIEW = "/gui/views/ProjectsView.fxml";
     public static final String ADD_PROJECT_VIEW = "/gui/views/AddProjectView.fxml";
     public static final String CLIENTS_VIEW = "/gui/views/ClientView.fxml";
+    public static final String CREATE_CLIENTS_VIEW = "/gui/views/CreateClietView.fxml";
 
     private ViewPaths() {}
 }

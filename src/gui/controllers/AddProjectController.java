@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Client;
 import be.Project;
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -21,11 +22,19 @@ public class AddProjectController extends BaseController implements Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        createComboBoxContent();
+    }
+
+    private void createComboBoxContent() {
         try {
             cbRoles.setItems(getModelsHandler().getClientModel().getAllClients());
         } catch (Exception e) {
             displayError(e);
         }
+        JFXButton btn = new JFXButton("create Client");
+        btn.setPrefSize(210, 25);
+        cbRoles.getItems().add(btn);
+
     }
 
     public void handleCancel() {
