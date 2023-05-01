@@ -50,13 +50,11 @@ public class CreateUserController extends BaseController implements Initializabl
         SystemUser user = createSystemUserFromFields();
         if(user != null){
             try {
-                SystemUser s = getModelsHandler().getSystemUserModel().createSystemUser(createSystemUserFromFields());
-
+                getModelsHandler().getSystemUserModel().createSystemUser(createSystemUserFromFields());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     private SystemUser createSystemUserFromFields() {
