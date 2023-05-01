@@ -33,11 +33,8 @@ public class InputValidator {
         return mat.matches() && !password.isEmpty();
     }
 
-    //ingen blank space først/sidst
-    //ingen tal, special tegn
-    //todo make check
-    public static boolean isName(String password){
-        return true;
+    public static boolean isName(String name){
+        return name.matches( "[A-Z]+([ '-][a-zA-Z]+)*" );
     }
 
 }
