@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.CreateUserController">
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.CreateUserController">
     <children>
         <HBox>
             <children>
@@ -53,6 +60,7 @@
                         <Label prefHeight="18.0" prefWidth="96.0" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <TextField prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" />
+                        <ComboBox fx:id="cbRoles" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                      <HBox.margin>
                         <Insets top="20.0" />
@@ -90,7 +98,7 @@
                         <Label prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <TextField prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
-                        <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
