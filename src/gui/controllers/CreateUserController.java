@@ -1,10 +1,9 @@
 package gui.controllers;
 
-import javafx.collections.ObservableList;
+import gui.util.AutoCompleteBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
