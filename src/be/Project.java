@@ -8,7 +8,6 @@ public class Project {
 
     public Project(Client client, String projectName, Date created) {
         clientName = client.getName();
-        clientLocation = client.getLocation();
         this.projectName = projectName;
         this.created = created;
     }
