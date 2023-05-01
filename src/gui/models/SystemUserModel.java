@@ -1,5 +1,6 @@
 package gui.models;
 
+import be.Enum.SystemRole;
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import bll.managers.SystemUserManager;
@@ -65,5 +66,10 @@ public class SystemUserModel {
 
     public SystemUser createSystemUser(SystemUser user) throws Exception {
         return systemUserManager.createSystemUser(user);
+    }
+
+    public ObservableList<SystemRole> getAllRoles(){
+        ObservableList<SystemRole> list = FXCollections.observableList(Arrays.stream(SystemRole.values()).toList());
+        return list;
     }
 }
