@@ -40,7 +40,7 @@ public class LoginController extends BaseController implements Initializable {
 
     //TODO Remove before publishing
     private void easyLogin() {
-        txtfEmail.setText("micdra01@easv365.dk");
+        txtfEmail.setText("Kennidamkier@gmail.com");
         pwfPassword.setText("P4$$word");
     }
 
