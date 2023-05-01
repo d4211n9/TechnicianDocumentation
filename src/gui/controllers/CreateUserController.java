@@ -23,7 +23,7 @@ public class CreateUserController extends BaseController implements Initializabl
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {//todo test content 
-            cbRoles.setItems(getModelsHandler().getSystemUserModel().getAllUsers());
+            cbRoles.setItems(getModelsHandler().getSystemUserModel().getAllRoles());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

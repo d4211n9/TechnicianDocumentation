@@ -33,4 +33,11 @@ public class InputValidator {
         return mat.matches() && !password.isEmpty();
     }
 
+    //ingen blank space først/sidst
+    //ingen tal, special tegn
+    //todo make check
+    public static boolean isName(String password){
+        return true;
+    }
+
 }
