@@ -1,8 +1,5 @@
 package be;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Client {
     private String name, location, email, phone, type;
     private int ID;
@@ -22,6 +19,10 @@ public class Client {
         this.email = email;
         this.phone = phone;
         this.type = type;
+    }
+
+    public int getID() {
+        return ID;
     }
 
     public String getName() {

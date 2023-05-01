@@ -1,7 +1,5 @@
 package gui.models;
 
-import be.Client;
-
 public class ModelsHandler {
     private static ModelsHandler modelsHandler;
     private SystemUserModel systemUserModel;

@@ -64,11 +64,12 @@ public class ProjectDAO implements IProjectDAO {
                 //Mapping the client
                 int clientID = resultSet.getInt(6);
                 String clientName = resultSet.getString(7);
-                String email = resultSet.getString(8);
-                String phone = resultSet.getString(9);
-                String type = resultSet.getString(10);
+                String clientLocation = resultSet.getString(8);
+                String email = resultSet.getString(9);
+                String phone = resultSet.getString(10);
+                String type = resultSet.getString(11);
                 
-                Client client = new Client(clientID, clientName, email, phone, type);
+                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
 
                 //Mapping the project
                 int ID = resultSet.getInt(1);
