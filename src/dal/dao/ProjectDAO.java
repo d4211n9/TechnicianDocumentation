@@ -7,6 +7,9 @@ import dal.interfaces.IProjectDAO;
 import exceptions.DALException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ProjectDAO implements IProjectDAO {
     private AbstractConnector connector;
@@ -42,5 +45,33 @@ public class ProjectDAO implements IProjectDAO {
         }
 
         return newProject;
+    }
+
+    @Override
+    public List<Project> getAllProjects() throws Exception {
+        ArrayList<Project> allProjects = new ArrayList<>();
+
+        String sql = "SELECT * FROM Project;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                int ID = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                int clientID = resultSet.getInt(3);
+                String location = resultSet.getString(4);
+                Date created = resultSet.getDate(5);
+                Project project = new Project(ID, name, clientID, location, created);
+                allProjects.add(project);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to read all projects", e);
+        }
+
+        return allProjects;
     }
 }

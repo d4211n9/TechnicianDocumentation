@@ -17,9 +17,21 @@ public class ProjectModel {
     public ProjectModel() throws Exception {
         projectManager = new ProjectManager();
         List<Project> copyAllProjects = new ArrayList<>();
-        //allProjects = retrieveAllProjects();
+        allProjects = retrieveAllProjects();
         allProjects.forEach(project -> copyAllProjects.add(project));
         filteredProjectList = FXCollections.observableList(copyAllProjects);
+    }
+
+    public Project createProject(Project project) throws Exception {
+        return projectManager.createProject(project);
+    }
+
+    public List<Project> retrieveAllProjects() throws Exception {
+        return projectManager.getAllProjects();
+    }
+
+    public ObservableList<Project> getAllProjects() throws Exception {
+        return filteredProjectList;
     }
 
     public void search(String query) {

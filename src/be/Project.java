@@ -1,8 +1,10 @@
 package be;
 
+import util.Searchable;
+
 import java.util.Date;
 
-public class Project {
+public class Project implements Searchable<Project> {
     private String location, name;
     private int ID, clientID;
     private Date created;
@@ -40,5 +42,15 @@ public class Project {
 
     public Date getCreated() {
         return created;
+    }
+
+    @Override
+    public Project search(String query) {
+        String searchableFields = (clientID + name + location + created).toLowerCase();
+        String lowerCaseQuery = query.toLowerCase();
+
+        if (searchableFields.contains(lowerCaseQuery)) return this;
+
+        return null;
     }
 }

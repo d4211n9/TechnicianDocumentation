@@ -23,6 +23,11 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
+    public List<Project> getAllProjects() throws Exception {
+        return projectDAO.getAllProjects();
+    }
+
+    @Override
     public List<Project> search(List<Project> allProjects, String query) {
         return search.searchForString(allProjects, query);
     }
