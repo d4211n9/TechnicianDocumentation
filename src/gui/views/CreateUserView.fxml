@@ -13,51 +13,51 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AddProjectController">
-   <children>
-      <HBox>
-         <children>
-            <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="35.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
-               <HBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </HBox.margin>
-            </JFXButton>
-            <Label fx:id="lblCreateProject" prefHeight="35.0" prefWidth="840.0" text="Create Project" HBox.hgrow="ALWAYS">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-               <HBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-         <VBox.margin>
-            <Insets bottom="10.0" />
-         </VBox.margin>
-      </HBox>
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.CreateUserController">
+    <children>
+        <HBox>
+            <children>
+                <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="35.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
+                    <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                    </HBox.margin>
+                </JFXButton>
+                <Label fx:id="lblCreateUser" prefHeight="35.0" prefWidth="840.0" text="Create User" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets left="10.0" />
+                    </padding>
+                    <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                    </HBox.margin>
+                </Label>
+            </children>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </HBox>
       <VBox alignment="CENTER" prefHeight="599.0" prefWidth="840.0">
          <children>
             <HBox alignment="CENTER" prefHeight="167.0" prefWidth="840.0">
                <children>
                   <GridPane prefHeight="117.0" prefWidth="840.0">
-                     <columnConstraints>
+                    <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="10.0" prefWidth="170.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.59999618530276" minWidth="10.0" prefWidth="140.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="259.6" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.59999618530276" minWidth="10.0" prefWidth="140.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="259.6" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="326.79999999999995" minWidth="10.0" prefWidth="298.4" />
-                     </columnConstraints>
-                     <rowConstraints>
+                    </columnConstraints>
+                    <rowConstraints>
                         <RowConstraints maxHeight="37.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="37.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="33.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
+                      <RowConstraints maxHeight="37.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="33.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
                         <Label prefHeight="18.0" prefWidth="70.0" text="Name" GridPane.columnIndex="1" />
-                        <Label prefHeight="18.0" prefWidth="96.0" text="Customer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtfName" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" />
                         <ComboBox fx:id="cbRoles" prefHeight="25.0" prefWidth="258.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
@@ -72,7 +72,7 @@
                   <Insets left="50.0" right="200.0" top="20.0" />
                </VBox.margin>
                <children>
-                  <Label fx:id="lblCustomerDetails" prefHeight="60.0" prefWidth="222.0" text="Customer details">
+                  <Label fx:id="lblLoginDetails" prefHeight="60.0" prefWidth="222.0" text="Login details">
                      <VBox.margin>
                         <Insets left="100.0" />
                      </VBox.margin>
@@ -93,11 +93,11 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label prefHeight="18.0" prefWidth="70.0" text="Street" GridPane.columnIndex="1" />
-                        <Label prefHeight="18.0" prefWidth="96.0" text="City" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label prefHeight="18.0" prefWidth="70.0" text="Email" GridPane.columnIndex="1" />
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtfPassword" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <TextField fx:id="txtfEmail" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
-                        <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Postal Code" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField fx:id="txtfConfirmPassword" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
@@ -106,22 +106,22 @@
          </children>
       </VBox>
       <Pane prefHeight="84.0" prefWidth="840.0" VBox.vgrow="ALWAYS" />
-      <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">
-         <VBox.margin>
-            <Insets left="10.0" right="10.0" />
-         </VBox.margin>
-         <children>
-            <JFXButton onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </JFXButton>
-            <JFXButton onAction="#handleCancel" prefHeight="60.0" prefWidth="150.0" text="❌ Cancel">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </JFXButton>
-         </children>
-      </HBox>
-   </children>
+        <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">
+            <VBox.margin>
+                <Insets left="10.0" right="10.0" />
+            </VBox.margin>
+            <children>
+                <JFXButton onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </JFXButton>
+                <JFXButton onAction="#handleCancel" prefHeight="60.0" prefWidth="150.0" text="❌ Cancel">
+                    <HBox.margin>
+                        <Insets left="20.0" />
+                    </HBox.margin>
+                </JFXButton>
+            </children>
+        </HBox>
+    </children>
 </VBox>

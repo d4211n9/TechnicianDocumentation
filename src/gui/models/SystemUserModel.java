@@ -1,5 +1,6 @@
 package gui.models;
 
+import be.Enum.SystemRole;
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import bll.managers.SystemUserManager;
@@ -52,7 +53,6 @@ public class SystemUserModel {
     }
 
     public void search(String query){
-
         filteredUserList.clear();
 
         System.out.println(allUsers.size());
@@ -62,6 +62,19 @@ public class SystemUserModel {
         else {
             filteredUserList.addAll(allUsers);
         }
+    }
 
+    public SystemUser createSystemUser(SystemUser user) throws Exception {
+        SystemUser createdUser = systemUserManager.createSystemUser(user);
+        if(createdUser != null){
+            allUsers.add(createdUser);
+            filteredUserList.add(createdUser);
+        }
+        return createdUser;
+    }
+
+    public ObservableList<SystemRole> getAllRoles(){
+        ObservableList<SystemRole> list = FXCollections.observableList(Arrays.stream(SystemRole.values()).toList());
+        return list;
     }
 }

@@ -1,5 +1,8 @@
 package be.Enum;
 
+import javax.lang.model.element.Name;
+import java.util.jar.Attributes;
+
 public enum SystemRole {
     Administrator("Administrator"),
     Technician("Technician"),
@@ -13,4 +16,16 @@ public enum SystemRole {
     }
 
     public String getRole() { return role; }
+
+    public static SystemRole getRole(String roleName) {
+        if (roleName.equalsIgnoreCase(Administrator.getRole())) return Administrator;
+
+        if (roleName.equalsIgnoreCase(Technician.getRole())) return Technician;
+
+        if (roleName.equalsIgnoreCase(ProjectManager.getRole())) return ProjectManager;
+
+        if (roleName.equalsIgnoreCase(SalesPerson.getRole())) return SalesPerson;
+
+        return null;
+    }
 }

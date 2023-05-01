@@ -87,4 +87,29 @@ public class SystemUserDAO implements ISystemUserDAO {
         return allUsers;
     }
 
+
+    @Override
+    public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
+        SystemUser user = null;
+        String sql = "INSERT INTO SystemUser " +
+                "(Email, Password, RoleName, UserName)" +
+                "VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, systemUser.getEmail());
+            System.out.println(systemUser.getEmail());
+            statement.setString(2, systemUser.getPassword());
+
+            statement.setString(3, systemUser.getRole().getRole());
+            statement.setString(4, systemUser.getName());
+            statement.executeUpdate();
+            user = systemUser;
+        }
+        catch (Exception e) {
+            throw new Exception("Failed create system user", e);
+        }
+        return user;
+    }
 }
