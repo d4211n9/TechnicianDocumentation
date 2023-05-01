@@ -56,3 +56,11 @@
     -fx-border-color: Gray;
     -fx-border-width: 2;
 }
+
+#lblCreateProject {
+    -fx-text-fill: #90AED6;
+}
+
+#lblCustomerDetails{
+    -fx-text-fill: #D9D9D9;
+}
