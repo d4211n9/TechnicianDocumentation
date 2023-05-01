@@ -79,7 +79,6 @@ public class CreateUserController extends BaseController implements Initializabl
     }
 
     private boolean isPasswordSame(){
-
         return txtfPassword.getText().equals(txtfConfirmPassword.getText());
     }
 }
