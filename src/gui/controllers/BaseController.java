@@ -114,6 +114,11 @@ public class BaseController {
         return button;
     }
 
+    public void loadInMainView(Node node, Node pageNode){
+        MainController mainController = MainControllerHandler.getInstance().getController();
+        mainController.saveLastView(pageNode);
+        mainController.mainBorderPane.setCenter(node);
+    }
     public boolean showQuestionDialog(String message, boolean defaultYes) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getButtonTypes().clear();
@@ -126,5 +131,12 @@ public class BaseController {
         yesButton.setDefaultButton(defaultYes);
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.YES;
+    }
+    public JFXButton createButton(String text){
+        JFXButton button = new JFXButton(text);
+        button.setFont(Font.font(16));
+        button.setPrefWidth(150);
+        button.setPrefHeight(60);
+        return button;
     }
 }

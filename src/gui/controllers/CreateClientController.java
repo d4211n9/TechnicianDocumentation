@@ -7,13 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 public class CreateClientController extends BaseController{
-    public TextField txtfName;
-    public TextField txtfPhone;
-    public TextField txtfEmail;
-    public TextField txtfAddress;
-    public TextField txtfCity;
-    public TextField txtfPostalCode;
-
+    public TextField txtfName, txtfPhone, txtfEmail, txtfAddress, txtfCity, txtfPostalCode;
 
     public void handleConfirm(ActionEvent actionEvent) {
         if(isTextFieldInfoValid()){
@@ -46,5 +40,9 @@ public class CreateClientController extends BaseController{
 
     public void handleBack(ActionEvent actionEvent) {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+    }
+
+    public void setEditContent(Client selectedItem) {
+
     }
 }

@@ -1,30 +1,24 @@
-package gui.controllers;
+package gui.controllers.userController;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
+import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import org.controlsfx.glyphfont.FontAwesome;
 
-import java.io.IOException;
 import java.net.URL;
-import java.net.http.WebSocket;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -38,22 +32,24 @@ public class UsersController extends BaseController implements Initializable {
     public JFXButton btnDelete;
     NodeAccessLevel buttonAccessLevel;
 
+    private JFXButton editButton, deleteButton;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
             loadTableView();
+            initializeButtonAccessLevels();
             addLoadedButtons();
-           tvListener();
+            tvListener();
     }
 
+
     private void tvListener() {
-        tvUsers.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(isTvSelected()){
-                    btnDelete.setDisable(false);
-                }else {
-                    btnDelete.setDisable(true);
-                }
+        tvUsers.setOnMouseClicked(event -> {
+            if(isTvSelected()){
+                deleteButton.setDisable(false);
+                editButton.setDisable(false);
+            }else {
+                deleteButton.setDisable(true);
+                editButton.setDisable(true);
             }
         });
     }
@@ -86,12 +82,44 @@ public class UsersController extends BaseController implements Initializable {
         buttonArea.getChildren().add(0, button);
     }
 
+
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
-        //TODO Slet, testing
+
+        addDeleteBtn();
+        addEditBtn();
+
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕👤 Add User", "/gui/views/CreateUserView.fxml", usersView),
+                loadButton("➕👤 Add User", "/gui/views/userViews/CreateUserView.fxml", usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+    }
+
+    private void addEditBtn() {
+        editButton = createButton("Edit User");
+        buttonAccessLevel.addNodeAccessLevel(editButton,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+        editButton.setDisable(true);
+
+        editButton.setOnMouseClicked(event -> {
+            FXMLLoader loader = loadView("/gui/views/userViews/CreateUserView.fxml");
+            CreateUserController controller = loader.getController();
+            controller.setEditContent(tvUsers.getSelectionModel().getSelectedItem());
+            loadInMainView(loader.getRoot(), usersView);
+        });
+    }
+
+    private void addDeleteBtn() {
+        deleteButton = createButton("Delete User");
+        buttonAccessLevel.addNodeAccessLevel(deleteButton,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+        deleteButton.setDisable(true);
+
+        deleteButton.setOnMouseClicked(event -> {
+            Object user = tvUsers.getSelectionModel().getSelectedItem();
+            if(showQuestionDialog(user.toString(), true)){
+                System.out.println("delete " + user.toString());
+            }
+        });
     }
 
     private void loadTableView() {
@@ -109,20 +137,13 @@ public class UsersController extends BaseController implements Initializable {
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
-
     }
-    public void handleSearch(KeyEvent keyEvent) {
+
+    public void handleSearch() {
         try {
             getModelsHandler().getSystemUserModel().search(txtfSearch.getText());
         } catch (Exception e) {
             displayError(e);
-        }
-    }
-
-    public void handleDelete(ActionEvent actionEvent) throws IOException {
-       Object user = tvUsers.getSelectionModel().getSelectedItem();
-        if(showQuestionDialog(user.toString(), true)){
-            System.out.println("delete " + user.toString());
         }
     }
 }

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.CreateUserController">
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.userController.CreateUserController">
     <children>
         <HBox>
             <children>
@@ -96,11 +96,11 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label prefHeight="18.0" prefWidth="70.0" text="Email" GridPane.columnIndex="1" />
-                        <Label prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label  fx:id="lblEmail" prefHeight="18.0" prefWidth="70.0" text="Email" GridPane.columnIndex="1" />
+                        <Label  fx:id="lblPassword" prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtfPassword" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <TextField fx:id="txtfEmail" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
-                        <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="lblConfirmPassword" layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField fx:id="txtfConfirmPassword" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
@@ -114,7 +114,7 @@
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
             <children>
-                <JFXButton onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
+                <JFXButton fx:id="btnConfirm" onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>
