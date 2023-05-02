@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -24,13 +25,20 @@ import java.util.ResourceBundle;
 
 
 public class UsersController extends BaseController implements Initializable {
-    public TableView<SystemUser> tvUsers;
-    public TableColumn<SystemUser, String> tcName, tcEmail;
-    public TableColumn<SystemUser, SystemRole> tcRole;
-    public HBox buttonArea;
-    public VBox usersView;
-    public TextField txtfSearch;
-    public JFXButton btnDelete;
+    @FXML
+    private TableView<SystemUser> tvUsers;
+    @FXML
+    private TableColumn<SystemUser, String> tcName, tcEmail;
+    @FXML
+    private TableColumn<SystemUser, SystemRole> tcRole;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private VBox usersView;
+    @FXML
+    private TextField txtfSearch;
+    @FXML
+    private JFXButton btnDelete;
     NodeAccessLevel buttonAccessLevel;
 
     private JFXButton editButton, deleteButton;
@@ -41,7 +49,6 @@ public class UsersController extends BaseController implements Initializable {
             addLoadedButtons();
             tvListener();
     }
-
 
     private void tvListener() {
         tvUsers.setOnMouseClicked(event -> {
