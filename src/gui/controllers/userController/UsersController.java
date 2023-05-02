@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import util.ViewPaths;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -90,7 +91,7 @@ public class UsersController extends BaseController implements Initializable {
         addEditBtn();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕👤 Add User", "/gui/views/userViews/CreateUserView.fxml", usersView),
+                loadButton("➕👤 Add User", ViewPaths.CREATE_USER_VIEW, usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
@@ -101,7 +102,7 @@ public class UsersController extends BaseController implements Initializable {
         editButton.setDisable(true);
 
         editButton.setOnMouseClicked(event -> {
-            FXMLLoader loader = loadView("/gui/views/userViews/CreateUserView.fxml");
+            FXMLLoader loader = loadView(ViewPaths.CREATE_USER_VIEW);
             CreateUserController controller = loader.getController();
             controller.setEditContent(tvUsers.getSelectionModel().getSelectedItem());
             loadInMainView(loader.getRoot(), usersView);

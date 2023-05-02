@@ -124,7 +124,7 @@ public class BaseController {
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
         alert.setContentText(message);
-        alert.setHeaderText("Are you sure you wanna delete");
+        alert.setHeaderText("Are you sure you want to delete?");
         Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
         Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
         noButton.setDefaultButton(!defaultYes);

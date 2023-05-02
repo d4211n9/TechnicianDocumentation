@@ -101,7 +101,7 @@ public class ClientController extends BaseController implements Initializable {
         editButton.setDisable(true);
 
         editButton.setOnMouseClicked(event -> {
-            FXMLLoader loader = loadView("/gui/views/CreateClietView.fxml");
+            FXMLLoader loader = loadView(ViewPaths.CREATE_CLIENTS_VIEW);
             CreateClientController controller = loader.getController();
             controller.setEditContent(tvClients.getSelectionModel().getSelectedItem());
             loadInMainView(loader.getRoot(), clientView);
@@ -131,10 +131,8 @@ public class ClientController extends BaseController implements Initializable {
 
     private void addLoadedButtons() {
         initializeButtonAccessLevels();
-
         try {
             SystemRole loggedInUserRole = getLoggedInUser();
-
             // Loops through the buttons and adds them to the sidebar if the user has the right access level
             for (Node button : buttonAccessLevel.getNodes()) {
 
