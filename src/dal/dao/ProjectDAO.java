@@ -22,7 +22,7 @@ public class ProjectDAO implements IProjectDAO {
     @Override
     public Project createProject(Project project) throws Exception {
         Project newProject = null;
-        String sql = "INSERT INTO Project (Name, Client, Location, Created) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Project (Name, Client, Location, Created, SoftDelete) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -32,6 +32,7 @@ public class ProjectDAO implements IProjectDAO {
             statement.setString(3, project.getLocation());
             Timestamp timestamp = new Timestamp(project.getCreated().getTime());
             statement.setTimestamp(4, timestamp);
+            statement.setDate(5, null);
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();

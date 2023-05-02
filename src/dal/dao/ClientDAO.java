@@ -22,7 +22,7 @@ public class ClientDAO implements IClientDAO {
     @Override
     public Client createClient(Client client) throws Exception {
         Client newClient = null;
-        String sql = "INSERT INTO Client (Name, ClientLocation, Email, Phone, Type) VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO Client (Name, ClientLocation, Email, Phone, Type, SoftDelete) VALUES (?, ?, ?, ?, ?, ?);";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -32,6 +32,7 @@ public class ClientDAO implements IClientDAO {
             statement.setString(3, client.getEmail());
             statement.setString(4, client.getPhone());
             statement.setString(5, client.getType());
+            statement.setDate(6, null);
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -52,7 +53,7 @@ public class ClientDAO implements IClientDAO {
     public List<Client> getAllClients() throws Exception {
         List<Client> allClients = new ArrayList<>();
 
-        String sql = "SELECT * FROM Client;";
+        String sql = "SELECT * FROM Client WHERE SoftDelete IS NULL;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
