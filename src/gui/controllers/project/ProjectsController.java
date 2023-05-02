@@ -1,9 +1,11 @@
-package gui.controllers;
+package gui.controllers.project;
 
 import be.Enum.SystemRole;
 import be.Project;
+import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,10 +14,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
@@ -105,5 +110,17 @@ public class ProjectsController extends BaseController implements Initializable 
 
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+    }
+
+    public void handleDoubleClick(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+            if(mouseEvent.getClickCount() == 2){
+                Project selected = (Project) tvProjects.getSelectionModel().getSelectedItem();
+                FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
+                ProjectInfoController controller = loader.getController();
+                controller.setContent(selected);
+                getMainController().mainBorderPane.setCenter(loader.getRoot());
+            }
+        }
     }
 }

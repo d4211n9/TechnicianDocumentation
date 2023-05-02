@@ -1,7 +1,8 @@
-package gui.controllers;
+package gui.controllers.project;
 
 import be.Client;
 import be.Project;
+import gui.controllers.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;

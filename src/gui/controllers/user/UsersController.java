@@ -1,19 +1,16 @@
-package gui.controllers.userController;
+package gui.controllers.user;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;

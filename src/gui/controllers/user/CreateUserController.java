@@ -1,4 +1,4 @@
-package gui.controllers.userController;
+package gui.controllers.user;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
@@ -6,20 +6,15 @@ import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import gui.util.AutoCompleteBox;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import util.InputValidator;
 
-import javax.management.relation.Role;
-import java.io.ObjectInputValidation;
 import java.net.URL;
 import java.util.ResourceBundle;
 
