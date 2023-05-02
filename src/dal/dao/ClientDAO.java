@@ -92,7 +92,7 @@ public class ClientDAO implements IClientDAO {
             statement.setString(4, client.getPhone());
             statement.setString(5, client.getType());
             statement.setInt(6, client.getID());
-            int i = statement.executeUpdate();
+            statement.executeUpdate();
 
             updatedClient = client;
         } catch (SQLException e) {
