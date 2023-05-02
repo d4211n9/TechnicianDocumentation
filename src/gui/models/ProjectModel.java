@@ -44,6 +44,10 @@ public class ProjectModel {
         return filteredProjectList;
     }
 
+    public Project softDeleteProject (Project project) throws Exception {
+        return null;
+    }
+
     public void search(String query) {
         filteredProjectList.clear();
         if(query != null) {

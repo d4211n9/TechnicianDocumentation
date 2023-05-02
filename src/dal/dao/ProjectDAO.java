@@ -8,6 +8,7 @@ import dal.interfaces.IProjectDAO;
 import exceptions.DALException;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,26 @@ public class ProjectDAO implements IProjectDAO {
 
     public ProjectDAO() throws Exception {
         connector = new SqlConnector();
+    }
+
+    @Override
+    public Project softDeleteProject(Project project) throws Exception {
+
+        Project softDeletedProject = null;
+
+        String sql = "UPDATE Project SET SoftDelete=CURRENT_DATE WHERE ID=?;";
+
+        try(Connection connection = connector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setDate(6, java.sql.Date.valueOf(LocalDate.now()));
+            statement.executeQuery();
+
+        } catch (Exception e) {
+            throw new Exception("Failed to soft delete project", e);
+        }
+        return softDeletedProject;
+
     }
 
     @Override

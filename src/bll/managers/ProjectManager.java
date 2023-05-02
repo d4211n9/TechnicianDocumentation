@@ -28,6 +28,11 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
+    public Project softDeleteProject(Project project) throws Exception {
+        return projectDAO.softDeleteProject(project);
+    }
+
+    @Override
     public List<Project> search(List<Project> allProjects, String query) {
         return search.searchForString(allProjects, query);
     }
