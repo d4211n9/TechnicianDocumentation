@@ -20,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
@@ -115,11 +114,12 @@ public class ProjectsController extends BaseController implements Initializable 
     public void handleDoubleClick(MouseEvent mouseEvent) {
         if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
             if(mouseEvent.getClickCount() == 2){
-                Project selected = (Project) tvProjects.getSelectionModel().getSelectedItem();
                 FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
-                ProjectInfoController controller = loader.getController();
-                controller.setContent(selected);
                 getMainController().mainBorderPane.setCenter(loader.getRoot());
+
+                ProjectInfoController controller = loader.getController();
+                Project selected = (Project) tvProjects.getSelectionModel().getSelectedItem();
+                controller.setContent(selected);
             }
         }
     }
