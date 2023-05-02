@@ -107,7 +107,7 @@
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
             <children>
-                <JFXButton onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
+                <JFXButton fx:id="btnConfirm" onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>

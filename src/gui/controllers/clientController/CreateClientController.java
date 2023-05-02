@@ -15,6 +15,7 @@ public class CreateClientController extends BaseController {
     public TextField txtfName, txtfPhone, txtfEmail, txtfAddress, txtfCity, txtfPostalCode;
     public Label lblCreateUser;
     public HBox buttonArea;
+    public JFXButton btnConfirm;
 
     Client selectedClient;
 
@@ -44,6 +45,7 @@ public class CreateClientController extends BaseController {
     }
 
     public void setEditContent(Client selectedItem) {
+
         txtfName.setText(selectedItem.getName());
         txtfEmail.setText(selectedItem.getEmail());
         txtfPhone.setText(selectedItem.getPhone());
@@ -51,6 +53,7 @@ public class CreateClientController extends BaseController {
         lblCreateUser.setText("Edit Client");
 
         addEditBtn();
+        buttonArea.getChildren().remove(btnConfirm);
         selectedClient = selectedItem;
         //todo vi skal have lavet en location tabel for at kunne sætte det sidste information
     }
