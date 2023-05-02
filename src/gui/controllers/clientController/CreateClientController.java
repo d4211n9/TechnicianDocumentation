@@ -64,8 +64,7 @@ public class CreateClientController extends BaseController {
 
         button.setOnMouseClicked(event -> {
             if(isTextFieldInfoValid()) {
-                Client client = bindClientInfo();//todo lav en update i dal osv..
-                System.out.println("edit bro");
+                Client client = bindClientInfo();
                 try {
                     getModelsHandler().getClientModel().updateClient(client, selectedClient);
                     handleCancel();
@@ -85,6 +84,6 @@ public class CreateClientController extends BaseController {
         String postalCode = txtfPostalCode.getText();
         String location = street + " " +city + " " + postalCode;
 
-        return new Client(name, location,email, phone, "b2b");//todo type burde være en enum...
+        return new Client(selectedClient.getID(), name, location,email, phone, "b2b");//todo type burde være en enum...
     }
 }
