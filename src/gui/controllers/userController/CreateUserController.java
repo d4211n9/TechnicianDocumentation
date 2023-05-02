@@ -26,20 +26,18 @@ import java.util.ResourceBundle;
 public class CreateUserController extends BaseController implements Initializable {
 
 
-    public VBox projectsView;
-    public Label lblCreateUser;
-    public Label lblEmail;
-    public Label lblPassword;
-    public Label lblConfirmPassword;
-    public JFXButton btnConfirm;
-    public HBox buttonArea;
     @FXML
-    private VBox loginInformation;
+    private VBox projectsView, loginInformation;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private Label lblCreateUser, lblEmail, lblPassword, lblConfirmPassword;
+    @FXML
+    private JFXButton btnConfirm;
     @FXML
     private ComboBox<SystemRole> cbRoles;
     @FXML
     private TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
-
 
 
     @Override
@@ -49,12 +47,8 @@ public class CreateUserController extends BaseController implements Initializabl
         } catch (Exception e) {
             displayError(e);
         }
-
         new AutoCompleteBox(cbRoles);
-
-
     }
-
 
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
@@ -110,7 +104,6 @@ public class CreateUserController extends BaseController implements Initializabl
         cbRoles.getSelectionModel().select(user.getRole());
         buttonArea.getChildren().remove(btnConfirm);
         addEditBtn(user);
-
     }
 
     private void addEditBtn(SystemUser user) {

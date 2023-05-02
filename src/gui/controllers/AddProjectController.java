@@ -2,11 +2,11 @@ package gui.controllers;
 
 import be.Client;
 import be.Project;
-import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -18,7 +18,7 @@ public class AddProjectController extends BaseController implements Initializabl
     @FXML
     private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity, txtfSearch;
     @FXML
-    private ComboBox cbRoles;
+    private ComboBox cbClients;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -27,7 +27,7 @@ public class AddProjectController extends BaseController implements Initializabl
 
     private void createComboBoxContent() {
         try {
-            cbRoles.setItems(getModelsHandler().getClientModel().getAllClients());
+            cbClients.setItems(getModelsHandler().getClientModel().getAllClients());
         } catch (Exception e) {
             displayError(e);
         }
@@ -44,7 +44,7 @@ public class AddProjectController extends BaseController implements Initializabl
     public void handleConfirm() {
         if(validateInput()) {
             String name = txtfName.getText();
-            Client client = (Client) cbRoles.getSelectionModel().getSelectedItem();
+            Client client = (Client) cbClients.getSelectionModel().getSelectedItem();
             String street = txtfStreet.getText();
             String postalCode = txtfPostalCode.getText();
             String city = txtfCity.getText();
@@ -55,6 +55,7 @@ public class AddProjectController extends BaseController implements Initializabl
             try {
                 getModelsHandler().getProjectModel().createProject(project);
                 getMainController().mainBorderPane.setCenter(loadView(ViewPaths.PROJECTS_VIEW).getRoot());
+                //TODO Åben det nye projekt der er oprettet, når vi har view til det...
                 getMainController().saveLastView(null);
             } catch (Exception e) {
                 displayError(e);
@@ -73,9 +74,9 @@ public class AddProjectController extends BaseController implements Initializabl
     public void handleSearch() {
         try {
             getModelsHandler().getClientModel().search(txtfSearch.getText());
-            cbRoles.setItems(getModelsHandler().getClientModel().getAllClients());
-            if(cbRoles.getItems().size() == 1) {
-                cbRoles.getSelectionModel().select(0);
+            cbClients.setItems(getModelsHandler().getClientModel().getAllClients());
+            if(cbClients.getItems().size() == 1) {
+                cbClients.getSelectionModel().select(0);
             }
         } catch (Exception e) {
             displayError(e);
