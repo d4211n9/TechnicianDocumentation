@@ -29,7 +29,6 @@ public class SystemUserManager implements ISystemUserManager {
         if(BCrypt.checkpw(user.getPassword(), systemUser.getPassword())){
             return systemUser;
         }
-
         return null;
     }
 
@@ -50,6 +49,15 @@ public class SystemUserManager implements ISystemUserManager {
         user.setPassword(hashedPassword);
 
         return systemUserDAO.createSystemUser(user);
+    }
+
+    @Override
+    public SystemUser updateSystemUser(SystemUser user) throws Exception {
+        String salt = BCrypt.gensalt(10);
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
+        user.setPassword(hashedPassword);
+
+        return systemUserDAO.updateSystemUser(user);
     }
 
 

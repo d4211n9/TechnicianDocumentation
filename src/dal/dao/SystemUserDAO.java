@@ -95,13 +95,12 @@ public class SystemUserDAO implements ISystemUserDAO {
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
             statement.setString(1, systemUser.getEmail());
-            System.out.println(systemUser.getEmail());
             statement.setString(2, systemUser.getPassword());
-
             statement.setString(3, systemUser.getRole().getRole());
             statement.setString(4, systemUser.getName());
             statement.setDate(5, null);
             statement.executeUpdate();
+
             user = systemUser;
         }
         catch (Exception e) {
@@ -109,4 +108,28 @@ public class SystemUserDAO implements ISystemUserDAO {
         }
         return user;
     }
+
+    @Override
+    public SystemUser updateSystemUser(SystemUser user) throws Exception {
+        SystemUser updatedUser = null;
+        String sql = "UPDATE SystemUser SET Email=?, Password=?, RoleName=?, UserName=?, SoftDelete=? WHERE Email=?;";
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPassword());//todo
+            statement.setString(3, user.getRole().toString());
+            statement.setString(4, user.getName());
+            statement.setTimestamp(5, null);
+            statement.setString(6, user.getEmail());
+
+            statement.executeUpdate();
+
+            updatedUser = user;
+        } catch (SQLException e) {
+            throw new Exception("Failed to edit the event", e);
+        }
+        return updatedUser;
+    }
+
 }

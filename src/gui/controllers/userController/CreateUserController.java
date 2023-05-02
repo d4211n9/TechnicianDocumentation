@@ -39,6 +39,8 @@ public class CreateUserController extends BaseController implements Initializabl
     @FXML
     private TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
 
+    private SystemUser selectedUser;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,7 +49,6 @@ public class CreateUserController extends BaseController implements Initializabl
         } catch (Exception e) {
             displayError(e);
         }
-        new AutoCompleteBox(cbRoles);
     }
 
     public void handleBack() {
@@ -72,11 +73,11 @@ public class CreateUserController extends BaseController implements Initializabl
     private SystemUser createSystemUserFromFields() {
         if(validateInput()){
             String name = txtfName.getText();
-            int role = cbRoles.getSelectionModel().getSelectedIndex();
+            SystemRole role = cbRoles.getSelectionModel().getSelectedItem();
             String email = txtfEmail.getText();
             String password = txtfPassword.getText();
 
-            return new SystemUser(email, password, SystemRole.getRole(String.valueOf(cbRoles.getItems().get(role))), name);
+            return new SystemUser(email, password, role, name);
         }
         return null;
     }
@@ -104,6 +105,8 @@ public class CreateUserController extends BaseController implements Initializabl
         cbRoles.getSelectionModel().select(user.getRole());
         buttonArea.getChildren().remove(btnConfirm);
         addEditBtn(user);
+
+        selectedUser = user;
     }
 
     private void addEditBtn(SystemUser user) {
@@ -112,20 +115,16 @@ public class CreateUserController extends BaseController implements Initializabl
 
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
-                String name = txtfName.getText();
-                String email = txtfEmail.getText();
-                String password = txtfPassword.getText();
-                SystemUser systemUser;
-                SystemRole role;
-
-                if (cbRoles.getSelectionModel().isSelected(-1)) {
-                    role = user.getRole();
-                } else {
-                    int roleIndex = cbRoles.getSelectionModel().getSelectedIndex();
-                    role = SystemRole.getRole(String.valueOf(cbRoles.getItems().get(roleIndex)));
+                SystemUser systemUser = createSystemUserFromFields();
+                try {
+                    getModelsHandler().getSystemUserModel().updateSystemUser(systemUser, selectedUser);
+                    handleBack();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                systemUser = new SystemUser(email, password, role, name);//todo skal sendes til dal osv..
             }
         });
     }
+
+
 }

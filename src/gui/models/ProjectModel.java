@@ -48,11 +48,10 @@ public class ProjectModel {
         filteredProjectList.clear();
         if(query != null) {
             searchString = query;
-            if (!query.isBlank()) {
-                filteredProjectList.addAll(projectManager.search(allProjects, query));
-            } else {
-                filteredProjectList.addAll(allProjects);
+            filteredProjectList.addAll(projectManager.search(allProjects, query));
             }
+        else {
+            filteredProjectList.addAll(projectManager.search(allProjects, ""));
         }
     }
 }

@@ -16,6 +16,8 @@ public class CreateClientController extends BaseController {
     public Label lblCreateUser;
     public HBox buttonArea;
 
+    Client selectedClient;
+
     public void handleConfirm(ActionEvent actionEvent) {
         if(isTextFieldInfoValid()){
 
@@ -49,6 +51,7 @@ public class CreateClientController extends BaseController {
         lblCreateUser.setText("Edit Client");
 
         addEditBtn();
+        selectedClient = selectedItem;
         //todo vi skal have lavet en location tabel for at kunne sætte det sidste information
     }
 
@@ -57,11 +60,15 @@ public class CreateClientController extends BaseController {
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {
-            System.out.println("edit bro");
             if(isTextFieldInfoValid()) {
                 Client client = bindClientInfo();//todo lav en update i dal osv..
-
-                handleCancel();
+                System.out.println("edit bro");
+                try {
+                    getModelsHandler().getClientModel().updateClient(client, selectedClient);
+                    handleCancel();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }

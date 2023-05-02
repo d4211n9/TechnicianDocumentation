@@ -24,12 +24,14 @@ public class SystemUserModel {
     private String searchString;
     private ObservableList<SystemUser> filteredUserList;
 
+    private  List<SystemUser> copyAllUsers;
+
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
 
         allUsers = retrieveAllUsers();
-        List<SystemUser> copyAllUsers = new ArrayList<>(allUsers);
+        copyAllUsers = new ArrayList<>(allUsers);
         filteredUserList = FXCollections.observableList(copyAllUsers);
     }
 
@@ -54,11 +56,9 @@ public class SystemUserModel {
         filteredUserList.clear();
         if(query != null) {
             searchString = query;
-            if (!query.isBlank()) {
-                filteredUserList.addAll(systemUserManager.search(allUsers, query));
-            } else {
-                filteredUserList.addAll(allUsers);
-            }
+            filteredUserList.addAll(systemUserManager.search(allUsers, query));
+        }else {
+            filteredUserList.addAll(systemUserManager.search(allUsers, ""));
         }
     }
 
@@ -74,5 +74,15 @@ public class SystemUserModel {
     public ObservableList<SystemRole> getAllRoles(){
         ObservableList<SystemRole> list = FXCollections.observableList(Arrays.stream(SystemRole.values()).toList());
         return list;
+    }
+
+    public boolean updateSystemUser(SystemUser user, SystemUser originalUser) throws Exception{
+        if(systemUserManager.updateSystemUser(user) != null){
+            allUsers.remove(user);
+            allUsers.add(originalUser);
+            search(searchString);
+            return true;
+        }
+        return false;
     }
 }

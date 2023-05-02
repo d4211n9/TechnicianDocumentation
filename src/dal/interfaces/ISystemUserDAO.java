@@ -11,4 +11,8 @@ public interface ISystemUserDAO {
     List<SystemUser> getAllSystemUsers() throws Exception;
 
     SystemUser createSystemUser(SystemUser user) throws Exception;
+
+    SystemUser updateSystemUser(SystemUser user) throws Exception;
+
+
 }

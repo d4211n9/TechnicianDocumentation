@@ -96,7 +96,7 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     private void addEditBtn() {
-        editButton = createButton("Edit User");
+        editButton = createButton("Edit Client");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);

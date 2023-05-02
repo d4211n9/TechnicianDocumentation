@@ -45,11 +45,21 @@ public class ClientModel {
         filteredClients.clear();
         if(query != null) {
             searchString = query;
-            if (!query.isBlank()) {
-                filteredClients.addAll(clientManager.search(allClients, query));
+            filteredClients.addAll(clientManager.search(allClients, query));
             } else {
-                filteredClients.addAll(allClients);
-            }
+                filteredClients.addAll(clientManager.search(allClients, ""));
         }
+
+
+    }
+
+    public boolean updateClient(Client client, Client originalClient) throws Exception{
+        if(clientManager.updateClient(client) != null){
+            allClients.remove(originalClient);
+            allClients.add(client);
+            search(searchString);
+            return true;
+        }
+        return false;
     }
 }

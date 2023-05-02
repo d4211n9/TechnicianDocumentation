@@ -99,7 +99,7 @@ public class ProjectsController extends BaseController implements Initializable 
     }
 
     private void addEditBtn() {
-        editButton = createButton("Edit User");
+        editButton = createButton("Edit Project");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
