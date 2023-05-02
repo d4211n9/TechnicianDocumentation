@@ -55,7 +55,8 @@ public class ProjectDAO implements IProjectDAO {
 
         String sql = "SELECT * FROM Project " +
                 "INNER JOIN Client " +
-                "ON Client.ID=Project.Client;";
+                "ON Client.ID=Project.Client " +
+                "WHERE Project.SoftDelete IS NULL;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
