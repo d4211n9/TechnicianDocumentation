@@ -34,7 +34,7 @@ public class ClientDAO implements IClientDAO {
             statement.setString(5, client.getType());
             statement.setDate(6, null);
 
-            statement.executeUpdate();
+            //  statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
 
             if (resultSet.next()) {
