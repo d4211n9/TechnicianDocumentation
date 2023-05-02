@@ -27,7 +27,7 @@ public class SystemUserDAO implements ISystemUserDAO {
     public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
         SystemUser systemUser = null;
 
-        String sql = "SELECT * FROM SystemUser WHERE Email = ?";
+        String sql = "SELECT * FROM SystemUser WHERE Email = ? AND SoftDelete IS NULL";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -64,7 +64,7 @@ public class SystemUserDAO implements ISystemUserDAO {
         try (Connection connection = connector.getConnection();
              Statement statement = connection.createStatement()) {
 
-            String sql = "SELECT * FROM SystemUser;";
+            String sql = "SELECT * FROM SystemUser WHERE SoftDelete IS NULL;";
 
             ResultSet rs = statement.executeQuery(sql);
 
@@ -88,8 +88,8 @@ public class SystemUserDAO implements ISystemUserDAO {
     public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
         SystemUser user = null;
         String sql = "INSERT INTO SystemUser " +
-                "(Email, Password, RoleName, UserName)" +
-                "VALUES (?, ?, ?, ?)";
+                "(Email, Password, RoleName, UserName, SoftDelete)" +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -100,6 +100,7 @@ public class SystemUserDAO implements ISystemUserDAO {
 
             statement.setString(3, systemUser.getRole().getRole());
             statement.setString(4, systemUser.getName());
+            statement.setDate(5, null);
             statement.executeUpdate();
             user = systemUser;
         }
