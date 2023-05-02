@@ -60,4 +60,9 @@ public class Project implements Searchable<Project> {
 
         return null;
     }
+
+    @Override
+    public String toString() {
+        return ID + ": " + name + " " + clientName;
+    }
 }

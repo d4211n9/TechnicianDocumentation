@@ -124,7 +124,7 @@ public class CreateUserController extends BaseController implements Initializabl
                     int roleIndex = cbRoles.getSelectionModel().getSelectedIndex();
                     role = SystemRole.getRole(String.valueOf(cbRoles.getItems().get(roleIndex)));
                 }
-                systemUser = new SystemUser(email, password, role, name);
+                systemUser = new SystemUser(email, password, role, name);//todo skal sendes til dal osv..
             }
         });
     }
