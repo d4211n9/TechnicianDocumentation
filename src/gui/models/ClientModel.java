@@ -13,6 +13,7 @@ public class ClientModel {
     private IClientManager clientManager;
     private List<Client> allClients;
     private ObservableList<Client> filteredClients;
+    private String searchString;
 
     public ClientModel() throws Exception {
         clientManager = new ClientManager();
@@ -24,6 +25,11 @@ public class ClientModel {
     }
 
     public Client createClient(Client client) throws Exception {
+        Client finalClient = clientManager.createClient(client);
+        if(finalClient != null){
+            allClients.add(finalClient);
+            search(searchString);
+        }
         return clientManager.createClient(client);
     }
 
@@ -37,12 +43,13 @@ public class ClientModel {
 
     public void search(String query) throws Exception {
         filteredClients.clear();
-
-        if (!query.isBlank()) {
-            filteredClients.addAll(clientManager.search(allClients, query));
-        }
-        else {
-            filteredClients.addAll(allClients);
+        if(query != null) {
+            searchString = query;
+            if (!query.isBlank()) {
+                filteredClients.addAll(clientManager.search(allClients, query));
+            } else {
+                filteredClients.addAll(allClients);
+            }
         }
     }
 }

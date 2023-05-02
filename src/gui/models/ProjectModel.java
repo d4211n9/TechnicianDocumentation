@@ -1,6 +1,7 @@
 package gui.models;
 
 import be.Project;
+import be.SystemUser;
 import bll.interfaces.IProjectManager;
 import bll.managers.ProjectManager;
 import javafx.collections.FXCollections;
@@ -14,21 +15,24 @@ public class ProjectModel {
     private List<Project> allProjects;
     private ObservableList<Project> filteredProjectList;
 
+    private String searchString;
+
     public ProjectModel() throws Exception {
         projectManager = new ProjectManager();
-        loadProjects();
-    }
 
-    public void loadProjects() throws Exception {
-        List<Project> copyAllProjects = new ArrayList<>();
         allProjects = retrieveAllProjects();
-        allProjects.forEach(project -> copyAllProjects.add(project));
-        filteredProjectList = FXCollections.observableList(copyAllProjects);
+        List<Project> copyAllUsers = new ArrayList<>(allProjects);
+        filteredProjectList = FXCollections.observableList(copyAllUsers);
     }
 
     public Project createProject(Project project) throws Exception {
         Project createdProject = projectManager.createProject(project);
-        loadProjects();
+
+
+        if(createdProject != null){
+            allProjects.add(createdProject);
+            search(searchString);
+        }
         return createdProject;
     }
 
@@ -42,12 +46,13 @@ public class ProjectModel {
 
     public void search(String query) {
         filteredProjectList.clear();
-
-        if (!query.isBlank()) {
-            filteredProjectList.addAll(projectManager.search(allProjects, query));
-        }
-        else {
-            filteredProjectList.addAll(allProjects);
+        if(query != null) {
+            searchString = query;
+            if (!query.isBlank()) {
+                filteredProjectList.addAll(projectManager.search(allProjects, query));
+            } else {
+                filteredProjectList.addAll(allProjects);
+            }
         }
     }
 }

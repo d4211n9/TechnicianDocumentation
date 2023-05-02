@@ -21,6 +21,7 @@ public class SystemUserModel {
 
     private List<SystemUser> allUsers;
 
+    private String searchString;
     private ObservableList<SystemUser> filteredUserList;
 
     public SystemUserModel() throws Exception {
@@ -28,8 +29,7 @@ public class SystemUserModel {
         systemUserManager = new SystemUserManager();
 
         allUsers = retrieveAllUsers();
-        List<SystemUser> copyAllUsers = new ArrayList<>();
-        allUsers.forEach(systemUser -> copyAllUsers.add(systemUser));
+        List<SystemUser> copyAllUsers = new ArrayList<>(allUsers);
         filteredUserList = FXCollections.observableList(copyAllUsers);
     }
 
@@ -52,13 +52,13 @@ public class SystemUserModel {
 
     public void search(String query){
         filteredUserList.clear();
-
-        System.out.println(allUsers.size());
-        if (!query.isBlank()) {
-            filteredUserList.addAll(systemUserManager.search(allUsers, query));
-        }
-        else {
-            filteredUserList.addAll(allUsers);
+        if(query != null) {
+            searchString = query;
+            if (!query.isBlank()) {
+                filteredUserList.addAll(systemUserManager.search(allUsers, query));
+            } else {
+                filteredUserList.addAll(allUsers);
+            }
         }
     }
 
@@ -66,7 +66,7 @@ public class SystemUserModel {
         SystemUser createdUser = systemUserManager.createSystemUser(user);
         if(createdUser != null){
             allUsers.add(createdUser);
-            filteredUserList.add(createdUser);
+            search(searchString);
         }
         return createdUser;
     }

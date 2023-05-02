@@ -31,6 +31,7 @@ public class UsersController extends BaseController implements Initializable {
     public VBox usersView;
     public TextField txtfSearch;
     public JFXButton btnDelete;
+    public JFXButton btnSearch;
     NodeAccessLevel buttonAccessLevel;
 
     private JFXButton editButton, deleteButton;
