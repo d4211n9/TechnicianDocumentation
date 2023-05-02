@@ -43,7 +43,7 @@ public class ClientDAO implements IClientDAO {
             }
         }
         catch (Exception e) {
-            throw new Exception("Failed to create event", e);
+            throw new Exception("Failed to create client", e);
         }
 
         return newClient;
