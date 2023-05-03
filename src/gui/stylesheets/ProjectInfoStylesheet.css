@@ -1,4 +1,29 @@
-#vbClientInfo, #vbStaff {
+
+#projectsView {
+    -fx-background-color: #333333;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+
+.button {
+    -fx-background-color: #90AED6;
+    -fx-text-fill: #333333;
+}
+
+.button:hover {
+    -fx-background-color: #90AED6;
+    -fx-text-fill: #000000;
+}
+
+
+#vbClientInfo, #vbStaff, #vbInstallations, #vbProjectInfo {
     -fx-border-radius: 2;
     -fx-border-color: grey;
+}
+
+#lblInstallations, #lblAssignedUsers, #lblClientInfo {
+    -fx-text-fill: #90AED6;
 }
