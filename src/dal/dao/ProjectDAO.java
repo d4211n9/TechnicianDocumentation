@@ -63,12 +63,12 @@ public class ProjectDAO implements IProjectDAO {
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 //Mapping the client
-                int clientID = resultSet.getInt(6);
-                String clientName = resultSet.getString(7);
-                String clientLocation = resultSet.getString(8);
-                String email = resultSet.getString(9);
-                String phone = resultSet.getString(10);
-                String type = resultSet.getString(11);
+                int clientID = resultSet.getInt(8);
+                String clientName = resultSet.getString(9);
+                String clientLocation = resultSet.getString(10);
+                String email = resultSet.getString(11);
+                String phone = resultSet.getString(13);
+                String type = resultSet.getString(14);
                 
                 Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
 

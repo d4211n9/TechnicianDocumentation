@@ -103,7 +103,7 @@ public class AddProjectController extends BaseController implements Initializabl
         lblCreateProject.setText("Edit Project");
         buttonArea.getChildren().remove(btnConfirm);
 
-        txtfName.setText(selectedItem.getClient().getName());
+        txtfName.setText(selectedItem.getName());
         txtfSearch.setText(selectedItem.getClient().getName());
         cbClients.getSelectionModel().select(selectedItem.getClient());
         //todo lav nu de locations
