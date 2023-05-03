@@ -31,7 +31,7 @@ public class ProjectModel {
 
         if(createdProject != null){
             allProjects.add(createdProject);
-            search(searchString);
+            search("");
         }
         return createdProject;
     }

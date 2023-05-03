@@ -9,22 +9,25 @@ public class Project implements Searchable<Project> {
     private int ID;
     private Date created;
     private Client client;
+    private String description;
 
-    public Project(String name, Client client, String location, Date created) {
+    public Project(String name, Client client, String location, Date created, String description) {
         this.client = client;
         this.name = name;
         this.clientName = client.getName();
         this.location = location;
         this.created = created;
+        this.description = description;
     }
 
-    public Project(int ID, String name, Client client, String location, Date created) {
+    public Project(int ID, String name, Client client, String location, Date created, String description) {
         this.ID = ID;
         this.client = client;
         this.name = name;
         this.clientName = client.getName();
         this.location = location;
         this.created = created;
+        this.description = description;
     }
 
     public Client getClient() {
@@ -59,5 +62,9 @@ public class Project implements Searchable<Project> {
         if (searchableFields.contains(lowerCaseQuery)) return this;
 
         return null;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

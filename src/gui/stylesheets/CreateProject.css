@@ -36,3 +36,7 @@
     -fx-border-color: #D9D9D9;
     -fx-border-width: 2;
 }
+
+#jfxTxtADescription {
+    -fx-text-fill: #D9D9D9;
+}

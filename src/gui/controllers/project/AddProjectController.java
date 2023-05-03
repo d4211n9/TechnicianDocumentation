@@ -2,6 +2,7 @@ package gui.controllers.project;
 
 import be.Client;
 import be.Project;
+import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +21,8 @@ public class AddProjectController extends BaseController implements Initializabl
     private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity, txtfSearch;
     @FXML
     private ComboBox cbClients;
+    @FXML
+    private JFXTextArea jfxTxtADescription;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -51,7 +54,8 @@ public class AddProjectController extends BaseController implements Initializabl
             String city = txtfCity.getText();
             String location = street + ", " + postalCode + " " + city;
             Date created = Calendar.getInstance().getTime();
-            Project project = new Project(name, client, location, created);
+            String description = jfxTxtADescription.getText();
+            Project project = new Project(name, client, location, created, description);
 
             try {
                 getModelsHandler().getProjectModel().createProject(project);

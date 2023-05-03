@@ -22,7 +22,7 @@ public class ProjectDAO implements IProjectDAO {
     @Override
     public Project createProject(Project project) throws Exception {
         Project newProject = null;
-        String sql = "INSERT INTO Project (Name, Client, Location, Created) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Project (Name, Client, Location, Created, Description) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -32,13 +32,14 @@ public class ProjectDAO implements IProjectDAO {
             statement.setString(3, project.getLocation());
             Timestamp timestamp = new Timestamp(project.getCreated().getTime());
             statement.setTimestamp(4, timestamp);
+            statement.setString(5, project.getDescription());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
 
             if(resultSet.next()) {
                 int ID = resultSet.getInt(1);
-                newProject = new Project(ID, project.getName(), project.getClient(), project.getLocation(), project.getCreated());
+                newProject = new Project(ID, project.getName(), project.getClient(), project.getLocation(), project.getCreated(), project.getDescription());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,7 +53,10 @@ public class ProjectDAO implements IProjectDAO {
     public List<Project> getAllProjects() throws Exception {
         ArrayList<Project> allProjects = new ArrayList<>();
 
-        String sql = "SELECT * FROM Project " +
+        String sql = "SELECT " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[Location] AS 'ProjectLocation', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
+                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.ClientLocation, Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType' " +
+                "FROM Project " +
                 "INNER JOIN Client " +
                 "ON Client.ID=Project.Client " +
                 "WHERE Project.SoftDelete IS NULL;";
@@ -63,22 +67,23 @@ public class ProjectDAO implements IProjectDAO {
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 //Mapping the client
-                int clientID = resultSet.getInt(6);
-                String clientName = resultSet.getString(7);
-                String clientLocation = resultSet.getString(8);
-                String email = resultSet.getString(9);
-                String phone = resultSet.getString(10);
-                String type = resultSet.getString(11);
+                int clientID = resultSet.getInt("ClientID");
+                String clientName = resultSet.getString("ClientName");
+                String clientLocation = resultSet.getString("ClientLocation");
+                String email = resultSet.getString("ClientEmail");
+                String phone = resultSet.getString("ClientPhone");
+                String type = resultSet.getString("ClientType");
                 
                 Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
 
                 //Mapping the project
-                int ID = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                String location = resultSet.getString(4);
-                Date created = resultSet.getDate(5);
+                int ID = resultSet.getInt("ProjectID");
+                String name = resultSet.getString("ProjectName");
+                String location = resultSet.getString("ProjectLocation");
+                Date created = resultSet.getDate("ProjectCreated");
+                String description = resultSet.getString("ProjectDescription");
 
-                Project project = new Project(ID, name, client, location, created);
+                Project project = new Project(ID, name, client, location, created, description);
 
                 allProjects.add(project);
             }

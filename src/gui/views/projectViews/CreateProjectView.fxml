@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="addProjectView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/CreateProject.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.project.AddProjectController">
+<VBox fx:id="addProjectView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/CreateProject.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.project.AddProjectController">
    <children>
       <HBox>
          <children>
@@ -57,13 +58,16 @@
                         <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <Label prefHeight="20.0" prefWidth="98.0" text="Project Title" GridPane.columnIndex="1">
                            <font>
                               <Font size="16.0" />
                            </font></Label>
-                        <Label prefHeight="18.0" prefWidth="96.0" text="Client" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Client" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <font>
                               <Font size="16.0" />
                            </font></Label>
@@ -71,12 +75,12 @@
                            <font>
                               <Font size="14.0" />
                            </font></TextField>
-                        <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="30.0" prefWidth="164.0" promptText="Search from existing..." GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="30.0" prefWidth="164.0" promptText="Search from existing..." GridPane.columnIndex="2" GridPane.rowIndex="5">
                            <font>
                               <Font size="14.0" />
                            </font></TextField>
-                        <ComboBox fx:id="cbClients" prefHeight="30.0" prefWidth="258.0" promptText="Choose from existing..." GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <HBox GridPane.columnIndex="3" GridPane.rowIndex="3">
+                        <ComboBox fx:id="cbClients" prefHeight="30.0" prefWidth="258.0" promptText="Choose from existing..." GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <HBox GridPane.columnIndex="3" GridPane.rowIndex="5">
                            <children>
                               <Label text="... or ">
                                  <font>
@@ -96,6 +100,12 @@
                               </JFXButton>
                            </children>
                         </HBox>
+                        <JFXTextArea fx:id="jfxTxtADescription" focusColor="#90aed6" prefWidth="254.0" unFocusColor="#d9d9d9" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Description" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                      </children>
                      <HBox.margin>
                         <Insets top="20.0" />
