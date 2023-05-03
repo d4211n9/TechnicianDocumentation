@@ -27,3 +27,7 @@
 #lblInstallations, #lblAssignedUsers, #lblClientInfo {
     -fx-text-fill: #90AED6;
 }
+
+#fpInstallations {
+    -fx-background-color: #333333;
+}

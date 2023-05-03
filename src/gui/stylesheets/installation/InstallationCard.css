@@ -1,0 +1,20 @@
+#installationCard {
+    -fx-background-color: #333333;
+    -fx-border-radius: 2;
+    -fx-border-color: #D9D9D9;
+}
+
+#installationCard:hover {
+    -fx-background-color: #333333;
+    -fx-border-radius: 2;
+    -fx-border-color: #90AED6;
+    -fx-border-width: 2;
+}
+
+.label {
+    -fx-text-fill: #90AED6;
+}
+
+#lblDescription {
+    -fx-text-fill: #FFFFFF;
+}

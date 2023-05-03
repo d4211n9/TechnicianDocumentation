@@ -5,10 +5,12 @@ import be.Project;
 import gui.controllers.BaseController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import util.ViewPaths;
 
 public class ProjectInfoController extends BaseController {
     @FXML
@@ -33,6 +35,14 @@ public class ProjectInfoController extends BaseController {
         lblClientType.setText(client.getType());
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
+
+        //TODO Slet, tester InstallationCard in action
+        FXMLLoader loader1 = loadView(ViewPaths.INSTALLATION_CARD);
+        FXMLLoader loader2 = loadView(ViewPaths.INSTALLATION_CARD);
+        HBox installationCard1 = loader1.getRoot();
+        HBox installationCard2 = loader2.getRoot();
+        fpInstallations.getChildren().add(installationCard1);
+        fpInstallations.getChildren().add(installationCard2);
     }
     public void handleBack(ActionEvent actionEvent) {
     }
