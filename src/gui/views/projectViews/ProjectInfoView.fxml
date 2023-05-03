@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.project.ProjectInfoController">
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/ProjectInfoStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.project.ProjectInfoController">
    <children>
       <HBox>
          <children>
@@ -38,7 +45,7 @@
          <children>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="840.0" VBox.vgrow="NEVER">
                <children>
-                  <VBox fx:id="vbClient" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="151.0" prefWidth="384.0" HBox.hgrow="ALWAYS">
+                  <VBox fx:id="vbClientInfo" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="151.0" prefWidth="384.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Client Information">
                            <font>
@@ -81,9 +88,10 @@
                         <Insets left="20.0" right="10.0" />
                      </HBox.margin>
                   </VBox>
+                  <Pane prefHeight="151.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
                   <VBox fx:id="vbStaff" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="151.0" prefWidth="288.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="Related Users">
+                        <Label text="Assigned Users">
                            <font>
                               <Font size="20.0" />
                            </font>
