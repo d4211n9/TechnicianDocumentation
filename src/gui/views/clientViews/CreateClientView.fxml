@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.clientController.CreateClientController">
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.clientController.CreateClientController">
     <children>
         <HBox>
             <children>
@@ -89,12 +95,12 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label prefHeight="18.0" prefWidth="70.0" text="City" GridPane.columnIndex="1" />
-                                <Label fx:id="Address" prefHeight="18.0" prefWidth="96.0" text="Street" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <TextField fx:id="txtfCity" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
-                                <TextField fx:id="txtfAddress" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Postal Code" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                <TextField fx:id="txtfPostalCode" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                <Label fx:id="Address" prefHeight="18.0" prefWidth="96.0" text="Street" GridPane.columnIndex="1" />
+                                <TextField fx:id="txtfAddress" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" />
+                                <Label layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Postal Code" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <TextField fx:id="txtfPostalCode" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <Label prefHeight="18.0" prefWidth="70.0" text="City" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <TextField fx:id="txtfCity" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                             </children>
                         </GridPane>
                     </children>
@@ -107,7 +113,7 @@
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
             <children>
-                <JFXButton onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
+                <JFXButton fx:id="btnConfirm" onAction="#handleConfirm" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>

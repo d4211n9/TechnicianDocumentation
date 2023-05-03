@@ -31,4 +31,9 @@ public class ClientManager implements IClientManager {
     public List<Client> search(List<Client> allClients, String query) throws Exception {
         return search.searchForString(allClients, query);
     }
+
+    @Override
+    public Client updateClient(Client client) throws Exception {
+        return clientDAO.updateClient(client);
+    }
 }

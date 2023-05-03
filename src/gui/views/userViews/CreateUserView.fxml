@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -96,12 +97,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label  fx:id="lblEmail" prefHeight="18.0" prefWidth="70.0" text="Email" GridPane.columnIndex="1" />
-                        <Label  fx:id="lblPassword" prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtfPassword" layoutX="346.0" layoutY="13.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label fx:id="lblEmail" prefHeight="18.0" prefWidth="70.0" text="Email" GridPane.columnIndex="1" />
                         <TextField fx:id="txtfEmail" prefHeight="26.0" prefWidth="193.0" GridPane.columnIndex="2" />
+                        <Label fx:id="lblPassword" prefHeight="18.0" prefWidth="96.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <PasswordField fx:id="pwfPassword" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <Label fx:id="lblConfirmPassword" layoutX="96.0" layoutY="127.0" prefHeight="18.0" prefWidth="96.0" text="Confirm password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <TextField fx:id="txtfConfirmPassword" layoutX="235.0" layoutY="123.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <PasswordField fx:id="pwfConfirmPassword" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                </children>
@@ -118,11 +119,17 @@
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
                 </JFXButton>
                 <JFXButton onAction="#handleCancel" prefHeight="60.0" prefWidth="150.0" text="❌ Cancel">
                     <HBox.margin>
                         <Insets left="20.0" />
                     </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
                 </JFXButton>
             </children>
         </HBox>

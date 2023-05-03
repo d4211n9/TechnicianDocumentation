@@ -67,4 +67,9 @@ public class Project implements Searchable<Project> {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String toString() {
+        return ID + ": " + name + " " + clientName;
+    }
 }

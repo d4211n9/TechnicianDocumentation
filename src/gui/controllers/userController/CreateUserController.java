@@ -4,12 +4,12 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
-import gui.util.AutoCompleteBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -32,7 +32,11 @@ public class CreateUserController extends BaseController implements Initializabl
     @FXML
     private ComboBox<SystemRole> cbRoles;
     @FXML
-    private TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
+    private TextField txtfName, txtfEmail;
+    @FXML
+    private PasswordField pwfPassword, pwfConfirmPassword;
+
+    private SystemUser selectedUser;
 
 
     @Override
@@ -42,7 +46,6 @@ public class CreateUserController extends BaseController implements Initializabl
         } catch (Exception e) {
             displayError(e);
         }
-        new AutoCompleteBox(cbRoles);
     }
 
     public void handleBack() {
@@ -67,11 +70,11 @@ public class CreateUserController extends BaseController implements Initializabl
     private SystemUser createSystemUserFromFields() {
         if(validateInput()){
             String name = txtfName.getText();
-            int role = cbRoles.getSelectionModel().getSelectedIndex();
+            SystemRole role = cbRoles.getSelectionModel().getSelectedItem();
             String email = txtfEmail.getText();
-            String password = txtfPassword.getText();
+            String password = pwfPassword.getText();
 
-            return new SystemUser(email, password, SystemRole.getRole(String.valueOf(cbRoles.getItems().get(role))), name);
+            return new SystemUser(email, password, role, name);
         }
         return null;
     }
@@ -79,12 +82,12 @@ public class CreateUserController extends BaseController implements Initializabl
     private boolean validateInput() {
         return InputValidator.isEmail(txtfEmail.getText()) &&
                 InputValidator.isName(txtfName.getText()) &&
-                InputValidator.isPassword(txtfPassword.getText()) &&
+                InputValidator.isPassword(pwfPassword.getText()) &&
                 isPasswordSame();
     }
 
     private boolean isPasswordSame(){
-        return txtfPassword.getText().equals(txtfConfirmPassword.getText());
+        return pwfPassword.getText().equals(pwfConfirmPassword.getText());
     }
 
     public void setEditContent(SystemUser user) {
@@ -99,28 +102,26 @@ public class CreateUserController extends BaseController implements Initializabl
         cbRoles.getSelectionModel().select(user.getRole());
         buttonArea.getChildren().remove(btnConfirm);
         addEditBtn(user);
+
+        selectedUser = user;
     }
 
     private void addEditBtn(SystemUser user) {
-        JFXButton button = createButton("Confirm Edit");
+        JFXButton button = createButton("✔ Confirm Edit");
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
-                String name = txtfName.getText();
-                String email = txtfEmail.getText();
-                String password = txtfPassword.getText();
-                SystemUser systemUser;
-                SystemRole role;
-
-                if (cbRoles.getSelectionModel().isSelected(-1)) {
-                    role = user.getRole();
-                } else {
-                    int roleIndex = cbRoles.getSelectionModel().getSelectedIndex();
-                    role = SystemRole.getRole(String.valueOf(cbRoles.getItems().get(roleIndex)));
+                SystemUser systemUser = createSystemUserFromFields();
+                try {
+                    getModelsHandler().getSystemUserModel().updateSystemUser(systemUser, selectedUser);
+                    handleBack();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                systemUser = new SystemUser(email, password, role, name);
             }
         });
     }
+
+
 }

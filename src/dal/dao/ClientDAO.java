@@ -2,6 +2,7 @@ package dal.dao;
 
 import be.Client;
 import be.Project;
+import be.SystemUser;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IClientDAO;
@@ -71,12 +72,32 @@ public class ClientDAO implements IClientDAO {
 
                 allClients.add(client);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DALException("Failed to read all clients", e);
         }
-
         return allClients;
+    }
+
+    @Override
+    public Client updateClient(Client client) throws Exception {
+        Client updatedClient = null;
+        String sql = "UPDATE Client SET Name=?, ClientLocation=?, Email=?, Phone=?, Type=? WHERE ID=?;";
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, client.getName());
+            statement.setString(2, client.getLocation());
+            statement.setString(3, client.getEmail());
+            statement.setString(4, client.getPhone());
+            statement.setString(5, client.getType());
+            statement.setInt(6, client.getID());
+            statement.executeUpdate();
+
+            updatedClient = client;
+        } catch (SQLException e) {
+            throw new Exception("Failed to update Client", e);
+        }
+        return updatedClient;
     }
 }

@@ -29,13 +29,7 @@ public class SystemUserManager implements ISystemUserManager {
         if(BCrypt.checkpw(user.getPassword(), systemUser.getPassword())){
             return systemUser;
         }
-
         return null;
-    }
-
-    @Override
-    public List<SystemUser> getAllSystemUsers() throws Exception {
-        return systemUserDAO.getAllSystemUsers();
     }
 
     @Override
@@ -52,5 +46,17 @@ public class SystemUserManager implements ISystemUserManager {
         return systemUserDAO.createSystemUser(user);
     }
 
+    @Override
+    public List<SystemUser> getAllSystemUsers() throws Exception {
+        return systemUserDAO.getAllSystemUsers();
+    }
 
+    @Override
+    public SystemUser updateSystemUser(SystemUser user) throws Exception {
+        String salt = BCrypt.gensalt(10);
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
+        user.setPassword(hashedPassword);
+
+        return systemUserDAO.updateSystemUser(user);
+    }
 }

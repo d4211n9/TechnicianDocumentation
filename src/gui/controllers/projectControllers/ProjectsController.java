@@ -2,7 +2,9 @@ package gui.controllers.projectControllers;
 
 import be.Enum.SystemRole;
 import be.Project;
+import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.controllers.clientController.CreateClientController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +36,7 @@ public class ProjectsController extends BaseController implements Initializable 
     @FXML
     private HBox buttonArea;
     @FXML
-    private TableView tvProjects;
+    private TableView<Project> tvProjects;
     @FXML
     private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
     @FXML
@@ -43,10 +45,13 @@ public class ProjectsController extends BaseController implements Initializable 
     private TableColumn<Project, Date> tcCreated;
     private NodeAccessLevel buttonAccessLevel;
 
+    private JFXButton editButton, deleteButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
         addLoadedButtons();
+        tvListener();
     }
 
     private void addLoadedButtons() {
@@ -54,7 +59,6 @@ public class ProjectsController extends BaseController implements Initializable 
 
         try {
             SystemRole loggedInUserRole = getLoggedInUser();
-
             // Loops through the buttons and adds them to the sidebar if the user has the right access level
             for (Node button : buttonAccessLevel.getNodes()) {
 
@@ -66,24 +70,62 @@ public class ProjectsController extends BaseController implements Initializable 
         }
     }
 
+    private void tvListener() {
+        tvProjects.setOnMouseClicked(event -> {
+            if(isTvSelected()){
+                deleteButton.setDisable(false);
+                editButton.setDisable(false);
+            }else {
+                deleteButton.setDisable(true);
+                editButton.setDisable(true);
+            }
+        });
+    }
+    private boolean isTvSelected() {
+        return tvProjects.getSelectionModel().getSelectedItem() != null;
+    }
+
     private void addButton(Button button) {
         buttonArea.getChildren().add(0, button);}
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
+        addDeleteBtn();
+        addEditBtn();
+
+
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+    }
 
-        //TODO Slet, testing
-        buttonAccessLevel.addNodeAccessLevel(
-                loadButton("👥 Users", ViewPaths.USERS_VIEW, projectsView),
-                Arrays.asList(SystemRole.Administrator));
+    private void addEditBtn() {
+        editButton = createButton("✏ Edit Project");
+        buttonAccessLevel.addNodeAccessLevel(editButton,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+        editButton.setDisable(true);
 
-        buttonAccessLevel.addNodeAccessLevel(
-                loadButton("👥 Users", ViewPaths.USERS_VIEW, projectsView),
-                Arrays.asList(SystemRole.Administrator));
+        editButton.setOnMouseClicked(event -> {
+            FXMLLoader loader = loadView(ViewPaths.ADD_PROJECT_VIEW);
+            AddProjectController controller = loader.getController();
+            controller.setEditContent(tvProjects.getSelectionModel().getSelectedItem());
+            loadInMainView(loader.getRoot(), projectsView);
+        });
+    }
+
+    private void addDeleteBtn() {
+        deleteButton = createButton("🗑 Delete Project");
+        buttonAccessLevel.addNodeAccessLevel(deleteButton,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+        deleteButton.setDisable(true);
+
+        deleteButton.setOnMouseClicked(event -> {
+            Object project = tvProjects.getSelectionModel().getSelectedItem();
+            if(showQuestionDialog(project.toString(), true)){
+                //TODO Delete ned i lagene
+            }
+        });
     }
 
     private void loadTableView() {

@@ -3,11 +3,15 @@ package gui.controllers.projectControllers;
 import be.Client;
 import be.Project;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -17,9 +21,15 @@ import java.util.ResourceBundle;
 
 public class AddProjectController extends BaseController implements Initializable {
     @FXML
+    private Label lblCreateProject;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private JFXButton btnConfirm;
+    @FXML
     private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity, txtfSearch;
     @FXML
-    private ComboBox cbClients;
+    private ComboBox<Client> cbClients;
     @FXML
     private JFXTextArea jfxTxtADescription;
 
@@ -46,15 +56,8 @@ public class AddProjectController extends BaseController implements Initializabl
 
     public void handleConfirm() {
         if(validateInput()) {
-            String name = txtfName.getText();
-            Client client = (Client) cbClients.getSelectionModel().getSelectedItem();
-            String street = txtfStreet.getText();
-            String postalCode = txtfPostalCode.getText();
-            String city = txtfCity.getText();
-            String location = street + ", " + postalCode + " " + city;
-            Date created = Calendar.getInstance().getTime();
-            String description = jfxTxtADescription.getText();
-            Project project = new Project(name, client, location, created, description);
+
+            Project project = createProject();
 
             try {
                 getModelsHandler().getProjectModel().createProject(project);
@@ -65,6 +68,19 @@ public class AddProjectController extends BaseController implements Initializabl
                 displayError(e);
             }
         }
+    }
+
+    private Project createProject() {
+        String name = txtfName.getText();
+        Client client = (Client) cbClients.getSelectionModel().getSelectedItem();
+        String street = txtfStreet.getText();
+        String postalCode = txtfPostalCode.getText();
+        String city = txtfCity.getText();
+        String location = street + ", " + postalCode + " " + city;
+        Date created = Calendar.getInstance().getTime();
+        String description = jfxTxtADescription.getText();
+
+        return new Project(name, client, location, created, description);
     }
 
     //TODO, valider input
@@ -85,5 +101,31 @@ public class AddProjectController extends BaseController implements Initializabl
         } catch (Exception e) {
             displayError(e);
         }
+    }
+
+    public void setEditContent(Project selectedItem) {
+        lblCreateProject.setText("Edit Project");
+        buttonArea.getChildren().remove(btnConfirm);
+
+        txtfName.setText(selectedItem.getName());
+        txtfSearch.setText(selectedItem.getClient().getName());
+        cbClients.getSelectionModel().select(selectedItem.getClient());
+        //todo lav nu de locations
+
+        addEditBtn();
+    }
+
+    private void addEditBtn() {
+        JFXButton button = createButton("✔ Confirm Edit");
+        buttonArea.getChildren().add(0, button);
+
+        button.setOnMouseClicked(event -> {
+            if(validateInput()) {
+                Project project = createProject();
+                //todo lav en update i dal osv..
+
+                handleCancel();
+            }
+        });
     }
 }
