@@ -99,7 +99,7 @@ public class ProjectsController extends BaseController implements Initializable 
     }
 
     private void addEditBtn() {
-        editButton = createButton("Edit Project");
+        editButton = createButton("✏ Edit Project");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -113,7 +113,7 @@ public class ProjectsController extends BaseController implements Initializable 
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("Delete User");
+        deleteButton = createButton("🗑 Delete Project");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);
@@ -121,7 +121,7 @@ public class ProjectsController extends BaseController implements Initializable 
         deleteButton.setOnMouseClicked(event -> {
             Object project = tvProjects.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(project.toString(), true)){
-                System.out.println("delete " + project.toString());
+                //TODO Delete ned i lagene
             }
         });
     }

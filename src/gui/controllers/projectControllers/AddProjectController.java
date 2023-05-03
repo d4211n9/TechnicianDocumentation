@@ -19,9 +19,12 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 public class AddProjectController extends BaseController implements Initializable {
-    public Label lblCreateProject;
-    public HBox buttonArea;
-    public JFXButton btnConfirm;
+    @FXML
+    private Label lblCreateProject;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private JFXButton btnConfirm;
     @FXML
     private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity, txtfSearch;
     @FXML
@@ -109,13 +112,13 @@ public class AddProjectController extends BaseController implements Initializabl
     }
 
     private void addEditBtn() {
-        JFXButton button = createButton("Confirm Edit");
+        JFXButton button = createButton("✔ Confirm Edit");
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {
-            System.out.println("edit bro");
             if(validateInput()) {
-                Project project = createProject();//todo lav en update i dal osv..
+                Project project = createProject();
+                //todo lav en update i dal osv..
 
                 handleCancel();
             }
