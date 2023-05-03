@@ -18,9 +18,9 @@
    <content>
       <VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/ProjectInfoStylesheet.css">
          <children>
-            <HBox>
+            <HBox prefHeight="55.0" prefWidth="840.0">
                <children>
-                  <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="35.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
+                  <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="39.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
@@ -28,7 +28,7 @@
                         <Font size="16.0" />
                      </font>
                   </JFXButton>
-                  <Label fx:id="lblProjectTitle" prefHeight="35.0" prefWidth="840.0" HBox.hgrow="ALWAYS">
+                  <Label fx:id="lblProjectTitle" prefHeight="39.0" prefWidth="548.0" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
@@ -39,6 +39,11 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Label>
+                  <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="81.0" text="💾 Save" textOverrun="CLIP" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </JFXButton>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
@@ -99,7 +104,7 @@
                            <children>
                               <Label fx:id="lblAssignedUsers" prefHeight="30.0" prefWidth="349.0" text="Assigned Users">
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets bottom="10.0" top="10.0" />
                                  </VBox.margin>
                                  <padding>
                                     <Insets left="45.0" />
@@ -108,7 +113,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="95.0" prefWidth="200.0">
+                              <ScrollPane fx:id="spAssignedUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="95.0" prefWidth="200.0">
                                  <content>
                                     <FlowPane fx:id="fpStaff" prefWidth="330.0" />
                                  </content>
@@ -120,6 +125,18 @@
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
+                                 <children>
+                                    <JFXButton fx:id="btnAdd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="55.0" text="➕ Add">
+                                       <HBox.margin>
+                                          <Insets right="10.0" top="5.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="btnRemove" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="75.0" text="➖ Remove">
+                                       <HBox.margin>
+                                          <Insets right="160.0" top="5.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                 </children>
                               </HBox>
                            </children>
                            <HBox.margin>
@@ -131,35 +148,53 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox fx:id="vbProjectInfo" prefHeight="200.0" prefWidth="100.0">
+                  <VBox fx:id="vbProjectInfo" prefHeight="106.0" prefWidth="780.0">
                      <children>
-                        <Label text="description" />
-                        <HBox>
+                        <Label fx:id="lblProjectInfo" text="Project info">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="45.0" top="10.0" />
+                           </VBox.margin></Label>
+                        <HBox prefHeight="68.0" prefWidth="758.0">
                            <VBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </VBox.margin>
                            <children>
-                              <TextArea prefHeight="76.0" prefWidth="406.0" wrapText="true" />
+                              <TextArea fx:id="taDescription" maxHeight="500.0" maxWidth="500.0" prefHeight="49.0" prefWidth="335.0" wrapText="true">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </HBox.margin></TextArea>
                               <VBox fx:id="v">
                                  <children>
                                     <HBox prefHeight="17.0" prefWidth="357.0">
                                        <children>
-                                          <Label text="location">
-                                             <padding>
+                                          <Label text="Created:">
+                                             <HBox.margin>
                                                 <Insets left="50.0" />
-                                             </padding>
+                                             </HBox.margin>
                                           </Label>
-                                          <Label text="Label" />
+                                          <Label fx:id="lblCreated" text="Label">
+                                             <HBox.margin>
+                                                <Insets left="33.0" />
+                                             </HBox.margin></Label>
                                        </children>
+                                       <VBox.margin>
+                                          <Insets top="-5.0" />
+                                       </VBox.margin>
                                     </HBox>
                                     <HBox prefWidth="296.0">
                                        <children>
-                                          <Label text="created date">
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
+                                          <Label text="Location:">
+                                             <HBox.margin>
+                                                <Insets bottom="30.0" left="50.0" />
+                                             </HBox.margin>
                                           </Label>
-                                          <Label text="Label" />
+                                          <Label fx:id="lblProjectLocation" text="Label">
+                                             <HBox.margin>
+                                                <Insets bottom="30.0" left="29.0" />
+                                             </HBox.margin></Label>
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />
@@ -171,28 +206,25 @@
                         </HBox>
                      </children>
                      <VBox.margin>
-                        <Insets left="30.0" right="30.0" />
+                        <Insets left="30.0" right="30.0" top="15.0" />
                      </VBox.margin>
                   </VBox>
-                  <VBox fx:id="vbInstallations" VBox.vgrow="ALWAYS">
+                  <VBox fx:id="vbInstallations" prefHeight="165.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
-                        <Insets left="30.0" right="30.0" />
+                        <Insets left="30.0" right="30.0" top="20.0" />
                      </VBox.margin>
                      <children>
                         <Label fx:id="lblInstallations" prefHeight="30.0" prefWidth="155.0" text="Installations" VBox.vgrow="NEVER">
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="10.0" left="45.0" top="10.0" />
                            </VBox.margin>
-                           <padding>
-                              <Insets left="45.0" />
-                           </padding>
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" prefWidth="540.0" VBox.vgrow="ALWAYS">
+                        <ScrollPane fx:id="spInstallation" fitToHeight="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" prefWidth="540.0" VBox.vgrow="ALWAYS">
                            <content>
-                              <FlowPane fx:id="fpInstallations" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="240.0" prefWidth="740.0" prefWrapLength="800.0" vgap="10.0" />
+                              <FlowPane fx:id="fpInstallations" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="73.0" prefWidth="740.0" prefWrapLength="800.0" vgap="10.0" />
                            </content>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" />
@@ -202,7 +234,7 @@
                   </VBox>
                </children>
             </VBox>
-            <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">
+            <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="820.0" VBox.vgrow="NEVER">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>

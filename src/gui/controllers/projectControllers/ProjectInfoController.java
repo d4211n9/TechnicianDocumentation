@@ -20,7 +20,7 @@ public class ProjectInfoController extends BaseController {
     @FXML
     private HBox buttonArea;
     @FXML
-    private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone;
+    private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone, lblCreated, lblProjectLocation;
 
     private Client client;
     private Project project;
@@ -35,6 +35,8 @@ public class ProjectInfoController extends BaseController {
         lblClientType.setText(client.getType());
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
+        lblProjectLocation.setText(client.getLocation());
+        lblCreated.setText(client.getLocation());
 
         //TODO Slet, tester InstallationCard in action
         FXMLLoader loader1 = loadView(ViewPaths.INSTALLATION_CARD);
