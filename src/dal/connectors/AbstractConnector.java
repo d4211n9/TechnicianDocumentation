@@ -2,6 +2,7 @@ package dal.connectors;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import exceptions.DALException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public abstract class AbstractConnector {
         }
         catch (IOException e) {
             e.printStackTrace();
-            throw new Exception(errorMessage, e);
+            throw new DALException(errorMessage, e);
         }
     }
 
@@ -63,7 +64,7 @@ public abstract class AbstractConnector {
         }
         catch (SQLServerException e) {
             e.printStackTrace();
-            throw new Exception(errorMessage, e);
+            throw new DALException(errorMessage, e);
         }
     }
 
