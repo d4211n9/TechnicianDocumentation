@@ -30,7 +30,7 @@ public class ClientModel {
             allClients.add(finalClient);
             search(searchString);
         }
-        return clientManager.createClient(client);
+        return finalClient;
     }
 
     public List<Client> retrieveAllClients() throws Exception {

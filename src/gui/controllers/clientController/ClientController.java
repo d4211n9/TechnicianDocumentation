@@ -96,7 +96,7 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     private void addEditBtn() {
-        editButton = createButton("Edit Client");
+        editButton = createButton("✏ Edit Client");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -110,7 +110,7 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("Delete User");
+        deleteButton = createButton("🗑 Delete User");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);
@@ -119,6 +119,7 @@ public class ClientController extends BaseController implements Initializable {
             Object user = tvClients.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(user.toString(), true)){
                 System.out.println("delete " + user.toString());
+                //TODO Delete ned i lagene
             }
         });
     }

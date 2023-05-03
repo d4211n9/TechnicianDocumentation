@@ -6,16 +6,22 @@ import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import util.InputValidator;
 
 public class CreateClientController extends BaseController {
-    public TextField txtfName, txtfPhone, txtfEmail, txtfAddress, txtfCity, txtfPostalCode;
-    public Label lblCreateUser;
-    public HBox buttonArea;
-    public JFXButton btnConfirm;
+    @FXML
+    private TextField txtfName, txtfPhone, txtfEmail, txtfAddress, txtfCity, txtfPostalCode;
+    @FXML
+    private Label lblCreateUser;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private JFXButton btnConfirm;
 
     Client selectedClient;
 
@@ -33,7 +39,12 @@ public class CreateClientController extends BaseController {
     }
 
     private boolean isTextFieldInfoValid() {
-        return true;
+        return InputValidator.isName(txtfName.getText()) &&
+                InputValidator.isEmail(txtfEmail.getText()) &&
+                InputValidator.isPhone(txtfPhone.getText()) &&
+                InputValidator.isStreet(txtfAddress.getText()) &&
+                InputValidator.isPostalCode(Integer.parseInt(txtfPostalCode.getText())) &&
+                InputValidator.isCity(txtfCity.getText());
     }
 
     public void handleCancel() {
@@ -65,6 +76,7 @@ public class CreateClientController extends BaseController {
         button.setOnMouseClicked(event -> {
             if(isTextFieldInfoValid()) {
                 Client client = bindClientInfo();
+                client = bindClientID(client);
                 try {
                     getModelsHandler().getClientModel().updateClient(client, selectedClient);
                     handleCancel();
@@ -84,6 +96,13 @@ public class CreateClientController extends BaseController {
         String postalCode = txtfPostalCode.getText();
         String location = street + " " +city + " " + postalCode;
 
-        return new Client(selectedClient.getID(), name, location,email, phone, "b2b");//todo type burde være en enum...
+        return new Client(name, location,email, phone, "b2b");
+        //TODO type burde være en enum...
+        //TODO Type skal også tilføjes til .fxml så man kan vælge ved create og edit
+    }
+
+    private Client bindClientID(Client client) {
+        return new Client(selectedClient.getID(), client.getName(), client.getLocation(),
+                client.getEmail(), client.getPhone(), "b2b");
     }
 }
