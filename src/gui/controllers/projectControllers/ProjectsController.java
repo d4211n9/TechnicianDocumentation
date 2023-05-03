@@ -160,7 +160,7 @@ public class ProjectsController extends BaseController implements Initializable 
                 getMainController().mainBorderPane.setCenter(loader.getRoot());
 
                 ProjectInfoController controller = loader.getController();
-                Project selected = (Project) tvProjects.getSelectionModel().getSelectedItem();
+                Project selected = tvProjects.getSelectionModel().getSelectedItem();
                 controller.setContent(selected);
             }
         }
