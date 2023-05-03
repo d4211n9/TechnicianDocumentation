@@ -33,11 +33,6 @@ public class SystemUserManager implements ISystemUserManager {
     }
 
     @Override
-    public List<SystemUser> getAllSystemUsers() throws Exception {
-        return systemUserDAO.getAllSystemUsers();
-    }
-
-    @Override
     public List<SystemUser> search(List<SystemUser> allUsers, String query) {
         return search.searchForString(allUsers, query);
     }
@@ -52,6 +47,11 @@ public class SystemUserManager implements ISystemUserManager {
     }
 
     @Override
+    public List<SystemUser> getAllSystemUsers() throws Exception {
+        return systemUserDAO.getAllSystemUsers();
+    }
+
+    @Override
     public SystemUser updateSystemUser(SystemUser user) throws Exception {
         String salt = BCrypt.gensalt(10);
         String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
@@ -59,6 +59,4 @@ public class SystemUserManager implements ISystemUserManager {
 
         return systemUserDAO.updateSystemUser(user);
     }
-
-
 }

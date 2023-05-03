@@ -8,6 +8,7 @@ import gui.controllers.BaseController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -70,7 +71,7 @@ public class CreateClientController extends BaseController {
     }
 
     private void addEditBtn() {
-        JFXButton button = createButton("Confirm Edit");
+        JFXButton button = createButton("✔ Confirm Edit");
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {

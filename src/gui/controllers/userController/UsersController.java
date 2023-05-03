@@ -22,8 +22,6 @@ import java.util.ResourceBundle;
 
 
 public class UsersController extends BaseController implements Initializable {
-    public JFXButton btnSearch;
-
     @FXML
     private TableView<SystemUser> tvUsers;
     @FXML
@@ -37,12 +35,11 @@ public class UsersController extends BaseController implements Initializable {
     @FXML
     private TextField txtfSearch;
     @FXML
-    private JFXButton btnDelete;
+    private JFXButton btnDelete, btnSearch, editButton, deleteButton;
 
     NodeAccessLevel buttonAccessLevel;
 
-    private JFXButton editButton, deleteButton;
-    @Override
+        @Override
     public void initialize(URL location, ResourceBundle resources) {
             loadTableView();
             initializeButtonAccessLevels();
@@ -103,7 +100,7 @@ public class UsersController extends BaseController implements Initializable {
     }
 
     private void addEditBtn() {
-        editButton = createButton("Edit User");
+        editButton = createButton("✏ Edit User");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -117,7 +114,7 @@ public class UsersController extends BaseController implements Initializable {
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("Delete User");
+        deleteButton = createButton("🗑 Delete User");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);

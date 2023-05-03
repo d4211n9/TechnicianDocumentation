@@ -57,6 +57,31 @@ public class SystemUserDAO implements ISystemUserDAO {
         }
     }
 
+    @Override
+    public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
+        SystemUser user = null;
+        String sql = "INSERT INTO SystemUser " +
+                "(Email, Password, RoleName, UserName, SoftDelete)" +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, systemUser.getEmail());
+            statement.setString(2, systemUser.getPassword());
+            statement.setString(3, systemUser.getRole().getRole());
+            statement.setString(4, systemUser.getName());
+            statement.setDate(5, null);
+            statement.executeUpdate();
+
+            user = systemUser;
+        }
+        catch (Exception e) {
+            throw new Exception("Failed create system user", e);
+        }
+        return user;
+    }
+
     public List<SystemUser> getAllSystemUsers() throws Exception {
 
         ArrayList<SystemUser> allUsers = new ArrayList<>();
@@ -81,32 +106,6 @@ public class SystemUserDAO implements ISystemUserDAO {
             throw new Exception("Failed to retrieve all Users", e);
         }
         return allUsers;
-    }
-
-
-    @Override
-    public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
-        SystemUser user = null;
-        String sql = "INSERT INTO SystemUser " +
-                "(Email, Password, RoleName, UserName, SoftDelete)" +
-                "VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = connector.getConnection();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
-
-            statement.setString(1, systemUser.getEmail());
-            statement.setString(2, systemUser.getPassword());
-            statement.setString(3, systemUser.getRole().getRole());
-            statement.setString(4, systemUser.getName());
-            statement.setDate(5, null);
-            statement.executeUpdate();
-
-            user = systemUser;
-        }
-        catch (Exception e) {
-            throw new Exception("Failed create system user", e);
-        }
-        return user;
     }
 
     @Override

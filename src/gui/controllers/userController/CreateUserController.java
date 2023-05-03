@@ -4,22 +4,17 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
-import gui.util.AutoCompleteBox;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import util.InputValidator;
 
-import javax.management.relation.Role;
-import java.io.ObjectInputValidation;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -37,7 +32,9 @@ public class CreateUserController extends BaseController implements Initializabl
     @FXML
     private ComboBox<SystemRole> cbRoles;
     @FXML
-    private TextField txtfConfirmPassword, txtfName, txtfEmail, txtfPassword;
+    private TextField txtfName, txtfEmail;
+    @FXML
+    private PasswordField pwfPassword, pwfConfirmPassword;
 
     private SystemUser selectedUser;
 
@@ -75,7 +72,7 @@ public class CreateUserController extends BaseController implements Initializabl
             String name = txtfName.getText();
             SystemRole role = cbRoles.getSelectionModel().getSelectedItem();
             String email = txtfEmail.getText();
-            String password = txtfPassword.getText();
+            String password = pwfPassword.getText();
 
             return new SystemUser(email, password, role, name);
         }
@@ -85,12 +82,12 @@ public class CreateUserController extends BaseController implements Initializabl
     private boolean validateInput() {
         return InputValidator.isEmail(txtfEmail.getText()) &&
                 InputValidator.isName(txtfName.getText()) &&
-                InputValidator.isPassword(txtfPassword.getText()) &&
+                InputValidator.isPassword(pwfPassword.getText()) &&
                 isPasswordSame();
     }
 
     private boolean isPasswordSame(){
-        return txtfPassword.getText().equals(txtfConfirmPassword.getText());
+        return pwfPassword.getText().equals(pwfConfirmPassword.getText());
     }
 
     public void setEditContent(SystemUser user) {
@@ -110,7 +107,7 @@ public class CreateUserController extends BaseController implements Initializabl
     }
 
     private void addEditBtn(SystemUser user) {
-        JFXButton button = createButton("Confirm Edit");
+        JFXButton button = createButton("✔ Confirm Edit");
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {

@@ -78,8 +78,8 @@ public class SystemUserModel {
 
     public boolean updateSystemUser(SystemUser user, SystemUser originalUser) throws Exception{
         if(systemUserManager.updateSystemUser(user) != null){
-            allUsers.remove(user);
-            allUsers.add(originalUser);
+            allUsers.remove(originalUser);
+            allUsers.add(user);
             search(searchString);
             return true;
         }
