@@ -1,12 +1,13 @@
-package gui.controllers;
+package gui.controllers.clientController;
 
 import be.Client;
+import gui.controllers.BaseController;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-public class CreateClientController extends BaseController{
+public class CreateClientController extends BaseController {
     public TextField txtfName, txtfPhone, txtfEmail, txtfAddress, txtfCity, txtfPostalCode;
 
     public void handleConfirm(ActionEvent actionEvent) {

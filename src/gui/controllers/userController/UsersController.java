@@ -1,4 +1,4 @@
-package gui.controllers.user;
+package gui.controllers.userController;
 
 import be.Enum.SystemRole;
 import be.SystemUser;

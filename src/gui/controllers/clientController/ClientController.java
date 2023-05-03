@@ -1,8 +1,9 @@
-package gui.controllers;
+package gui.controllers.clientController;
 
 import be.Client;
 import be.Enum.SystemRole;
 import com.jfoenix.controls.JFXButton;
+import gui.controllers.BaseController;
 import gui.models.ClientModel;
 import gui.util.NodeAccessLevel;
 import javafx.collections.FXCollections;

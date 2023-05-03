@@ -1,4 +1,4 @@
-package gui.controllers.project;
+package gui.controllers.projectControllers;
 
 import be.Enum.SystemRole;
 import be.Project;
