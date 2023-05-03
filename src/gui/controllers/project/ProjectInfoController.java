@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui.controllers.project;
 
 import be.Client;
 import be.Project;

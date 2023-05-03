@@ -1,7 +1,8 @@
-package gui.controllers;
+package gui.controllers.project;
 
 import be.Enum.SystemRole;
 import be.Project;
+import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

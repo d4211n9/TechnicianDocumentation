@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui.controllers.project;
 
 import be.Client;
 import be.Project;
@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;

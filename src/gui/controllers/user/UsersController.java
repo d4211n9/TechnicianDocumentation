@@ -1,8 +1,9 @@
-package gui.controllers;
+package gui.controllers.user;
 
 import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
+import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
