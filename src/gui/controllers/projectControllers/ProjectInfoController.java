@@ -9,6 +9,7 @@ import gui.util.NodeAccessLevel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,16 +18,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class ProjectInfoController extends BaseController {
+public class ProjectInfoController extends BaseController implements Initializable {
+    public HBox hbUserBtnArea;
     @FXML
     private VBox projectsView;
     @FXML
     private FlowPane fpStaff, fpInstallations;
     @FXML
-    private HBox buttonArea;
+    private HBox buttonArea1;
     @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone, lblCreated, lblProjectLocation;
 
@@ -67,14 +71,10 @@ public class ProjectInfoController extends BaseController {
 
         addRemoveAssignedUserBtn();
         addAssignUserBtn();
-
-        buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
     private void addAssignUserBtn() {//todo lav om til at slette ting fra view
-        editButton = createButton("✏ Edit Project");
+        editButton = createButton("✏ Assign");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -88,7 +88,7 @@ public class ProjectInfoController extends BaseController {
     }
 
     private void addRemoveAssignedUserBtn() {
-        deleteButton = createButton("🗑 Delete Project");
+        deleteButton = createButton("🗑 Delete");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);
@@ -100,7 +100,8 @@ public class ProjectInfoController extends BaseController {
         });
     }
     private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);}
+        hbUserBtnArea.getChildren().add(0, button);
+        System.out.println("heeeey");}
 
 
     private void addLoadedButtons() {
@@ -110,12 +111,18 @@ public class ProjectInfoController extends BaseController {
             SystemRole loggedInUserRole = getLoggedInUser();
             // Loops through the buttons and adds them to the sidebar if the user has the right access level
             for (Node button : buttonAccessLevel.getNodes()) {
-
                 List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
                 if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
             }
         } catch (Exception e) {
             displayError(e);
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeButtonAccessLevels();
+        addLoadedButtons();
+        System.out.println("mfkoe");
     }
 }

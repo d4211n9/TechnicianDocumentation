@@ -35,6 +35,7 @@ public class ProjectsController extends BaseController implements Initializable 
     private VBox projectsView;
     @FXML
     private HBox buttonArea;
+
     @FXML
     private TableView<Project> tvProjects;
     @FXML
