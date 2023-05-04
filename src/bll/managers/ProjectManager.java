@@ -29,8 +29,19 @@ public class ProjectManager implements IProjectManager {
         return projectFacade.getAllProjects();
     }
 
+    @Override
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
         return projectFacade.getSystemUsersAssignedToProject(projectId);
+    }
+
+    @Override
+    public void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception {
+        projectFacade.deleteSystemUserAssignedToProject(projectId, systemUserEmail);
+    }
+
+    @Override
+    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
+        projectFacade.assignSystemUserToProject(projectId, systemUserEmail);
     }
 
     @Override
