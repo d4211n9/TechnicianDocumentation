@@ -81,4 +81,24 @@ public class SystemUsersAssignedToProjectsDAO implements ISystemUsersAssignedToP
             throw dalException;
         }
     }
+
+    @Override
+    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
+        String sql = "INSERT INTO SystemUsersAssignedToProjects (ProjectID, SystemUserEmail) VALUES (?, ?)";
+
+        try (Connection conn = connector.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setInt(1, projectId);
+            statement.setString(2, systemUserEmail);
+
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            DALException dalException = new DALException("Failed to assign user to project", e);
+            dalException.printStackTrace(); //TODO replace with log to the database.
+
+            throw dalException;
+        }
+    }
 }

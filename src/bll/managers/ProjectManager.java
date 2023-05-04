@@ -40,6 +40,11 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
+    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
+        projectFacade.assignSystemUserToProject(projectId, systemUserEmail);
+    }
+
+    @Override
     public List<Project> search(List<Project> allProjects, String query) {
         return search.searchForString(allProjects, query);
     }

@@ -33,4 +33,8 @@ public class ProjectFacade {
     public void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception {
         systemUsersAssignedToProjectsDAO.deleteSystemUserAssignedToProject(projectId, systemUserEmail);
     }
+
+    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
+        systemUsersAssignedToProjectsDAO.assignSystemUserToProject(projectId, systemUserEmail);
+    }
 }
