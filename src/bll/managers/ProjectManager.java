@@ -45,6 +45,11 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
+    public List<SystemUser> getSystemUsersNotAssignedToProject(int projectId) throws Exception {
+        return projectFacade.getSystemUsersNotAssignedToProject(projectId);
+    }
+
+    @Override
     public List<Project> search(List<Project> allProjects, String query) {
         return search.searchForString(allProjects, query);
     }

@@ -12,4 +12,5 @@ public interface IProjectManager {
     List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception;
     void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception;
     void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception;
+    List<SystemUser> getSystemUsersNotAssignedToProject(int projectId) throws Exception;
 }

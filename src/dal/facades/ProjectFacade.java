@@ -37,4 +37,8 @@ public class ProjectFacade {
     public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
         systemUsersAssignedToProjectsDAO.assignSystemUserToProject(projectId, systemUserEmail);
     }
+
+    public List<SystemUser> getSystemUsersNotAssignedToProject(int projectId) throws Exception {
+        return systemUsersAssignedToProjectsDAO.getSystemUsersNotAssignedToProject(projectId);
+    }
 }
