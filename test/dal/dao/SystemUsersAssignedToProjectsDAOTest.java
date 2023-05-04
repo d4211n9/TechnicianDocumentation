@@ -46,7 +46,7 @@ class SystemUsersAssignedToProjectsDAOTest {
         try {
             ISystemUsersAssignedToProjectsDAO systemUsersAssignedToProjectsDAO = new SystemUsersAssignedToProjectsDAO(new TestSqlConnector());
 
-            boolean isSuccess = systemUsersAssignedToProjectsDAO.assignSystemUserToProject(1, "steffan@gmail.com");
+            boolean isSuccess = systemUsersAssignedToProjectsDAO.assignSystemUserToProject(1, "patand01twin@easv365.dk");
 
             Assertions.assertTrue(isSuccess);
         }
@@ -62,6 +62,17 @@ class SystemUsersAssignedToProjectsDAOTest {
             ISystemUsersAssignedToProjectsDAO systemUsersAssignedToProjectsDAO = new SystemUsersAssignedToProjectsDAO(new TestSqlConnector());
 
             List<SystemUser> systemUsersNotAssigned = systemUsersAssignedToProjectsDAO.getSystemUsersNotAssignedToProject(1);
+
+            boolean isCorrectUser = false;
+
+            for (SystemUser systemUser : systemUsersNotAssigned) {
+                if (systemUser.getEmail().equals("patand01@easv365.dk")) {
+                    isCorrectUser = true;
+                    break;
+                }
+            }
+
+            Assertions.assertTrue(isCorrectUser);
         }
         catch (Exception e) {
             Assertions.fail(e.getMessage(), e);
