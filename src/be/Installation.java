@@ -3,19 +3,22 @@ package be;
 public class Installation {
     private String name, description;
     private int ID, isDoneInt;
+    private byte[] drawingVarBinary;
     private boolean isDone;
 
-    public Installation(String name, String description, boolean isDone) {
+    public Installation(String name, String description, byte[] drawingVarBinary, boolean isDone) {
         this.name = name;
         this.description = description;
+        this.drawingVarBinary = drawingVarBinary;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
     }
 
-    public Installation(int ID, String name, String description, boolean isDone) {
+    public Installation(int ID, String name, String description, byte[] drawingVarBinary, boolean isDone) {
         this.ID = ID;
         this.name = name;
         this.description = description;
+        this.drawingVarBinary = drawingVarBinary;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
     }
