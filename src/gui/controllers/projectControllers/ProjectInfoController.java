@@ -14,10 +14,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class ProjectInfoController extends BaseController {
@@ -48,17 +50,18 @@ public class ProjectInfoController extends BaseController {
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
         lblProjectLocation.setText(client.getLocation());
-        lblCreated.setText(client.getLocation());
+        lblCreated.setText(project.getCreated()+"");
 
         //TODO Slet, tester InstallationCard in action
         FXMLLoader loader1 = loadView(ViewPaths.INSTALLATION_CARD);
         FXMLLoader loader2 = loadView(ViewPaths.INSTALLATION_CARD);
-        HBox installationCard1 = loader1.getRoot();
-        HBox installationCard2 = loader2.getRoot();
+        Pane installationCard1 = loader1.getRoot();
+        Pane installationCard2 = loader2.getRoot();
         fpInstallations.getChildren().add(installationCard1);
         fpInstallations.getChildren().add(installationCard2);
     }
-    public void handleBack(ActionEvent actionEvent) {
+    public void handleBack() {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
 

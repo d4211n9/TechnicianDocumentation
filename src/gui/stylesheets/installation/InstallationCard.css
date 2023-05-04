@@ -12,9 +12,9 @@
 }
 
 .label {
-    -fx-text-fill: #90AED6;
+    -fx-text-fill: #FFFFFF;
 }
 
-#lblDescription {
-    -fx-text-fill: #FFFFFF;
+#lblName, #lblAssignedUsers {
+    -fx-text-fill: #90AED6;
 }
