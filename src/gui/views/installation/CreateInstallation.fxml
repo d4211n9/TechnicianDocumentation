@@ -51,9 +51,9 @@
                         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                      <rowConstraints>
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="37.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="37.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="33.4" minHeight="10.0" prefHeight="33.4" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
@@ -62,7 +62,7 @@
                            <font>
                               <Font size="16.0" />
                            </font></Label>
-                        <TextField fx:id="txtfName" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="26.0" prefWidth="500.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                        <TextField fx:id="txtfName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="34.0" prefWidth="500.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                            <font>
                               <Font size="16.0" />
                            </font></TextField>
@@ -70,7 +70,7 @@
                            <font>
                               <Font size="16.0" />
                            </font></Label>
-                        <JFXTextArea fx:id="txtDescription" style="-fx-text-fill: white;" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2147483647">
+                        <JFXTextArea fx:id="txtDescription" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2147483647">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -97,7 +97,7 @@
                         <Insets left="100.0" />
                      </HBox.margin>
                   </HBox>
-                  <ScrollPane fx:id="spAssignedUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="95.0" prefWidth="470.0" HBox.hgrow="ALWAYS">
+                  <ScrollPane fx:id="spAssignedUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="95.0" prefWidth="493.0" HBox.hgrow="ALWAYS">
                      <content>
                         <FlowPane fx:id="fpStaff" prefWidth="330.0" />
                      </content>
