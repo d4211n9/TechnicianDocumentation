@@ -95,4 +95,28 @@ public class ProjectDAO implements IProjectDAO {
 
         return allProjects;
     }
+
+    public Project updateProject(Project project) throws Exception {
+        Project updatedProject = null;
+
+        String sql = "UPDATE Project SET Name=?, Location=?, Description=? WHERE ID=?;";
+
+        try (Connection connection = connector.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, project.getName());
+            statement.setString(2, project.getLocation());
+            statement.setString(3, project.getDescription());
+
+            statement.executeUpdate();
+            updatedProject = project;
+
+        } catch (SQLException e) {
+            DALException dalException = new DALException("Failed to update project", e);
+            dalException.printStackTrace(); //TODO replace with log to the database.
+
+            throw dalException;
+        }
+        return updatedProject;
+    }
 }
