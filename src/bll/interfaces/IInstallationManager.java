@@ -1,6 +1,7 @@
 package bll.interfaces;
 
 import be.Installation;
+import be.SystemUser;
 
 import java.util.List;
 

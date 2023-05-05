@@ -1,10 +1,14 @@
 package be;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Installation {
     private String name, description;
     private int ID, projectID, isDoneInt;
     private byte[] drawingBytes;
     private boolean isDone;
+    private List<SystemUser> assignedSystemUsers;
 
     public Installation(int projectID, String name, String description, byte[] drawingBytes, boolean isDone) {
         this.projectID = projectID;
@@ -13,6 +17,7 @@ public class Installation {
         this.drawingBytes = drawingBytes;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
+        assignedSystemUsers = new ArrayList<>();
     }
 
     public Installation(int ID, int projectID, String name, String description, byte[] drawingBytes, boolean isDone) {
@@ -23,6 +28,7 @@ public class Installation {
         this.drawingBytes = drawingBytes;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
+        assignedSystemUsers = new ArrayList<>();
     }
 
     public int getProjectID() {
@@ -49,6 +55,10 @@ public class Installation {
     public int getIsDoneInt() {
         isDoneInt = isDone ? 1 : 0;
         return isDoneInt;
+    }
+
+    public List<SystemUser> getAssignedSystemUsers() {
+        return assignedSystemUsers;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package bll.managers;
 
 import be.Installation;
+import be.SystemUser;
 import bll.interfaces.IInstallationManager;
 import dal.facades.ProjectFacade;
 
