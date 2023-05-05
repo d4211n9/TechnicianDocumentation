@@ -96,6 +96,7 @@ public class ProjectDAO implements IProjectDAO {
         return allProjects;
     }
 
+    @Override
     public Project updateProject(Project project) throws Exception {
         Project updatedProject = null;
 

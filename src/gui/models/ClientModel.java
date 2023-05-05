@@ -49,8 +49,6 @@ public class ClientModel {
             } else {
                 filteredClients.addAll(clientManager.search(allClients, ""));
         }
-
-
     }
 
     public boolean updateClient(Client client, Client originalClient) throws Exception{

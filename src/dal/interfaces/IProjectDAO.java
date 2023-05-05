@@ -7,4 +7,6 @@ import java.util.List;
 public interface IProjectDAO {
     Project createProject(Project project) throws Exception;
     List<Project> getAllProjects() throws Exception;
+
+    Project updateProject(Project project) throws Exception;
 }

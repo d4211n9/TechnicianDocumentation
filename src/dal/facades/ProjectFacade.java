@@ -26,6 +26,10 @@ public class ProjectFacade {
         return projectDAO.getAllProjects();
     }
 
+    public Project updateProject(Project project) throws Exception {
+        return projectDAO.updateProject(project);
+    }
+
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
         return systemUsersAssignedToProjectsDAO.getSystemUsersAssignedToProject(projectId);
     }

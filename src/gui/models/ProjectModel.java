@@ -1,7 +1,6 @@
 package gui.models;
 
 import be.Project;
-import be.SystemUser;
 import bll.interfaces.IProjectManager;
 import bll.managers.ProjectManager;
 import javafx.collections.FXCollections;
@@ -42,6 +41,17 @@ public class ProjectModel {
 
     public ObservableList<Project> getAllProjects() throws Exception {
         return filteredProjectList;
+    }
+
+    public boolean updateProject(Project project, Project originalProject) throws Exception {
+
+        if (projectManager.updateProject(project) != null) {
+            allProjects.remove(originalProject);
+            allProjects.add(project);
+            search(searchString);
+            return true;
+        }
+            return false;
     }
 
     public void search(String query) {

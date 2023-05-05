@@ -4,9 +4,7 @@ import be.Project;
 import be.SystemUser;
 import bll.interfaces.IProjectManager;
 import bll.util.Search;
-import dal.dao.ProjectDAO;
 import dal.facades.ProjectFacade;
-import dal.interfaces.IProjectDAO;
 
 import java.util.List;
 
@@ -27,6 +25,11 @@ public class ProjectManager implements IProjectManager {
     @Override
     public List<Project> getAllProjects() throws Exception {
         return projectFacade.getAllProjects();
+    }
+
+    @Override
+    public Project updateProject(Project project) throws Exception {
+        return projectFacade.updateProject(project);
     }
 
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
