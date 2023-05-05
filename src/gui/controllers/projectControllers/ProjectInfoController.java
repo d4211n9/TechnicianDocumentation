@@ -7,6 +7,7 @@ import be.Project;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import gui.controllers.installation.InstallationCardController;
+import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -133,10 +134,19 @@ public class ProjectInfoController extends BaseController {
     }
 
     private void showInstallation(Installation i) {
-        FXMLLoader loader = loadView(ViewPaths.INSTALLATION_CARD);
-        Pane installationCard = loader.getRoot();
-        InstallationCardController controller = loader.getController();
-        controller.setContent(i);
+        FXMLLoader cardLoader = loadView(ViewPaths.INSTALLATION_CARD);
+        Pane installationCard = cardLoader.getRoot();
+        InstallationCardController cardController = cardLoader.getController();
+        cardController.setContent(i);
+        installationCard.setOnMouseClicked(event -> {
+            getMainController().saveLastView(projectsView);
+
+            FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
+            VBox installationInfo = infoLoader.getRoot();
+            InstallationInfoController infoController = infoLoader.getController();
+            infoController.setContent(i);
+            getMainController().mainBorderPane.setCenter(installationInfo);
+        });
         fpInstallations.getChildren().add(installationCard);
     }
 }
