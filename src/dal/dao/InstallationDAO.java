@@ -91,7 +91,27 @@ public class InstallationDAO implements IInstallationDAO {
 
     @Override
     public Installation updateInstallation(Installation installation) throws Exception {
-        //TODO Implement
-        return null;
+
+        Installation updatedInstallation = null;
+        String sql = "UPDATE Installation SET ProjectID=?, Name=?, Description=?, Drawing=?, Is_Done=?, SoftDelete=? WHERE ID=?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, installation.getProjectID());
+            statement.setString(2, installation.getName());
+            statement.setString(3, installation.getDescription());
+            statement.setBytes(4, installation.getDrawingBytes());
+            statement.setInt(5, installation.getIsDoneInt());
+            statement.setTimestamp(6, null);
+
+            statement.executeUpdate();
+
+            updatedInstallation = installation;
+
+        } catch (SQLException e) {
+            throw new Exception("Failed to update installation", e);
+        }
+        return updatedInstallation;
     }
 }
