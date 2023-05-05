@@ -31,6 +31,10 @@ public class Installation {
         assignedSystemUsers = new ArrayList<>();
     }
 
+    public int getID() {
+        return ID;
+    }
+
     public int getProjectID() {
         return projectID;
     }
@@ -45,6 +49,10 @@ public class Installation {
 
     public byte[] getDrawingBytes() {
         return drawingBytes;
+    }
+
+    public void setDrawingBytes(byte[] drawingBytes) {
+        this.drawingBytes = drawingBytes;
     }
 
     //TODO Check: usikker på om int eller boolean skal bruges i isDone getter...

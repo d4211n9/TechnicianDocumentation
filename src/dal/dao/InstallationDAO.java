@@ -93,17 +93,17 @@ public class InstallationDAO implements IInstallationDAO {
     public Installation updateInstallation(Installation installation) throws Exception {
 
         Installation updatedInstallation = null;
-        String sql = "UPDATE Installation SET ProjectID=?, Name=?, Description=?, Drawing=?, Is_Done=?, SoftDelete=? WHERE ID=?;";
+        String sql = "UPDATE Installation SET Name=?, Description=?, Drawing=?, Is_Done=?, SoftDelete=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, installation.getProjectID());
-            statement.setString(2, installation.getName());
-            statement.setString(3, installation.getDescription());
-            statement.setBytes(4, installation.getDrawingBytes());
-            statement.setInt(5, installation.getIsDoneInt());
-            statement.setTimestamp(6, null);
+            statement.setString(1, installation.getName());
+            statement.setString(2, installation.getDescription());
+            statement.setBytes(3, installation.getDrawingBytes());
+            statement.setInt(4, installation.getIsDoneInt());
+            statement.setTimestamp(5, null);
+            statement.setInt(6, installation.getID());
 
             statement.executeUpdate();
 
