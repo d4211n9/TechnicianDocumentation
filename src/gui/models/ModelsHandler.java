@@ -5,12 +5,14 @@ public class ModelsHandler {
     private SystemUserModel systemUserModel;
     private ProjectModel projectModel;
     private ClientModel clientModel;
+    private InstallationModel installationModel;
 
 
     private ModelsHandler() throws Exception {
         systemUserModel = new SystemUserModel();
         projectModel = new ProjectModel();
         clientModel = new ClientModel();
+        installationModel = new InstallationModel();
     }
 
     public static ModelsHandler getInstance() throws Exception {
@@ -27,8 +29,11 @@ public class ModelsHandler {
         return projectModel;
     }
 
-
     public ClientModel getClientModel() {
         return clientModel;
+    }
+
+    public InstallationModel getInstallationModel() {
+        return installationModel;
     }
 }

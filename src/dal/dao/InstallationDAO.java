@@ -68,10 +68,10 @@ public class InstallationDAO implements IInstallationDAO {
             while(resultSet.next()) {
                 //Mapping the installation
                 int ID = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                String description = resultSet.getString(3);
-                byte[] drawingBytes = resultSet.getBytes(4);
-                int isDoneInt = resultSet.getInt(5);
+                String name = resultSet.getString(3);
+                String description = resultSet.getString(4);
+                byte[] drawingBytes = resultSet.getBytes(5);
+                int isDoneInt = resultSet.getInt(6);
 
                 //Converting int to boolean
                 boolean isDone = false;

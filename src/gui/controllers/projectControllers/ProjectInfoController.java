@@ -2,9 +2,11 @@ package gui.controllers.projectControllers;
 
 import be.Client;
 import be.Enum.SystemRole;
+import be.Installation;
 import be.Project;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.controllers.installation.InstallationCardController;
 import gui.util.NodeAccessLevel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,6 +36,7 @@ public class ProjectInfoController extends BaseController {
 
     private Client client;
     private Project project;
+    private List<Installation> installations;
 
     private NodeAccessLevel buttonAccessLevel;
 
@@ -45,20 +48,14 @@ public class ProjectInfoController extends BaseController {
 
         lblProjectTitle.setText(project.getName());
         lblClientName.setText(client.getName());
-        lblClientLocation.setText(client.getLocation()); //TODO Obs.: Client og Project kan have forskellige locations, bør vi vise clients her?
+        lblClientLocation.setText(client.getLocation());
         lblClientType.setText(client.getType());
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
         lblProjectLocation.setText(client.getLocation());
         lblCreated.setText(project.getCreated()+"");
 
-        //TODO Slet, tester InstallationCard in action
-        FXMLLoader loader1 = loadView(ViewPaths.INSTALLATION_CARD);
-        FXMLLoader loader2 = loadView(ViewPaths.INSTALLATION_CARD);
-        Pane installationCard1 = loader1.getRoot();
-        Pane installationCard2 = loader2.getRoot();
-        fpInstallations.getChildren().add(installationCard1);
-        fpInstallations.getChildren().add(installationCard2);
+        loadInstallations();
     }
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
@@ -120,5 +117,26 @@ public class ProjectInfoController extends BaseController {
         } catch (Exception e) {
             displayError(e);
         }
+    }
+
+    private void loadInstallations() {
+        try {
+            installations = getModelsHandler().getInstallationModel().getAllInstallations(project.getID());
+        } catch (Exception e) {
+            e.printStackTrace();
+            displayError(e);
+        }
+
+        for (Installation i : installations) {
+            showInstallation(i);
+        }
+    }
+
+    private void showInstallation(Installation i) {
+        FXMLLoader loader = loadView(ViewPaths.INSTALLATION_CARD);
+        Pane installationCard = loader.getRoot();
+        InstallationCardController controller = loader.getController();
+        controller.setContent(i);
+        fpInstallations.getChildren().add(installationCard);
     }
 }
