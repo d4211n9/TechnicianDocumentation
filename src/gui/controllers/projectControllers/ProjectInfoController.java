@@ -6,12 +6,13 @@ import be.Installation;
 import be.Project;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.controllers.clientController.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,11 +22,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
+import java.net.URL;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class ProjectInfoController extends BaseController {
+public class ProjectInfoController extends BaseController implements Initializable {
     @FXML
     private VBox projectsView;
     @FXML
@@ -42,6 +44,11 @@ public class ProjectInfoController extends BaseController {
     private NodeAccessLevel buttonAccessLevel;
 
     private JFXButton editButton, deleteButton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        addLoadedButtons();
+    }
 
     public void setContent(Project project) {
         this.project = project;
@@ -68,10 +75,22 @@ public class ProjectInfoController extends BaseController {
 
         addRemoveAssignedUserBtn();
         addAssignUserBtn();
+        addCreateInstallationBtn();
+    }
 
+    private void addCreateInstallationBtn() {
+        Button btnAddInstallation = createButton("➕🛠 Installation");
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+                btnAddInstallation,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
+        btnAddInstallation.setOnMouseClicked(event -> {
+            getMainController().saveLastView(projectsView);
+            FXMLLoader createLoader = loadView(ViewPaths.CREATE_INSTALLATION);
+            VBox createInstallation = createLoader.getRoot();
+            CreateInstallationController controller = createLoader.getController();
+            controller.setContent(project);
+            getMainController().mainBorderPane.setCenter(createInstallation);
+        });
     }
 
     private void addAssignUserBtn() {//todo lav om til at slette ting fra view

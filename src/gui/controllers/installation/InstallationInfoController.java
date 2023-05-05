@@ -71,4 +71,7 @@ public class InstallationInfoController extends BaseController implements Initia
         infoBtnArea.getChildren().add(button);
     }
 
+    public void handleBack() {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+    }
 }

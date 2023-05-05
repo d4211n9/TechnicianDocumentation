@@ -13,7 +13,7 @@
    <children>
       <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="150.0" prefHeight="55.0" prefWidth="840.0" VBox.vgrow="ALWAYS">
          <children>
-            <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="39.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
+            <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleBack" prefHeight="35.0" prefWidth="39.0" text="🔙" textOverrun="CLIP" HBox.hgrow="NEVER">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
