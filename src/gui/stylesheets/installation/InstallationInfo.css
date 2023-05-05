@@ -42,8 +42,11 @@
     -fx-background-radius: 2;
 }
 
-.tab-pane .tab {
-
+.tab-pane {
+    -fx-tab-min-width: 100px;
+}
+.tab-pane:top *.tab-header-area {
+    -fx-font-size: 16;
 }
 
 .tab-pane .tab:selected {
