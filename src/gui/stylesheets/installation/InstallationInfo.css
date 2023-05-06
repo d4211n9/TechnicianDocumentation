@@ -28,7 +28,7 @@
     -fx-background-insets: 0px;
 }
 
-#lblInstallationTitle, #lblName {
+#lblInstallationTitle, #lblName, #lblAssigned {
     -fx-text-fill: #90AED6;
 }
 

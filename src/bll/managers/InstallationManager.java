@@ -28,4 +28,25 @@ public class InstallationManager implements IInstallationManager {
     public Installation updateInstallation(Installation installation) throws Exception {
         return projectFacade.updateInstallation(installation);
     }
+
+    @Override
+    public List<SystemUser> getSystemUsersAssignedToInstallation(int installationId) throws Exception {
+        return projectFacade.getSystemUsersAssignedToInstallation(installationId);
+    }
+
+    @Override
+    public List<SystemUser> getSystemUsersNotAssignedToInstallation(int installationId) throws Exception {
+        return projectFacade.getSystemUsersNotAssignedToInstallation(installationId);
+    }
+
+    @Override
+    public boolean assignSystemUserToInstallation(int installationId, String systemUserEmailToAssign) throws Exception {
+        return projectFacade.assignSystemUserToInstallation(installationId, systemUserEmailToAssign);
+    }
+
+    @Override
+    public boolean deleteSystemUserAssignedToInstallation(int installationId, String systemUserEmailToDelete) throws Exception {
+        return projectFacade.deleteSystemUserAssignedToInstallation(installationId, systemUserEmailToDelete);
+    }
+
 }

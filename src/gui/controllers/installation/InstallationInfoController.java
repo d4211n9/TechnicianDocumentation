@@ -2,9 +2,15 @@ package gui.controllers.installation;
 
 import be.Enum.SystemRole;
 import be.Installation;
+import be.SystemUser;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -32,22 +38,31 @@ import java.util.ResourceBundle;
 
 public class InstallationInfoController extends BaseController implements Initializable {
     @FXML
-    private VBox installationInfo;
+    private VBox installationInfo, vbUserBtnArea;
     @FXML
     private HBox infoBtnArea, photosBtnArea, drawingBtnArea, deviceBtnArea, hbImage;
     @FXML
-    private Label lblName;
+    private Label lblName, lblDescription;
+    @FXML
+    private JFXListView listUsers;
     @FXML
     private ImageView imgPhoto;
+    @FXML
+    private JFXButton assignUser, unAssignUser;
+    @FXML
+    private JFXToggleButton toggleUsers;
 
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
     private final List<Image> images = new ArrayList<>();
     private int currentImageIndex = 0;
+    private ObservableList<SystemUser> obsAssignedUsers = null;
+    private ObservableList<SystemUser> obsUnAssignedUsers = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
+        userListener();
 
         hbImage.widthProperty().addListener((observable, oldValue, newValue) ->
                 imgPhoto.setFitWidth((Double) newValue));
@@ -59,6 +74,9 @@ public class InstallationInfoController extends BaseController implements Initia
     public void setContent(Installation installation) {
         this.installation = installation;
         lblName.setText(installation.getName());
+        lblDescription.setText(installation.getDescription());
+
+        loadUsers();
 
         if(installation.getDrawingBytes() != null) {
             Platform.runLater(() -> loadPhotos());
@@ -78,6 +96,12 @@ public class InstallationInfoController extends BaseController implements Initia
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
+        addEditBtn();
+        addAssignUserBtn();
+        addUnAssignUserBtn();
+    }
+
+    private void addEditBtn() {
         Button btnEditInfo = createButton("✏ Edit info");
         buttonAccessLevel.addNodeAccessLevel(
                 btnEditInfo,
@@ -85,8 +109,106 @@ public class InstallationInfoController extends BaseController implements Initia
         addInfoButton(btnEditInfo);
     }
 
+    private void addAssignUserBtn() {
+        assignUser = createButton("➕👤 Add");
+        buttonAccessLevel.addNodeAccessLevel(
+                assignUser,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
+        addAssignedButton(assignUser);
+        assignUser.setDisable(true);
+        assignUser.setVisible(false);
+
+        assignUser.setOnAction(event -> {
+            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
+            try {
+                if(getModelsHandler().getInstallationModel().assignSystemUserToInstallation(
+                        installation.getID(),
+                        selectedUser.getEmail())) {
+                    obsAssignedUsers.add(selectedUser);
+                    obsUnAssignedUsers.remove(selectedUser);
+                } else {
+                    displayError(new Throwable("Failed to add the user to the installation"));
+                }
+            } catch (Exception e) {
+                displayError(e);
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void addUnAssignUserBtn() {
+        unAssignUser = createButton("➖👤 Remove");
+        buttonAccessLevel.addNodeAccessLevel(
+                unAssignUser,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
+        addAssignedButton(unAssignUser);
+        unAssignUser.setDisable(true);
+
+        unAssignUser.setOnAction(event -> {
+            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
+            try {
+                if(getModelsHandler().getInstallationModel().deleteSystemUserAssignedToInstallation(
+                        installation.getID(),
+                        selectedUser.getEmail())) {
+                    obsAssignedUsers.remove(selectedUser);
+                    obsUnAssignedUsers.add(selectedUser);
+                } else {
+                    displayError(new Throwable("Failed to remove the user from the installation"));
+                }
+            } catch (Exception e) {
+                displayError(e);
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void loadUsers() {
+        try {
+            List<SystemUser> assignedUsers = getModelsHandler().getInstallationModel().
+                    getSystemUsersAssignedToInstallation(installation.getID());
+            obsAssignedUsers = FXCollections.observableList(assignedUsers);
+
+            List<SystemUser> unAssignedUsers = getModelsHandler().getInstallationModel().
+                    getSystemUsersNotAssignedToInstallation(installation.getID());
+            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
+        } catch (Exception e) {
+            displayError(e);
+            e.printStackTrace(); //TODO replace with log to the database?
+        }
+
+        listUsers.setItems(obsAssignedUsers);
+    }
+
+    private void userListener() {
+        listUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null) {
+                assignUser.setDisable(false);
+                unAssignUser.setDisable(false);
+            } else {
+                assignUser.setDisable(true);
+                unAssignUser.setDisable(true);
+            }
+        });
+    }
+
+    public void handleToggleUsers() {
+        listUsers.getSelectionModel().select(null);
+        if(toggleUsers.isSelected()) {
+            listUsers.setItems(obsAssignedUsers);
+            assignUser.setVisible(false);
+            unAssignUser.setVisible(true);
+        } else {
+            listUsers.setItems(obsUnAssignedUsers);
+            unAssignUser.setVisible(false);
+            assignUser.setVisible(true);
+        }
+    }
+
     private void addInfoButton(Button button) {
         infoBtnArea.getChildren().add(button);
+    }
+    private void addAssignedButton(Button button) {
+        vbUserBtnArea.getChildren().add(button);
     }
     private void addPhotosButton(Button button) {
         photosBtnArea.getChildren().add(button);
