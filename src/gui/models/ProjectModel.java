@@ -44,6 +44,18 @@ public class ProjectModel {
         return filteredProjectList;
     }
 
+    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
+        projectManager.assignSystemUserToProject(projectId, systemUserEmail);
+    }
+
+    public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
+        return projectManager.getSystemUsersAssignedToProject(projectId);
+    }
+
+    public void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception {
+        projectManager.deleteSystemUserAssignedToProject(projectId, systemUserEmail);
+    }
+
     public void search(String query) {
         filteredProjectList.clear();
         if(query != null) {

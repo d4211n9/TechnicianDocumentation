@@ -4,12 +4,16 @@ import be.Client;
 import be.Enum.SystemRole;
 import be.Installation;
 import be.Project;
+import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
 import gui.controllers.BaseController;
 import gui.controllers.clientController.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,9 +35,11 @@ public class ProjectInfoController extends BaseController implements Initializab
     @FXML
     private VBox projectsView;
     @FXML
-    private FlowPane fpStaff, fpInstallations;
+    private FlowPane fpInstallations;
     @FXML
-    private HBox buttonArea;
+    private HBox buttonArea, hbUserBtnArea;
+    @FXML
+    private JFXListView listAssignedUsers;
     @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone, lblCreated, lblProjectLocation;
 
@@ -64,6 +70,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         lblCreated.setText(project.getCreated()+"");
 
         loadInstallations();
+        loadAssignedUsers();
     }
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
@@ -167,5 +174,18 @@ public class ProjectInfoController extends BaseController implements Initializab
             getMainController().mainBorderPane.setCenter(installationInfo);
         });
         fpInstallations.getChildren().add(installationCard);
+    }
+
+    private void loadAssignedUsers() {
+        List<SystemUser> assignedUsers = null;
+        try {
+            assignedUsers = getModelsHandler().getProjectModel().getSystemUsersAssignedToProject(project.getID());
+        } catch (Exception e) {
+            displayError(e);
+            e.printStackTrace(); //TODO replace with log to the database?
+        }
+        ObservableList<SystemUser> obsUsers = FXCollections.observableList(assignedUsers);
+
+        listAssignedUsers.setItems(obsUsers);
     }
 }
