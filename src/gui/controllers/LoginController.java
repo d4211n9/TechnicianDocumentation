@@ -1,10 +1,7 @@
 package gui.controllers;
 
 import be.SystemUser;
-import exceptions.DALException;
-import gui.models.ModelsHandler;
 import gui.util.MainControllerHandler;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -16,9 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import util.InputValidator;
-import util.StylePaths;
 import util.SymbolPaths;
-import util.ViewPaths;
 
 import java.net.URL;
 import java.util.ResourceBundle;

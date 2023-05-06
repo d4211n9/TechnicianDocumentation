@@ -1,4 +1,4 @@
-package gui.controllers.clientController;
+package gui.controllers.installation;
 
 import be.Installation;
 import be.Project;
