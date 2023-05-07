@@ -116,7 +116,6 @@ public class InstallationInfoController extends BaseController implements Initia
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(assignUser);
         assignUser.setDisable(true);
-        assignUser.setVisible(false);
 
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
@@ -180,27 +179,32 @@ public class InstallationInfoController extends BaseController implements Initia
     }
 
     private void userListener() {
-        listUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null) {
-                assignUser.setDisable(false);
+        listUsers.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            //If a user is selected from the assigned users list we enable the remove button
+            if(n != null && toggleUsers.isSelected()) {
                 unAssignUser.setDisable(false);
-            } else {
+            }
+            //If a user is selected from the unassigned users list we enable the add button
+            else if (n != null && !toggleUsers.isSelected()) {
+                assignUser.setDisable(false);
+            }
+            //If no user is selected we disable both buttons
+            else {
                 assignUser.setDisable(true);
                 unAssignUser.setDisable(true);
             }
         });
     }
 
+    /**
+     * Switches between showing list of assigned and unassigned users
+     */
     public void handleToggleUsers() {
-        listUsers.getSelectionModel().select(null);
+        listUsers.getSelectionModel().select(null); //De-select user to avoid "hanging" selection
         if(toggleUsers.isSelected()) {
             listUsers.setItems(obsAssignedUsers);
-            assignUser.setVisible(false);
-            unAssignUser.setVisible(true);
         } else {
             listUsers.setItems(obsUnAssignedUsers);
-            unAssignUser.setVisible(false);
-            assignUser.setVisible(true);
         }
     }
 
