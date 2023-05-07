@@ -1,7 +1,9 @@
 package gui.controllers.installation;
 
 import be.Installation;
+import com.jfoenix.controls.JFXListView;
 import gui.controllers.BaseController;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -16,13 +18,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class InstallationCardController extends BaseController implements Initializable {
-
     @FXML
     private Label lblName, lblDescription;
     @FXML
-    private HBox buttonArea;
-    @FXML
     private ImageView imgInstallation;
+    @FXML
+    private JFXListView listUsers;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -32,5 +33,12 @@ public class InstallationCardController extends BaseController implements Initia
     public void setContent(Installation installation) {
         lblName.setText(installation.getName());
         lblDescription.setText(installation.getDescription());
+        try {
+            listUsers.setItems(FXCollections.observableList(getModelsHandler()
+                    .getInstallationModel()
+                    .getSystemUsersAssignedToInstallation(installation.getID())));
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 }

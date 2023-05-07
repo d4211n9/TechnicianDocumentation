@@ -18,3 +18,22 @@
 #lblName, #lblAssignedUsers {
     -fx-text-fill: #90AED6;
 }
+
+#vbStaff {
+    -fx-border-radius: 0;
+    -fx-border-color: transparent;
+}
+
+#listUsers {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+#listUsers .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+#listUsers .list-cell:selected, #listUsers .list-cell:hover {
+    -fx-text-fill: #90AED6;
+}
