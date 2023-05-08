@@ -108,6 +108,7 @@ public class ProjectDAO implements IProjectDAO {
             statement.setString(1, project.getName());
             statement.setString(2, project.getLocation());
             statement.setString(3, project.getDescription());
+            statement.setInt(4, project.getID());
 
             statement.executeUpdate();
             updatedProject = project;

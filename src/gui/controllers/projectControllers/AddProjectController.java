@@ -33,6 +33,8 @@ public class AddProjectController extends BaseController implements Initializabl
     @FXML
     private JFXTextArea jfxTxtADescription;
 
+    private Project projectToEdit;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createComboBoxContent();
@@ -80,7 +82,7 @@ public class AddProjectController extends BaseController implements Initializabl
         Date created = Calendar.getInstance().getTime();
         String description = jfxTxtADescription.getText();
 
-        return new Project(name, client, location, created, description);
+        return new Project(projectToEdit.getID(), name, client, location, created, description);
     }
 
     //TODO, valider input
@@ -104,6 +106,8 @@ public class AddProjectController extends BaseController implements Initializabl
     }
 
     public void setEditContent(Project selectedItem) {
+        projectToEdit = selectedItem;
+
         lblCreateProject.setText("Edit Project");
         buttonArea.getChildren().remove(btnConfirm);
 
@@ -122,9 +126,15 @@ public class AddProjectController extends BaseController implements Initializabl
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
                 Project project = createProject();
-                //todo lav en update i dal osv..
 
-                handleCancel();
+                try {
+                    getModelsHandler().getProjectModel().updateProject(project, projectToEdit);
+
+                    handleCancel();
+                }
+                catch (Exception e) {
+                    displayError(e);
+                }
             }
         });
     }
