@@ -89,6 +89,19 @@ public class AddProjectController extends BaseController implements Initializabl
         Date created = Calendar.getInstance().getTime();
         String description = jfxTxtADescription.getText();
 
+        return new Project(name, client, location, created, description);
+    }
+
+    private Project createEditProject() {
+        String name = txtfName.getText();
+        Client client = (Client) cbClients.getSelectionModel().getSelectedItem();
+        String street = txtfStreet.getText();
+        String postalCode = txtfPostalCode.getText();
+        String city = txtfCity.getText();
+        String location = street + ", " + postalCode + " " + city;
+        Date created = Calendar.getInstance().getTime();
+        String description = jfxTxtADescription.getText();
+
         return new Project(projectToEdit.getID(), name, client, location, created, description);
     }
 
@@ -132,7 +145,7 @@ public class AddProjectController extends BaseController implements Initializabl
 
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
-                Project project = createProject();
+                Project project = createEditProject();
 
                 try {
                     getModelsHandler().getProjectModel().updateProject(project, projectToEdit);

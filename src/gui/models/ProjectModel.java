@@ -1,6 +1,7 @@
 package gui.models;
 
 import be.Project;
+import be.SystemUser;
 import bll.interfaces.IProjectManager;
 import bll.managers.ProjectManager;
 import javafx.collections.FXCollections;
