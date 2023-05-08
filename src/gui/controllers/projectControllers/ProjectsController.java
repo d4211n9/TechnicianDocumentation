@@ -158,6 +158,7 @@ public class ProjectsController extends BaseController implements Initializable 
             if(mouseEvent.getClickCount() == 2){
                 FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
                 getMainController().mainBorderPane.setCenter(loader.getRoot());
+                getMainController().saveLastView(projectsView);
 
                 ProjectInfoController controller = loader.getController();
                 Project selected = tvProjects.getSelectionModel().getSelectedItem();

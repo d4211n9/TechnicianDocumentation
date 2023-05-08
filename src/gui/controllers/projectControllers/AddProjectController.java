@@ -5,7 +5,9 @@ import be.Project;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.controllers.installation.InstallationInfoController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -62,10 +64,15 @@ public class AddProjectController extends BaseController implements Initializabl
             Project project = createProject();
 
             try {
-                getModelsHandler().getProjectModel().createProject(project);
-                getMainController().mainBorderPane.setCenter(loadView(ViewPaths.PROJECTS_VIEW).getRoot());
-                //TODO Åben det nye projekt der er oprettet, når vi har view til det...
-                getMainController().saveLastView(null);
+                project = getModelsHandler().getProjectModel().createProject(project);
+                getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
+                        getModelsHandler().getSystemUserModel().getLoggedInSystemUser().getValue().getEmail());
+                
+                FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
+                VBox projectInfoView = loader.getRoot();
+                ProjectInfoController projectInfoController = loader.getController();
+                projectInfoController.setContent(project);
+                getMainController().mainBorderPane.setCenter(projectInfoView);
             } catch (Exception e) {
                 displayError(e);
             }

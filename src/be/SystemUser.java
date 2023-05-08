@@ -63,6 +63,6 @@ public class SystemUser implements Searchable<SystemUser> {
 
     @Override
     public String toString() {
-        return name + " " + email;
+        return name + " " + email + " " + role;
     }
 }

@@ -1,5 +1,5 @@
 
-#projectsView {
+#installationInfo {
     -fx-background-color: #333333;
 }
 
@@ -22,33 +22,35 @@
     -fx-background-color: #D9D9D9;
 }
 
-.scroll-pane {
-    -fx-background: transparent;
-    -fx-background-color: transparent;
-}
-
 #btnSave, #btnAdd, #btnRemove {
     -fx-padding: 0px;
     -fx-border-insets: 0px;
     -fx-background-insets: 0px;
 }
 
-#spInstallation {
-    -fx-background: #333333;
-    -fx-border-color: #333333;
-}
-
-#vbClientInfo, #vbStaff, #vbInstallations, #vbProjectInfo {
-    -fx-border-radius: 2;
-    -fx-border-color: grey;
-}
-
-#lblInstallations, #lblAssignedUsers, #lblProjectInfo, #lblClientInfo {
+#lblInstallationTitle, #lblName, #lblAssignedUsers {
     -fx-text-fill: #90AED6;
 }
 
-#fpInstallations {
+.tab-pane:focused
+{
+    -fx-text-fill: white;
+}
+
+.tab-header-area .tab-header-background {
     -fx-background-color: #333333;
+    -fx-background-radius: 2;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 100px;
+}
+.tab-pane:top *.tab-header-area {
+    -fx-font-size: 16;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #90AED6;
 }
 
 #listUsers {
