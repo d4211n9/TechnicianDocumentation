@@ -50,3 +50,17 @@
 #fpInstallations {
     -fx-background-color: #333333;
 }
+
+#listUsers {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+#listUsers .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+#listUsers .list-cell:selected, #listUsers .list-cell:hover {
+    -fx-text-fill: #90AED6;
+}

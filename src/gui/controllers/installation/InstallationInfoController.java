@@ -42,7 +42,7 @@ public class InstallationInfoController extends BaseController implements Initia
     @FXML
     private HBox infoBtnArea, photosBtnArea, drawingBtnArea, deviceBtnArea, hbImage;
     @FXML
-    private Label lblName, lblDescription;
+    private Label lblName, lblDescription, lblAssignedUsers;
     @FXML
     private JFXListView listUsers;
     @FXML
@@ -203,8 +203,10 @@ public class InstallationInfoController extends BaseController implements Initia
         listUsers.getSelectionModel().select(null); //De-select user to avoid "hanging" selection
         if(toggleUsers.isSelected()) {
             listUsers.setItems(obsAssignedUsers);
+            lblAssignedUsers.setText("Users Assigned");
         } else {
             listUsers.setItems(obsUnAssignedUsers);
+            lblAssignedUsers.setText("Users Not Assigned");
         }
     }
 
