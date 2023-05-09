@@ -2,91 +2,45 @@ package gui.controllers.projectControllers;
 
 import be.Enum.SystemRole;
 import be.Project;
-import com.jfoenix.controls.JFXButton;
-import gui.controllers.BaseController;
-import gui.controllers.clientController.CreateClientController;
+import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class ProjectsController extends BaseController implements Initializable {
-    @FXML
-    private TextField txtfSearch;
+public class ProjectsController extends TableViewController implements Initializable {
+
     @FXML
     private VBox projectsView;
-    @FXML
-    private HBox buttonArea;
-    @FXML
-    private TableView<Project> tvProjects;
     @FXML
     private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
     @FXML
     private TableColumn<Project, Integer> tcID;
     @FXML
     private TableColumn<Project, Date> tcCreated;
-    private NodeAccessLevel buttonAccessLevel;
-
-    private JFXButton editButton, deleteButton;
+    @FXML
+    private TextField txtfSearch;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
+        initializeButtonAccessLevels();
         addLoadedButtons();
         tvListener();
     }
-
-    private void addLoadedButtons() {
-        initializeButtonAccessLevels();
-
-        try {
-            SystemRole loggedInUserRole = getLoggedInUser();
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
-
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
-            }
-        } catch (Exception e) {
-            displayError(e);
-        }
-    }
-
-    private void tvListener() {
-        tvProjects.setOnMouseClicked(event -> {
-            if(isTvSelected()){
-                deleteButton.setDisable(false);
-                editButton.setDisable(false);
-            }else {
-                deleteButton.setDisable(true);
-                editButton.setDisable(true);
-            }
-        });
-    }
-    private boolean isTvSelected() {
-        return tvProjects.getSelectionModel().getSelectedItem() != null;
-    }
-
-    private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);}
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
@@ -109,7 +63,7 @@ public class ProjectsController extends BaseController implements Initializable 
         editButton.setOnMouseClicked(event -> {
             FXMLLoader loader = loadView(ViewPaths.ADD_PROJECT_VIEW);
             AddProjectController controller = loader.getController();
-            controller.setEditContent(tvProjects.getSelectionModel().getSelectedItem());
+            controller.setEditContent((Project) tableView.getSelectionModel().getSelectedItem());
             loadInMainView(loader.getRoot(), projectsView);
         });
     }
@@ -121,7 +75,7 @@ public class ProjectsController extends BaseController implements Initializable 
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object project = tvProjects.getSelectionModel().getSelectedItem();
+            Object project = tableView.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(project.toString(), true)){
                 //TODO Delete ned i lagene
             }
@@ -135,7 +89,7 @@ public class ProjectsController extends BaseController implements Initializable 
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
         try {
-            tvProjects.setItems(getModelsHandler().getProjectModel().getAllProjects());
+            tableView.setItems(getModelsHandler().getProjectModel().getAllProjects());
         } catch (Exception e) {
             displayError(e);
         }
@@ -161,7 +115,7 @@ public class ProjectsController extends BaseController implements Initializable 
                 getMainController().saveLastView(projectsView);
 
                 ProjectInfoController controller = loader.getController();
-                Project selected = tvProjects.getSelectionModel().getSelectedItem();
+                Project selected = (Project) tableView.getSelectionModel().getSelectedItem();
                 controller.setContent(selected);
             }
         }

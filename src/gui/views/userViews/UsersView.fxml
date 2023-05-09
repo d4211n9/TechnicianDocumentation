@@ -47,7 +47,7 @@
             <Insets bottom="10.0" />
          </VBox.margin>
         </HBox>
-        <TableView fx:id="tvUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="tcName" prefWidth="200.0" text="Name" />
                 <TableColumn fx:id="tcEmail" prefWidth="400.0" text="Email" />

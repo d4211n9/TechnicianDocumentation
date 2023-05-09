@@ -51,7 +51,7 @@
             <Insets bottom="10.0" />
          </VBox.margin>
       </HBox>
-      <TableView fx:id="tvProjects" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseReleased="#handleDoubleClick" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseReleased="#handleDoubleClick" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="tcClient" prefWidth="140.0" text="Client" />
           <TableColumn fx:id="tcLocation" prefWidth="275.0" text="Location" />
