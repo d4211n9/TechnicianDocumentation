@@ -35,7 +35,7 @@ public class AddProjectController extends BaseController implements Initializabl
     @FXML
     private JFXTextArea jfxTxtADescription;
 
-    private Project projectToEdit;
+    private int projectToEditId = -1;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,20 +89,11 @@ public class AddProjectController extends BaseController implements Initializabl
         Date created = Calendar.getInstance().getTime();
         String description = jfxTxtADescription.getText();
 
+        if (projectToEditId != -1) {
+            return new Project(projectToEditId, name, client, location, created, description);
+        }
+
         return new Project(name, client, location, created, description);
-    }
-
-    private Project createEditProject() {
-        String name = txtfName.getText();
-        Client client = (Client) cbClients.getSelectionModel().getSelectedItem();
-        String street = txtfStreet.getText();
-        String postalCode = txtfPostalCode.getText();
-        String city = txtfCity.getText();
-        String location = street + ", " + postalCode + " " + city;
-        Date created = Calendar.getInstance().getTime();
-        String description = jfxTxtADescription.getText();
-
-        return new Project(projectToEdit.getID(), name, client, location, created, description);
     }
 
     //TODO, valider input
@@ -126,7 +117,7 @@ public class AddProjectController extends BaseController implements Initializabl
     }
 
     public void setEditContent(Project selectedItem) {
-        projectToEdit = selectedItem;
+        projectToEditId = selectedItem.getID();
 
         lblCreateProject.setText("Edit Project");
         buttonArea.getChildren().remove(btnConfirm);
@@ -145,10 +136,10 @@ public class AddProjectController extends BaseController implements Initializabl
 
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
-                Project project = createEditProject();
+                Project project = createProject();
 
                 try {
-                    getModelsHandler().getProjectModel().updateProject(project, projectToEdit);
+                    getModelsHandler().getProjectModel().updateProject(project);
 
                     handleCancel();
                 }

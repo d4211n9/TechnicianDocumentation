@@ -44,11 +44,14 @@ public class ProjectModel {
         return filteredProjectList;
     }
 
-    public boolean updateProject(Project project, Project originalProject) throws Exception {
+    public boolean updateProject(Project updatedProject) throws Exception {
 
-        if (projectManager.updateProject(project) != null) {
-            allProjects.remove(originalProject);
-            allProjects.add(project);
+        if (projectManager.updateProject(updatedProject) != null) {
+
+            allProjects.removeIf(project -> project.getID() == updatedProject.getID());
+
+            allProjects.add(updatedProject);
+
             search(searchString);
             return true;
         }
