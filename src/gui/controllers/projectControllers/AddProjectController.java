@@ -5,7 +5,6 @@ import be.Project;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
-import gui.controllers.installation.InstallationInfoController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

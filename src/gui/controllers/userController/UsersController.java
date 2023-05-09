@@ -33,7 +33,7 @@ public class UsersController extends TableViewController implements Initializabl
     public void initialize(URL location, ResourceBundle resources) {
             loadTableView();
             initializeButtonAccessLevels();
-            addLoadedButtons();
+            usersView.getChildren().add(addButtons());
             tvListener();
     }
 

@@ -38,7 +38,7 @@ public class ProjectInfoController extends BaseController implements Initializab
     @FXML
     private FlowPane fpInstallations;
     @FXML
-    private HBox buttonArea, hbUserBtnArea;
+    private HBox hbUserBtnArea;
     @FXML
     private JFXListView listUsers;
     @FXML
@@ -50,14 +50,14 @@ public class ProjectInfoController extends BaseController implements Initializab
     private Client client;
     private Project project;
     private List<Installation> installations;
-    private NodeAccessLevel buttonAccessLevel;
     private JFXButton assignUser, unAssignUser;
     private ObservableList<SystemUser> obsAssignedUsers = null;
     private ObservableList<SystemUser> obsUnAssignedUsers = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addLoadedButtons();
+        initializeButtonAccessLevels();
+        projectsView.getChildren().add(addButtons());
     }
 
     public void setContent(Project project) {
@@ -148,29 +148,10 @@ public class ProjectInfoController extends BaseController implements Initializab
         });
     }
 
-    private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);}
-
     private void addAssignedButton(Button button) {
         hbUserBtnArea.getChildren().add(button);
     }
 
-
-    private void addLoadedButtons() {
-        initializeButtonAccessLevels();
-
-        try {
-            SystemRole loggedInUserRole = getLoggedInUser();
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
-
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
-            }
-        } catch (Exception e) {
-            displayError(e);
-        }
-    }
 
     private void loadInstallations() {
         try {
@@ -217,24 +198,6 @@ public class ProjectInfoController extends BaseController implements Initializab
         }
 
         listUsers.setItems(obsAssignedUsers);
-    }
-
-    private void userListener() {
-        listUsers.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
-            //If a user is selected from the assigned users list we enable the remove button
-            if(n != null && toggleUsers.isSelected()) {
-                unAssignUser.setDisable(false);
-            }
-            //If a user is selected from the unassigned users list we enable the add button
-            else if (n != null && !toggleUsers.isSelected()) {
-                assignUser.setDisable(false);
-            }
-            //If no user is selected we disable both buttons
-            else {
-                assignUser.setDisable(true);
-                unAssignUser.setDisable(true);
-            }
-        });
     }
 
     /**

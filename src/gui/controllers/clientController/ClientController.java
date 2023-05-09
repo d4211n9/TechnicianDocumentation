@@ -31,7 +31,7 @@ public class ClientController extends TableViewController implements Initializab
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
         initializeButtonAccessLevels();
-        addLoadedButtons();
+        clientView.getChildren().add(addButtons());
         tvListener();
     }
 

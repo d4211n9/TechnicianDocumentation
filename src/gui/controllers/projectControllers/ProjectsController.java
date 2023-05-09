@@ -38,7 +38,7 @@ public class ProjectsController extends TableViewController implements Initializ
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
         initializeButtonAccessLevels();
-        addLoadedButtons();
+        projectsView.getChildren().add(addButtons());
         tvListener();
     }
 
@@ -47,7 +47,6 @@ public class ProjectsController extends TableViewController implements Initializ
 
         addDeleteBtn();
         addEditBtn();
-
 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
@@ -95,7 +94,7 @@ public class ProjectsController extends TableViewController implements Initializ
         }
     }
 
-    public void handleSearch(KeyEvent keyEvent) {
+    public void handleSearch() {
         try {
             getModelsHandler().getProjectModel().search(txtfSearch.getText());
         } catch (Exception e) {
