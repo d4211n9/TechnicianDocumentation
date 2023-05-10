@@ -6,7 +6,6 @@ import be.Project;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
-import gui.controllers.installation.InstallationInfoController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -89,7 +88,7 @@ public class AddProjectController extends BaseController implements Initializabl
         String city = txtfCity.getText();
         Address address = null;
         try {
-            address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
+            address = getModelsHandler().getAddressModel().createProjectAddress(new Address(street, postalCode, city));
         } catch (Exception e) {
             displayError(e);
         }

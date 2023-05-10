@@ -1,5 +1,6 @@
 package dal.dao;
 
+import be.Address;
 import be.Client;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
@@ -51,22 +52,32 @@ public class ClientDAO implements IClientDAO {
     public List<Client> getAllClients() throws Exception {
         List<Client> allClients = new ArrayList<>();
 
-        String sql = "SELECT * FROM Client WHERE SoftDelete IS NULL;";
+        String sql = "SELECT * FROM Client " +
+                "INNER JOIN BillingAddress " +
+                "ON BillingAddress.ID=Client.AddressID " +
+                "WHERE SoftDelete IS NULL;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
+                //Mapping the billing address of the customer
+                int clientAddressID = resultSet.getInt(8);
+                String clientStreet = resultSet.getString(9);
+                String clientPostalCode = resultSet.getString(10);
+                String clientCity = resultSet.getString(11);
+
+                Address billingAddress = new Address(clientAddressID, clientStreet, clientPostalCode, clientCity);
+
                 //Mapping the client
                 int clientID = resultSet.getInt(1);
                 String clientName = resultSet.getString(2);
-                int addressID = resultSet.getInt(3);
                 String email = resultSet.getString(4);
                 String phone = resultSet.getString(5);
                 String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, addressID, email, phone, type);
+                Client client = new Client(clientID, clientName, billingAddress, email, phone, type);
 
                 allClients.add(client);
             }

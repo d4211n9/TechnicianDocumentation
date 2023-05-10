@@ -11,15 +11,27 @@ public class AddressModel {
         addressManager = new AddressManager();
     }
 
-    public Address createAddress(Address address) throws Exception {
-        return addressManager.createAddress(address);
+    public Address createBillingAddress(Address address) throws Exception {
+        return addressManager.createBillingAddress(address);
     }
 
-    public Address getAddressFromID(int addressID) throws Exception {
-        return addressManager.getAddressFromID(addressID);
+    public Address getBillingAddressFromID(int addressID) throws Exception {
+        return addressManager.getBillingAddressFromID(addressID);
     }
 
-    public Address updateAddress(Address address) throws Exception {
-        return addressManager.updateAddress(address);
+    public Address updateBillingAddress(Address address) throws Exception {
+        return addressManager.updateBillingAddress(address);
+    }
+
+    public Address createProjectAddress(Address address) throws Exception {
+        return addressManager.createProjectAddress(address);
+    }
+
+    public Address getProjectAddressFromID(int addressID) throws Exception {
+        return addressManager.getProjectAddressFromID(addressID);
+    }
+
+    public Address updateProjectAddress(Address address) throws Exception {
+        return addressManager.updateProjectAddress(address);
     }
 }

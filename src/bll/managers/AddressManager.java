@@ -13,17 +13,32 @@ public class AddressManager implements IAddressManager {
     }
 
     @Override
-    public Address createAddress(Address address) throws Exception {
-        return addressDAO.createAddress(address);
+    public Address createBillingAddress(Address address) throws Exception {
+        return addressDAO.createBillingAddress(address);
     }
 
     @Override
-    public Address getAddressFromID(int addressID) throws Exception {
-        return addressDAO.getAddressFromID(addressID);
+    public Address getBillingAddressFromID(int addressID) throws Exception {
+        return addressDAO.getBillingAddressFromID(addressID);
     }
 
     @Override
-    public Address updateAddress(Address address) throws Exception {
-        return addressDAO.updateAddress(address);
+    public Address updateBillingAddress(Address address) throws Exception {
+        return addressDAO.updateBillingAddress(address);
+    }
+
+    @Override
+    public Address createProjectAddress(Address address) throws Exception {
+        return addressDAO.createProjectAddress(address);
+    }
+
+    @Override
+    public Address getProjectAddressFromID(int addressID) throws Exception {
+        return addressDAO.getProjectAddressFromID(addressID);
+    }
+
+    @Override
+    public Address updateProjectAddress(Address address) throws Exception {
+        return addressDAO.updateProjectAddress(address);
     }
 }

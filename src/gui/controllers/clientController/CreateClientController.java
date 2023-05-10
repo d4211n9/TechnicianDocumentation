@@ -2,17 +2,13 @@ package gui.controllers.clientController;
 
 import be.Address;
 import be.Client;
-import be.Enum.SystemRole;
-import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import util.InputValidator;
 
 public class CreateClientController extends BaseController {
@@ -100,7 +96,7 @@ public class CreateClientController extends BaseController {
 
         Address address = null;
         try {
-            address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
+            address = getModelsHandler().getAddressModel().createBillingAddress(new Address(street, postalCode, city));
         } catch (Exception e) {
             displayError(e);
         }
