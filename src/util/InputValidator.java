@@ -39,4 +39,24 @@ public class InputValidator {
         return true;
     }
 
+    //TODO Make validation of phone no.
+    public static boolean isPhone(String phone) {
+        return true;
+    }
+
+    //TODO Make validation of street name and no.
+    public static boolean isStreet(String street) {
+        return true;
+    }
+
+    //TODO Make validation of city.
+    public static boolean isCity(String city) {
+        return true;
+    }
+
+    //TODO Make validation of postal code.
+    public static boolean isPostalCode(int postalCode) {
+        return true;
+    }
+
 }

@@ -57,6 +57,31 @@ public class SystemUserDAO implements ISystemUserDAO {
         }
     }
 
+    @Override
+    public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
+        SystemUser user = null;
+        String sql = "INSERT INTO SystemUser " +
+                "(Email, Password, RoleName, UserName, SoftDelete)" +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, systemUser.getEmail());
+            statement.setString(2, systemUser.getPassword());
+            statement.setString(3, systemUser.getRole().getRole());
+            statement.setString(4, systemUser.getName());
+            statement.setDate(5, null);
+            statement.executeUpdate();
+
+            user = systemUser;
+        }
+        catch (Exception e) {
+            throw new Exception("Failed create system user", e);
+        }
+        return user;
+    }
+
     public List<SystemUser> getAllSystemUsers() throws Exception {
 
         ArrayList<SystemUser> allUsers = new ArrayList<>();
@@ -83,30 +108,27 @@ public class SystemUserDAO implements ISystemUserDAO {
         return allUsers;
     }
 
-
     @Override
-    public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
-        SystemUser user = null;
-        String sql = "INSERT INTO SystemUser " +
-                "(Email, Password, RoleName, UserName, SoftDelete)" +
-                "VALUES (?, ?, ?, ?, ?)";
+    public SystemUser updateSystemUser(SystemUser user) throws Exception {
+        SystemUser updatedUser = null;
+        String sql = "UPDATE SystemUser SET Email=?, Password=?, RoleName=?, UserName=?, SoftDelete=? WHERE Email=?;";
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-        try (Connection conn = connector.getConnection();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPassword());//todo
+            statement.setString(3, user.getRole().toString());
+            statement.setString(4, user.getName());
+            statement.setTimestamp(5, null);
+            statement.setString(6, user.getEmail());
 
-            statement.setString(1, systemUser.getEmail());
-            System.out.println(systemUser.getEmail());
-            statement.setString(2, systemUser.getPassword());
-
-            statement.setString(3, systemUser.getRole().getRole());
-            statement.setString(4, systemUser.getName());
-            statement.setDate(5, null);
             statement.executeUpdate();
-            user = systemUser;
+
+            updatedUser = user;
+        } catch (SQLException e) {
+            throw new Exception("Failed to edit the event", e);
         }
-        catch (Exception e) {
-            throw new Exception("Failed create system user", e);
-        }
-        return user;
+        return updatedUser;
     }
+
 }

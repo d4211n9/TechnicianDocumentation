@@ -1,0 +1,68 @@
+
+#installationInfo {
+    -fx-background-color: #333333;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+
+.button {
+    -fx-background-color: #90AED6;
+    -fx-text-fill: #333333;
+}
+
+.button:hover {
+    -fx-background-color: #90AED6;
+    -fx-text-fill: #000000;
+}
+
+.text-area *.content {
+    -fx-background-color: #D9D9D9;
+}
+
+#btnSave, #btnAdd, #btnRemove {
+    -fx-padding: 0px;
+    -fx-border-insets: 0px;
+    -fx-background-insets: 0px;
+}
+
+#lblInstallationTitle, #lblName, #lblAssignedUsers {
+    -fx-text-fill: #90AED6;
+}
+
+.tab-pane:focused
+{
+    -fx-text-fill: white;
+}
+
+.tab-header-area .tab-header-background {
+    -fx-background-color: #333333;
+    -fx-background-radius: 2;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 100px;
+}
+.tab-pane:top *.tab-header-area {
+    -fx-font-size: 16;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #90AED6;
+}
+
+#listUsers {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+#listUsers .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+#listUsers .list-cell:selected, #listUsers .list-cell:hover {
+    -fx-text-fill: #90AED6;
+}

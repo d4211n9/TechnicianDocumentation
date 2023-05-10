@@ -1,15 +1,13 @@
-package gui.controllers;
+package gui.controllers.clientController;
 
 import be.Client;
 import be.Enum.SystemRole;
 import com.jfoenix.controls.JFXButton;
-import gui.controllers.userController.CreateUserController;
+import gui.controllers.BaseController;
 import gui.models.ClientModel;
 import gui.util.NodeAccessLevel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +18,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
@@ -99,7 +96,7 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     private void addEditBtn() {
-        editButton = createButton("Edit User");
+        editButton = createButton("✏ Edit Client");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -113,7 +110,7 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("Delete User");
+        deleteButton = createButton("🗑 Delete User");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);
@@ -122,6 +119,7 @@ public class ClientController extends BaseController implements Initializable {
             Object user = tvClients.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(user.toString(), true)){
                 System.out.println("delete " + user.toString());
+                //TODO Delete ned i lagene
             }
         });
     }

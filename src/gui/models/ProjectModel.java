@@ -31,7 +31,7 @@ public class ProjectModel {
 
         if(createdProject != null){
             allProjects.add(createdProject);
-            search(searchString);
+            search("");
         }
         return createdProject;
     }
@@ -46,6 +46,32 @@ public class ProjectModel {
 
     public Project softDeleteProject (Project project) throws Exception {
         return null;
+    }
+
+    public boolean updateProject(Project updatedProject) throws Exception {
+
+        if (projectManager.updateProject(updatedProject) != null) {
+
+            allProjects.removeIf(project -> project.getID() == updatedProject.getID());
+
+            allProjects.add(updatedProject);
+
+            search(searchString);
+            return true;
+        }
+            return false;
+    }
+
+    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
+        projectManager.assignSystemUserToProject(projectId, systemUserEmail);
+    }
+
+    public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
+        return projectManager.getSystemUsersAssignedToProject(projectId);
+    }
+
+    public void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception {
+        projectManager.deleteSystemUserAssignedToProject(projectId, systemUserEmail);
     }
 
     public void search(String query) {
