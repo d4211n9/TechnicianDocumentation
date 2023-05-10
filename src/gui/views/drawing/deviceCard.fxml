@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox fx:id="element" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.DeviceCard">
+   <children>
+      <ImageView fx:id="imgView" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lbl" alignment="CENTER" prefWidth="100.0" text="højtaler" />
+   </children>
+</HBox>

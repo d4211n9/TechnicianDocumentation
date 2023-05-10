@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox fx:id="background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.DrawingController">
+   <children>
+      <HBox prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+         <children>
+            <ScrollPane fx:id="contentArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1000.0" HBox.hgrow="ALWAYS">
+               <content>
+                  <Pane fx:id="pane" prefHeight="1000.0" prefWidth="1000.0" />
+               </content>
+            </ScrollPane>
+            <VBox fx:id="sidebar" minWidth="150.0" prefHeight="400.0" prefWidth="100.0" HBox.hgrow="NEVER">
+               <children>
+                  <Button fx:id="button" mnemonicParsing="false" text="Drag me biaatch" />
+                  <Label fx:id="lbl" text="Label" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
