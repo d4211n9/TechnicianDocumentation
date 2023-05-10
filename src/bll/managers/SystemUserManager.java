@@ -6,6 +6,7 @@ import bll.util.BCrypt;
 import bll.util.Search;
 import dal.dao.SystemUserDAO;
 import dal.interfaces.ISystemUserDAO;
+import util.Searchable;
 
 
 import java.util.Collections;
@@ -13,12 +14,10 @@ import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {
     ISystemUserDAO systemUserDAO;
-    Search search;
+    Search<SystemUser> search;
     public SystemUserManager() throws Exception {
         systemUserDAO = new SystemUserDAO();
-        search = new Search();
-
-
+        search = new Search<>();
     }
 
     @Override
