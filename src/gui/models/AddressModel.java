@@ -12,6 +12,7 @@ public class AddressModel {
     }
 
     public Address createAddress(Address address) throws Exception {
+        //TODO Check om adressen allerede findes først, da fx. add project ellers vil tilføje en duplicate
         return addressManager.createAddress(address);
     }
 

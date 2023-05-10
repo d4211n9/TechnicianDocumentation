@@ -4,6 +4,7 @@ import be.Client;
 import be.Project;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
+import dal.interfaces.IAddressDAO;
 import dal.interfaces.IProjectDAO;
 import exceptions.DALException;
 
@@ -15,9 +16,11 @@ import java.util.List;
 
 public class ProjectDAO implements IProjectDAO {
     private AbstractConnector connector;
+    private IAddressDAO addressDAO;
 
     public ProjectDAO() throws Exception {
         connector = new SqlConnector();
+        addressDAO = new AddressDAO();
     }
 
     @Override
@@ -96,7 +99,8 @@ public class ProjectDAO implements IProjectDAO {
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
 
-                Client client = new Client(clientID, clientName, clientAddressID, email, phone, type);
+
+                Client client = new Client(clientID, clientName, addressDAO.getAddressFromID(clientAddressID), email, phone, type);
 
                 //Mapping the project
                 int ID = resultSet.getInt("ProjectID");
@@ -105,7 +109,7 @@ public class ProjectDAO implements IProjectDAO {
                 Date created = resultSet.getDate("ProjectCreated");
                 String description = resultSet.getString("ProjectDescription");
 
-                Project project = new Project(ID, name, client, projectAddressID, created, description);
+                Project project = new Project(ID, name, client, addressDAO.getAddressFromID(projectAddressID), created, description);
 
                 allProjects.add(project);
             }

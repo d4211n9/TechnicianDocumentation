@@ -36,8 +36,7 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private TableColumn<Client, String> tcName, tcEmail, tcPhone;
     @FXML
-    private TableColumn<Address, String> tcLocation;
-
+    private TableColumn<Client, Address> tcLocation;
     @FXML
     private VBox clientView;
 
@@ -73,7 +72,7 @@ public class ClientController extends BaseController implements Initializable {
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("clientAddress"));
+        tcLocation.setCellValueFactory(new PropertyValueFactory<>("address"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         try {

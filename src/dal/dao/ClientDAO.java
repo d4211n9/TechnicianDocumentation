@@ -3,6 +3,7 @@ package dal.dao;
 import be.Client;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
+import dal.interfaces.IAddressDAO;
 import dal.interfaces.IClientDAO;
 import exceptions.DALException;
 
@@ -12,9 +13,11 @@ import java.util.List;
 
 public class ClientDAO implements IClientDAO {
     private AbstractConnector connector;
+    private IAddressDAO addressDAO;
 
     public ClientDAO() throws Exception {
         connector = new SqlConnector();
+        addressDAO = new AddressDAO();
     }
 
     @Override
@@ -66,7 +69,7 @@ public class ClientDAO implements IClientDAO {
                 String phone = resultSet.getString(5);
                 String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, addressID, email, phone, type);
+                Client client = new Client(clientID, clientName, addressDAO.getAddressFromID(addressID), email, phone, type);
 
                 allClients.add(client);
             }
