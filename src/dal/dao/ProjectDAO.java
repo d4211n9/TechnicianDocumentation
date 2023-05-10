@@ -43,14 +43,14 @@ public class ProjectDAO implements IProjectDAO {
     @Override
     public Project createProject(Project project) throws Exception {
         Project newProject = null;
-        String sql = "INSERT INTO Project (Name, Client, Location, Created, SoftDelete, Description) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Project (Name, Client, AddressID, Created, SoftDelete, Description) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, project.getName());
             statement.setInt(2, project.getClient().getID());
-            statement.setString(3, project.getLocation());
+            statement.setInt(3, project.getAddress().getID());
             Timestamp timestamp = new Timestamp(project.getCreated().getTime());
             statement.setTimestamp(4, timestamp);
             statement.setDate(5, null);
@@ -61,7 +61,7 @@ public class ProjectDAO implements IProjectDAO {
 
             if(resultSet.next()) {
                 int ID = resultSet.getInt(1);
-                newProject = new Project(ID, project.getName(), project.getClient(), project.getLocation(), project.getCreated(), project.getDescription());
+                newProject = new Project(ID, project.getName(), project.getClient(), project.getAddress(), project.getCreated(), project.getDescription());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,8 +76,8 @@ public class ProjectDAO implements IProjectDAO {
         ArrayList<Project> allProjects = new ArrayList<>();
 
         String sql = "SELECT " +
-                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[Location] AS 'ProjectLocation', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
-                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.ClientLocation, Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType' " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
+                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType' " +
                 "FROM Project " +
                 "INNER JOIN Client " +
                 "ON Client.ID=Project.Client " +
@@ -91,21 +91,21 @@ public class ProjectDAO implements IProjectDAO {
                 //Mapping the client
                 int clientID = resultSet.getInt("ClientID");
                 String clientName = resultSet.getString("ClientName");
-                String clientLocation = resultSet.getString("ClientLocation");
+                int clientAddressID = resultSet.getInt("ClientAddressID");
                 String email = resultSet.getString("ClientEmail");
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
-                
-                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
+
+                Client client = new Client(clientID, clientName, clientAddressID, email, phone, type);
 
                 //Mapping the project
                 int ID = resultSet.getInt("ProjectID");
                 String name = resultSet.getString("ProjectName");
-                String location = resultSet.getString("ProjectLocation");
+                int projectAddressID = resultSet.getInt("ProjectAddressID");
                 Date created = resultSet.getDate("ProjectCreated");
                 String description = resultSet.getString("ProjectDescription");
 
-                Project project = new Project(ID, name, client, location, created, description);
+                Project project = new Project(ID, name, client, projectAddressID, created, description);
 
                 allProjects.add(project);
             }
@@ -122,13 +122,13 @@ public class ProjectDAO implements IProjectDAO {
     public Project updateProject(Project project) throws Exception {
         Project updatedProject = null;
 
-        String sql = "UPDATE Project SET Name=?, Location=?, Description=? WHERE ID=?;";
+        String sql = "UPDATE Project SET Name=?, AddressID=?, Description=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, project.getName());
-            statement.setString(2, project.getLocation());
+            statement.setInt(2, project.getAddress().getID());
             statement.setString(3, project.getDescription());
             statement.setInt(4, project.getID());
 

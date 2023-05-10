@@ -1,5 +1,6 @@
 package gui.controllers.clientController;
 
+import be.Address;
 import be.Client;
 import be.Enum.SystemRole;
 import be.SystemUser;
@@ -87,6 +88,7 @@ public class CreateClientController extends BaseController {
             }
         });
     }
+
     private Client bindClientInfo(){
         String name = txtfName.getText();
         String email = txtfEmail.getText();
@@ -95,15 +97,21 @@ public class CreateClientController extends BaseController {
         String city = txtfCity.getText();
         String street = txtfAddress.getText();
         String postalCode = txtfPostalCode.getText();
-        String location = street + " " +city + " " + postalCode;
 
-        return new Client(name, location,email, phone, "b2b");
+        Address address = null;
+        try {
+            address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
+        } catch (Exception e) {
+            displayError(e);
+        }
+
+        return new Client(name, address, email, phone, "b2b");
         //TODO type burde være en enum...
         //TODO Type skal også tilføjes til .fxml så man kan vælge ved create og edit
     }
 
     private Client bindClientID(Client client) {
-        return new Client(selectedClient.getID(), client.getName(), client.getLocation(),
+        return new Client(selectedClient.getID(), client.getName(), client.getAddress(),
                 client.getEmail(), client.getPhone(), "b2b");
     }
 }

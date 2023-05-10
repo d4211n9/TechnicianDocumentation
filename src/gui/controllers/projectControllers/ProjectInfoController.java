@@ -64,13 +64,14 @@ public class ProjectInfoController extends BaseController implements Initializab
         this.project = project;
         client = project.getClient();
 
-        lblProjectTitle.setText(project.getName());
         lblClientName.setText(client.getName());
-        lblClientLocation.setText(client.getLocation());
+        lblClientLocation.setText(client.getAddress().toString());
         lblClientType.setText(client.getType());
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
-        lblProjectLocation.setText(client.getLocation());
+
+        lblProjectTitle.setText(project.getName());
+        lblProjectLocation.setText(project.getAddress().toString());
         lblCreated.setText(project.getCreated()+"");
 
         loadInstallations();

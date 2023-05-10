@@ -1,5 +1,6 @@
 package gui.controllers.clientController;
 
+import be.Address;
 import be.Client;
 import be.Enum.SystemRole;
 import com.jfoenix.controls.JFXButton;
@@ -33,17 +34,16 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private TableView<Client> tvClients;
     @FXML
-    private TableColumn<Client, String> tcName, tcLocation, tcEmail, tcPhone;
+    private TableColumn<Client, String> tcName, tcEmail, tcPhone;
+    @FXML
+    private TableColumn<Address, String> tcLocation;
 
     @FXML
     private VBox clientView;
-    private ClientModel clientModel;
 
     private JFXButton editButton, deleteButton;
 
     private NodeAccessLevel buttonAccessLevel;
-    private ObservableList<Client> allClients = FXCollections.observableList(new ArrayList<>()); //TODO Slet, testing
-
     @FXML
     private HBox buttonArea;
 
@@ -73,7 +73,7 @@ public class ClientController extends BaseController implements Initializable {
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tcLocation.setCellValueFactory(new PropertyValueFactory<>("clientAddress"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         try {

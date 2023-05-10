@@ -1,5 +1,6 @@
 package gui.controllers.projectControllers;
 
+import be.Address;
 import be.Client;
 import be.Project;
 import com.jfoenix.controls.JFXTextArea;
@@ -82,18 +83,25 @@ public class AddProjectController extends BaseController implements Initializabl
     private Project createProject() {
         String name = txtfName.getText();
         Client client = (Client) cbClients.getSelectionModel().getSelectedItem();
+
         String street = txtfStreet.getText();
         String postalCode = txtfPostalCode.getText();
         String city = txtfCity.getText();
-        String location = street + ", " + postalCode + " " + city;
+        Address address = null;
+        try {
+            address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
+        } catch (Exception e) {
+            displayError(e);
+        }
+
         Date created = Calendar.getInstance().getTime();
         String description = jfxTxtADescription.getText();
 
         if (projectToEditId != -1) {
-            return new Project(projectToEditId, name, client, location, created, description);
+            return new Project(projectToEditId, name, client, address, created, description);
         }
 
-        return new Project(name, client, location, created, description);
+        return new Project(name, client, address, created, description);
     }
 
     //TODO, valider input
@@ -102,6 +110,7 @@ public class AddProjectController extends BaseController implements Initializabl
     }
 
     public void handleAddClient() {
+        //TODO Lav quick create eller åben Create Client view og gå tilbage hertil bagefter
     }
 
     public void handleSearch() {
@@ -126,6 +135,14 @@ public class AddProjectController extends BaseController implements Initializabl
         txtfSearch.setText(selectedItem.getClient().getName());
         cbClients.getSelectionModel().select(selectedItem.getClient());
         //todo lav nu de locations
+
+        try {
+            txtfStreet.setText(selectedItem.getAddress().getStreet());
+            txtfPostalCode.setText(selectedItem.getAddress().getPostalCode());
+            txtfCity.setText(selectedItem.getAddress().getCity());
+        } catch (Exception e) {
+            displayError(e);
+        }
 
         addEditBtn();
     }

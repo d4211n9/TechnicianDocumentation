@@ -3,21 +3,22 @@ package be;
 import util.Searchable;
 
 public class Client implements Searchable {
-    private String name, location, email, phone, type;
+    private String name, email, phone, type;
     private int ID;
+    private Address clientAddress;
 
-    public Client(String name, String location, String email, String phone, String type) {
+    public Client(String name, Address clientAddress, String email, String phone, String type) {
         this.name = name;
-        this.location = location;
+        this.clientAddress = clientAddress;
         this.email = email;
         this.phone = phone;
         this.type = type;
     }
 
-    public Client(int ID, String name, String location, String email, String phone, String type) {
+    public Client(int ID, String name, Address clientAddress, String email, String phone, String type) {
         this.ID = ID;
         this.name = name;
-        this.location = location;
+        this.clientAddress = clientAddress;
         this.email = email;
         this.phone = phone;
         this.type = type;
@@ -31,8 +32,8 @@ public class Client implements Searchable {
         return name;
     }
 
-    public String getLocation() {
-        return location;
+    public Address getAddress() {
+        return clientAddress;
     }
 
     public String getEmail() {

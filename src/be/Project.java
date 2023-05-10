@@ -5,27 +5,28 @@ import util.Searchable;
 import java.util.Date;
 
 public class Project implements Searchable<Project> {
-    private String location, name, clientName;
+    private String name, clientName;
     private int ID;
     private Date created;
     private Client client;
     private String description;
+    private Address projectAddress;
 
-    public Project(String name, Client client, String location, Date created, String description) {
+    public Project(String name, Client client, Address projectAddress, Date created, String description) {
         this.client = client;
         this.name = name;
         this.clientName = client.getName();
-        this.location = location;
+        this.projectAddress = projectAddress;
         this.created = created;
         this.description = description;
     }
 
-    public Project(int ID, String name, Client client, String location, Date created, String description) {
+    public Project(int ID, String name, Client client, Address projectAddress, Date created, String description) {
         this.ID = ID;
         this.client = client;
         this.name = name;
         this.clientName = client.getName();
-        this.location = location;
+        this.projectAddress = projectAddress;
         this.created = created;
         this.description = description;
     }
@@ -42,8 +43,8 @@ public class Project implements Searchable<Project> {
         return ID;
     }
 
-    public String getLocation() {
-        return location;
+    public Address getAddress() {
+        return projectAddress;
     }
 
     public String getName() {
@@ -56,7 +57,7 @@ public class Project implements Searchable<Project> {
 
     @Override
     public Project search(String query) {
-        String searchableFields = (ID + name + clientName + location + created).toLowerCase();
+        String searchableFields = (ID + name + clientName + projectAddress + created).toLowerCase(); //TODO Re-add address after normalizing
         String lowerCaseQuery = query.toLowerCase();
 
         if (searchableFields.contains(lowerCaseQuery)) return this;

@@ -1,10 +1,10 @@
 package gui.controllers.projectControllers;
 
+import be.Address;
 import be.Enum.SystemRole;
 import be.Project;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
-import gui.controllers.clientController.CreateClientController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +38,9 @@ public class ProjectsController extends BaseController implements Initializable 
     @FXML
     private TableView<Project> tvProjects;
     @FXML
-    private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
+    private TableColumn<Project, String> tcProjectName, tcClient;
+    @FXML
+    private TableColumn<Address, String> tcLocation;
     @FXML
     private TableColumn<Project, Integer> tcID;
     @FXML
@@ -131,7 +133,7 @@ public class ProjectsController extends BaseController implements Initializable 
     private void loadTableView() {
         tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
         tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tcLocation.setCellValueFactory(new PropertyValueFactory<>("projectAddress"));
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
         try {
