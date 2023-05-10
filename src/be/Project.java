@@ -46,6 +46,17 @@ public class Project implements Searchable<Project> {
     public Address getAddress() {
         return projectAddress;
     }
+    public String getStreet() {
+        return projectAddress.getStreet();
+    }
+
+    public String getPostalCode() {
+        return projectAddress.getPostalCode();
+    }
+
+    public String getCity() {
+        return projectAddress.getCity();
+    }
 
     public String getName() {
         return name;

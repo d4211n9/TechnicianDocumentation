@@ -53,11 +53,13 @@
       </HBox>
       <TableView fx:id="tvProjects" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseReleased="#handleDoubleClick" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="tcClient" prefWidth="140.0" text="Client" />
-          <TableColumn fx:id="tcLocation" prefWidth="275.0" text="Location" />
-            <TableColumn fx:id="tcProjectName" prefWidth="200.0" text="Project Name" />
-            <TableColumn fx:id="tcID" prefWidth="85.0" text="Project ID" />
-            <TableColumn fx:id="tcCreated" prefWidth="110.0" text="Created" />
+          <TableColumn fx:id="tcClient" prefWidth="150.0" text="Customer" />
+            <TableColumn fx:id="tcProjectName" prefWidth="165.0" text="Project Name" />
+          <TableColumn fx:id="tcStreet" prefWidth="150.0" text="Street" />
+            <TableColumn fx:id="tcPostalCode" prefWidth="75.0" text="ZIP" />
+            <TableColumn fx:id="tcCity" prefWidth="125.0" text="City" />
+            <TableColumn fx:id="tcID" prefWidth="50.0" text="P#" />
+            <TableColumn fx:id="tcCreated" prefWidth="100.0" text="Created" />
         </columns>
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />

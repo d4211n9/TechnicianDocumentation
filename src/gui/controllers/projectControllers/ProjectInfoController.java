@@ -45,7 +45,7 @@ public class ProjectInfoController extends BaseController implements Initializab
     private JFXToggleButton toggleUsers;
     @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone,
-            lblCreated, lblProjectLocation, lblAssignedUsers;
+            lblCreated, lblProjectLocation, lblAssignedUsers, lblDescription;
 
     private Client client;
     private Project project;
@@ -71,6 +71,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         lblClientPhone.setText(client.getPhone());
 
         lblProjectTitle.setText(project.getName());
+        lblDescription.setText(project.getDescription());
         lblProjectLocation.setText(project.getAddress().toString());
         lblCreated.setText(project.getCreated()+"");
 

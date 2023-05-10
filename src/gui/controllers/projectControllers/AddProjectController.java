@@ -3,10 +3,10 @@ package gui.controllers.projectControllers;
 import be.Address;
 import be.Client;
 import be.Project;
-import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
-import gui.controllers.installation.InstallationInfoController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,6 +30,8 @@ public class AddProjectController extends BaseController implements Initializabl
     @FXML
     private JFXButton btnConfirm;
     @FXML
+    private JFXToggleButton toggleAddress;
+    @FXML
     private TextField txtfName, txtfStreet, txtfPostalCode, txtfCity, txtfSearch;
     @FXML
     private ComboBox<Client> cbClients;
@@ -37,6 +39,7 @@ public class AddProjectController extends BaseController implements Initializabl
     private JFXTextArea jfxTxtADescription;
 
     private int projectToEditId = -1;
+    private boolean isBilling = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -87,11 +90,16 @@ public class AddProjectController extends BaseController implements Initializabl
         String street = txtfStreet.getText();
         String postalCode = txtfPostalCode.getText();
         String city = txtfCity.getText();
+
         Address address = null;
-        try {
-            address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
-        } catch (Exception e) {
-            displayError(e);
+        if(toggleAddress.isSelected()) {
+            address = client.getAddress();
+        } else {
+            try {
+                address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
+            } catch (Exception e) {
+                displayError(e);
+            }
         }
 
         Date created = Calendar.getInstance().getTime();
@@ -132,16 +140,13 @@ public class AddProjectController extends BaseController implements Initializabl
         buttonArea.getChildren().remove(btnConfirm);
 
         txtfName.setText(selectedItem.getName());
+        jfxTxtADescription.setText(selectedItem.getDescription());
         txtfSearch.setText(selectedItem.getClient().getName());
         cbClients.getSelectionModel().select(selectedItem.getClient());
-        //todo lav nu de locations
 
-        try {
-            txtfStreet.setText(selectedItem.getAddress().getStreet());
-            txtfPostalCode.setText(selectedItem.getAddress().getPostalCode());
-            txtfCity.setText(selectedItem.getAddress().getCity());
-        } catch (Exception e) {
-            displayError(e);
+        if(selectedItem.getAddress().getID() == selectedItem.getClient().getAddress().getID()) {
+            toggleAddress.setSelected(true);
+            handleToggleAddress();
         }
 
         addEditBtn();
@@ -165,5 +170,25 @@ public class AddProjectController extends BaseController implements Initializabl
                 }
             }
         });
+    }
+
+    public void handleToggleAddress() {
+        if(toggleAddress.isSelected() && cbClients.getSelectionModel().getSelectedItem() != null) {
+            Client client = cbClients.getSelectionModel().getSelectedItem();
+            txtfStreet.setText(client.getStreet());
+            txtfPostalCode.setText(client.getPostalCode());
+            txtfCity.setText(client.getCity());
+            isBilling = true;
+            disableAddressFields(true);
+        } else {
+            disableAddressFields(false);
+            isBilling = false;
+        }
+    }
+
+    private void disableAddressFields(boolean disable) {
+        txtfStreet.setDisable(disable);
+        txtfPostalCode.setDisable(disable);
+        txtfCity.setDisable(disable);
     }
 }

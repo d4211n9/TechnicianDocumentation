@@ -62,13 +62,15 @@ public class CreateClientController extends BaseController {
         txtfName.setText(selectedItem.getName());
         txtfEmail.setText(selectedItem.getEmail());
         txtfPhone.setText(selectedItem.getPhone());
+        txtfAddress.setText(selectedItem.getAddress().getStreet());
+        txtfPostalCode.setText(selectedItem.getAddress().getPostalCode());
+        txtfCity.setText(selectedItem.getAddress().getCity());
 
         lblCreateUser.setText("Edit Client");
 
         addEditBtn();
         buttonArea.getChildren().remove(btnConfirm);
         selectedClient = selectedItem;
-        //todo vi skal have lavet en location tabel for at kunne sætte det sidste information
     }
 
     private void addEditBtn() {

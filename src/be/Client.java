@@ -35,6 +35,17 @@ public class Client implements Searchable {
     public Address getAddress() {
         return clientAddress;
     }
+    public String getStreet() {
+        return clientAddress.getStreet();
+    }
+
+    public String getPostalCode() {
+        return clientAddress.getPostalCode();
+    }
+
+    public String getCity() {
+        return clientAddress.getCity();
+    }
 
     public String getEmail() {
         return email;

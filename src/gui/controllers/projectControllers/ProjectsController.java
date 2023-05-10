@@ -38,9 +38,7 @@ public class ProjectsController extends BaseController implements Initializable 
     @FXML
     private TableView<Project> tvProjects;
     @FXML
-    private TableColumn<Project, String> tcProjectName, tcClient;
-    @FXML
-    private TableColumn<Project, Address> tcLocation;
+    private TableColumn<Project, String> tcProjectName, tcClient, tcStreet, tcPostalCode, tcCity;
     @FXML
     private TableColumn<Project, Integer> tcID;
     @FXML
@@ -133,7 +131,9 @@ public class ProjectsController extends BaseController implements Initializable 
     private void loadTableView() {
         tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
         tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tcStreet.setCellValueFactory(new PropertyValueFactory<>("street"));
+        tcPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
         try {
