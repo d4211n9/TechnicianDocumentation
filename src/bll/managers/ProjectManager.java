@@ -49,7 +49,7 @@ public class ProjectManager implements IProjectManager {
 
     @Override
     public Project softDeleteProject(Project project) throws Exception {
-        return projectDAO.softDeleteProject(project);
+        return projectFacade.softDeleteProject(project);
     }
 
     @Override

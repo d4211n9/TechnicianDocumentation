@@ -39,6 +39,10 @@ public class ProjectFacade {
         return projectDAO.updateProject(project);
     }
 
+    public Project softDeleteProject(Project project) throws Exception {
+        return projectDAO.softDeleteProject(project);
+    }
+
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
         return systemUsersAssignedToProjectsDAO.getSystemUsersAssignedToProject(projectId);
     }
