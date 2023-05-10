@@ -18,8 +18,8 @@ public class DraggableMaker {
 
         //todo should check if the node is inside the content area before setting placement
         node.setOnMouseDragged(mouseEvent -> {
-            double x = mouseEvent.getSceneX() - mouseAnchorX - area.getParent().getParent().getLayoutX();
-            node.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX -area.getParent().getLayoutX());
+            double x = mouseEvent.getSceneX() - mouseAnchorX - area.getParent().getParent().getParent().getParent().getLayoutX();
+            node.setLayoutX(x);
             node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY - area.getParent().getLayoutY());
             System.out.println("jfie");
         });

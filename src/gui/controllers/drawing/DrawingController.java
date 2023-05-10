@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import util.DraggableMaker;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -41,8 +42,11 @@ public class DrawingController extends BaseController implements Initializable {
 
     Node selectedelement;
 
+    ArrayList<Device> devicesesOnDrawing;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        devicesesOnDrawing = new ArrayList<>();
 
                                                 //todo test tænker vi skal køre det her igennem for hver element der skal tilføjes ovre i siden.
         Device device = new Device();           //todo make devices be. højde, brede, img, navn,
@@ -55,10 +59,11 @@ public class DrawingController extends BaseController implements Initializable {
         controller.setContent(device);
 
 
-       addDeviceListener(deviceElement);//checks and creates new devices if dragged into pane
+       addDeviceListener(loader);//checks and creates new devices if dragged into pane
 }
 
-    private void addDeviceListener(Node deviceElement) {
+    private void addDeviceListener(FXMLLoader loader) {
+        Node deviceElement = loader.getRoot();
         deviceElement.setOnMousePressed(event -> {
             System.out.println("first step done");
             mouseAnchorX = event.getX();
@@ -90,6 +95,12 @@ public class DrawingController extends BaseController implements Initializable {
             deviceElement.setOnMouseReleased(event1 -> {
                 //todo tjek om musen er indenfor selve content pane, hvis ikke skal elementet slettes ellers skal resten af koden køres
                 //todo lav elementerne draggable når man er færdig med at dragg
+                DeviceCard controller = loader.getController();
+
+                devicesesOnDrawing.add(controller.getDevice());
+                DraggableMaker d = new DraggableMaker();
+                d.makeDraggAble(selectedElementImg, pane);
+
                 System.out.println("drag done you placed the item");
             });
         });
