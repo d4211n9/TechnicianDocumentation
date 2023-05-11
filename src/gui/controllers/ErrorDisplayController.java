@@ -16,13 +16,9 @@ import java.util.ResourceBundle;
 public class ErrorDisplayController extends BaseController implements Initializable {
 
     @FXML
-    private VBox displayErrorVBox;
-    @FXML
-    private HBox displayErrorHeaderHBox;
-    @FXML
     private ImageView headerImageView;
     @FXML
-    private Text headerText, errorMessageText, contactSupportText;
+    private Text errorMessageText;
 
     private Throwable throwable;
 
@@ -34,11 +30,5 @@ public class ErrorDisplayController extends BaseController implements Initializa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         headerImageView.setImage(new Image(SymbolPaths.LOGO_NO_BG));
-    }
-
-    public void handleDelete(ActionEvent actionEvent) {//todo
-    }
-
-    public void handleCancel(ActionEvent actionEvent) {//todo
     }
 }

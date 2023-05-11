@@ -26,7 +26,7 @@ public class CreateClientController extends BaseController {
 
     Client selectedClient;
 
-    public void handleConfirm(ActionEvent actionEvent) {
+    public void handleConfirm() {
         if(isTextFieldInfoValid()){
 
             Client client = bindClientInfo();
