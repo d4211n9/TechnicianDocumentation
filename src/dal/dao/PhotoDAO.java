@@ -5,6 +5,10 @@ import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IPhotoDAO;
 import exceptions.DALException;
+import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
 
@@ -20,24 +24,17 @@ public class PhotoDAO implements IPhotoDAO {
     @Override
     public Photo uploadPhoto(Photo photo) throws Exception {
         Photo newPhoto = null;
+        InputStream is = new FileInputStream(new File("resources/images/WUAV_logo.jpg"));
 
+        //InputStream is = new FileInputStream(new Image(photo.getPhoto()));
 
         String sql = "INSERT INTO Photo (InstallationID, Image, Description) VALUES (?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-
-            /*BufferedImage bufferimage = ImageIO.read(new File("images/WUAV_logo.jpg"));
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(bufferimage, "jpg", output );
-            byte [] data = output.toByteArray();
-            */
-
-
-
             statement.setInt(1, photo.getInstallationID());
-            statement.setString(2, String.valueOf(photo));
+            statement.setBinaryStream(2, is);
             statement.setString(3, photo.getDescription());
 
 
@@ -62,11 +59,11 @@ public class PhotoDAO implements IPhotoDAO {
         return null;
     }
 
-    public byte[] convertToBytes(Photo photo) throws IOException {
+   /* public byte[] convertToBytes(Photo photo) throws IOException {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
              ObjectOutput out = new ObjectOutputStream(bos)) {
             out.writeObject(photo);
             return bos.toByteArray();
         }
-    }
+    }*/
 }

@@ -22,7 +22,7 @@ public class Main extends Application {
 
         Photo photo = new Photo(1, new Image(SymbolPaths.LOGO), "ello");
         PhotoDAO photoDAP = new PhotoDAO();
-        photoDAP.convertToBytes(photo);
+        photoDAP.uploadPhoto(photo);
     }
 
     @Override
