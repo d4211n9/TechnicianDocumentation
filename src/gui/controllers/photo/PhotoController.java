@@ -1,4 +1,4 @@
-package gui.controllers.installation;
+package gui.controllers.photo;
 
 import gui.controllers.BaseController;
 
