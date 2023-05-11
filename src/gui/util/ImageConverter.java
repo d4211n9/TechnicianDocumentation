@@ -1,5 +1,6 @@
 package gui.util;
 
+/*
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -7,11 +8,12 @@ import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+
+import java.io.*;
+
+
 
 public class ImageConverter {
-
 
     private void loadPhotos() {
         ByteArrayInputStream bais = new ByteArrayInputStream(installation.getDrawingBytes());
@@ -37,4 +39,23 @@ public class ImageConverter {
 
         return new ImageView(wr).getImage();
     }
+
+    private static byte[] convertImageToBytes(Image image) {
+
+
+
+
+        return new byte[0];
+    }
+
+
 }
+
+ */
+
+
+
+
+
+
+

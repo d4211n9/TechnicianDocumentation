@@ -2,7 +2,9 @@ package be;
 
 import javafx.scene.image.Image;
 
-public class Photo {
+import java.io.Serializable;
+
+public class Photo implements Serializable {
 
     private int ID, installationID;
     private Image photo;

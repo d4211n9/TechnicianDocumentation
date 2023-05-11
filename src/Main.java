@@ -1,14 +1,28 @@
+import be.Photo;
+import dal.dao.PhotoDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import util.SymbolPaths;
 import util.ViewPaths;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
 public class Main extends Application {
-    public static void main(String[] args) {
-        Application.launch();
+
+    public static void main(String[] args) throws Exception {
+        //Application.launch();
+
+        Photo photo = new Photo(1, new Image(SymbolPaths.LOGO), "ello");
+        PhotoDAO photoDAP = new PhotoDAO();
+        photoDAP.convertToBytes(photo);
     }
 
     @Override
