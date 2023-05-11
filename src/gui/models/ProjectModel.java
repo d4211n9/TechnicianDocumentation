@@ -7,11 +7,12 @@ import bll.managers.ProjectManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.fxml.Initializable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectModel {
+public class ProjectModel implements Runnable {
     private IProjectManager projectManager;
     private List<Project> allProjects;
     private ObservableList<Project> filteredProjectList;
@@ -133,5 +134,10 @@ public class ProjectModel {
                 filteredProjectList.addAll(allProjects);
             }
         }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("projects update");
     }
 }

@@ -17,9 +17,7 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ProjectsController extends TableViewController implements Initializable {
 
@@ -34,12 +32,25 @@ public class ProjectsController extends TableViewController implements Initializ
     @FXML
     private TextField txtfSearch;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
         initializeButtonAccessLevels();
         projectsView.getChildren().add(addButtons());
         tvListener();
+        projectBackgroundUpdate();;
+    }
+
+    private void projectBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getProjectModel());
+
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void initializeButtonAccessLevels() {

@@ -41,15 +41,19 @@ public class UsersController extends TableViewController implements Initializabl
             usersView.getChildren().add(addButtons());
             tvListener();
 
-            try {
-                List<Runnable> backgroundUpdateList = new ArrayList<>();
-                backgroundUpdateList.add(getModelsHandler().getSystemUserModel());
-
-                backgroundUpdate(backgroundUpdateList);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            userBackgroundUpdate();
         }
+
+    private void userBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getSystemUserModel());
+
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));

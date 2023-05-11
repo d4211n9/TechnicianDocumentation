@@ -72,6 +72,17 @@ public class InstallationInfoController extends BaseController implements Initia
                 imgPhoto.setFitHeight((Double) newValue));
     }
 
+    private void installationBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getInstallationModel());
+
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void setContent(Installation installation) {
         this.installation = installation;

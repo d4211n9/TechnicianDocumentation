@@ -15,7 +15,9 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ClientController extends TableViewController implements Initializable {
@@ -33,6 +35,19 @@ public class ClientController extends TableViewController implements Initializab
         initializeButtonAccessLevels();
         clientView.getChildren().add(addButtons());
         tvListener();
+
+        clientBackgroundUpdate();//should be last in initialize
+    }
+
+    private void clientBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getClientModel());
+            backgroundUpdateList.add(getModelsHandler().getSystemUserModel());
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadTableView() {

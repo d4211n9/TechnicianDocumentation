@@ -79,7 +79,6 @@ public class ClientModel implements Runnable {
                 }
 
                 updateValue(successfullyUpdatedClient);
-
                 return successfullyUpdatedClient;
             }
         };
@@ -88,6 +87,6 @@ public class ClientModel implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("mfmfmfmfmfmfmf");
+        System.out.println("client update");
     }
 }

@@ -10,7 +10,7 @@ import javafx.concurrent.Task;
 
 import java.util.List;
 
-public class InstallationModel {
+public class InstallationModel implements Runnable {
     private IInstallationManager installationManager;
     private ObservableList<Installation> allInstallations;
 
@@ -29,7 +29,6 @@ public class InstallationModel {
                 return createdInstallation;
             }
         };
-
         return createInstallationTask;
     }
 
@@ -122,5 +121,10 @@ public class InstallationModel {
         };
 
         return deleteUserAssignedToInstallationTask;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("installation update");
     }
 }

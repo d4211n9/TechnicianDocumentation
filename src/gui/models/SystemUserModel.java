@@ -128,6 +128,8 @@ public class SystemUserModel implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("user update");
+
         List<SystemUser> updatedSystemUsers;
         try {
             updatedSystemUsers = systemUserManager.getAllModifiedUsers(lastUpdatedTime);

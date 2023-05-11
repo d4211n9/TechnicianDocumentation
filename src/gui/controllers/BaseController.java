@@ -45,14 +45,13 @@ public class BaseController {
     }
 
     public static void backgroundUpdate(List<Runnable> runnable) throws ExecutionException, InterruptedException {
-        System.out.println(runnable.size());
         if (executorService != null) {
             executorService.shutdownNow();
         }
         executorService = Executors.newScheduledThreadPool(runnable.size());
         for (Runnable run: runnable) {
             try {
-                executorService.scheduleWithFixedDelay(run, 0, 5, TimeUnit.SECONDS);
+                executorService.scheduleWithFixedDelay(run, 0, 3, TimeUnit.SECONDS);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
