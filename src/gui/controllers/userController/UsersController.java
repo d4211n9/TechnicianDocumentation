@@ -81,9 +81,14 @@ public class UsersController extends TableViewController implements Initializabl
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object user = tableView.getSelectionModel().getSelectedItem();
+            SystemUser user = (SystemUser) tableView.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(user.toString(), true)){
-                System.out.println("delete " + user.toString());
+                try {
+                    getModelsHandler().getSystemUserModel().deleteSystemUser(user);
+                    handleSearch();
+                } catch (Exception e) {
+                    displayError(e);
+                }
             }
         });
     }

@@ -62,7 +62,7 @@ public class CreateUserController extends BaseController implements Initializabl
                 getModelsHandler().getSystemUserModel().createSystemUser(createSystemUserFromFields());
                 handleBack();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                displayError(e);
             }
         }
     }
@@ -117,7 +117,7 @@ public class CreateUserController extends BaseController implements Initializabl
                     getModelsHandler().getSystemUserModel().updateSystemUser(systemUser, selectedUser);
                     handleBack();
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    displayError(e);
                 }
             }
         });

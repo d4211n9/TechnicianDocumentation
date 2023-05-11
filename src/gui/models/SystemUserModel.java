@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -84,5 +85,11 @@ public class SystemUserModel {
             return true;
         }
         return false;
+    }
+
+    public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {
+        deletedSystemUser.setDeleted(new Timestamp(System.currentTimeMillis()));
+        systemUserManager.updateSystemUser(deletedSystemUser);
+        allUsers.remove(deletedSystemUser);
     }
 }

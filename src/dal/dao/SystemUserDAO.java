@@ -51,6 +51,7 @@ public class SystemUserDAO implements ISystemUserDAO {
             return systemUser;
         }
         catch (SQLException e) {
+            e.printStackTrace();
             DALException dalException = new DALException("Failed to validate login", e);
             dalException.printStackTrace(); //TODO Log error in database
             throw dalException;
@@ -61,8 +62,8 @@ public class SystemUserDAO implements ISystemUserDAO {
     public SystemUser createSystemUser(SystemUser systemUser) throws Exception {
         SystemUser user = null;
         String sql = "INSERT INTO SystemUser " +
-                "(Email, Password, RoleName, UserName, SoftDelete)" +
-                "VALUES (?, ?, ?, ?, ?)";
+                "(Email, Password, RoleName, UserName, SoftDelete, LastModified)" +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -71,12 +72,15 @@ public class SystemUserDAO implements ISystemUserDAO {
             statement.setString(2, systemUser.getPassword());
             statement.setString(3, systemUser.getRole().getRole());
             statement.setString(4, systemUser.getName());
-            statement.setDate(5, null);
+            statement.setTimestamp(5, systemUser.getDeleted());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(6, t);
             statement.executeUpdate();
 
             user = systemUser;
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new Exception("Failed create system user", e);
         }
         return user;
@@ -97,12 +101,12 @@ public class SystemUserDAO implements ISystemUserDAO {
                 String email = rs.getString("Email");
                 String role = rs.getString("RoleName");
                 SystemRole systemRole = SystemRole.valueOf(role);
-
                 String name= rs.getString("UserName");
                 SystemUser systemUser = new SystemUser(email, systemRole, name);
                 allUsers.add(systemUser);
             }
         } catch (Exception e){
+            e.printStackTrace();
             throw new Exception("Failed to retrieve all Users", e);
         }
         return allUsers;
@@ -111,22 +115,28 @@ public class SystemUserDAO implements ISystemUserDAO {
     @Override
     public SystemUser updateSystemUser(SystemUser user) throws Exception {
         SystemUser updatedUser = null;
-        String sql = "UPDATE SystemUser SET Email=?, Password=?, RoleName=?, UserName=?, SoftDelete=? WHERE Email=?;";
+        String sql = "UPDATE SystemUser SET Email=?, Password=?, RoleName=?, UserName=?, SoftDelete=?, LastModified=? WHERE Email=?;";
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());//todo
+            statement.setString(2, user.getPassword());
             statement.setString(3, user.getRole().toString());
             statement.setString(4, user.getName());
-            statement.setTimestamp(5, null);
-            statement.setString(6, user.getEmail());
+            statement.setTimestamp(5, user.getDeleted());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(6, t);
+            statement.setString(7, user.getEmail());
 
             statement.executeUpdate();
 
             updatedUser = user;
         } catch (SQLException e) {
-            throw new Exception("Failed to edit the event", e);
+            e.printStackTrace();
+            throw new Exception("Failed to edit the system user", e);
+        }
+        if(user.getDeleted() != null) {
+            updatedUser = null;
         }
         return updatedUser;
     }
