@@ -132,11 +132,12 @@ public class SystemUserModel implements Runnable {
         try {
             updatedSystemUsers = systemUserManager.getAllModifiedUsers(lastUpdatedTime);
             lastUpdatedTime.setTime(System.currentTimeMillis());
+
             if(updatedSystemUsers.size() > 0){
                 allUsers = retrieveAllUsers();
                 search(searchString);
             }
-            System.out.println(",dekwmdekwl");
+            Thread.sleep(3000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -32,8 +32,6 @@ public class UsersController extends TableViewController implements Initializabl
     private VBox usersView;
     @FXML
     private TextField txtfSearch;
-    private  ScheduledExecutorService executorService;
-
         @Override
     public void initialize(URL location, ResourceBundle resources) {
             loadTableView();
@@ -102,6 +100,7 @@ public class UsersController extends TableViewController implements Initializabl
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
+        executorService.shutdown();
 
     }
 

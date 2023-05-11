@@ -25,18 +25,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class BaseController {
 
 
     public NodeAccessLevel buttonAccessLevel;
 
-    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-    ScheduledFuture future = null;
+    public static ScheduledExecutorService executorService;
+    static ScheduledFuture future;
 
 
     public ModelsHandler getModelsHandler() throws Exception {
@@ -47,15 +44,13 @@ public class BaseController {
         return MainControllerHandler.getInstance().getController();
     }
 
-    public void backgroundUpdate(Runnable runnable){
-        System.out.println(future);
+    public static void backgroundUpdate(Runnable runnable) throws ExecutionException, InterruptedException {
         if (executorService != null){
-            executorService.close();
-            executorService = Executors.newScheduledThreadPool(1);
-            System.out.println("yaaay");
+            future.cancel(true);
         }
+        executorService = Executors.newScheduledThreadPool(1);
         try {
-             executorService.scheduleWithFixedDelay(runnable, 0, 5, TimeUnit.SECONDS);
+             future = executorService.scheduleWithFixedDelay(runnable, 0, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
