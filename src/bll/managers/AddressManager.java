@@ -14,6 +14,10 @@ public class AddressManager implements IAddressManager {
 
     @Override
     public Address createAddress(Address address) throws Exception {
+        Address existingAddress = existingAddress(address);
+        if(existingAddress != null) {
+            return existingAddress;
+        }
         return addressDAO.createAddress(address);
     }
 
@@ -25,5 +29,10 @@ public class AddressManager implements IAddressManager {
     @Override
     public Address updateAddress(Address address) throws Exception {
         return addressDAO.updateAddress(address);
+    }
+
+    @Override
+    public Address existingAddress(Address address) throws Exception {
+        return addressDAO.existingAddress(address);
     }
 }

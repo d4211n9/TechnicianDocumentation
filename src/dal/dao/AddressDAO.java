@@ -88,4 +88,33 @@ public class AddressDAO implements IAddressDAO {
         }
         return updatedAddress;
     }
+
+    @Override
+    public Address existingAddress(Address address) throws Exception {
+        Address existingAddress = null;
+        String sql = "SELECT * FROM Address WHERE Street = ? AND PostalCode = ?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, address.getStreet());
+            statement.setString(2, address.getPostalCode());
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                //Mapping the address
+                int ID = resultSet.getInt(1);
+                String street = resultSet.getString(2);
+                String postalCode = resultSet.getString(3);
+                String city = resultSet.getString(4);
+
+                existingAddress = new Address(ID, street, postalCode, city);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to read address", e);
+        }
+
+        return existingAddress;
+    }
 }
