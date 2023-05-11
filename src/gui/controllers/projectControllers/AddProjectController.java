@@ -147,6 +147,10 @@ public class AddProjectController extends BaseController implements Initializabl
         if(selectedItem.getAddress().getID() == selectedItem.getClient().getAddress().getID()) {
             toggleAddress.setSelected(true);
             handleToggleAddress();
+        } else {
+            txtfStreet.setText(selectedItem.getStreet());
+            txtfPostalCode.setText(selectedItem.getPostalCode());
+            txtfCity.setText(selectedItem.getCity());
         }
 
         addEditBtn();

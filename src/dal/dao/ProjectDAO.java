@@ -1,10 +1,10 @@
 package dal.dao;
 
+import be.Address;
 import be.Client;
 import be.Project;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
-import dal.interfaces.IAddressDAO;
 import dal.interfaces.IProjectDAO;
 import exceptions.DALException;
 
@@ -16,11 +16,9 @@ import java.util.List;
 
 public class ProjectDAO implements IProjectDAO {
     private AbstractConnector connector;
-    private IAddressDAO addressDAO;
 
     public ProjectDAO() throws Exception {
         connector = new SqlConnector();
-        addressDAO = new AddressDAO();
     }
 
     @Override
@@ -80,10 +78,13 @@ public class ProjectDAO implements IProjectDAO {
 
         String sql = "SELECT " +
                 "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
-                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType' " +
+                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType', " +
+                "ClientAddress.ID AS 'ClientAddressID', ClientAddress.Street AS 'ClientStreet', ClientAddress.PostalCode AS 'ClientPostalCode', ClientAddress.City AS 'ClientCity', " +
+                "ProjectAddress.ID AS 'ProjectAddressID', ProjectAddress.Street AS 'ProjectStreet', ProjectAddress.PostalCode AS 'ProjectPostalCode', ProjectAddress.City AS 'ProjectCity' " +
                 "FROM Project " +
-                "INNER JOIN Client " +
-                "ON Client.ID=Project.Client " +
+                "INNER JOIN Client ON Client.ID=Project.Client " +
+                "INNER JOIN Address ClientAddress ON ClientAddress.ID = Client.AddressID " +
+                "INNER JOIN Address ProjectAddress ON ProjectAddress.ID = Project.AddressID " +
                 "WHERE Project.SoftDelete IS NULL;";
 
         try (Connection connection = connector.getConnection();
@@ -91,25 +92,36 @@ public class ProjectDAO implements IProjectDAO {
 
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
+                //Mapping the client address
+                int clientAddressID = resultSet.getInt("ClientAddressID");
+                String clientStreet = resultSet.getString("ClientStreet");
+                String clientPostalCode = resultSet.getString("ClientPostalCode");
+                String clientCity = resultSet.getString("ClientCity");
+                Address clientAddress = new Address(clientAddressID, clientStreet, clientPostalCode, clientCity);
+
                 //Mapping the client
                 int clientID = resultSet.getInt("ClientID");
                 String clientName = resultSet.getString("ClientName");
-                int clientAddressID = resultSet.getInt("ClientAddressID");
                 String email = resultSet.getString("ClientEmail");
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
 
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
 
-                Client client = new Client(clientID, clientName, addressDAO.getAddressFromID(clientAddressID), email, phone, type);
+                //Mapping the project address
+                int projectAddressID = resultSet.getInt("ProjectAddressID");
+                String projectStreet = resultSet.getString("ProjectStreet");
+                String projectPostalCode = resultSet.getString("ProjectPostalCode");
+                String projectCity = resultSet.getString("ProjectCity");
+                Address projectAddress = new Address(projectAddressID, projectStreet, projectPostalCode, projectCity);
 
                 //Mapping the project
                 int ID = resultSet.getInt("ProjectID");
                 String name = resultSet.getString("ProjectName");
-                int projectAddressID = resultSet.getInt("ProjectAddressID");
                 Date created = resultSet.getDate("ProjectCreated");
                 String description = resultSet.getString("ProjectDescription");
 
-                Project project = new Project(ID, name, client, addressDAO.getAddressFromID(projectAddressID), created, description);
+                Project project = new Project(ID, name, client, projectAddress, created, description);
 
                 allProjects.add(project);
             }

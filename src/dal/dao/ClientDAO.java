@@ -1,9 +1,9 @@
 package dal.dao;
 
+import be.Address;
 import be.Client;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
-import dal.interfaces.IAddressDAO;
 import dal.interfaces.IClientDAO;
 import exceptions.DALException;
 
@@ -13,11 +13,9 @@ import java.util.List;
 
 public class ClientDAO implements IClientDAO {
     private AbstractConnector connector;
-    private IAddressDAO addressDAO;
 
     public ClientDAO() throws Exception {
         connector = new SqlConnector();
-        addressDAO = new AddressDAO();
     }
 
     @Override
@@ -54,22 +52,32 @@ public class ClientDAO implements IClientDAO {
     public List<Client> getAllClients() throws Exception {
         List<Client> allClients = new ArrayList<>();
 
-        String sql = "SELECT * FROM Client WHERE SoftDelete IS NULL;";
+        String sql = "SELECT * " +
+                "FROM Client " +
+                "INNER JOIN Address " +
+                "ON Address.ID = Client.AddressID " +
+                "WHERE SoftDelete IS NULL;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
+                //Mapping the client address
+                int addressID = resultSet.getInt(8);
+                String street = resultSet.getString(9);
+                String postalCode = resultSet.getString(10);
+                String city = resultSet.getString(11);
+                Address clientAddress = new Address(addressID, street, postalCode, city);
+
                 //Mapping the client
                 int clientID = resultSet.getInt(1);
                 String clientName = resultSet.getString(2);
-                int addressID = resultSet.getInt(3);
                 String email = resultSet.getString(4);
                 String phone = resultSet.getString(5);
                 String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, addressDAO.getAddressFromID(addressID), email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
 
                 allClients.add(client);
             }
