@@ -32,13 +32,27 @@ public class SystemUserModel {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
 
-        allUsers = retrieveAllUsers();
+        allUsers = retrieveAllUsers().get();
+
         copyAllUsers = new ArrayList<>(allUsers);
         filteredUserList = FXCollections.observableList(copyAllUsers);
     }
 
-    public List<SystemUser> retrieveAllUsers() throws Exception {
-        return systemUserManager.getAllSystemUsers();
+    public Task<List<SystemUser>> retrieveAllUsers() throws Exception {
+        Task<List<SystemUser>> retrieveAllUsersTask = new Task<>() {
+            @Override
+            protected List<SystemUser> call() throws Exception {
+                List<SystemUser> allSystemUsers = systemUserManager.getAllSystemUsers();
+
+                updateValue(allSystemUsers);
+
+                return allSystemUsers;
+            }
+        };
+
+        executeTask(retrieveAllUsersTask);
+
+        return retrieveAllUsersTask;
     }
 
     public Task<Boolean> SystemUserValidLogin(SystemUser user) throws Exception {
@@ -78,13 +92,26 @@ public class SystemUserModel {
         }
     }
 
-    public SystemUser createSystemUser(SystemUser user) throws Exception {
-        SystemUser createdUser = systemUserManager.createSystemUser(user);
-        if(createdUser != null){
-            allUsers.add(createdUser);
-            search(searchString);
-        }
-        return createdUser;
+    public Task<SystemUser> createSystemUser(SystemUser user) throws Exception {
+        Task<SystemUser> createSystemUserTask = new Task<>() {
+            @Override
+            protected SystemUser call() throws Exception {
+                SystemUser createdUser = systemUserManager.createSystemUser(user);
+
+                if(createdUser != null){
+                    allUsers.add(createdUser);
+                    search(searchString);
+                }
+
+                updateValue(createdUser);
+
+                return createdUser;
+            }
+        };
+
+        executeTask(createSystemUserTask);
+
+        return createSystemUserTask;
     }
 
     public ObservableList<SystemRole> getAllRoles(){
@@ -92,14 +119,28 @@ public class SystemUserModel {
         return list;
     }
 
-    public boolean updateSystemUser(SystemUser user, SystemUser originalUser) throws Exception{
-        if(systemUserManager.updateSystemUser(user) != null){
-            allUsers.remove(originalUser);
-            allUsers.add(user);
-            search(searchString);
-            return true;
-        }
-        return false;
+    public Task<Boolean> updateSystemUser(SystemUser user, SystemUser originalUser) throws Exception{
+        Task<Boolean> updateSystemUserTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                boolean successfullyUpdatedUser = systemUserManager.updateSystemUser(user) != null;
+
+                if(successfullyUpdatedUser){
+                    allUsers.remove(originalUser);
+                    allUsers.add(user);
+
+                    search(searchString);
+                }
+
+                updateValue(successfullyUpdatedUser);
+
+                return successfullyUpdatedUser;
+            }
+        };
+
+        executeTask(updateSystemUserTask);
+
+        return updateSystemUserTask;
     }
 
     private <T> void executeTask(Task<T> task) {
