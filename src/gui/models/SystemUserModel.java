@@ -12,15 +12,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.*;
 
-public class SystemUserModel {
+public class SystemUserModel implements Runnable {
 
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
@@ -29,6 +27,8 @@ public class SystemUserModel {
     private ObservableList<SystemUser> filteredUserList;
     private  List<SystemUser> copyAllUsers;
 
+    private Timestamp lastUpdatedTime;
+
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
@@ -36,6 +36,8 @@ public class SystemUserModel {
         allUsers = retrieveAllUsers();
         copyAllUsers = new ArrayList<>(allUsers);
         filteredUserList = FXCollections.observableList(copyAllUsers);
+        lastUpdatedTime = new Timestamp(System.currentTimeMillis());
+        updateAllUsers();
     }
 
     public List<SystemUser> retrieveAllUsers() throws Exception {
@@ -122,5 +124,39 @@ public class SystemUserModel {
         };
 
         return updateSystemUserTask;
+    }
+
+
+    private <T> void executeTask(Task<T> task) {
+        try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+            executorService.submit(task);
+        }
+    }
+
+    private void updateAllUsers(){
+
+    }
+
+    private void executeFixedTask(Task task){
+        System.out.println("checked");
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(task, 2, 2, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void run() {
+        List<SystemUser> updatedSystemUsers;
+        try {
+            updatedSystemUsers = systemUserManager.getAllModifiedUsers(lastUpdatedTime);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if(updatedSystemUsers.size() > 0){
+            System.out.println("there has been a change bro");
+
+        }else {
+            System.out.println("i checked but nothing happened bro");
+        }
     }
 }

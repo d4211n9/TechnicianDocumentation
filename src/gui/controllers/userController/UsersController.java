@@ -3,6 +3,7 @@ package gui.controllers.userController;
 import be.Enum.SystemRole;
 import be.SystemUser;
 import gui.controllers.TableViewController;
+import gui.models.ModelsHandler;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,9 @@ import util.ViewPaths;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class UsersController extends TableViewController implements Initializable {
@@ -28,6 +32,7 @@ public class UsersController extends TableViewController implements Initializabl
     private VBox usersView;
     @FXML
     private TextField txtfSearch;
+    private  ScheduledExecutorService executorService;
 
         @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,7 +40,15 @@ public class UsersController extends TableViewController implements Initializabl
             initializeButtonAccessLevels();
             usersView.getChildren().add(addButtons());
             tvListener();
-    }
+
+            executorService = Executors.newScheduledThreadPool(1);
+            try {
+                //executorService.schedule(getModelsHandler().getSystemUserModel(), 1, TimeUnit.SECONDS);
+                executorService.scheduleWithFixedDelay(getModelsHandler().getSystemUserModel(), 0, 1, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -91,6 +104,8 @@ public class UsersController extends TableViewController implements Initializabl
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
+        executorService.shutdown();
+
     }
 
     public void handleSearch() {

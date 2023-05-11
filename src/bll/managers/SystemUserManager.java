@@ -9,6 +9,7 @@ import dal.interfaces.ISystemUserDAO;
 import util.Searchable;
 
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,5 +58,10 @@ public class SystemUserManager implements ISystemUserManager {
         user.setPassword(hashedPassword);
 
         return systemUserDAO.updateSystemUser(user);
+    }
+
+    @Override
+    public List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception {
+        return systemUserDAO.getAllModifiedUsers(lastUpdateTime);
     }
 }
