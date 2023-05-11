@@ -41,10 +41,8 @@ public class UsersController extends TableViewController implements Initializabl
             usersView.getChildren().add(addButtons());
             tvListener();
 
-            executorService = Executors.newScheduledThreadPool(1);
             try {
-                //executorService.schedule(getModelsHandler().getSystemUserModel(), 1, TimeUnit.SECONDS);
-                executorService.scheduleWithFixedDelay(getModelsHandler().getSystemUserModel(), 0, 1, TimeUnit.SECONDS);
+                backgroundUpdate(getModelsHandler().getSystemUserModel());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -104,7 +102,6 @@ public class UsersController extends TableViewController implements Initializabl
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
-        executorService.shutdown();
 
     }
 

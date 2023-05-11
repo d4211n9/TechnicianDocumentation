@@ -25,11 +25,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class BaseController {
 
 
     public NodeAccessLevel buttonAccessLevel;
+
+    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    ScheduledFuture future = null;
 
 
     public ModelsHandler getModelsHandler() throws Exception {
@@ -38,6 +45,20 @@ public class BaseController {
 
     public MainController getMainController() {
         return MainControllerHandler.getInstance().getController();
+    }
+
+    public void backgroundUpdate(Runnable runnable){
+        System.out.println(future);
+        if (executorService != null){
+            executorService.close();
+            executorService = Executors.newScheduledThreadPool(1);
+            System.out.println("yaaay");
+        }
+        try {
+             executorService.scheduleWithFixedDelay(runnable, 0, 5, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

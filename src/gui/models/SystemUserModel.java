@@ -37,11 +37,12 @@ public class SystemUserModel implements Runnable {
         copyAllUsers = new ArrayList<>(allUsers);
         filteredUserList = FXCollections.observableList(copyAllUsers);
         lastUpdatedTime = new Timestamp(System.currentTimeMillis());
-        updateAllUsers();
     }
 
     public List<SystemUser> retrieveAllUsers() throws Exception {
-        return systemUserManager.getAllSystemUsers();
+        copyAllUsers = new ArrayList<>(systemUserManager.getAllSystemUsers());
+        System.out.println("retrived from db duuude");
+        return copyAllUsers;
     }
 
     public Task<Boolean> SystemUserValidLogin(SystemUser user) {
@@ -89,7 +90,6 @@ public class SystemUserModel implements Runnable {
                     allUsers.add(createdUser);
                     search(searchString);
                 }
-
                 updateValue(createdUser);
 
                 return createdUser;
@@ -126,30 +126,20 @@ public class SystemUserModel implements Runnable {
         return updateSystemUserTask;
     }
 
-    private void updateAllUsers(){
-
-    }
-
-    private void executeFixedTask(Task task){
-        System.out.println("checked");
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(task, 2, 2, TimeUnit.SECONDS);
-    }
-
     @Override
     public void run() {
         List<SystemUser> updatedSystemUsers;
         try {
             updatedSystemUsers = systemUserManager.getAllModifiedUsers(lastUpdatedTime);
+            lastUpdatedTime.setTime(System.currentTimeMillis());
+            if(updatedSystemUsers.size() > 0){
+                allUsers = retrieveAllUsers();
+                search(searchString);
+            }
+            System.out.println(",dekwmdekwl");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        if(updatedSystemUsers.size() > 0){
-            System.out.println("there has been a change bro");
-
-        }else {
-            System.out.println("i checked but nothing happened bro");
-        }
     }
 }
