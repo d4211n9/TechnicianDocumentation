@@ -1,16 +1,15 @@
 package dal.facades;
 
 import be.Installation;
+import be.Photo;
 import be.Project;
 import be.SystemUser;
 import dal.dao.InstallationDAO;
 import dal.dao.ProjectDAO;
 import dal.dao.SystemUserAssignedToInstallationDAO;
 import dal.dao.SystemUsersAssignedToProjectsDAO;
-import dal.interfaces.IInstallationDAO;
-import dal.interfaces.IProjectDAO;
-import dal.interfaces.ISystemUserAssignedToInstallationDAO;
-import dal.interfaces.ISystemUsersAssignedToProjectsDAO;
+import dal.interfaces.*;
+import exceptions.DALException;
 
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class ProjectFacade {
     private ISystemUsersAssignedToProjectsDAO systemUsersAssignedToProjectsDAO;
     private IInstallationDAO installationDAO;
     private ISystemUserAssignedToInstallationDAO systemUsersAssignedToInstallationDAO;
+    private IPhotoDAO photoDAO;
 
     public ProjectFacade() throws Exception {
         projectDAO = new ProjectDAO();
@@ -79,4 +79,9 @@ public class ProjectFacade {
     public boolean deleteSystemUserAssignedToInstallation(int installationId, String systemUserEmailToDelete) throws Exception {
         return systemUsersAssignedToInstallationDAO.deleteSystemUserAssignedToInstallation(installationId, systemUserEmailToDelete);
     }
+
+    public Photo uploadPhoto (Photo photo) throws DALException {
+        return photoDAO.uploadPhoto(photo);
+    }
+
 }
