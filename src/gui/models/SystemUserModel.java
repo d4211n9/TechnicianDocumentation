@@ -4,6 +4,7 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import bll.managers.SystemUserManager;
+import gui.util.TaskExecutor;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
@@ -32,32 +33,18 @@ public class SystemUserModel implements Runnable {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
 
-        allUsers = retrieveAllUsers().get();
-
+        allUsers = retrieveAllUsers();
         copyAllUsers = new ArrayList<>(allUsers);
         filteredUserList = FXCollections.observableList(copyAllUsers);
         lastUpdatedTime = new Timestamp(System.currentTimeMillis());
         updateAllUsers();
     }
 
-    public Task<List<SystemUser>> retrieveAllUsers() throws Exception {
-        Task<List<SystemUser>> retrieveAllUsersTask = new Task<>() {
-            @Override
-            protected List<SystemUser> call() throws Exception {
-                List<SystemUser> allSystemUsers = systemUserManager.getAllSystemUsers();
-
-                updateValue(allSystemUsers);
-
-                return allSystemUsers;
-            }
-        };
-
-        executeTask(retrieveAllUsersTask);
-
-        return retrieveAllUsersTask;
+    public List<SystemUser> retrieveAllUsers() throws Exception {
+        return systemUserManager.getAllSystemUsers();
     }
 
-    public Task<Boolean> SystemUserValidLogin(SystemUser user) throws Exception {
+    public Task<Boolean> SystemUserValidLogin(SystemUser user) {
         Task<Boolean> validLoginTask = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
@@ -70,8 +57,6 @@ public class SystemUserModel implements Runnable {
                 return isValidLogin;
             }
         };
-
-        executeTask(validLoginTask);
 
         return validLoginTask;
     }
@@ -94,7 +79,7 @@ public class SystemUserModel implements Runnable {
         }
     }
 
-    public Task<SystemUser> createSystemUser(SystemUser user) throws Exception {
+    public Task<SystemUser> createSystemUser(SystemUser user) {
         Task<SystemUser> createSystemUserTask = new Task<>() {
             @Override
             protected SystemUser call() throws Exception {
@@ -111,8 +96,6 @@ public class SystemUserModel implements Runnable {
             }
         };
 
-        executeTask(createSystemUserTask);
-
         return createSystemUserTask;
     }
 
@@ -121,7 +104,7 @@ public class SystemUserModel implements Runnable {
         return list;
     }
 
-    public Task<Boolean> updateSystemUser(SystemUser user, SystemUser originalUser) throws Exception{
+    public Task<Boolean> updateSystemUser(SystemUser user, SystemUser originalUser) {
         Task<Boolean> updateSystemUserTask = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
@@ -140,10 +123,9 @@ public class SystemUserModel implements Runnable {
             }
         };
 
-        executeTask(updateSystemUserTask);
-
         return updateSystemUserTask;
     }
+
 
     private <T> void executeTask(Task<T> task) {
         try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
