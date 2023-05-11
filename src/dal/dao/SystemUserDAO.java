@@ -140,4 +140,31 @@ public class SystemUserDAO implements ISystemUserDAO {
         return updatedUser;
     }
 
+    public List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception {
+        ArrayList<SystemUser> allUsers = new ArrayList<>();
+        String sql = "SELECT * FROM SystemUser WHERE LastModified>?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setTimestamp(1, lastUpdateTime);
+
+
+            ResultSet rs = statement.executeQuery();
+
+            while(rs.next()) {
+                String email = rs.getString("Email");
+                String role = rs.getString("RoleName");
+                SystemRole systemRole = SystemRole.valueOf(role);
+                String name= rs.getString("UserName");
+                SystemUser systemUser = new SystemUser(email, systemRole, name);
+                allUsers.add(systemUser);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new Exception("Failed to retrieve all Users", e);
+        }
+        return allUsers;
+    }
+
 }
