@@ -4,6 +4,8 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -57,12 +59,18 @@ public class CreateUserController extends BaseController implements Initializabl
 
     public void handleConfirm(ActionEvent actionEvent) {
         SystemUser user = createSystemUserFromFields();
-        if(user != null){
+        if(user != null) {
             try {
-                getModelsHandler().getSystemUserModel().createSystemUser(createSystemUserFromFields());
+                Task<SystemUser> createSystemUserTask = getModelsHandler()
+                        .getSystemUserModel()
+                        .createSystemUser(createSystemUserFromFields());
+
+                TaskExecutor.executeTask(createSystemUserTask);
+
                 handleBack();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            }
+            catch (Exception e) {
+                displayError(e);
             }
         }
     }
@@ -114,10 +122,16 @@ public class CreateUserController extends BaseController implements Initializabl
             if(validateInput()) {
                 SystemUser systemUser = createSystemUserFromFields();
                 try {
-                    getModelsHandler().getSystemUserModel().updateSystemUser(systemUser, selectedUser);
+                    Task<Boolean> updateSystemUserTask = getModelsHandler()
+                            .getSystemUserModel()
+                            .updateSystemUser(systemUser, selectedUser);
+
+                    TaskExecutor.executeTask(updateSystemUserTask);
+
                     handleBack();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                }
+                catch (Exception e) {
+                    displayError(e);
                 }
             }
         });

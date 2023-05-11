@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.SystemUser;
 import gui.util.MainControllerHandler;
+import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -52,25 +53,29 @@ public class LoginController extends BaseController implements Initializable {
         String email = txtfEmail.getText();
         String password = pwfPassword.getText();
 
-        if(InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
+        if (InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
 
             SystemUser user = new SystemUser(email, password);
 
             try {
                 Task<Boolean> validLoginTask = getModelsHandler().getSystemUserModel().SystemUserValidLogin(user);
 
-                validLoginTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue) {
-                        MainControllerHandler.getInstance().getController();
-                        close();
-                    }
-                    else {
-                        //TODO Show that something went wrong
-                        lblEmail.setText("Email* Wrong email or password, please try again");
-                        txtfEmail.requestFocus();
-                    }
-                });
-            } catch (Exception e) {
+                validLoginTask
+                        .valueProperty()
+                        .addListener((observable, oldValue, newValue) -> {
+                            if (newValue) {
+                                MainControllerHandler.getInstance().getController();
+                                close();
+                            } else {
+                                //TODO Show that something went wrong
+                                lblEmail.setText("Email* Wrong email or password, please try again");
+                                txtfEmail.requestFocus();
+                            }
+                        });
+
+                TaskExecutor.executeTask(validLoginTask);
+            }
+            catch (Exception e) {
                 displayError(e);
             }
         }
