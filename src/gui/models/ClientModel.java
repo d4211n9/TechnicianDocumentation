@@ -1,11 +1,13 @@
 package gui.models;
 
 import be.Client;
+import be.Project;
 import bll.interfaces.IClientManager;
 import bll.managers.ClientManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +61,12 @@ public class ClientModel {
             return true;
         }
         return false;
+    }
+
+    public void deleteClient(Client deletedClient) throws Exception {
+        deletedClient.setDeleted(new Timestamp(System.currentTimeMillis()));
+        clientManager.updateClient(deletedClient);
+        allClients.remove(deletedClient);
+
     }
 }

@@ -122,7 +122,7 @@ public class ProjectDAO implements IProjectDAO {
     public Project updateProject(Project project) throws Exception {
         Project updatedProject = null;
 
-        String sql = "UPDATE Project SET Name=?, Location=?, Description=? WHERE ID=?;";
+        String sql = "UPDATE Project SET Name=?, Location=?, Description=?, SoftDelete=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -130,7 +130,8 @@ public class ProjectDAO implements IProjectDAO {
             statement.setString(1, project.getName());
             statement.setString(2, project.getLocation());
             statement.setString(3, project.getDescription());
-            statement.setInt(4, project.getID());
+            statement.setTimestamp(4, project.getDeleted());
+            statement.setInt(5, project.getID());
 
             statement.executeUpdate();
             updatedProject = project;

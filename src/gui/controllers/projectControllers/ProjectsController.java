@@ -1,16 +1,17 @@
 package gui.controllers.projectControllers;
 
 import be.Enum.SystemRole;
+import be.Installation;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -74,11 +75,26 @@ public class ProjectsController extends TableViewController implements Initializ
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object project = tableView.getSelectionModel().getSelectedItem();
+            Project project = (Project) tableView.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(project.toString(), true)){
-                //TODO Delete ned i lagene
+                handleDelete(project);
             }
         });
+    }
+
+    private void handleDelete(Project project) {
+        try {
+            for(Installation installation : getModelsHandler().getInstallationModel().getAllInstallations(project.getID())) {
+                System.out.println(installation.getID() + " [INSTALLATION DELETED]");
+                System.out.println(getModelsHandler().getInstallationModel().getAllInstallations(project.getID()).size());
+                getModelsHandler().getInstallationModel().deleteInstallation(installation);
+            }
+            System.out.println(project.getName() + " [PROJECT DELETED]");
+            getModelsHandler().getProjectModel().deleteProject(project);
+            handleSearch();
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void loadTableView() {

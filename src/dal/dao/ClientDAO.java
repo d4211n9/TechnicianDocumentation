@@ -83,7 +83,7 @@ public class ClientDAO implements IClientDAO {
     @Override
     public Client updateClient(Client client) throws Exception {
         Client updatedClient = null;
-        String sql = "UPDATE Client SET Name=?, ClientLocation=?, Email=?, Phone=?, Type=? WHERE ID=?;";
+        String sql = "UPDATE Client SET Name=?, ClientLocation=?, Email=?, Phone=?, Type=?, SoftDelete=? WHERE ID=?;";
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -92,7 +92,8 @@ public class ClientDAO implements IClientDAO {
             statement.setString(3, client.getEmail());
             statement.setString(4, client.getPhone());
             statement.setString(5, client.getType());
-            statement.setInt(6, client.getID());
+            statement.setTimestamp(6, client.getDeleted());
+            statement.setInt(7, client.getID());
             statement.executeUpdate();
 
             updatedClient = client;

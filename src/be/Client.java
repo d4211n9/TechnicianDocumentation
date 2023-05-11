@@ -2,9 +2,12 @@ package be;
 
 import util.Searchable;
 
+import java.sql.Timestamp;
+
 public class Client implements Searchable {
     private String name, location, email, phone, type;
     private int ID;
+    private Timestamp deleted;
 
     public Client(String name, String location, String email, String phone, String type) {
         this.name = name;
@@ -45,6 +48,14 @@ public class Client implements Searchable {
 
     public String getType() {
         return type;
+    }
+
+    public Timestamp getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Timestamp deleted) {
+        this.deleted = deleted;
     }
 
     @Override

@@ -7,6 +7,7 @@ import bll.managers.InstallationManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class InstallationModel {
@@ -28,6 +29,12 @@ public class InstallationModel {
 
     public Installation updateInstallation(Installation installation) throws Exception {
         return installationManager.updateInstallation(installation);
+    }
+
+    public void deleteInstallation(Installation deletedInstallation) throws Exception {
+        deletedInstallation.setDeleted(new Timestamp(System.currentTimeMillis()));
+        installationManager.updateInstallation(deletedInstallation);
+        allInstallations.remove(deletedInstallation);
     }
 
     public List<SystemUser> getSystemUsersAssignedToInstallation(int installationId) throws Exception {

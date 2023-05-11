@@ -7,6 +7,7 @@ import bll.managers.ProjectManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,12 @@ public class ProjectModel {
             return true;
         }
             return false;
+    }
+
+    public void deleteProject(Project deletedProject) throws Exception {
+        deletedProject.setDeleted(new Timestamp(System.currentTimeMillis()));
+        projectManager.updateProject(deletedProject);
+        allProjects.remove(deletedProject);
     }
 
     public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {

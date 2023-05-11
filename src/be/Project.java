@@ -2,6 +2,7 @@ package be;
 
 import util.Searchable;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Project implements Searchable<Project> {
@@ -10,6 +11,7 @@ public class Project implements Searchable<Project> {
     private Date created;
     private Client client;
     private String description;
+    private Timestamp deleted;
 
     public Project(String name, Client client, String location, Date created, String description) {
         this.client = client;
@@ -66,6 +68,14 @@ public class Project implements Searchable<Project> {
 
     public String getDescription() {
         return description;
+    }
+
+    public Timestamp getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Timestamp deleted) {
+        this.deleted = deleted;
     }
 
     @Override
