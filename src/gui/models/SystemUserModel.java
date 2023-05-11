@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,10 +41,23 @@ public class SystemUserModel {
         return systemUserManager.getAllSystemUsers();
     }
 
-    public boolean SystemUserValidLogin(SystemUser user) throws Exception {
-        loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
+    public Task<Boolean> SystemUserValidLogin(SystemUser user) throws Exception {
+        Task<Boolean> validLoginTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
 
-        return loggedInSystemUser.get() != null;
+                boolean isValidLogin = loggedInSystemUser.get() != null;
+
+                updateValue(isValidLogin);
+
+                return isValidLogin;
+            }
+        };
+
+        executeTask(validLoginTask);
+
+        return validLoginTask;
     }
 
     public ObservableValue<SystemUser> getLoggedInSystemUser() {
@@ -86,5 +100,11 @@ public class SystemUserModel {
             return true;
         }
         return false;
+    }
+
+    private <T> void executeTask(Task<T> task) {
+        try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+            executorService.submit(task);
+        }
     }
 }

@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.SystemUser;
 import gui.util.MainControllerHandler;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -49,23 +50,29 @@ public class LoginController extends BaseController implements Initializable {
     private void handleLogin() {
         String email = txtfEmail.getText();
         String password = pwfPassword.getText();
-        if(InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
-            SystemUser user = new SystemUser(email, password);
-            try {
-                if(getModelsHandler().getSystemUserModel().SystemUserValidLogin(user)) {
-                    MainControllerHandler.getInstance().getController();
-                    close();
 
-                    return;
-                }
+        if(InputValidator.isEmail(email) && InputValidator.isPassword(password)) {
+
+            SystemUser user = new SystemUser(email, password);
+
+            try {
+                Task<Boolean> validLoginTask = getModelsHandler().getSystemUserModel().SystemUserValidLogin(user);
+
+                validLoginTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        MainControllerHandler.getInstance().getController();
+                        close();
+                    }
+                    else {
+                        //TODO Show that something went wrong
+                        lblEmail.setText("Email* Wrong email or password, please try again");
+                        txtfEmail.requestFocus();
+                    }
+                });
             } catch (Exception e) {
                 displayError(e);
             }
         }
-
-        //TODO Show that something went wrong
-        lblEmail.setText("Email* Wrong email or password, please try again");
-        txtfEmail.requestFocus();
     }
 
     @FXML
