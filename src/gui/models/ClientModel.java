@@ -12,7 +12,7 @@ import javafx.concurrent.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientModel {
+public class ClientModel implements Runnable {
     private IClientManager clientManager;
     private List<Client> allClients;
     private ObservableList<Client> filteredClients;
@@ -83,7 +83,11 @@ public class ClientModel {
                 return successfullyUpdatedClient;
             }
         };
-
         return updateClientTask;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("mfmfmfmfmfmfmf");
     }
 }

@@ -44,15 +44,18 @@ public class BaseController {
         return MainControllerHandler.getInstance().getController();
     }
 
-    public static void backgroundUpdate(Runnable runnable) throws ExecutionException, InterruptedException {
-        if (executorService != null){
-            future.cancel(true);
+    public static void backgroundUpdate(List<Runnable> runnable) throws ExecutionException, InterruptedException {
+        System.out.println(runnable.size());
+        if (executorService != null) {
+            executorService.shutdownNow();
         }
-        executorService = Executors.newScheduledThreadPool(1);
-        try {
-             future = executorService.scheduleWithFixedDelay(runnable, 0, 1, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        executorService = Executors.newScheduledThreadPool(runnable.size());
+        for (Runnable run: runnable) {
+            try {
+                executorService.scheduleWithFixedDelay(run, 0, 5, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

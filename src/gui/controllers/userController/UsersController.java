@@ -15,7 +15,9 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,7 +42,10 @@ public class UsersController extends TableViewController implements Initializabl
             tvListener();
 
             try {
-                backgroundUpdate(getModelsHandler().getSystemUserModel());
+                List<Runnable> backgroundUpdateList = new ArrayList<>();
+                backgroundUpdateList.add(getModelsHandler().getSystemUserModel());
+
+                backgroundUpdate(backgroundUpdateList);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
