@@ -24,6 +24,7 @@ public class PhotoDAO implements IPhotoDAO {
     @Override
     public Photo uploadPhoto(Photo photo) throws Exception {
         Photo newPhoto = null;
+
         InputStream is = new FileInputStream(new File("resources/images/WUAV_logo.jpg"));
 
         //InputStream is = new FileInputStream(new Image(photo.getPhoto()));
@@ -55,9 +56,27 @@ public class PhotoDAO implements IPhotoDAO {
 
 
     @Override
-    public Photo deletePhoto(Photo photo) throws DALException {
-        return null;
+    public Photo deletePhoto(Photo photo) throws Exception {
+
+        Photo deletedPhoto = null;
+
+        String sql = "DELETE FROM Photo WHERE ID=?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, photo.getID());
+            statement.executeUpdate();
+
+            deletedPhoto = photo;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to upload", e);
+        }
+        return deletedPhoto;
     }
+
 
    /* public byte[] convertToBytes(Photo photo) throws IOException {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();

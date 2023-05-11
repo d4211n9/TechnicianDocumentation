@@ -20,9 +20,10 @@ public class Main extends Application {
     public static void main(String[] args) throws Exception {
         //Application.launch();
 
-        Photo photo = new Photo(1, new Image(SymbolPaths.LOGO), "ello");
+        Photo photo = new Photo(1,1, new Image(SymbolPaths.LOGO), "ello");
         PhotoDAO photoDAP = new PhotoDAO();
-        photoDAP.uploadPhoto(photo);
+        //photoDAP.uploadPhoto(photo);
+        photoDAP.deletePhoto(photo);
     }
 
     @Override

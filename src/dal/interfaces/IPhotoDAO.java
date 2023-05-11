@@ -7,7 +7,7 @@ public interface IPhotoDAO {
 
     public Photo uploadPhoto(Photo photo) throws Exception;
 
-    public Photo deletePhoto(Photo photo) throws DALException;
+    public Photo deletePhoto(Photo photo) throws Exception;
 
 
 

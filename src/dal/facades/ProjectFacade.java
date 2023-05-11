@@ -80,8 +80,11 @@ public class ProjectFacade {
         return systemUsersAssignedToInstallationDAO.deleteSystemUserAssignedToInstallation(installationId, systemUserEmailToDelete);
     }
 
-    public Photo uploadPhoto (Photo photo) throws Exception {
+    public Photo uploadPhoto(Photo photo) throws Exception {
         return photoDAO.uploadPhoto(photo);
     }
 
+    public Photo deletePhoto(Photo photo) throws Exception{
+        return photoDAO.deletePhoto(photo);
+    }
 }
