@@ -73,6 +73,8 @@ public class LoginController extends BaseController implements Initializable {
                             }
                         });
 
+                validLoginTask.setOnFailed(event -> displayError(validLoginTask.getException()));
+
                 TaskExecutor.executeTask(validLoginTask);
             }
             catch (Exception e) {

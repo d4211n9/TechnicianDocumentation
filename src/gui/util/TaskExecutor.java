@@ -1,6 +1,8 @@
 package gui.util;
 
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

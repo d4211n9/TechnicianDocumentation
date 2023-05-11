@@ -65,6 +65,8 @@ public class CreateUserController extends BaseController implements Initializabl
                         .getSystemUserModel()
                         .createSystemUser(createSystemUserFromFields());
 
+                createSystemUserTask.setOnFailed(event -> displayError(createSystemUserTask.getException()));
+
                 TaskExecutor.executeTask(createSystemUserTask);
 
                 handleBack();
@@ -125,6 +127,8 @@ public class CreateUserController extends BaseController implements Initializabl
                     Task<Boolean> updateSystemUserTask = getModelsHandler()
                             .getSystemUserModel()
                             .updateSystemUser(systemUser, selectedUser);
+
+                    updateSystemUserTask.setOnFailed(failedEvent -> displayError(updateSystemUserTask.getException()));
 
                     TaskExecutor.executeTask(updateSystemUserTask);
 

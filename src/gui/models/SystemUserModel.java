@@ -33,32 +33,13 @@ public class SystemUserModel {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
         systemUserManager = new SystemUserManager();
 
-        Task<List<SystemUser>> allSystemUsersTask = retrieveAllUsers();
-
-        allSystemUsersTask
-                .valueProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    allUsers = newValue;
-                    copyAllUsers = new ArrayList<>(allUsers);
-                    filteredUserList = FXCollections.observableList(copyAllUsers);
-                });
-
-        TaskExecutor.executeTask(allSystemUsersTask);
+        allUsers = retrieveAllUsers();
+        copyAllUsers = new ArrayList<>(allUsers);
+        filteredUserList = FXCollections.observableList(copyAllUsers);
     }
 
-    public Task<List<SystemUser>> retrieveAllUsers() {
-        Task<List<SystemUser>> retrieveAllUsersTask = new Task<>() {
-            @Override
-            protected List<SystemUser> call() throws Exception {
-                List<SystemUser> allSystemUsers = systemUserManager.getAllSystemUsers();
-
-                updateValue(allSystemUsers);
-
-                return allSystemUsers;
-            }
-        };
-
-        return retrieveAllUsersTask;
+    public List<SystemUser> retrieveAllUsers() throws Exception {
+        return systemUserManager.getAllSystemUsers();
     }
 
     public Task<Boolean> SystemUserValidLogin(SystemUser user) {
