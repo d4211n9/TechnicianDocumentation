@@ -13,8 +13,10 @@ import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +30,7 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -115,10 +118,17 @@ public class ProjectInfoController extends BaseController implements Initializab
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
             try {
-                getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
+                Task<Void> assignUserToProjectTask = getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
                         selectedUser.getEmail());
-                obsAssignedUsers.add(selectedUser);
-                obsUnAssignedUsers.remove(selectedUser);
+
+                assignUserToProjectTask.setOnSucceeded(succeddedEvent -> {
+                    obsAssignedUsers.add(selectedUser);
+                    obsUnAssignedUsers.remove(selectedUser);
+                });
+
+                assignUserToProjectTask.setOnFailed(failedEvent -> displayError(assignUserToProjectTask.getException()));
+
+                TaskExecutor.executeTask(assignUserToProjectTask);
             } catch (Exception e) {
                 displayError(e);
                 e.printStackTrace();
@@ -137,10 +147,15 @@ public class ProjectInfoController extends BaseController implements Initializab
         unAssignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
             try {
-                getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
+                Task<Void> deleteUserAssignedToProjectTask = getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
                         selectedUser.getEmail());
-                obsAssignedUsers.remove(selectedUser);
-                obsUnAssignedUsers.add(selectedUser);
+
+                deleteUserAssignedToProjectTask.setOnSucceeded(succeddedEvent -> {
+                    obsAssignedUsers.remove(selectedUser);
+                    obsUnAssignedUsers.add(selectedUser);
+                });
+
+                deleteUserAssignedToProjectTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToProjectTask.getException()));
             } catch (Exception e) {
                 displayError(e);
                 e.printStackTrace();
@@ -185,19 +200,31 @@ public class ProjectInfoController extends BaseController implements Initializab
 
     private void loadUsers() {
         try {
-            List<SystemUser> assignedUsers = getModelsHandler().getProjectModel().
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getProjectModel().
                     getSystemUsersAssignedToProject(project.getID());
-            obsAssignedUsers = FXCollections.observableList(assignedUsers);
 
-            List<SystemUser> unAssignedUsers = getModelsHandler().getProjectModel().
+            assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                obsAssignedUsers = FXCollections.observableList(newValue);
+
+                listUsers.setItems(obsAssignedUsers);
+            });
+
+            assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
+
+            Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getProjectModel().
                     getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
-            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
+
+            unAssignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                obsUnAssignedUsers = FXCollections.observableList(newValue);
+            });
+
+            unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
+
+            TaskExecutor.executeTasks(Arrays.asList(assignedUsersTask, unAssignedUsersTask));
         } catch (Exception e) {
             displayError(e);
             e.printStackTrace(); //TODO replace with log to the database?
         }
-
-        listUsers.setItems(obsAssignedUsers);
     }
 
     /**

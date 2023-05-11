@@ -5,6 +5,8 @@ import be.Project;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -58,24 +60,51 @@ public class AddProjectController extends BaseController implements Initializabl
     }
 
     public void handleConfirm() {
-        if(validateInput()) {
+        if (validateInput()) {
 
             Project project = createProject();
 
             try {
-                project = getModelsHandler().getProjectModel().createProject(project);
-                getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
-                        getModelsHandler().getSystemUserModel().getLoggedInSystemUser().getValue().getEmail());
-                
-                FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
-                VBox projectInfoView = loader.getRoot();
-                ProjectInfoController projectInfoController = loader.getController();
-                projectInfoController.setContent(project);
-                getMainController().mainBorderPane.setCenter(projectInfoView);
+                Task<Project> createProjectTask = getModelsHandler().getProjectModel().createProject(project);
+
+                createProjectTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                    Task<Void> assignLoggedInUserToProjectTask = assignLoggedInSystemUserToProject(newValue.getID());
+
+                    assignLoggedInUserToProjectTask.setOnSucceeded(event -> {
+                        FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
+                        VBox projectInfoView = loader.getRoot();
+                        ProjectInfoController projectInfoController = loader.getController();
+                        projectInfoController.setContent(project);
+                        getMainController().mainBorderPane.setCenter(projectInfoView);
+                    });
+
+                    assignLoggedInUserToProjectTask.setOnFailed(event -> displayError(assignLoggedInUserToProjectTask.getException()));
+
+                    TaskExecutor.executeTask(assignLoggedInUserToProjectTask);
+                });
+
+                createProjectTask.setOnFailed(event -> displayError(createProjectTask.getException()));
+
+                TaskExecutor.executeTask(createProjectTask);
             } catch (Exception e) {
                 displayError(e);
             }
         }
+    }
+
+    private Task<Void> assignLoggedInSystemUserToProject(int projectId) {
+        Task<Void> assignUserToProjectTask = null;
+
+        try {
+            assignUserToProjectTask = getModelsHandler()
+                    .getProjectModel().assignSystemUserToProject(projectId,
+                            getModelsHandler().getSystemUserModel().getLoggedInSystemUser().getValue().getEmail());
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+
+        return assignUserToProjectTask;
     }
 
     private Project createProject() {
@@ -107,7 +136,7 @@ public class AddProjectController extends BaseController implements Initializabl
         try {
             getModelsHandler().getClientModel().search(txtfSearch.getText());
             cbClients.setItems(getModelsHandler().getClientModel().getAllClients());
-            if(cbClients.getItems().size() == 1) {
+            if (cbClients.getItems().size() == 1) {
                 cbClients.getSelectionModel().select(0);
             }
         } catch (Exception e) {
@@ -134,15 +163,18 @@ public class AddProjectController extends BaseController implements Initializabl
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {
-            if(validateInput()) {
+            if (validateInput()) {
                 Project project = createProject();
 
                 try {
-                    getModelsHandler().getProjectModel().updateProject(project);
+                    Task<Boolean> updateProjectTask = getModelsHandler().getProjectModel().updateProject(project);
+
+                    updateProjectTask.setOnFailed(failedEvent -> displayError(updateProjectTask.getException()));
+
+                    TaskExecutor.executeTask(updateProjectTask);
 
                     handleCancel();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     displayError(e);
                 }
             }
