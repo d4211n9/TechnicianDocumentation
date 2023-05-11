@@ -126,13 +126,6 @@ public class SystemUserModel implements Runnable {
         return updateSystemUserTask;
     }
 
-
-    private <T> void executeTask(Task<T> task) {
-        try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
-            executorService.submit(task);
-        }
-    }
-
     private void updateAllUsers(){
 
     }

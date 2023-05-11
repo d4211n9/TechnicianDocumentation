@@ -8,9 +8,11 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -119,15 +121,24 @@ public class InstallationInfoController extends BaseController implements Initia
 
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
+
             try {
-                if(getModelsHandler().getInstallationModel().assignSystemUserToInstallation(
-                        installation.getID(),
-                        selectedUser.getEmail())) {
-                    obsAssignedUsers.add(selectedUser);
-                    obsUnAssignedUsers.remove(selectedUser);
-                } else {
-                    displayError(new Throwable("Failed to add the user to the installation"));
-                }
+                Task<Boolean> assignUserToInstallationTask = getModelsHandler()
+                        .getInstallationModel()
+                        .assignSystemUserToInstallation(installation.getID(), selectedUser.getEmail());
+
+                assignUserToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                    if(newValue) {
+                        obsAssignedUsers.add(selectedUser);
+                        obsUnAssignedUsers.remove(selectedUser);
+                    } else {
+                        displayError(new Throwable("Failed to add the user to the installation"));
+                    }
+                });
+
+                assignUserToInstallationTask.setOnFailed(failedEvent -> displayError(assignUserToInstallationTask.getException()));
+
+                TaskExecutor.executeTask(assignUserToInstallationTask);
             } catch (Exception e) {
                 displayError(e);
                 e.printStackTrace();
@@ -145,15 +156,24 @@ public class InstallationInfoController extends BaseController implements Initia
 
         unAssignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
+
             try {
-                if(getModelsHandler().getInstallationModel().deleteSystemUserAssignedToInstallation(
-                        installation.getID(),
-                        selectedUser.getEmail())) {
-                    obsAssignedUsers.remove(selectedUser);
-                    obsUnAssignedUsers.add(selectedUser);
-                } else {
-                    displayError(new Throwable("Failed to remove the user from the installation"));
-                }
+                Task<Boolean> deleteUserAssignedToInstallationTask = getModelsHandler()
+                        .getInstallationModel()
+                        .deleteSystemUserAssignedToInstallation(installation.getID(), selectedUser.getEmail());
+
+                deleteUserAssignedToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                    if(newValue) {
+                        obsAssignedUsers.remove(selectedUser);
+                        obsUnAssignedUsers.add(selectedUser);
+                    } else {
+                        displayError(new Throwable("Failed to remove the user from the installation"));
+                    }
+                });
+
+                deleteUserAssignedToInstallationTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToInstallationTask.getException()));
+
+                TaskExecutor.executeTask(deleteUserAssignedToInstallationTask);
             } catch (Exception e) {
                 displayError(e);
                 e.printStackTrace();
@@ -163,19 +183,33 @@ public class InstallationInfoController extends BaseController implements Initia
 
     private void loadUsers() {
         try {
-            List<SystemUser> assignedUsers = getModelsHandler().getInstallationModel().
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getInstallationModel().
                     getSystemUsersAssignedToInstallation(installation.getID());
-            obsAssignedUsers = FXCollections.observableList(assignedUsers);
 
-            List<SystemUser> unAssignedUsers = getModelsHandler().getInstallationModel().
+            assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                List<SystemUser> assignedUsers = newValue;
+                obsAssignedUsers = FXCollections.observableList(assignedUsers);
+
+                listUsers.setItems(obsAssignedUsers);
+            });
+
+            assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
+
+            Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getInstallationModel().
                     getSystemUsersNotAssignedToInstallation(installation.getID());
-            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
+
+            unAssignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                List<SystemUser> unAssignedUsers = newValue;
+                obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
+            });
+
+            unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
+
+            TaskExecutor.executeTasks(Arrays.asList(assignedUsersTask, unAssignedUsersTask));
         } catch (Exception e) {
             displayError(e);
             e.printStackTrace(); //TODO replace with log to the database?
         }
-
-        listUsers.setItems(obsAssignedUsers);
     }
 
     private void userListener() {
@@ -275,7 +309,13 @@ public class InstallationInfoController extends BaseController implements Initia
             });
             displayImage();
             try {
-                getModelsHandler().getInstallationModel().updateInstallation(installation);
+                Task<Installation> updateInstallationTask = getModelsHandler()
+                        .getInstallationModel()
+                        .updateInstallation(installation);
+
+                updateInstallationTask.setOnFailed(event -> displayError(updateInstallationTask.getException()));
+
+                TaskExecutor.executeTask(updateInstallationTask);
             } catch (Exception e) {
                 displayError(e);
             }

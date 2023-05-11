@@ -170,14 +170,25 @@ public class ProjectInfoController extends BaseController implements Initializab
 
     private void loadInstallations() {
         try {
-            installations = getModelsHandler().getInstallationModel().getAllInstallations(project.getID());
+            Task<ObservableList<Installation>> allInstallationsTask = getModelsHandler()
+                    .getInstallationModel()
+                    .getAllInstallations(project.getID());
+
+            allInstallationsTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                installations = newValue;
+
+                for (Installation i : installations) {
+                    showInstallation(i);
+                }
+            });
+
+            allInstallationsTask.setOnFailed(event -> displayError(allInstallationsTask.getException()));
+
+            TaskExecutor.executeTask(allInstallationsTask);
+
         } catch (Exception e) {
             e.printStackTrace();
             displayError(e);
-        }
-
-        for (Installation i : installations) {
-            showInstallation(i);
         }
     }
 

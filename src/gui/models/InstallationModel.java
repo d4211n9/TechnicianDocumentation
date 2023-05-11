@@ -6,6 +6,7 @@ import bll.interfaces.IInstallationManager;
 import bll.managers.InstallationManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 import java.util.List;
 
@@ -17,29 +18,109 @@ public class InstallationModel {
         installationManager = new InstallationManager();
     }
 
-    public Installation createInstallation(Installation installation) throws Exception {
-        return installationManager.createInstallation(installation);
+    public Task<Installation> createInstallation(Installation installation) {
+        Task<Installation> createInstallationTask = new Task<>() {
+            @Override
+            protected Installation call() throws Exception {
+                Installation createdInstallation = installationManager.createInstallation(installation);
+
+                updateValue(createdInstallation);
+
+                return createdInstallation;
+            }
+        };
+
+        return createInstallationTask;
     }
 
-    public ObservableList<Installation> getAllInstallations(int projectID) throws Exception {
-        allInstallations = FXCollections.observableList(installationManager.getInstallationsFromProject(projectID));
-        return allInstallations;
+    public Task<ObservableList<Installation>> getAllInstallations(int projectID) {
+        Task<ObservableList<Installation>> allInstallationsTask = new Task<>() {
+            @Override
+            protected ObservableList<Installation> call() throws Exception {
+                allInstallations = FXCollections.observableList(installationManager.getInstallationsFromProject(projectID));
+
+                updateValue(allInstallations);
+
+                return allInstallations;
+            }
+        };
+
+        return allInstallationsTask;
     }
 
-    public Installation updateInstallation(Installation installation) throws Exception {
-        return installationManager.updateInstallation(installation);
+    public Task<Installation> updateInstallation(Installation installation) {
+        Task<Installation> updateInstallationTask = new Task<>() {
+            @Override
+            protected Installation call() throws Exception {
+                Installation updatedInstallation = installationManager.updateInstallation(installation);
+
+                updateValue(updatedInstallation);
+
+                return updatedInstallation;
+            }
+        };
+
+        return updateInstallationTask;
     }
 
-    public List<SystemUser> getSystemUsersAssignedToInstallation(int installationId) throws Exception {
-        return installationManager.getSystemUsersAssignedToInstallation(installationId);
+    public Task<List<SystemUser>> getSystemUsersAssignedToInstallation(int installationId) {
+        Task<List<SystemUser>> usersAssignedToInstallationTask = new Task<>() {
+            @Override
+            protected List<SystemUser> call() throws Exception {
+                List<SystemUser> usersAssignedToInstallation =  installationManager
+                        .getSystemUsersAssignedToInstallation(installationId);
+
+                updateValue(usersAssignedToInstallation);
+
+                return usersAssignedToInstallation;
+            }
+        };
+
+        return usersAssignedToInstallationTask;
     }
-    public List<SystemUser> getSystemUsersNotAssignedToInstallation(int installationId) throws Exception {
-        return installationManager.getSystemUsersNotAssignedToInstallation(installationId);
+    public Task<List<SystemUser>> getSystemUsersNotAssignedToInstallation(int installationId) {
+        Task<List<SystemUser>> usersNotAssignedToInstallationTask = new Task<>() {
+            @Override
+            protected List<SystemUser> call() throws Exception {
+                List<SystemUser> usersNotAssignedToInstallation =  installationManager
+                        .getSystemUsersNotAssignedToInstallation(installationId);
+
+                updateValue(usersNotAssignedToInstallation);
+
+                return usersNotAssignedToInstallation;
+            }
+        };
+
+        return usersNotAssignedToInstallationTask;
     }
-    public boolean assignSystemUserToInstallation(int installationId, String systemUserEmailToAssign) throws Exception {
-        return installationManager.assignSystemUserToInstallation(installationId, systemUserEmailToAssign);
+    public Task<Boolean> assignSystemUserToInstallation(int installationId, String systemUserEmailToAssign) {
+        Task<Boolean> assignUserToInstallationTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                boolean successfullyAssignedUserToInstallation = installationManager
+                        .assignSystemUserToInstallation(installationId, systemUserEmailToAssign);
+
+                updateValue(successfullyAssignedUserToInstallation);
+
+                return successfullyAssignedUserToInstallation;
+            }
+        };
+
+        return assignUserToInstallationTask;
     }
-    public boolean deleteSystemUserAssignedToInstallation(int installationId, String systemUserEmailToDelete) throws Exception {
-        return installationManager.deleteSystemUserAssignedToInstallation(installationId, systemUserEmailToDelete);
+    public Task<Boolean> deleteSystemUserAssignedToInstallation(int installationId, String systemUserEmailToDelete) {
+        Task<Boolean> deleteUserAssignedToInstallationTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                boolean successfullyDeletedUserAssignedToInstallation = installationManager
+                        .deleteSystemUserAssignedToInstallation(installationId, systemUserEmailToDelete);
+
+                updateValue(successfullyDeletedUserAssignedToInstallation);
+
+                return successfullyDeletedUserAssignedToInstallation;
+            }
+        };
+
+        return deleteUserAssignedToInstallationTask;
     }
 }
