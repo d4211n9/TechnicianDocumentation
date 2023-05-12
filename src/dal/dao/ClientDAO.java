@@ -66,10 +66,10 @@ public class ClientDAO implements IClientDAO {
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 //Mapping the client address
-                int addressID = resultSet.getInt(8);
-                String street = resultSet.getString(9);
-                String postalCode = resultSet.getString(10);
-                String city = resultSet.getString(11);
+                int addressID = resultSet.getInt(9);
+                String street = resultSet.getString(10);
+                String postalCode = resultSet.getString(11);
+                String city = resultSet.getString(12);
                 Address clientAddress = new Address(addressID, street, postalCode, city);
 
                 //Mapping the client
@@ -119,7 +119,10 @@ public class ClientDAO implements IClientDAO {
     public List<Client> getAllModifiedClients(Timestamp lastCheck) throws Exception {
         List<Client> allClients = new ArrayList<>();
 
-        String sql = "SELECT * FROM Client WHERE LastModified>?;";
+        String sql = "SELECT * FROM Client " +
+                "INNER JOIN Address " +
+                "ON Address.ID = Client.AddressID " +
+                "WHERE LastModified>?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -128,15 +131,21 @@ public class ClientDAO implements IClientDAO {
 
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
+                //Mapping the client address
+                int addressID = resultSet.getInt(9);
+                String street = resultSet.getString(10);
+                String postalCode = resultSet.getString(11);
+                String city = resultSet.getString(12);
+                Address clientAddress = new Address(addressID, street, postalCode, city);
+
                 //Mapping the client
                 int clientID = resultSet.getInt(1);
                 String clientName = resultSet.getString(2);
-                String clientLocation = resultSet.getString(3);
                 String email = resultSet.getString(4);
                 String phone = resultSet.getString(5);
                 String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
 
                 allClients.add(client);
             }

@@ -3,6 +3,7 @@ package gui.controllers.clientController;
 import be.Address;
 import be.Client;
 import be.Enum.SystemRole;
+import com.jfoenix.controls.JFXButton;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
@@ -29,8 +30,6 @@ public class ClientController extends TableViewController implements Initializab
     private VBox clientView;
 
     private JFXButton editButton, deleteButton;
-
-    private NodeAccessLevel buttonAccessLevel;
     @FXML
     private TextField txtfSearch;
 

@@ -168,11 +168,14 @@ public class ProjectDAO implements IProjectDAO {
         ArrayList<Project> allProjects = new ArrayList<>();
 
         String sql = "SELECT " +
-                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[Location] AS 'ProjectLocation', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
-                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.ClientLocation, Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType' " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
+                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType', " +
+                "ClientAddress.ID AS 'ClientAddressID', ClientAddress.Street AS 'ClientStreet', ClientAddress.PostalCode AS 'ClientPostalCode', ClientAddress.City AS 'ClientCity', " +
+                "ProjectAddress.ID AS 'ProjectAddressID', ProjectAddress.Street AS 'ProjectStreet', ProjectAddress.PostalCode AS 'ProjectPostalCode', ProjectAddress.City AS 'ProjectCity' " +
                 "FROM Project " +
-                "INNER JOIN Client " +
-                "ON Client.ID=Project.Client " +
+                "INNER JOIN Client ON Client.ID=Project.Client " +
+                "INNER JOIN Address ClientAddress ON ClientAddress.ID = Client.AddressID " +
+                "INNER JOIN Address ProjectAddress ON ProjectAddress.ID = Project.AddressID " +
                 "WHERE Project.LastModified>?;";
 
         try (Connection connection = connector.getConnection();
@@ -182,24 +185,36 @@ public class ProjectDAO implements IProjectDAO {
 
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
+                //Mapping the client address
+                int clientAddressID = resultSet.getInt("ClientAddressID");
+                String clientStreet = resultSet.getString("ClientStreet");
+                String clientPostalCode = resultSet.getString("ClientPostalCode");
+                String clientCity = resultSet.getString("ClientCity");
+                Address clientAddress = new Address(clientAddressID, clientStreet, clientPostalCode, clientCity);
+
                 //Mapping the client
                 int clientID = resultSet.getInt("ClientID");
                 String clientName = resultSet.getString("ClientName");
-                String clientLocation = resultSet.getString("ClientLocation");
                 String email = resultSet.getString("ClientEmail");
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
 
-                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+
+                //Mapping the project address
+                int projectAddressID = resultSet.getInt("ProjectAddressID");
+                String projectStreet = resultSet.getString("ProjectStreet");
+                String projectPostalCode = resultSet.getString("ProjectPostalCode");
+                String projectCity = resultSet.getString("ProjectCity");
+                Address projectAddress = new Address(projectAddressID, projectStreet, projectPostalCode, projectCity);
 
                 //Mapping the project
                 int ID = resultSet.getInt("ProjectID");
                 String name = resultSet.getString("ProjectName");
-                String location = resultSet.getString("ProjectLocation");
                 Date created = resultSet.getDate("ProjectCreated");
                 String description = resultSet.getString("ProjectDescription");
 
-                Project project = new Project(ID, name, client, location, created, description);
+                Project project = new Project(ID, name, client, projectAddress, created, description);
 
                 allProjects.add(project);
             }
