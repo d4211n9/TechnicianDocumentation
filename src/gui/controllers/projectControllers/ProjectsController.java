@@ -41,6 +41,7 @@ public class ProjectsController extends TableViewController implements Initializ
         initializeButtonAccessLevels();
         projectsView.getChildren().add(addButtons());
         tvListener();
+        tvListener();
     }
 
     private void initializeButtonAccessLevels() {
@@ -75,7 +76,7 @@ public class ProjectsController extends TableViewController implements Initializ
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Project project = (Project) tableView.getSelectionModel().getSelectedItem();
+            Project project = (Project) tableView.getSelectionModel().getSelectedItem();//todo den burde lige vise hvis der er nogle installationer der ikke er færdige
             if(showQuestionDialog(project.toString(), true)){
                 handleDelete(project);
             }

@@ -82,7 +82,7 @@ public class ClientController extends TableViewController implements Initializab
 
         deleteButton.setOnMouseClicked(event -> {
             Client client = (Client) tableView.getSelectionModel().getSelectedItem();
-            if(showQuestionDialog(client.toString(), true)){
+            if(showQuestionDialog(client.toString(), true)){//todo burde lige advarer hvis der stadigt er projekter der er i gang værende på projektet 
                 handleDelete(client);
             }
         });
