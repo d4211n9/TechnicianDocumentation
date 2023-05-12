@@ -1,7 +1,6 @@
 package gui.controllers.projectControllers;
 
 import be.Enum.SystemRole;
-import be.Installation;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;

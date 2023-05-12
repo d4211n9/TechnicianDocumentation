@@ -2,7 +2,6 @@ package gui.controllers.clientController;
 
 import be.Client;
 import be.Enum.SystemRole;
-import be.Installation;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
