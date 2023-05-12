@@ -105,7 +105,6 @@ public class UsersController extends TableViewController implements Initializabl
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
-        executorService.shutdown();
 
     }
 
