@@ -98,9 +98,6 @@ public class ProjectModel implements Runnable {
         projectManager.deleteProject(deletedProject);
     }
 
-    public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
-        projectManager.assignSystemUserToProject(projectId, systemUserEmail);
-    }
     public Task<Void> assignSystemUserToProject(int projectId, String systemUserEmail) {
         Task<Void> assignUserToProjectTask = new Task<>() {
             @Override

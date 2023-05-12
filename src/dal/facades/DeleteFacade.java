@@ -51,5 +51,7 @@ public class DeleteFacade {
                 deleteProject(p);
             }
         }
+        deletedClient.setDeleted(new Timestamp(System.currentTimeMillis()));
+        clientDAO.updateClient(deletedClient);
     }
 }
