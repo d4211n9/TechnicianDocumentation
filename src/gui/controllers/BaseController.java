@@ -33,7 +33,6 @@ public class BaseController {
     public NodeAccessLevel buttonAccessLevel;
 
     public static ScheduledExecutorService executorService;
-    static ScheduledFuture future;
 
 
     public ModelsHandler getModelsHandler() throws Exception {
@@ -48,7 +47,12 @@ public class BaseController {
         if (executorService != null) {
             executorService.shutdownNow();
         }
-        executorService = Executors.newScheduledThreadPool(runnable.size());
+
+        executorService = Executors.newScheduledThreadPool(runnable.size(), r -> {
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            return thread;
+        });
         for (Runnable run: runnable) {
             try {
                 executorService.scheduleWithFixedDelay(run, 0, 3, TimeUnit.SECONDS);
@@ -59,6 +63,7 @@ public class BaseController {
             }
         }
     }
+
 
     /**
      * Opens a new window
