@@ -16,14 +16,16 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ClientController extends TableViewController implements Initializable {
 
     @FXML
-    private TableColumn<Client, String> tcName, tcLocation, tcEmail, tcPhone;
+    private TableColumn<Client, String> tcName, tcEmail, tcPhone, tcStreet, tcPostalCode, tcCity;
     @FXML
     private VBox clientView;
     @FXML
@@ -35,11 +37,25 @@ public class ClientController extends TableViewController implements Initializab
         initializeButtonAccessLevels();
         clientView.getChildren().add(addButtons());
         tvListener();
+
+        clientBackgroundUpdate();//should be last in initialize
+    }
+
+    private void clientBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getClientModel());
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tcStreet.setCellValueFactory(new PropertyValueFactory<>("street"));
+        tcPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         try {
@@ -82,7 +98,7 @@ public class ClientController extends TableViewController implements Initializab
 
         deleteButton.setOnMouseClicked(event -> {
             Client client = (Client) tableView.getSelectionModel().getSelectedItem();
-            if(showQuestionDialog(client.toString(), true)){//todo burde lige advarer hvis der stadigt er projekter der er i gang værende på projektet 
+            if(showQuestionDialog(client.toString(), true)){//todo burde lige advarer hvis der stadigt er projekter der er i gang værende på projektet
                 handleDelete(client);
             }
         });

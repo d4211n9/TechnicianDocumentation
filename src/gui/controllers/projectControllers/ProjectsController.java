@@ -18,16 +18,14 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ProjectsController extends TableViewController implements Initializable {
 
     @FXML
     private VBox projectsView;
     @FXML
-    private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
+    private TableColumn<Project, String> tcProjectName, tcClient, tcStreet, tcPostalCode, tcCity;
     @FXML
     private TableColumn<Project, Integer> tcID;
     @FXML
@@ -35,13 +33,25 @@ public class ProjectsController extends TableViewController implements Initializ
     @FXML
     private TextField txtfSearch;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
         initializeButtonAccessLevels();
         projectsView.getChildren().add(addButtons());
         tvListener();
-        tvListener();
+        projectBackgroundUpdate();
+    }
+
+    private void projectBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getProjectModel());
+
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void initializeButtonAccessLevels() {
@@ -95,7 +105,9 @@ public class ProjectsController extends TableViewController implements Initializ
     private void loadTableView() {
         tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
         tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tcStreet.setCellValueFactory(new PropertyValueFactory<>("street"));
+        tcPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
         try {

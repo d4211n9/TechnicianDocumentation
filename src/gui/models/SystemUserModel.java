@@ -9,23 +9,23 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SystemUserModel {
+public class SystemUserModel implements Runnable {
 
     private ISystemUserManager systemUserManager;
     private static ObservableObjectValue<SystemUser> loggedInSystemUser;
-
     private List<SystemUser> allUsers;
-
     private String searchString;
     private ObservableList<SystemUser> filteredUserList;
-
     private  List<SystemUser> copyAllUsers;
+
+    private Timestamp lastUpdatedTime;
 
     public SystemUserModel() throws Exception {
         loggedInSystemUser = new SimpleObjectProperty<>(null);
@@ -33,16 +33,31 @@ public class SystemUserModel {
 
         allUsers = retrieveAllUsers();
         copyAllUsers = new ArrayList<>(allUsers);
+
         filteredUserList = FXCollections.observableList(copyAllUsers);
+        lastUpdatedTime = new Timestamp(System.currentTimeMillis());
     }
 
     public List<SystemUser> retrieveAllUsers() throws Exception {
-        return systemUserManager.getAllSystemUsers();
+        copyAllUsers = new ArrayList<>(systemUserManager.getAllSystemUsers());
+        return copyAllUsers;
     }
 
-    public boolean SystemUserValidLogin(SystemUser user) throws Exception {
-        loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
-        return loggedInSystemUser.get() != null;
+    public Task<Boolean> SystemUserValidLogin(SystemUser user) {
+        Task<Boolean> validLoginTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
+
+                boolean isValidLogin = loggedInSystemUser.get() != null;
+
+                updateValue(isValidLogin);
+
+                return isValidLogin;
+            }
+        };
+
+        return validLoginTask;
     }
 
     public ObservableValue<SystemUser> getLoggedInSystemUser() {
@@ -63,13 +78,23 @@ public class SystemUserModel {
         }
     }
 
-    public SystemUser createSystemUser(SystemUser user) throws Exception {
-        SystemUser createdUser = systemUserManager.createSystemUser(user);
-        if(createdUser != null){
-            allUsers.add(createdUser);
-            search(searchString);
-        }
-        return createdUser;
+    public Task<SystemUser> createSystemUser(SystemUser user) {
+        Task<SystemUser> createSystemUserTask = new Task<>() {
+            @Override
+            protected SystemUser call() throws Exception {
+                SystemUser createdUser = systemUserManager.createSystemUser(user);
+
+                if(createdUser != null){
+                    allUsers.add(createdUser);
+                    search(searchString);
+                }
+                updateValue(createdUser);
+
+                return createdUser;
+            }
+        };
+
+        return createSystemUserTask;
     }
 
     public ObservableList<SystemRole> getAllRoles(){
@@ -77,14 +102,44 @@ public class SystemUserModel {
         return list;
     }
 
-    public boolean updateSystemUser(SystemUser user, SystemUser originalUser) throws Exception{
-        if(systemUserManager.updateSystemUser(user) != null){
-            allUsers.remove(originalUser);
-            allUsers.add(user);
-            search(searchString);
-            return true;
+    public Task<Boolean> updateSystemUser(SystemUser user, SystemUser originalUser) {
+        Task<Boolean> updateSystemUserTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                boolean successfullyUpdatedUser = systemUserManager.updateSystemUser(user) != null;
+
+                if(successfullyUpdatedUser){
+                    allUsers.remove(originalUser);
+                    allUsers.add(user);
+
+                    search(searchString);
+                }
+
+                updateValue(successfullyUpdatedUser);
+                return successfullyUpdatedUser;
+            }
+        };
+
+        return updateSystemUserTask;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("user update");
+
+        List<SystemUser> updatedSystemUsers;
+        try {
+            updatedSystemUsers = systemUserManager.getAllModifiedUsers(lastUpdatedTime);
+            lastUpdatedTime.setTime(System.currentTimeMillis());
+
+            if(updatedSystemUsers.size() > 0){
+                allUsers = retrieveAllUsers();
+                search(searchString);
+            }
+            Thread.sleep(300);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {

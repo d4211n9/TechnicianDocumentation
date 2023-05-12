@@ -12,6 +12,7 @@ import dal.interfaces.IProjectDAO;
 import dal.interfaces.ISystemUserAssignedToInstallationDAO;
 import dal.interfaces.ISystemUsersAssignedToProjectsDAO;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ProjectFacade {
@@ -78,5 +79,9 @@ public class ProjectFacade {
     }
     public boolean deleteSystemUserAssignedToInstallation(int installationId, String systemUserEmailToDelete) throws Exception {
         return systemUsersAssignedToInstallationDAO.deleteSystemUserAssignedToInstallation(installationId, systemUserEmailToDelete);
+    }
+
+    public List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception{
+        return projectDAO.getModifiedProjects(lastCheck);
     }
 }

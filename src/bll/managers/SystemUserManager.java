@@ -7,19 +7,21 @@ import bll.util.Search;
 import dal.dao.SystemUserDAO;
 import dal.facades.DeleteFacade;
 import dal.interfaces.ISystemUserDAO;
+import util.Searchable;
 
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {
     private ISystemUserDAO systemUserDAO;
     private DeleteFacade deleteFacade;
-    private Search search;
+    private Search<SystemUser> search;
     public SystemUserManager() throws Exception {
         systemUserDAO = new SystemUserDAO();
         deleteFacade = new DeleteFacade();
-        search = new Search();
+        search = new Search<>();
     }
 
     @Override
@@ -64,5 +66,10 @@ public class SystemUserManager implements ISystemUserManager {
     @Override
     public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {
         deleteFacade.deleteSystemUser(deletedSystemUser);
+    }
+
+    @Override
+    public List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception {
+        return systemUserDAO.getAllModifiedUsers(lastUpdateTime);
     }
 }

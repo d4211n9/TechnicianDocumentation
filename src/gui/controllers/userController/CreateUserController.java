@@ -4,6 +4,8 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -57,13 +59,9 @@ public class CreateUserController extends BaseController implements Initializabl
 
     public void handleConfirm(ActionEvent actionEvent) {
         SystemUser user = createSystemUserFromFields();
-        if(user != null){
-            try {
-                getModelsHandler().getSystemUserModel().createSystemUser(createSystemUserFromFields());
-                handleBack();
-            } catch (Exception e) {
-                displayError(e);
-            }
+
+        if(user != null) {
+            createUser(user);
         }
     }
 
@@ -113,15 +111,43 @@ public class CreateUserController extends BaseController implements Initializabl
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
                 SystemUser systemUser = createSystemUserFromFields();
-                try {
-                    getModelsHandler().getSystemUserModel().updateSystemUser(systemUser, selectedUser);
-                    handleBack();
-                } catch (Exception e) {
-                    displayError(e);
-                }
+
+                updateUser(systemUser);
             }
         });
     }
 
+    private void createUser(SystemUser user) {
+        try {
+            Task<SystemUser> createSystemUserTask = getModelsHandler()
+                    .getSystemUserModel()
+                    .createSystemUser(user);
 
+            createSystemUserTask.setOnFailed(event -> displayError(createSystemUserTask.getException()));
+
+            TaskExecutor.executeTask(createSystemUserTask);
+
+            handleBack();
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void updateUser(SystemUser systemUser) {
+        try {
+            Task<Boolean> updateSystemUserTask = getModelsHandler()
+                    .getSystemUserModel()
+                    .updateSystemUser(systemUser, selectedUser);
+
+            updateSystemUserTask.setOnFailed(failedEvent -> displayError(updateSystemUserTask.getException()));
+
+            TaskExecutor.executeTask(updateSystemUserTask);
+
+            handleBack();
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
 }

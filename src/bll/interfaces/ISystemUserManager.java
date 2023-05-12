@@ -1,6 +1,8 @@
 package bll.interfaces;
 
 import be.SystemUser;
+
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface ISystemUserManager {
@@ -11,4 +13,5 @@ public interface ISystemUserManager {
     List<SystemUser> getAllSystemUsers() throws Exception;
     SystemUser updateSystemUser(SystemUser user) throws Exception;
     void deleteSystemUser(SystemUser deletedSystemUser) throws Exception;
+    List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception;
 }

@@ -7,6 +7,7 @@ import dal.dao.ClientDAO;
 import dal.facades.DeleteFacade;
 import dal.interfaces.IClientDAO;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ClientManager implements IClientManager {
@@ -43,5 +44,10 @@ public class ClientManager implements IClientManager {
     @Override
     public void deleteClient(Client deletedClient) throws Exception {
         deleteFacade.deleteClient(deletedClient);
+    }
+
+    @Override
+    public List<Client> getAllModifiedClients(Timestamp lastCheck) throws Exception {
+        return clientDAO.getAllModifiedClients(lastCheck);
     }
 }

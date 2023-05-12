@@ -7,6 +7,7 @@ import bll.util.Search;
 import dal.facades.DeleteFacade;
 import dal.facades.ProjectFacade;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ProjectManager implements IProjectManager {
@@ -52,6 +53,11 @@ public class ProjectManager implements IProjectManager {
     @Override
     public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {
         projectFacade.assignSystemUserToProject(projectId, systemUserEmail);
+    }
+
+    @Override
+    public List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception {
+        return projectFacade.getModifiedProjects(lastCheck);
     }
 
     @Override
