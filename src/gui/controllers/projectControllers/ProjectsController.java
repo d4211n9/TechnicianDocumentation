@@ -1,10 +1,8 @@
 package gui.controllers.projectControllers;
 
-import be.Address;
 import be.Enum.SystemRole;
 import be.Project;
 import gui.controllers.TableViewController;
-import com.jfoenix.controls.JFXButton;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -41,7 +38,7 @@ public class ProjectsController extends TableViewController implements Initializ
         initializeButtonAccessLevels();
         projectsView.getChildren().add(addButtons());
         tvListener();
-        projectBackgroundUpdate();;
+        projectBackgroundUpdate();
     }
 
     private void projectBackgroundUpdate() {

@@ -3,7 +3,6 @@ package gui.controllers.userController;
 import be.Enum.SystemRole;
 import be.SystemUser;
 import gui.controllers.TableViewController;
-import gui.models.ModelsHandler;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,9 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 
 public class UsersController extends TableViewController implements Initializable {

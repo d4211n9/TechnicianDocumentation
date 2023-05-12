@@ -1,9 +1,7 @@
 package gui.controllers.clientController;
 
-import be.Address;
 import be.Client;
 import be.Enum.SystemRole;
-import com.jfoenix.controls.JFXButton;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
@@ -28,8 +26,6 @@ public class ClientController extends TableViewController implements Initializab
     private TableColumn<Client, String> tcName, tcEmail, tcPhone, tcStreet, tcPostalCode, tcCity;
     @FXML
     private VBox clientView;
-
-    private JFXButton editButton, deleteButton;
     @FXML
     private TextField txtfSearch;
 
