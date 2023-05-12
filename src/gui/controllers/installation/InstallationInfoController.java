@@ -2,6 +2,7 @@ package gui.controllers.installation;
 
 import be.Enum.SystemRole;
 import be.Installation;
+import be.Photo;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -266,12 +267,15 @@ public class InstallationInfoController extends BaseController implements Initia
             files.forEach((File f) ->
             {
                 try {
+                    //TODO opret Photo med byte[] constructor
                     byte[] fileContent = Files.readAllBytes(f.toPath());
-                    installation.setDrawingBytes(fileContent);
+                    Photo photo = new Photo(installation.getID(), fileContent, "billede beskrivelse..");
+                    //getPhotoModel.Create(photo);
+                    //installation.setDrawingBytes(fileContent);
                 } catch (Exception e) {
                     displayError(e);
                 }
-                images.add(new Image(f.toURI().toString()));
+                //images.add(new Image(f.toURI().toString()));
             });
             displayImage();
             try {
