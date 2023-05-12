@@ -53,7 +53,6 @@ public class SystemUserDAO implements ISystemUserDAO {
             return systemUser;
         }
         catch (SQLException e) {
-            e.printStackTrace();
             DALException dalException = new DALException("Failed to validate login", e);
             dalException.printStackTrace(); //TODO Log error in database
             throw dalException;

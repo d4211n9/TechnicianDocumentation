@@ -44,7 +44,7 @@ public class BaseController {
         return MainControllerHandler.getInstance().getController();
     }
 
-    public static void backgroundUpdate(List<Runnable> runnable) throws ExecutionException, InterruptedException {
+    public static void backgroundUpdate(List<Runnable> runnable) throws Exception {
         if (executorService != null) {
             executorService.shutdownNow();
         }
@@ -53,7 +53,9 @@ public class BaseController {
             try {
                 executorService.scheduleWithFixedDelay(run, 0, 3, TimeUnit.SECONDS);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                GUIException guiException = new GUIException("Failed to background update", e);
+                guiException.printStackTrace();
+                throw guiException;
             }
         }
     }

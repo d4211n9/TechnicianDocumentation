@@ -43,10 +43,9 @@ public class ClientController extends TableViewController implements Initializab
         try {
             List<Runnable> backgroundUpdateList = new ArrayList<>();
             backgroundUpdateList.add(getModelsHandler().getClientModel());
-            backgroundUpdateList.add(getModelsHandler().getSystemUserModel());
             backgroundUpdate(backgroundUpdateList);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            displayError(e);
         }
     }
 
