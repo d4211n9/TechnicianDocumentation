@@ -64,9 +64,7 @@ public class ProjectModel {
     }
 
     public void deleteProject(Project deletedProject) throws Exception {
-        deletedProject.setDeleted(new Timestamp(System.currentTimeMillis()));
-        projectManager.updateProject(deletedProject);
-        allProjects.remove(deletedProject);
+        projectManager.deleteProject(deletedProject);
     }
 
     public void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception {

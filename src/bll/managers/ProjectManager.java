@@ -4,12 +4,14 @@ import be.Project;
 import be.SystemUser;
 import bll.interfaces.IProjectManager;
 import bll.util.Search;
+import dal.facades.DeleteFacade;
 import dal.facades.ProjectFacade;
 
 import java.util.List;
 
 public class ProjectManager implements IProjectManager {
     private ProjectFacade projectFacade;
+    private DeleteFacade deleteFacade;
     private Search search;
 
     public ProjectManager() throws Exception {
@@ -30,6 +32,11 @@ public class ProjectManager implements IProjectManager {
     @Override
     public Project updateProject(Project project) throws Exception {
         return projectFacade.updateProject(project);
+    }
+
+    @Override
+    public void deleteProject(Project deletedProject) throws Exception {
+        deleteFacade.deleteProject(deletedProject);
     }
 
     @Override

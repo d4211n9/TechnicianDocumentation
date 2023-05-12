@@ -88,8 +88,6 @@ public class SystemUserModel {
     }
 
     public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {
-        deletedSystemUser.setDeleted(new Timestamp(System.currentTimeMillis()));
-        systemUserManager.updateSystemUser(deletedSystemUser);
-        allUsers.remove(deletedSystemUser);
+        systemUserManager.deleteSystemUser(deletedSystemUser);
     }
 }

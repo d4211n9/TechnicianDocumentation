@@ -85,12 +85,6 @@ public class ProjectsController extends TableViewController implements Initializ
 
     private void handleDelete(Project project) {
         try {
-            for(Installation installation : getModelsHandler().getInstallationModel().getAllInstallations(project.getID())) {
-                System.out.println(installation.getID() + " [INSTALLATION DELETED]");
-                System.out.println(getModelsHandler().getInstallationModel().getAllInstallations(project.getID()).size());
-                getModelsHandler().getInstallationModel().deleteInstallation(installation);
-            }
-            System.out.println(project.getName() + " [PROJECT DELETED]");
             getModelsHandler().getProjectModel().deleteProject(project);
             handleSearch();
         } catch (Exception e) {

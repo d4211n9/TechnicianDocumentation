@@ -10,4 +10,5 @@ public interface ISystemUserManager {
     SystemUser createSystemUser(SystemUser user) throws Exception;
     List<SystemUser> getAllSystemUsers() throws Exception;
     SystemUser updateSystemUser(SystemUser user) throws Exception;
+    void deleteSystemUser(SystemUser deletedSystemUser) throws Exception;
 }

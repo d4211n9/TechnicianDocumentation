@@ -32,9 +32,7 @@ public class InstallationModel {
     }
 
     public void deleteInstallation(Installation deletedInstallation) throws Exception {
-        deletedInstallation.setDeleted(new Timestamp(System.currentTimeMillis()));
-        installationManager.updateInstallation(deletedInstallation);
-        allInstallations.remove(deletedInstallation);
+        installationManager.deleteInstallation(deletedInstallation);
     }
 
     public List<SystemUser> getSystemUsersAssignedToInstallation(int installationId) throws Exception {

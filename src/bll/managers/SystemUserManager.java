@@ -5,6 +5,7 @@ import bll.interfaces.ISystemUserManager;
 import bll.util.BCrypt;
 import bll.util.Search;
 import dal.dao.SystemUserDAO;
+import dal.facades.DeleteFacade;
 import dal.interfaces.ISystemUserDAO;
 
 
@@ -12,13 +13,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {
-    ISystemUserDAO systemUserDAO;
-    Search search;
+    private ISystemUserDAO systemUserDAO;
+    private DeleteFacade deleteFacade;
+    private Search search;
     public SystemUserManager() throws Exception {
         systemUserDAO = new SystemUserDAO();
+        deleteFacade = new DeleteFacade();
         search = new Search();
-
-
     }
 
     @Override
@@ -58,5 +59,10 @@ public class SystemUserManager implements ISystemUserManager {
         user.setPassword(hashedPassword);
 
         return systemUserDAO.updateSystemUser(user);
+    }
+
+    @Override
+    public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {
+        deleteFacade.deleteSystemUser(deletedSystemUser);
     }
 }

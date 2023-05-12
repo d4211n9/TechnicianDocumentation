@@ -64,9 +64,6 @@ public class ClientModel {
     }
 
     public void deleteClient(Client deletedClient) throws Exception {
-        deletedClient.setDeleted(new Timestamp(System.currentTimeMillis()));
-        clientManager.updateClient(deletedClient);
-        allClients.remove(deletedClient);
-
+        clientManager.deleteClient(deletedClient);
     }
 }

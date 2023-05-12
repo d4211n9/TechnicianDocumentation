@@ -13,6 +13,7 @@ public interface IProjectManager {
     Project softDeleteProject(Project project) throws Exception;
 
     Project updateProject(Project project) throws Exception;
+    void deleteProject(Project deletedProject) throws Exception;
 
     List<Project> search(List<Project> allProjects, String query);
 
