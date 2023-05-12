@@ -6,6 +6,7 @@ import bll.util.Search;
 import dal.dao.ClientDAO;
 import dal.interfaces.IClientDAO;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ClientManager implements IClientManager {
@@ -35,5 +36,10 @@ public class ClientManager implements IClientManager {
     @Override
     public Client updateClient(Client client) throws Exception {
         return clientDAO.updateClient(client);
+    }
+
+    @Override
+    public List<Client> getAllModifiedClients(Timestamp lastCheck) throws Exception {
+        return clientDAO.getAllModifiedClients(lastCheck);
     }
 }

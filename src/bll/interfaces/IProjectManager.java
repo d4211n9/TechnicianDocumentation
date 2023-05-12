@@ -2,6 +2,8 @@ package bll.interfaces;
 
 import be.Project;
 import be.SystemUser;
+
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface IProjectManager {
@@ -21,4 +23,6 @@ public interface IProjectManager {
     void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception;
 
     void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception;
+
+    List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception;
 }

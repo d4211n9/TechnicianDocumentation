@@ -4,7 +4,6 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import bll.managers.SystemUserManager;
-import gui.util.TaskExecutor;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
@@ -16,7 +15,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
 
 public class SystemUserModel implements Runnable {
 
@@ -35,13 +33,13 @@ public class SystemUserModel implements Runnable {
 
         allUsers = retrieveAllUsers();
         copyAllUsers = new ArrayList<>(allUsers);
+
         filteredUserList = FXCollections.observableList(copyAllUsers);
         lastUpdatedTime = new Timestamp(System.currentTimeMillis());
     }
 
     public List<SystemUser> retrieveAllUsers() throws Exception {
         copyAllUsers = new ArrayList<>(systemUserManager.getAllSystemUsers());
-        System.out.println("retrived from db duuude");
         return copyAllUsers;
     }
 
@@ -118,7 +116,6 @@ public class SystemUserModel implements Runnable {
                 }
 
                 updateValue(successfullyUpdatedUser);
-
                 return successfullyUpdatedUser;
             }
         };

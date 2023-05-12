@@ -1,6 +1,7 @@
 package gui.models;
 
 import be.Client;
+import be.SystemUser;
 import bll.interfaces.IClientManager;
 import bll.managers.ClientManager;
 import exceptions.GUIException;
@@ -9,23 +10,29 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClientModel implements Runnable {
     private IClientManager clientManager;
     private List<Client> allClients;
+    private List<Client> copyAllClients;
     private ObservableList<Client> filteredClients;
     private String searchString;
+
+    private Timestamp lastUpdatedTime;
 
     public ClientModel() throws Exception {
         clientManager = new ClientManager();
 
-        List<Client> copyAllClients = new ArrayList<>();
-
         allClients = retrieveAllClients();
-        allClients.forEach(client -> copyAllClients.add(client));
+        copyAllClients = new ArrayList<>(allClients);
         filteredClients = FXCollections.observableList(copyAllClients);
+
+        lastUpdatedTime = new Timestamp(System.currentTimeMillis());
+
     }
 
     public Task<Client> createClient(Client client) {
@@ -49,7 +56,8 @@ public class ClientModel implements Runnable {
     }
 
     public List<Client> retrieveAllClients() throws Exception {
-        return clientManager.getAllClients();
+        copyAllClients = new ArrayList<>(clientManager.getAllClients());
+        return copyAllClients;
     }
 
     public ObservableList<Client> getAllClients() {
@@ -88,5 +96,19 @@ public class ClientModel implements Runnable {
     @Override
     public void run() {
         System.out.println("client update");
+
+        List<Client> updatedClients;
+        try {
+            updatedClients = clientManager.getAllModifiedClients(lastUpdatedTime);
+            lastUpdatedTime.setTime(System.currentTimeMillis());
+
+            if(updatedClients.size() > 0){
+                allClients = retrieveAllClients();
+                search(searchString);
+            }
+            Thread.sleep(300);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

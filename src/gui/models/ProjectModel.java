@@ -9,6 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +21,19 @@ public class ProjectModel implements Runnable {
 
     private String searchString;
 
+    private Timestamp lastUpdateTime;
+
+    private List<Project> copyAllProjects;
+
     public ProjectModel() throws Exception {
         projectManager = new ProjectManager();
 
+
         allProjects = retrieveAllProjects();
-        List<Project> copyAllUsers = new ArrayList<>(allProjects);
-        filteredProjectList = FXCollections.observableList(copyAllUsers);
+        copyAllProjects = new ArrayList<>(allProjects);
+
+        filteredProjectList = FXCollections.observableList(copyAllProjects);
+        lastUpdateTime = new Timestamp(System.currentTimeMillis());
     }
 
     public Task<Project> createProject(Project project) {
@@ -48,7 +57,8 @@ public class ProjectModel implements Runnable {
     }
 
     public List<Project> retrieveAllProjects() throws Exception {
-        return projectManager.getAllProjects();
+        copyAllProjects = new ArrayList<>(projectManager.getAllProjects());
+        return copyAllProjects;
     }
 
     public ObservableList<Project> getAllProjects() throws Exception {
@@ -128,16 +138,29 @@ public class ProjectModel implements Runnable {
         filteredProjectList.clear();
         if(query != null) {
             searchString = query;
-            if (!query.isBlank()) {
-                filteredProjectList.addAll(projectManager.search(allProjects, query));
+            filteredProjectList.addAll(projectManager.search(allProjects, query));
             } else {
-                filteredProjectList.addAll(allProjects);
-            }
+            filteredProjectList.addAll(allProjects);
         }
+
     }
 
     @Override
     public void run() {
         System.out.println("projects update");
+
+        List<Project> updatedProjects;
+        try {
+            updatedProjects = projectManager.getModifiedProjects(lastUpdateTime);
+            lastUpdateTime.setTime(System.currentTimeMillis());
+
+            if(updatedProjects.size() > 0){
+                allProjects = retrieveAllProjects();
+                search(searchString);
+            }
+            Thread.sleep(300);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
