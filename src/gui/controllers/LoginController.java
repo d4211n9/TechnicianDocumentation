@@ -57,29 +57,7 @@ public class LoginController extends BaseController implements Initializable {
 
             SystemUser user = new SystemUser(email, password);
 
-            try {
-                Task<Boolean> validLoginTask = getModelsHandler().getSystemUserModel().SystemUserValidLogin(user);
-
-                validLoginTask
-                        .valueProperty()
-                        .addListener((observable, oldValue, newValue) -> {
-                            if (newValue) {
-                                MainControllerHandler.getInstance().getController();
-                                close();
-                            } else {
-                                //TODO Show that something went wrong
-                                lblEmail.setText("Email* Wrong email or password, please try again");
-                                txtfEmail.requestFocus();
-                            }
-                        });
-
-                validLoginTask.setOnFailed(event -> displayError(validLoginTask.getException()));
-
-                TaskExecutor.executeTask(validLoginTask);
-            }
-            catch (Exception e) {
-                displayError(e);
-            }
+            login(user);
         }
     }
 
@@ -93,5 +71,31 @@ public class LoginController extends BaseController implements Initializable {
     private void close() {
         Stage stage = (Stage) ivLogo.getScene().getWindow();
         stage.close();
+    }
+
+    private void login(SystemUser user) {
+        try {
+            Task<Boolean> validLoginTask = getModelsHandler().getSystemUserModel().SystemUserValidLogin(user);
+
+            validLoginTask
+                    .valueProperty()
+                    .addListener((observable, oldValue, newValue) -> {
+                        if (newValue) {
+                            MainControllerHandler.getInstance().getController();
+                            close();
+                        } else {
+                            //TODO Show that something went wrong
+                            lblEmail.setText("Email* Wrong email or password, please try again");
+                            txtfEmail.requestFocus();
+                        }
+                    });
+
+            validLoginTask.setOnFailed(event -> displayError(validLoginTask.getException()));
+
+            TaskExecutor.executeTask(validLoginTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
     }
 }

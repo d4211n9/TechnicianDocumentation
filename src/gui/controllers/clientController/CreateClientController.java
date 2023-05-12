@@ -32,19 +32,24 @@ public class CreateClientController extends BaseController {
         if(isTextFieldInfoValid()){
 
             Client client = bindClientInfo();
-            try {
-                Task<Client> createClientTask = getModelsHandler()
-                        .getClientModel()
-                        .createClient(client);
 
-                createClientTask.setOnFailed(event -> displayError(createClientTask.getException()));
+            createClient(client);
+        }
+    }
 
-                TaskExecutor.executeTask(createClientTask);
+    private void createClient(Client client) {
+        try {
+            Task<Client> createClientTask = getModelsHandler()
+                    .getClientModel()
+                    .createClient(client);
 
-                handleCancel();
-            } catch (Exception e) {
-                displayError(e);
-            }
+            createClientTask.setOnFailed(event -> displayError(createClientTask.getException()));
+
+            TaskExecutor.executeTask(createClientTask);
+
+            handleCancel();
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -88,23 +93,28 @@ public class CreateClientController extends BaseController {
                 Client client = bindClientInfo();
                 client = bindClientID(client);
 
-                try {
-                    Task<Boolean> updateClientTask = getModelsHandler()
-                            .getClientModel()
-                            .updateClient(client, selectedClient);
-
-                    updateClientTask
-                            .setOnFailed(failedEvent -> displayError(updateClientTask.getException()));
-
-                    TaskExecutor.executeTask(updateClientTask);
-
-                    handleCancel();
-                } catch (Exception e) {
-                    displayError(e);
-                }
+                updateClient(client);
             }
         });
     }
+
+    private void updateClient(Client client) {
+        try {
+            Task<Boolean> updateClientTask = getModelsHandler()
+                    .getClientModel()
+                    .updateClient(client, selectedClient);
+
+            updateClientTask
+                    .setOnFailed(failedEvent -> displayError(updateClientTask.getException()));
+
+            TaskExecutor.executeTask(updateClientTask);
+
+            handleCancel();
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
     private Client bindClientInfo(){
         String name = txtfName.getText();
         String email = txtfEmail.getText();

@@ -59,21 +59,9 @@ public class CreateUserController extends BaseController implements Initializabl
 
     public void handleConfirm(ActionEvent actionEvent) {
         SystemUser user = createSystemUserFromFields();
+
         if(user != null) {
-            try {
-                Task<SystemUser> createSystemUserTask = getModelsHandler()
-                        .getSystemUserModel()
-                        .createSystemUser(createSystemUserFromFields());
-
-                createSystemUserTask.setOnFailed(event -> displayError(createSystemUserTask.getException()));
-
-                TaskExecutor.executeTask(createSystemUserTask);
-
-                handleBack();
-            }
-            catch (Exception e) {
-                displayError(e);
-            }
+            createUser(user);
         }
     }
 
@@ -123,23 +111,43 @@ public class CreateUserController extends BaseController implements Initializabl
         button.setOnMouseClicked(event -> {
             if(validateInput()) {
                 SystemUser systemUser = createSystemUserFromFields();
-                try {
-                    Task<Boolean> updateSystemUserTask = getModelsHandler()
-                            .getSystemUserModel()
-                            .updateSystemUser(systemUser, selectedUser);
 
-                    updateSystemUserTask.setOnFailed(failedEvent -> displayError(updateSystemUserTask.getException()));
-
-                    TaskExecutor.executeTask(updateSystemUserTask);
-
-                    handleBack();
-                }
-                catch (Exception e) {
-                    displayError(e);
-                }
+                updateUser(systemUser);
             }
         });
     }
 
+    private void createUser(SystemUser user) {
+        try {
+            Task<SystemUser> createSystemUserTask = getModelsHandler()
+                    .getSystemUserModel()
+                    .createSystemUser(user);
 
+            createSystemUserTask.setOnFailed(event -> displayError(createSystemUserTask.getException()));
+
+            TaskExecutor.executeTask(createSystemUserTask);
+
+            handleBack();
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void updateUser(SystemUser systemUser) {
+        try {
+            Task<Boolean> updateSystemUserTask = getModelsHandler()
+                    .getSystemUserModel()
+                    .updateSystemUser(systemUser, selectedUser);
+
+            updateSystemUserTask.setOnFailed(failedEvent -> displayError(updateSystemUserTask.getException()));
+
+            TaskExecutor.executeTask(updateSystemUserTask);
+
+            handleBack();
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
 }

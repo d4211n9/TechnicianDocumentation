@@ -117,23 +117,29 @@ public class ProjectInfoController extends BaseController implements Initializab
 
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                Task<Void> assignUserToProjectTask = getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
-                        selectedUser.getEmail());
 
-                assignUserToProjectTask.setOnSucceeded(succeddedEvent -> {
-                    obsAssignedUsers.add(selectedUser);
-                    obsUnAssignedUsers.remove(selectedUser);
-                });
-
-                assignUserToProjectTask.setOnFailed(failedEvent -> displayError(assignUserToProjectTask.getException()));
-
-                TaskExecutor.executeTask(assignUserToProjectTask);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+            assignUserToProject(selectedUser);
         });
+    }
+
+    private void assignUserToProject(SystemUser selectedUser) {
+        try {
+            Task<Void> assignUserToProjectTask = getModelsHandler()
+                    .getProjectModel()
+                    .assignSystemUserToProject(project.getID(),
+                    selectedUser.getEmail());
+
+            assignUserToProjectTask.setOnSucceeded(succeddedEvent -> {
+                obsAssignedUsers.add(selectedUser);
+                obsUnAssignedUsers.remove(selectedUser);
+            });
+
+            assignUserToProjectTask.setOnFailed(failedEvent -> displayError(assignUserToProjectTask.getException()));
+
+            TaskExecutor.executeTask(assignUserToProjectTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void addUnAssignUserBtn() {
@@ -146,21 +152,27 @@ public class ProjectInfoController extends BaseController implements Initializab
 
         unAssignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                Task<Void> deleteUserAssignedToProjectTask = getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
-                        selectedUser.getEmail());
 
-                deleteUserAssignedToProjectTask.setOnSucceeded(succeddedEvent -> {
-                    obsAssignedUsers.remove(selectedUser);
-                    obsUnAssignedUsers.add(selectedUser);
-                });
-
-                deleteUserAssignedToProjectTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToProjectTask.getException()));
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+            unAssignUser(selectedUser);
         });
+    }
+
+    private void unAssignUser(SystemUser selectedUser) {
+        try {
+            Task<Void> deleteUserAssignedToProjectTask = getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
+                    selectedUser.getEmail());
+
+            deleteUserAssignedToProjectTask.setOnSucceeded(succeddedEvent -> {
+                obsAssignedUsers.remove(selectedUser);
+                obsUnAssignedUsers.add(selectedUser);
+            });
+
+            deleteUserAssignedToProjectTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToProjectTask.getException()));
+
+            TaskExecutor.executeTask(deleteUserAssignedToProjectTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void addAssignedButton(Button button) {
@@ -187,7 +199,6 @@ public class ProjectInfoController extends BaseController implements Initializab
             TaskExecutor.executeTask(allInstallationsTask);
 
         } catch (Exception e) {
-            e.printStackTrace();
             displayError(e);
         }
     }
@@ -210,6 +221,11 @@ public class ProjectInfoController extends BaseController implements Initializab
     }
 
     private void loadUsers() {
+        loadAssignedUsers();
+        loadUnAssignedUsers();
+    }
+
+    private void loadAssignedUsers() {
         try {
             Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getProjectModel().
                     getSystemUsersAssignedToProject(project.getID());
@@ -222,6 +238,15 @@ public class ProjectInfoController extends BaseController implements Initializab
 
             assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
 
+            TaskExecutor.executeTask(assignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void loadUnAssignedUsers() {
+        try {
             Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getProjectModel().
                     getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
 
@@ -231,10 +256,10 @@ public class ProjectInfoController extends BaseController implements Initializab
 
             unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
 
-            TaskExecutor.executeTasks(Arrays.asList(assignedUsersTask, unAssignedUsersTask));
-        } catch (Exception e) {
+            TaskExecutor.executeTask(unAssignedUsersTask);
+        }
+        catch (Exception e) {
             displayError(e);
-            e.printStackTrace(); //TODO replace with log to the database?
         }
     }
 

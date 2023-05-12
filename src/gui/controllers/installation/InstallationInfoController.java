@@ -133,28 +133,31 @@ public class InstallationInfoController extends BaseController implements Initia
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
 
-            try {
-                Task<Boolean> assignUserToInstallationTask = getModelsHandler()
-                        .getInstallationModel()
-                        .assignSystemUserToInstallation(installation.getID(), selectedUser.getEmail());
-
-                assignUserToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                    if(newValue) {
-                        obsAssignedUsers.add(selectedUser);
-                        obsUnAssignedUsers.remove(selectedUser);
-                    } else {
-                        displayError(new Throwable("Failed to add the user to the installation"));
-                    }
-                });
-
-                assignUserToInstallationTask.setOnFailed(failedEvent -> displayError(assignUserToInstallationTask.getException()));
-
-                TaskExecutor.executeTask(assignUserToInstallationTask);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+            assignUserToInstallation(selectedUser);
         });
+    }
+
+    private void assignUserToInstallation(SystemUser selectedUser) {
+        try {
+            Task<Boolean> assignUserToInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .assignSystemUserToInstallation(installation.getID(), selectedUser.getEmail());
+
+            assignUserToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue) {
+                    obsAssignedUsers.add(selectedUser);
+                    obsUnAssignedUsers.remove(selectedUser);
+                } else {
+                    displayError(new Throwable("Failed to add the user to the installation"));
+                }
+            });
+
+            assignUserToInstallationTask.setOnFailed(failedEvent -> displayError(assignUserToInstallationTask.getException()));
+
+            TaskExecutor.executeTask(assignUserToInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void addUnAssignUserBtn() {
@@ -168,31 +171,39 @@ public class InstallationInfoController extends BaseController implements Initia
         unAssignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
 
-            try {
-                Task<Boolean> deleteUserAssignedToInstallationTask = getModelsHandler()
-                        .getInstallationModel()
-                        .deleteSystemUserAssignedToInstallation(installation.getID(), selectedUser.getEmail());
-
-                deleteUserAssignedToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                    if(newValue) {
-                        obsAssignedUsers.remove(selectedUser);
-                        obsUnAssignedUsers.add(selectedUser);
-                    } else {
-                        displayError(new Throwable("Failed to remove the user from the installation"));
-                    }
-                });
-
-                deleteUserAssignedToInstallationTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToInstallationTask.getException()));
-
-                TaskExecutor.executeTask(deleteUserAssignedToInstallationTask);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+            unAssignUser(selectedUser);
         });
     }
 
+    private void unAssignUser(SystemUser selectedUser) {
+        try {
+            Task<Boolean> deleteUserAssignedToInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .deleteSystemUserAssignedToInstallation(installation.getID(), selectedUser.getEmail());
+
+            deleteUserAssignedToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue) {
+                    obsAssignedUsers.remove(selectedUser);
+                    obsUnAssignedUsers.add(selectedUser);
+                } else {
+                    displayError(new Throwable("Failed to remove the user from the installation"));
+                }
+            });
+
+            deleteUserAssignedToInstallationTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToInstallationTask.getException()));
+
+            TaskExecutor.executeTask(deleteUserAssignedToInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
     private void loadUsers() {
+        loadAssignedUsers();
+        loadUnAssignedUsers();
+    }
+
+    private void loadAssignedUsers() {
         try {
             Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getInstallationModel().
                     getSystemUsersAssignedToInstallation(installation.getID());
@@ -206,6 +217,15 @@ public class InstallationInfoController extends BaseController implements Initia
 
             assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
 
+            TaskExecutor.executeTask(assignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void loadUnAssignedUsers() {
+        try {
             Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getInstallationModel().
                     getSystemUsersNotAssignedToInstallation(installation.getID());
 
@@ -216,10 +236,10 @@ public class InstallationInfoController extends BaseController implements Initia
 
             unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
 
-            TaskExecutor.executeTasks(Arrays.asList(assignedUsersTask, unAssignedUsersTask));
-        } catch (Exception e) {
+            TaskExecutor.executeTask(unAssignedUsersTask);
+        }
+        catch (Exception e) {
             displayError(e);
-            e.printStackTrace(); //TODO replace with log to the database?
         }
     }
 
@@ -319,17 +339,22 @@ public class InstallationInfoController extends BaseController implements Initia
                 images.add(new Image(f.toURI().toString()));
             });
             displayImage();
-            try {
-                Task<Installation> updateInstallationTask = getModelsHandler()
-                        .getInstallationModel()
-                        .updateInstallation(installation);
 
-                updateInstallationTask.setOnFailed(event -> displayError(updateInstallationTask.getException()));
+            updateInstallation();
+        }
+    }
 
-                TaskExecutor.executeTask(updateInstallationTask);
-            } catch (Exception e) {
-                displayError(e);
-            }
+    private void updateInstallation() {
+        try {
+            Task<Installation> updateInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .updateInstallation(installation);
+
+            updateInstallationTask.setOnFailed(event -> displayError(updateInstallationTask.getException()));
+
+            TaskExecutor.executeTask(updateInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 

@@ -35,7 +35,7 @@ public class InstallationModel implements Runnable {
     public Task<ObservableList<Installation>> getAllInstallations(int projectID) {
         Task<ObservableList<Installation>> allInstallationsTask = new Task<>() {
             @Override
-            protected ObservableList<Installation> call() throws Exception {//todo ville det give meningen at lytte for om der er kommet nogle nye installationer og tilføje hvis der er
+            protected ObservableList<Installation> call() throws Exception {
                 allInstallations = FXCollections.observableList(installationManager.getInstallationsFromProject(projectID));
 
                 updateValue(allInstallations);

@@ -37,10 +37,15 @@ public class InstallationCardController extends BaseController implements Initia
     public void setContent(Installation installation) {
         lblName.setText(installation.getName());
         lblDescription.setText(installation.getDescription());
+
+        loadAssignedUsers(installation.getID());
+    }
+
+    private void loadAssignedUsers(int installationId) {
         try {
             Task<List<SystemUser>> usersAssignedToInstallation = getModelsHandler()
                     .getInstallationModel()
-                    .getSystemUsersAssignedToInstallation(installation.getID());
+                    .getSystemUsersAssignedToInstallation(installationId);
 
             usersAssignedToInstallation
                     .valueProperty()
