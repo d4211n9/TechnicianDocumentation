@@ -2,7 +2,6 @@ package gui.controllers.clientController;
 
 import be.Client;
 import be.Enum.SystemRole;
-import be.Installation;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
@@ -16,7 +15,6 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
@@ -89,31 +87,6 @@ public class ClientController extends TableViewController implements Initializab
     }
 
     private void handleDelete(Client client) {
-        try {
-            //Loop through each project from that client ...
-            for(Project project : getModelsHandler().getProjectModel().getAllProjects()) {
-                if(project.getClient().getID() == client.getID()) {
-
-                    //.. to Soft Delete all installations from all projects
-                    for(Installation installation : getModelsHandler().getInstallationModel().getAllInstallations(project.getID())) {
-                        System.out.println(installation.getID() + " [INSTALLATION DELETED]");
-                        System.out.println(getModelsHandler().getInstallationModel().getAllInstallations(project.getID()).size());
-                        getModelsHandler().getInstallationModel().deleteInstallation(installation);
-                    }
-
-                    //... and then each project
-                    System.out.println(project.getName() + " [PROJECT DELETED]");
-                    getModelsHandler().getProjectModel().deleteProject(project);
-                }
-            }
-
-            //Soft Delete the client
-            getModelsHandler().getClientModel().deleteClient(client);
-
-            handleSearch();
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     public void handleBack() {
