@@ -13,8 +13,10 @@ import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +30,7 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -38,7 +41,7 @@ public class ProjectInfoController extends BaseController implements Initializab
     @FXML
     private FlowPane fpInstallations;
     @FXML
-    private HBox buttonArea, hbUserBtnArea;
+    private HBox hbUserBtnArea;
     @FXML
     private JFXListView listUsers;
     @FXML
@@ -50,14 +53,14 @@ public class ProjectInfoController extends BaseController implements Initializab
     private Client client;
     private Project project;
     private List<Installation> installations;
-    private NodeAccessLevel buttonAccessLevel;
     private JFXButton assignUser, unAssignUser;
     private ObservableList<SystemUser> obsAssignedUsers = null;
     private ObservableList<SystemUser> obsUnAssignedUsers = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addLoadedButtons();
+        initializeButtonAccessLevels();
+        projectsView.getChildren().add(addButtons());
     }
 
     public void setContent(Project project) {
@@ -116,16 +119,29 @@ public class ProjectInfoController extends BaseController implements Initializab
 
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
-                        selectedUser.getEmail());
+
+            assignUserToProject(selectedUser);
+        });
+    }
+
+    private void assignUserToProject(SystemUser selectedUser) {
+        try {
+            Task<Void> assignUserToProjectTask = getModelsHandler()
+                    .getProjectModel()
+                    .assignSystemUserToProject(project.getID(),
+                    selectedUser.getEmail());
+
+            assignUserToProjectTask.setOnSucceeded(succeddedEvent -> {
                 obsAssignedUsers.add(selectedUser);
                 obsUnAssignedUsers.remove(selectedUser);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
-        });
+            });
+
+            assignUserToProjectTask.setOnFailed(failedEvent -> displayError(assignUserToProjectTask.getException()));
+
+            TaskExecutor.executeTask(assignUserToProjectTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void addUnAssignUserBtn() {
@@ -138,52 +154,54 @@ public class ProjectInfoController extends BaseController implements Initializab
 
         unAssignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
-                        selectedUser.getEmail());
-                obsAssignedUsers.remove(selectedUser);
-                obsUnAssignedUsers.add(selectedUser);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+
+            unAssignUser(selectedUser);
         });
     }
 
-    private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);}
+    private void unAssignUser(SystemUser selectedUser) {
+        try {
+            Task<Void> deleteUserAssignedToProjectTask = getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
+                    selectedUser.getEmail());
+
+            deleteUserAssignedToProjectTask.setOnSucceeded(succeddedEvent -> {
+                obsAssignedUsers.remove(selectedUser);
+                obsUnAssignedUsers.add(selectedUser);
+            });
+
+            deleteUserAssignedToProjectTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToProjectTask.getException()));
+
+            TaskExecutor.executeTask(deleteUserAssignedToProjectTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
 
     private void addAssignedButton(Button button) {
         hbUserBtnArea.getChildren().add(button);
     }
 
 
-    private void addLoadedButtons() {
-        initializeButtonAccessLevels();
-
-        try {
-            SystemRole loggedInUserRole = getLoggedInUser();
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
-
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
-            }
-        } catch (Exception e) {
-            displayError(e);
-        }
-    }
-
     private void loadInstallations() {
         try {
-            installations = getModelsHandler().getInstallationModel().getAllInstallations(project.getID());
-        } catch (Exception e) {
-            e.printStackTrace();
-            displayError(e);
-        }
+            Task<ObservableList<Installation>> allInstallationsTask = getModelsHandler()
+                    .getInstallationModel()
+                    .getAllInstallations(project.getID());
 
-        for (Installation i : installations) {
-            showInstallation(i);
+            allInstallationsTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                installations = newValue;
+
+                for (Installation i : installations) {
+                    showInstallation(i);
+                }
+            });
+
+            allInstallationsTask.setOnFailed(event -> displayError(allInstallationsTask.getException()));
+
+            TaskExecutor.executeTask(allInstallationsTask);
+
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -205,38 +223,46 @@ public class ProjectInfoController extends BaseController implements Initializab
     }
 
     private void loadUsers() {
-        try {
-            List<SystemUser> assignedUsers = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID());
-            obsAssignedUsers = FXCollections.observableList(assignedUsers);
-
-            List<SystemUser> unAssignedUsers = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
-            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
-        } catch (Exception e) {
-            displayError(e);
-            e.printStackTrace(); //TODO replace with log to the database?
-        }
-
-        listUsers.setItems(obsAssignedUsers);
+        loadAssignedUsers();
+        loadUnAssignedUsers();
     }
 
-    private void userListener() {
-        listUsers.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
-            //If a user is selected from the assigned users list we enable the remove button
-            if(n != null && toggleUsers.isSelected()) {
-                unAssignUser.setDisable(false);
-            }
-            //If a user is selected from the unassigned users list we enable the add button
-            else if (n != null && !toggleUsers.isSelected()) {
-                assignUser.setDisable(false);
-            }
-            //If no user is selected we disable both buttons
-            else {
-                assignUser.setDisable(true);
-                unAssignUser.setDisable(true);
-            }
-        });
+    private void loadAssignedUsers() {
+        try {
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getProjectModel().
+                    getSystemUsersAssignedToProject(project.getID());
+
+            assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                obsAssignedUsers = FXCollections.observableList(newValue);
+
+                listUsers.setItems(obsAssignedUsers);
+            });
+
+            assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
+
+            TaskExecutor.executeTask(assignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void loadUnAssignedUsers() {
+        try {
+            Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getProjectModel().
+                    getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
+
+            unAssignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                obsUnAssignedUsers = FXCollections.observableList(newValue);
+            });
+
+            unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
+
+            TaskExecutor.executeTask(unAssignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
     }
 
     /**

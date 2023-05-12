@@ -6,6 +6,8 @@ import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -27,16 +29,28 @@ public class CreateClientController extends BaseController {
 
     Client selectedClient;
 
-    public void handleConfirm(ActionEvent actionEvent) {
+    public void handleConfirm() {
         if(isTextFieldInfoValid()){
 
             Client client = bindClientInfo();
-            try {
-                getModelsHandler().getClientModel().createClient(client);
-                handleCancel();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+
+            createClient(client);
+        }
+    }
+
+    private void createClient(Client client) {
+        try {
+            Task<Client> createClientTask = getModelsHandler()
+                    .getClientModel()
+                    .createClient(client);
+
+            createClientTask.setOnFailed(event -> displayError(createClientTask.getException()));
+
+            TaskExecutor.executeTask(createClientTask);
+
+            handleCancel();
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -81,14 +95,27 @@ public class CreateClientController extends BaseController {
             if(isTextFieldInfoValid()) {
                 Client client = bindClientInfo();
                 client = bindClientID(client);
-                try {
-                    getModelsHandler().getClientModel().updateClient(client, selectedClient);
-                    handleCancel();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+
+                updateClient(client);
             }
         });
+    }
+
+    private void updateClient(Client client) {
+        try {
+            Task<Boolean> updateClientTask = getModelsHandler()
+                    .getClientModel()
+                    .updateClient(client, selectedClient);
+
+            updateClientTask
+                    .setOnFailed(failedEvent -> displayError(updateClientTask.getException()));
+
+            TaskExecutor.executeTask(updateClientTask);
+
+            handleCancel();
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private Client bindClientInfo(){

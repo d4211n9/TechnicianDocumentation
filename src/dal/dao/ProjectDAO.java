@@ -44,7 +44,7 @@ public class ProjectDAO implements IProjectDAO {
     @Override
     public Project createProject(Project project) throws Exception {
         Project newProject = null;
-        String sql = "INSERT INTO Project (Name, Client, AddressID, Created, SoftDelete, Description) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Project (Name, Client, AddressID, Created, SoftDelete, Description, LastModified) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -56,6 +56,8 @@ public class ProjectDAO implements IProjectDAO {
             statement.setTimestamp(4, timestamp);
             statement.setDate(5, null);
             statement.setString(6, project.getDescription());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(7, t);
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -138,7 +140,7 @@ public class ProjectDAO implements IProjectDAO {
     public Project updateProject(Project project) throws Exception {
         Project updatedProject = null;
 
-        String sql = "UPDATE Project SET Name=?, AddressID=?, Description=? WHERE ID=?;";
+        String sql = "UPDATE Project SET Name=?, AddressID=?, Description=?, LastModified=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -146,7 +148,9 @@ public class ProjectDAO implements IProjectDAO {
             statement.setString(1, project.getName());
             statement.setInt(2, project.getAddress().getID());
             statement.setString(3, project.getDescription());
-            statement.setInt(4, project.getID());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(4, t);
+            statement.setInt(5, project.getID());
 
             statement.executeUpdate();
             updatedProject = project;
@@ -158,5 +162,53 @@ public class ProjectDAO implements IProjectDAO {
             throw dalException;
         }
         return updatedProject;
+    }
+
+    public List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception {
+        ArrayList<Project> allProjects = new ArrayList<>();
+
+        String sql = "SELECT " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[Location] AS 'ProjectLocation', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
+                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.ClientLocation, Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType' " +
+                "FROM Project " +
+                "INNER JOIN Client " +
+                "ON Client.ID=Project.Client " +
+                "WHERE Project.LastModified>?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setTimestamp(1, lastCheck);
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                //Mapping the client
+                int clientID = resultSet.getInt("ClientID");
+                String clientName = resultSet.getString("ClientName");
+                String clientLocation = resultSet.getString("ClientLocation");
+                String email = resultSet.getString("ClientEmail");
+                String phone = resultSet.getString("ClientPhone");
+                String type = resultSet.getString("ClientType");
+
+                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
+
+                //Mapping the project
+                int ID = resultSet.getInt("ProjectID");
+                String name = resultSet.getString("ProjectName");
+                String location = resultSet.getString("ProjectLocation");
+                Date created = resultSet.getDate("ProjectCreated");
+                String description = resultSet.getString("ProjectDescription");
+
+                Project project = new Project(ID, name, client, location, created, description);
+
+                allProjects.add(project);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to read all projects", e);
+        }
+
+        return allProjects;
     }
 }

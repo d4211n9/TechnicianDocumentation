@@ -5,29 +5,59 @@ import com.jfoenix.controls.JFXButton;
 import exceptions.GUIException;
 import gui.models.ModelsHandler;
 import gui.util.MainControllerHandler;
+import gui.util.NodeAccessLevel;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.ViewPaths;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.*;
 
 public class BaseController {
+
+
+    public NodeAccessLevel buttonAccessLevel;
+
+    public static ScheduledExecutorService executorService;
+    static ScheduledFuture future;
+
+
     public ModelsHandler getModelsHandler() throws Exception {
         return ModelsHandler.getInstance();
     }
 
     public MainController getMainController() {
         return MainControllerHandler.getInstance().getController();
+    }
+
+    public static void backgroundUpdate(List<Runnable> runnable) throws Exception {
+        if (executorService != null) {
+            executorService.shutdownNow();
+        }
+        executorService = Executors.newScheduledThreadPool(runnable.size());
+        for (Runnable run: runnable) {
+            try {
+                executorService.scheduleWithFixedDelay(run, 0, 3, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                GUIException guiException = new GUIException("Failed to background update", e);
+                guiException.printStackTrace();
+                throw guiException;
+            }
+        }
     }
 
     /**
@@ -52,7 +82,6 @@ public class BaseController {
         stage.setScene(new Scene(root));
         stage.setTitle(sceneTitle);
         stage.initModality(Modality.APPLICATION_MODAL);
-        //stage.initStyle(StageStyle.UNDECORATED); //TODO Fjern outcommenting når resizing spiller?
         stage.show();
 
         return loader;
@@ -138,5 +167,38 @@ public class BaseController {
         button.setPrefWidth(150);
         button.setPrefHeight(60);
         return button;
+    }
+
+    public ArrayList<Button> addLoadedButtons(NodeAccessLevel buttonAccessLevel) {
+        ArrayList<Button> buttons = new ArrayList<>();
+        try {
+            //Gets the logged-in user's role
+            SystemRole loggedInUserRole = getLoggedInUser();
+
+            // Loops through the buttons and adds them to the contentArea if the user has the right access level
+            for (Node button : buttonAccessLevel.getNodes()) {
+
+                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
+
+                if(accessLevel.contains(loggedInUserRole))
+                    buttons.add((Button) button);
+
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
+        return buttons;
+    }
+
+    public HBox addButtons(){
+        ArrayList<Button> buttons = addLoadedButtons(buttonAccessLevel);
+
+        HBox buttonAreaHBox = new HBox();
+        buttonAreaHBox.setAlignment(Pos.CENTER);
+
+        for (Button button: buttons){
+            buttonAreaHBox.getChildren().add(0, button);
+        }
+        return buttonAreaHBox;
     }
 }

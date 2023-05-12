@@ -21,7 +21,7 @@ public class ClientDAO implements IClientDAO {
     @Override
     public Client createClient(Client client) throws Exception {
         Client newClient = null;
-        String sql = "INSERT INTO Client (Name, AddressID, Email, Phone, Type, SoftDelete) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO Client (Name, AddressID, Email, Phone, Type, SoftDelete, LastModified) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -32,6 +32,8 @@ public class ClientDAO implements IClientDAO {
             statement.setString(4, client.getPhone());
             statement.setString(5, client.getType());
             statement.setDate(6, null);
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(7, t);
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -91,7 +93,7 @@ public class ClientDAO implements IClientDAO {
     @Override
     public Client updateClient(Client client) throws Exception {
         Client updatedClient = null;
-        String sql = "UPDATE Client SET Name=?, AddressID=?, Email=?, Phone=?, Type=? WHERE ID=?;";
+        String sql = "UPDATE Client SET Name=?, AddressID=?, Email=?, Phone=?, Type=? , LastModified=? WHERE ID=?;";
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -100,7 +102,10 @@ public class ClientDAO implements IClientDAO {
             statement.setString(3, client.getEmail());
             statement.setString(4, client.getPhone());
             statement.setString(5, client.getType());
-            statement.setInt(6, client.getID());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(6, t);
+            statement.setInt(7, client.getID());
+
             statement.executeUpdate();
 
             updatedClient = client;
@@ -108,5 +113,37 @@ public class ClientDAO implements IClientDAO {
             throw new Exception("Failed to update Client", e);
         }
         return updatedClient;
+    }
+
+
+    public List<Client> getAllModifiedClients(Timestamp lastCheck) throws Exception {
+        List<Client> allClients = new ArrayList<>();
+
+        String sql = "SELECT * FROM Client WHERE LastModified>?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+                statement.setTimestamp(1, lastCheck);
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                //Mapping the client
+                int clientID = resultSet.getInt(1);
+                String clientName = resultSet.getString(2);
+                String clientLocation = resultSet.getString(3);
+                String email = resultSet.getString(4);
+                String phone = resultSet.getString(5);
+                String type = resultSet.getString(6);
+
+                Client client = new Client(clientID, clientName, clientLocation, email, phone, type);
+
+                allClients.add(client);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to read all clients", e);
+        }
+        return allClients;
     }
 }

@@ -3,23 +3,15 @@ package gui.controllers.clientController;
 import be.Address;
 import be.Client;
 import be.Enum.SystemRole;
-import com.jfoenix.controls.JFXButton;
-import gui.controllers.BaseController;
-import gui.models.ClientModel;
+import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
@@ -29,10 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ClientController extends BaseController implements Initializable {
-    public TextField txtfSearch;
-    @FXML
-    private TableView<Client> tvClients;
+public class ClientController extends TableViewController implements Initializable {
+
     @FXML
     private TableColumn<Client, String> tcName, tcEmail, tcPhone, tcStreet, tcPostalCode, tcCity;
     @FXML
@@ -42,31 +32,27 @@ public class ClientController extends BaseController implements Initializable {
 
     private NodeAccessLevel buttonAccessLevel;
     @FXML
-    private HBox buttonArea;
+    private TextField txtfSearch;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addLoadedButtons();
-        tvListener();
         loadTableView();
+        initializeButtonAccessLevels();
+        clientView.getChildren().add(addButtons());
+        tvListener();
+
+        clientBackgroundUpdate();//should be last in initialize
     }
 
-    private void tvListener() {
-        tvClients.setOnMouseClicked(event -> {
-            if(isTvSelected()){
-                deleteButton.setDisable(false);
-                editButton.setDisable(false);
-            }else {
-                deleteButton.setDisable(true);
-                editButton.setDisable(true);
-            }
-        });
+    private void clientBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getClientModel());
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
-
-    private boolean isTvSelected() {
-        return tvClients.getSelectionModel().getSelectedItem() != null;
-    }
-
 
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -76,12 +62,11 @@ public class ClientController extends BaseController implements Initializable {
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         try {
-            tvClients.setItems(getModelsHandler().getClientModel().getAllClients());
+            tableView.setItems(getModelsHandler().getClientModel().getAllClients());
         } catch (Exception e) {
             displayError(e);
         }
     }
-
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
@@ -103,7 +88,7 @@ public class ClientController extends BaseController implements Initializable {
         editButton.setOnMouseClicked(event -> {
             FXMLLoader loader = loadView(ViewPaths.CREATE_CLIENTS_VIEW);
             CreateClientController controller = loader.getController();
-            controller.setEditContent(tvClients.getSelectionModel().getSelectedItem());
+            controller.setEditContent((Client) tableView.getSelectionModel().getSelectedItem());
             loadInMainView(loader.getRoot(), clientView);
         });
     }
@@ -115,7 +100,7 @@ public class ClientController extends BaseController implements Initializable {
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object user = tvClients.getSelectionModel().getSelectedItem();
+            Object user = tableView.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(user.toString(), true)){
                 System.out.println("delete " + user.toString());
                 //TODO Delete ned i lagene
@@ -125,23 +110,6 @@ public class ClientController extends BaseController implements Initializable {
 
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
-    }
-
-    private void addButton(Button button) {buttonArea.getChildren().add(0, button);}
-
-    private void addLoadedButtons() {
-        initializeButtonAccessLevels();
-        try {
-            SystemRole loggedInUserRole = getLoggedInUser();
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
-
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
-            }
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     public void handleSearch(KeyEvent keyEvent) {
