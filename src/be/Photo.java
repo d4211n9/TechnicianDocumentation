@@ -9,6 +9,7 @@ public class Photo implements Serializable {
     private int ID, installationID;
     private Image photo;
     private String description;
+    private byte[] photoBytes;
 
 
     public Photo (int ID, int installationID, Image photo, String description){
@@ -21,6 +22,12 @@ public class Photo implements Serializable {
     public Photo (int installationID, Image photo, String description){
         this.installationID = installationID;
         this.photo = photo;
+        this.description = description;
+    }
+
+    public Photo (int installationID, byte[] photoBytes, String description){
+        this.installationID = installationID;
+        this.photoBytes = photoBytes;
         this.description = description;
     }
 
