@@ -6,6 +6,7 @@ public class ModelsHandler {
     private ProjectModel projectModel;
     private ClientModel clientModel;
     private InstallationModel installationModel;
+    private PhotoModel photoModel;
 
 
     private ModelsHandler() throws Exception {
@@ -13,6 +14,7 @@ public class ModelsHandler {
         projectModel = new ProjectModel();
         clientModel = new ClientModel();
         installationModel = new InstallationModel();
+        photoModel = new PhotoModel();
     }
 
     public static ModelsHandler getInstance() throws Exception {

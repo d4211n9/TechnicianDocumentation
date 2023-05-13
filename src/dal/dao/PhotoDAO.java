@@ -6,11 +6,14 @@ import dal.connectors.SqlConnector;
 import dal.interfaces.IPhotoDAO;
 import exceptions.DALException;
 import javafx.scene.image.Image;
+import jdk.jfr.Description;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoDAO implements IPhotoDAO {
 
@@ -42,7 +45,7 @@ public class PhotoDAO implements IPhotoDAO {
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 int ID = resultSet.getInt(1);
                 newPhoto = new Photo(ID, photo.getInstallationID(), photo.getPhoto(), photo.getDescription());
             }
@@ -52,30 +55,64 @@ public class PhotoDAO implements IPhotoDAO {
 
         }
         return newPhoto;
-        }
-
+    }
 
     @Override
-    public Photo deletePhoto(Photo photo) throws Exception {
+    public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
 
-        Photo deletedPhoto = null;
+        List<Photo> allPhotos = new ArrayList<>();
 
-        String sql = "DELETE FROM Photo WHERE ID=?;";
+        String sql = "SELECT * FROM Photo WHERE InstallationID =?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, photo.getID());
-            statement.executeUpdate();
+            statement.setInt(1, installationID);
 
-            deletedPhoto = photo;
+            ResultSet resultSet = statement.executeQuery();
+
+            int ID = resultSet.getInt(1);
+            int installationID = resultSet.getInt(2);
+            Image photo = resultSet.getBytes(3);
+            String description = resultSet.getString(4);
+
+
+            Photo photo = new Photo(ID, installationID, photo, description);
+
+            allPhotos.add(photo);
+
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DALException("Failed to upload", e);
-        }
-        return deletedPhoto;
+        e.printStackTrace();
+        throw new DALException("Failed to read installations from project", e);
     }
+        return allPhotos;
+    }
+
+
+        @Override
+    public Photo deletePhoto (Photo photo) throws Exception {
+
+            Photo deletedPhoto = null;
+
+            String sql = "DELETE FROM Photo WHERE ID=?;";
+
+            try (Connection connection = connector.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+
+                statement.setInt(1, photo.getID());
+                statement.executeUpdate();
+
+                deletedPhoto = photo;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new DALException("Failed to upload", e);
+            }
+            return deletedPhoto;
+        }
+    }
+
 
 
    /* public byte[] convertToBytes(Photo photo) throws IOException {
@@ -85,4 +122,5 @@ public class PhotoDAO implements IPhotoDAO {
             return bos.toByteArray();
         }
     }*/
-}
+
+

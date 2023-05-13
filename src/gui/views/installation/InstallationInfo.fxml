@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -106,6 +107,7 @@
                         <HBox fx:id="hbImage" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                            <children>
                               <ImageView fx:id="imgPhoto" fitHeight="350.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
+                              <TilePane fx:id="tpImage" prefHeight="200.0" prefWidth="200.0" />
                            </children>
                         </HBox>
                         <HBox fx:id="photosBtnArea" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="60.0" prefWidth="820.0" VBox.vgrow="NEVER">

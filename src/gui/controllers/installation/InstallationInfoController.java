@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -301,4 +302,12 @@ public class InstallationInfoController extends BaseController implements Initia
             imgPhoto.setImage(images.get(currentImageIndex));
         }
     }
+
+public void loadPhotoInPhotoTab() {
+
+
+
+}
+
+
 }

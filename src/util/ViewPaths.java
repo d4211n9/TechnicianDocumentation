@@ -1,5 +1,7 @@
 package util;
 
+import javafx.scene.layout.VBox;
+
 public class ViewPaths {
     public static final String ERROR_DISPLAYER = "/gui/views/ErrorDisplayView.fxml";
     public static final String MAIN_VIEW = "/gui/views/MainView.fxml";
@@ -14,6 +16,8 @@ public class ViewPaths {
     public static final String INSTALLATION_CARD = "/gui/views/installation/InstallationCard.fxml";
     public static final String INSTALLATION_INFO = "/gui/views/installation/InstallationInfo.fxml";
     public static final String CREATE_INSTALLATION = "/gui/views/installation/CreateInstallation.fxml";
+
+    public static final String PHOTO_CARD = "/gui/views/photoViews/PhotoCard.fxml";
 
 
     private ViewPaths() {}

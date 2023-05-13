@@ -83,6 +83,9 @@ public class ProjectFacade {
     public Photo uploadPhoto(Photo photo) throws Exception {
         return photoDAO.uploadPhoto(photo);
     }
+    public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
+        return photoDAO.getPhotoFromInstallation(installationID);
+    }
 
     public Photo deletePhoto(Photo photo) throws Exception{
         return photoDAO.deletePhoto(photo);
