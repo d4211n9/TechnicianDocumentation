@@ -1,5 +1,6 @@
 package be;
 
+import be.Enum.ProjectStatus;
 import util.Searchable;
 
 import java.sql.Timestamp;
@@ -13,17 +14,19 @@ public class Project implements Searchable<Project> {
     private String description;
     private Timestamp deleted;
     private Address projectAddress;
+    private ProjectStatus status;
 
-    public Project(String name, Client client, Address projectAddress, Date created, String description) {
+    public Project(String name, Client client, Address projectAddress, Date created, String description, ProjectStatus status) {
         this.client = client;
         this.name = name;
         this.clientName = client.getName();
         this.projectAddress = projectAddress;
         this.created = created;
         this.description = description;
+        this.status = status;
     }
 
-    public Project(int ID, String name, Client client, Address projectAddress, Date created, String description) {
+    public Project(int ID, String name, Client client, Address projectAddress, Date created, String description, ProjectStatus status) {
         this.ID = ID;
         this.client = client;
         this.name = name;
@@ -31,6 +34,7 @@ public class Project implements Searchable<Project> {
         this.projectAddress = projectAddress;
         this.created = created;
         this.description = description;
+        this.status = status;
     }
 
     public Client getClient() {
@@ -88,6 +92,14 @@ public class Project implements Searchable<Project> {
 
     public void setDeleted(Timestamp deleted) {
         this.deleted = deleted;
+    }
+
+    public ProjectStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProjectStatus status) {
+        this.status = status;
     }
 
     @Override

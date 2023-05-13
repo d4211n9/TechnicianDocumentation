@@ -2,6 +2,7 @@ package gui.controllers.projectControllers;
 
 import be.Address;
 import be.Client;
+import be.Enum.ProjectStatus;
 import be.Project;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
@@ -38,6 +39,8 @@ public class AddProjectController extends BaseController implements Initializabl
     @FXML
     private ComboBox<Client> cbClients;
     @FXML
+    private ComboBox<ProjectStatus> cbStatus;
+    @FXML
     private JFXTextArea jfxTxtADescription;
 
     private int projectToEditId = -1;
@@ -51,6 +54,7 @@ public class AddProjectController extends BaseController implements Initializabl
     private void createComboBoxContent() {
         try {
             cbClients.setItems(getModelsHandler().getClientModel().getAllClients());
+            cbStatus.setItems(getModelsHandler().getProjectModel().getAllStatuses());
         } catch (Exception e) {
             displayError(e);
         }
@@ -144,11 +148,13 @@ public class AddProjectController extends BaseController implements Initializabl
         Date created = Calendar.getInstance().getTime();
         String description = jfxTxtADescription.getText();
 
+        ProjectStatus projectStatus = cbStatus.getSelectionModel().getSelectedItem();
+
         if (projectToEditId != -1) {
-            return new Project(projectToEditId, name, client, address, created, description);
+            return new Project(projectToEditId, name, client, address, created, description, projectStatus);
         }
 
-        return new Project(name, client, address, created, description);
+        return new Project(name, client, address, created, description, projectStatus);
     }
 
     //TODO, valider input
@@ -182,6 +188,7 @@ public class AddProjectController extends BaseController implements Initializabl
         jfxTxtADescription.setText(selectedItem.getDescription());
         txtfSearch.setText(selectedItem.getClient().getName());
         cbClients.getSelectionModel().select(selectedItem.getClient());
+        cbStatus.getSelectionModel().select(selectedItem.getStatus());
 
         if(selectedItem.getAddress().getID() == selectedItem.getClient().getAddress().getID()) {
             toggleAddress.setSelected(true);

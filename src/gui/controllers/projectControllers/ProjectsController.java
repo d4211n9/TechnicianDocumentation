@@ -1,5 +1,6 @@
 package gui.controllers.projectControllers;
 
+import be.Enum.ProjectStatus;
 import be.Enum.SystemRole;
 import be.Project;
 import gui.controllers.TableViewController;
@@ -26,7 +27,7 @@ public class ProjectsController extends TableViewController implements Initializ
     @FXML
     private TableColumn<Project, String> tcProjectName, tcClient, tcStreet, tcPostalCode, tcCity;
     @FXML
-    private TableColumn<Project, Integer> tcID;
+    private TableColumn<Project, ProjectStatus> tcStatus;
     @FXML
     private TableColumn<Project, Date> tcCreated;
     @FXML
@@ -102,7 +103,7 @@ public class ProjectsController extends TableViewController implements Initializ
     }
 
     private void loadTableView() {
-        tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        tcStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
         tcStreet.setCellValueFactory(new PropertyValueFactory<>("street"));
         tcPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
@@ -129,7 +130,7 @@ public class ProjectsController extends TableViewController implements Initializ
     }
 
     public void handleDoubleClick(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && isTvSelected()){
             if(mouseEvent.getClickCount() == 2){
                 FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
                 getMainController().mainBorderPane.setCenter(loader.getRoot());

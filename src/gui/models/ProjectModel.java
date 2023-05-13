@@ -1,5 +1,6 @@
 package gui.models;
 
+import be.Enum.ProjectStatus;
 import be.Project;
 import be.SystemUser;
 import bll.interfaces.IProjectManager;
@@ -13,6 +14,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProjectModel implements Runnable {
@@ -148,6 +150,10 @@ public class ProjectModel implements Runnable {
             filteredProjectList.addAll(allProjects);
         }
 
+    }
+
+    public ObservableList<ProjectStatus> getAllStatuses() {
+        return FXCollections.observableList(Arrays.stream(ProjectStatus.values()).toList());
     }
 
     @Override

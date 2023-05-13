@@ -22,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -46,6 +47,8 @@ public class ProjectInfoController extends BaseController implements Initializab
     private JFXListView listUsers;
     @FXML
     private JFXToggleButton toggleUsers;
+    @FXML
+    private ComboBox cbStatus;
     @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone,
             lblCreated, lblProjectLocation, lblAssignedUsers, lblDescription;
@@ -77,6 +80,9 @@ public class ProjectInfoController extends BaseController implements Initializab
         lblDescription.setText(project.getDescription());
         lblProjectLocation.setText(project.getAddress().toString());
         lblCreated.setText(project.getCreated()+"");
+
+        loadComboBoxOptions();
+        cbStatus.getSelectionModel().select(project.getStatus());
 
         loadInstallations();
         loadUsers();
@@ -276,6 +282,14 @@ public class ProjectInfoController extends BaseController implements Initializab
         } else {
             listUsers.setItems(obsUnAssignedUsers);
             lblAssignedUsers.setText("Users Not Assigned");
+        }
+    }
+
+    private void loadComboBoxOptions() {
+        try {
+            cbStatus.setItems(getModelsHandler().getProjectModel().getAllStatuses());
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 }

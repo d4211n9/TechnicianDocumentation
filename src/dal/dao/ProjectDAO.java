@@ -2,6 +2,7 @@ package dal.dao;
 
 import be.Address;
 import be.Client;
+import be.Enum.ProjectStatus;
 import be.Project;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
@@ -44,7 +45,7 @@ public class ProjectDAO implements IProjectDAO {
     @Override
     public Project createProject(Project project) throws Exception {
         Project newProject = null;
-        String sql = "INSERT INTO Project (Name, Client, AddressID, Created, SoftDelete, Description, LastModified) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Project (Name, Client, AddressID, Created, SoftDelete, Description, LastModified, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -58,13 +59,14 @@ public class ProjectDAO implements IProjectDAO {
             statement.setString(6, project.getDescription());
             Timestamp t = new Timestamp(System.currentTimeMillis());
             statement.setTimestamp(7, t);
+            statement.setString(8, project.getStatus().getStatus());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
 
             if(resultSet.next()) {
                 int ID = resultSet.getInt(1);
-                newProject = new Project(ID, project.getName(), project.getClient(), project.getAddress(), project.getCreated(), project.getDescription());
+                newProject = new Project(ID, project.getName(), project.getClient(), project.getAddress(), project.getCreated(), project.getDescription(), project.getStatus());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,7 +81,7 @@ public class ProjectDAO implements IProjectDAO {
         ArrayList<Project> allProjects = new ArrayList<>();
 
         String sql = "SELECT " +
-                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', Project.Status AS 'Status', " +
                 "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType', " +
                 "ClientAddress.ID AS 'ClientAddressID', ClientAddress.Street AS 'ClientStreet', ClientAddress.PostalCode AS 'ClientPostalCode', ClientAddress.City AS 'ClientCity', " +
                 "ProjectAddress.ID AS 'ProjectAddressID', ProjectAddress.Street AS 'ProjectStreet', ProjectAddress.PostalCode AS 'ProjectPostalCode', ProjectAddress.City AS 'ProjectCity' " +
@@ -122,8 +124,10 @@ public class ProjectDAO implements IProjectDAO {
                 String name = resultSet.getString("ProjectName");
                 Date created = resultSet.getDate("ProjectCreated");
                 String description = resultSet.getString("ProjectDescription");
+                String status = resultSet.getString("Status");
+                ProjectStatus projectStatus = ProjectStatus.getProjectStatus(status);
 
-                Project project = new Project(ID, name, client, projectAddress, created, description);
+                Project project = new Project(ID, name, client, projectAddress, created, description, projectStatus);
 
                 allProjects.add(project);
             }
@@ -140,7 +144,7 @@ public class ProjectDAO implements IProjectDAO {
     public Project updateProject(Project project) throws Exception {
         Project updatedProject = null;
 
-        String sql = "UPDATE Project SET Name=?, AddressID=?, Description=?, SoftDelete=?, LastModified=? WHERE ID=?;";
+        String sql = "UPDATE Project SET Name=?, AddressID=?, Description=?, SoftDelete=?, LastModified=?, Status=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -151,7 +155,8 @@ public class ProjectDAO implements IProjectDAO {
             statement.setTimestamp(4, project.getDeleted());
             Timestamp t = new Timestamp(System.currentTimeMillis());
             statement.setTimestamp(5, t);
-            statement.setInt(6, project.getID());
+            statement.setString(6, project.getStatus().getStatus());
+            statement.setInt(7, project.getID());
 
             statement.executeUpdate();
             updatedProject = project;
@@ -169,7 +174,7 @@ public class ProjectDAO implements IProjectDAO {
         ArrayList<Project> allProjects = new ArrayList<>();
 
         String sql = "SELECT " +
-                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', Project.Status AS 'Status', " +
                 "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType', " +
                 "ClientAddress.ID AS 'ClientAddressID', ClientAddress.Street AS 'ClientStreet', ClientAddress.PostalCode AS 'ClientPostalCode', ClientAddress.City AS 'ClientCity', " +
                 "ProjectAddress.ID AS 'ProjectAddressID', ProjectAddress.Street AS 'ProjectStreet', ProjectAddress.PostalCode AS 'ProjectPostalCode', ProjectAddress.City AS 'ProjectCity' " +
@@ -214,8 +219,10 @@ public class ProjectDAO implements IProjectDAO {
                 String name = resultSet.getString("ProjectName");
                 Date created = resultSet.getDate("ProjectCreated");
                 String description = resultSet.getString("ProjectDescription");
+                String status = resultSet.getString("Status");
+                ProjectStatus projectStatus = ProjectStatus.getProjectStatus(status);
 
-                Project project = new Project(ID, name, client, projectAddress, created, description);
+                Project project = new Project(ID, name, client, projectAddress, created, description, projectStatus);
 
                 allProjects.add(project);
             }

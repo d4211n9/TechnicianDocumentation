@@ -68,14 +68,20 @@
                            <font>
                               <Font size="16.0" />
                            </font></Label>
-                        <Label prefHeight="18.0" prefWidth="96.0" text="Client" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                           <font>
-                              <Font size="16.0" />
-                           </font></Label>
                         <TextField fx:id="txtfName" prefHeight="30.0" prefWidth="220.0" GridPane.columnIndex="2">
                            <font>
                               <Font size="14.0" />
                            </font></TextField>
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Description" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <JFXTextArea fx:id="jfxTxtADescription" focusColor="#90aed6" prefWidth="254.0" unFocusColor="#d9d9d9" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Client" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
                         <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="30.0" prefWidth="164.0" promptText="Search from existing..." GridPane.columnIndex="2" GridPane.rowIndex="5">
                            <font>
                               <Font size="14.0" />
@@ -88,7 +94,7 @@
                                     <Font size="14.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                    <Insets left="10.0" right="25.0" top="20.0" />
                                  </HBox.margin>
                               </Label>
                               <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddClient" prefHeight="60.0" prefWidth="150.0" text="➕💰 Add Client">
@@ -101,12 +107,26 @@
                               </JFXButton>
                            </children>
                         </HBox>
-                        <JFXTextArea fx:id="jfxTxtADescription" focusColor="#90aed6" prefWidth="254.0" unFocusColor="#d9d9d9" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
-                        <Label prefHeight="18.0" prefWidth="96.0" text="Description" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
+                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <children>
+                              <Label text="Status" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cbStatus" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </HBox>
                      </children>
                      <HBox.margin>
                         <Insets top="20.0" />
