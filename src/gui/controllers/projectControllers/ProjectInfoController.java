@@ -28,6 +28,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -121,12 +122,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 assignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(assignUser);
-        assignUser.setDisable(true);
 
         assignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
+            FXMLLoader loader = openStage("/gui/views/projectViews/AddUserToProjectView.fxml", "Assign User");
+           // SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
 
-            assignUserToProject(selectedUser);
+           // assignUserToProject(selectedUser);
         });
     }
 
