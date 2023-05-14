@@ -125,12 +125,10 @@ public class ProjectInfoController extends BaseController implements Initializab
             //FXMLLoader loader = openStage("/gui/views/projectViews/AddUserToProjectView.fxml", "Assign User");
                 FXMLLoader loader = loadView("/gui/views/projectViews/AddUserToProjectView.fxml");
                 AddUserToProjectController controller = loader.getController();
-                //controller.setEditContent((SystemUser) tableView.getSelectionModel().getSelectedItem());
+                //controller.setEditContent((SystemUser) tableView.getSelectionModel().getSelectedItem());//todo
                 loadInMainView(loader.getRoot(), projectsView);
-            //getMainController().loadInMainView("/gui/views/projectViews/AddUserToProjectView.fxml", "");
-           // SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
+                controller.setProject(project);
 
-           // assignUserToProject(selectedUser);
         });
     }
 

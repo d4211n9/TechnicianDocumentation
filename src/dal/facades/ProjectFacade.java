@@ -84,4 +84,8 @@ public class ProjectFacade {
     public List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception{
         return projectDAO.getModifiedProjects(lastCheck);
     }
+
+    public List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception{
+        return systemUsersAssignedToProjectsDAO.getAllUserNotAssignedToProject(projectId);
+    }
 }

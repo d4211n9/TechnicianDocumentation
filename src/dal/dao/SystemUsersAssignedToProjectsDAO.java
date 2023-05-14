@@ -91,7 +91,6 @@ public class SystemUsersAssignedToProjectsDAO implements ISystemUsersAssignedToP
 
             statement.setInt(1, projectId);
             statement.setString(2, systemUserEmail);
-
             statement.executeUpdate();
         }
         catch (SQLException e) {
@@ -99,6 +98,39 @@ public class SystemUsersAssignedToProjectsDAO implements ISystemUsersAssignedToP
             dalException.printStackTrace(); //TODO replace with log to the database.
 
             throw dalException;
+        }
+    }
+
+    public List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception {
+        List<SystemUser> unAssignedSystemUsers = new ArrayList<>();
+
+        String sql = "SELECT " +
+                "SystemUser.Email, SystemUser.RoleName, SystemUser.UserName " +
+                "FROM SystemUser " +
+                "WHERE NOT SystemUser.Email IN " +
+                "(SELECT SystemUsersAssignedToProjects.SystemUserEmail " +
+                "FROM SystemUsersAssignedToProjects " +
+                "WHERE SystemUsersAssignedToProjects.ProjectID = ?);";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setInt(1, projectId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String email = resultSet.getString("Email");
+                SystemRole role = SystemRole.getRole(resultSet.getString("RoleName"));
+                String name = resultSet.getString("UserName");
+
+                SystemUser assignedSystemUser = new SystemUser(email, role, name);
+
+                unAssignedSystemUsers.add(assignedSystemUser);
+                System.out.println(assignedSystemUser);
+            }
+
+            return unAssignedSystemUsers;
         }
     }
 }

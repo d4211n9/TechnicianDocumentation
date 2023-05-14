@@ -26,4 +26,6 @@ public interface IProjectManager {
     void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception;
 
     List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception;
+
+    List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception;
 }

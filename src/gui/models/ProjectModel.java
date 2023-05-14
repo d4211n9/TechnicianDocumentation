@@ -8,10 +8,7 @@ import bll.managers.ProjectManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.fxml.Initializable;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +24,8 @@ public class ProjectModel implements Runnable {
     private Timestamp lastUpdateTime;
 
     private List<Project> copyAllProjects;
+
+    private ObservableList<SystemUser> users;
 
     public ProjectModel() throws Exception {
         projectManager = new ProjectManager();
@@ -101,11 +100,11 @@ public class ProjectModel implements Runnable {
     }
 
     public Task<Void> assignSystemUserToProject(int projectId, String systemUserEmail) {
+
         Task<Void> assignUserToProjectTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
                 projectManager.assignSystemUserToProject(projectId, systemUserEmail);
-
                 return null;
             }
         };
@@ -174,4 +173,11 @@ public class ProjectModel implements Runnable {
             throw new RuntimeException(e);
         }
     }
+
+    public ObservableList<SystemUser> getAllUsersNotAssignedProject(int projectId) throws Exception {
+        users = FXCollections.observableList(projectManager.getAllUserNotAssignedToProject(projectId));
+        return users;
+    }
+
+
 }

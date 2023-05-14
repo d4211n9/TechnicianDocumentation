@@ -55,6 +55,10 @@ public class ProjectManager implements IProjectManager {
         projectFacade.assignSystemUserToProject(projectId, systemUserEmail);
     }
 
+    public List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception{
+        return projectFacade.getAllUserNotAssignedToProject(projectId);
+    }
+
     @Override
     public List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception {
         return projectFacade.getModifiedProjects(lastCheck);
