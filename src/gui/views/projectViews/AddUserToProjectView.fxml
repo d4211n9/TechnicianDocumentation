@@ -54,7 +54,7 @@
                   <Insets />
                </HBox.margin>
             </Label>
-            <HBox fillHeight="false" onMouseClicked="#handleAddUser" prefHeight="28.0" prefWidth="246.0" HBox.hgrow="NEVER">
+            <HBox fillHeight="false" minWidth="-Infinity" onMouseClicked="#handleAddUser" prefHeight="28.0" prefWidth="246.0" HBox.hgrow="NEVER">
                <HBox.margin>
                   <Insets bottom="20.0" right="10.0" top="10.0" />
                </HBox.margin>
