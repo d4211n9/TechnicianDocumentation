@@ -12,6 +12,7 @@ import gui.controllers.BaseController;
 import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
+import gui.controllers.userController.CreateUserController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
@@ -20,7 +21,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -28,11 +28,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -123,8 +121,13 @@ public class ProjectInfoController extends BaseController implements Initializab
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(assignUser);
 
-        assignUser.setOnAction(event -> {
-            FXMLLoader loader = openStage("/gui/views/projectViews/AddUserToProjectView.fxml", "Assign User");
+        assignUser.setOnMouseClicked(event -> {
+            //FXMLLoader loader = openStage("/gui/views/projectViews/AddUserToProjectView.fxml", "Assign User");
+                FXMLLoader loader = loadView("/gui/views/projectViews/AddUserToProjectView.fxml");
+                AddUserToProjectController controller = loader.getController();
+                //controller.setEditContent((SystemUser) tableView.getSelectionModel().getSelectedItem());
+                loadInMainView(loader.getRoot(), projectsView);
+            //getMainController().loadInMainView("/gui/views/projectViews/AddUserToProjectView.fxml", "");
            // SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
 
            // assignUserToProject(selectedUser);
