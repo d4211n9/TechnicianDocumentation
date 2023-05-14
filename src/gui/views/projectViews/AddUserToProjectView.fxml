@@ -59,12 +59,12 @@
                   <Insets bottom="20.0" right="10.0" top="10.0" />
                </HBox.margin>
                <children>
-                  <Label prefHeight="28.0" prefWidth="232.0" text="Want to See Users Assigned To Project?" wrapText="true">
+                  <Label prefHeight="28.0" prefWidth="232.0" text="Want to See Users Assigned To Project?" underline="true" wrapText="true">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <JFXButton fx:id="btnSearch1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" text="👤" textOverrun="CLIP" wrapText="true">
+                  <JFXButton fx:id="btnSearch1" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" text="👤" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
                      <font>
                         <Font size="10.0" />
                      </font>
