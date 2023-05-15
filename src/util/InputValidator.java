@@ -1,8 +1,5 @@
 package util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class InputValidator {
     public static boolean isEmail(String email) {
         return email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}") && !email.isEmpty();
@@ -50,8 +47,7 @@ public class InputValidator {
     public static boolean isStreet(String street) {
         return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$");
     }
-
-    //TODO Make validation of city.
+    
     public static boolean isCity(String city) {
         return city.matches("[A-Z][a-zA-Z]*");
     }
@@ -65,5 +61,4 @@ public class InputValidator {
         String zip = "" + postalCode;
         return zip.matches("\\d{4}");
     }
-
 }

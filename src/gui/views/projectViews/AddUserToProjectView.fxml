@@ -34,7 +34,7 @@
                         <Insets right="10.0" top="10.0" />
                     </HBox.margin>
                 </TextField>
-                <JFXButton fx:id="btnSearch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="35.0" text="🔍" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
+                <JFXButton fx:id="btnSearch" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="35.0" text="🔍" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
                     <HBox.margin>
                         <Insets right="10.0" top="10.0" />
                     </HBox.margin>
