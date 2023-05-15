@@ -79,7 +79,11 @@ public class AddUserToProjectController extends TableViewController implements I
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Button b = createButton("Confirm");
+        addDoneButton();
+    }
+
+    private void addDoneButton() {
+        Button b = createButton("✅ Done");
         b.setOnMousePressed(event -> {
             handleBack();
         });
