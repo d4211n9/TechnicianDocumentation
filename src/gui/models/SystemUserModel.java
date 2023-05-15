@@ -43,11 +43,11 @@ public class SystemUserModel implements Runnable {
         return copyAllUsers;
     }
 
-    public Task<Boolean> SystemUserValidLogin(SystemUser user) {
+    public Task<Boolean> SystemUserValidLogin(SystemUser user, boolean rememberLogin) {
         Task<Boolean> validLoginTask = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
-                loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user));
+                loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user, rememberLogin));
 
                 boolean isValidLogin = loggedInSystemUser.get() != null;
 
@@ -58,6 +58,14 @@ public class SystemUserModel implements Runnable {
         };
 
         return validLoginTask;
+    }
+
+    public SystemUser isLoginRemembered() {
+        return systemUserManager.isLoginRemembered();
+    }
+
+    public void deleteRememberedLogin() {
+        systemUserManager.deleteRememberedLogin();
     }
 
     public ObservableValue<SystemUser> getLoggedInSystemUser() {

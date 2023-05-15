@@ -3,6 +3,7 @@ package bll.managers;
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import bll.util.BCrypt;
+import bll.util.RememberLogin;
 import bll.util.Search;
 import dal.dao.SystemUserDAO;
 import dal.facades.DeleteFacade;
@@ -25,11 +26,18 @@ public class SystemUserManager implements ISystemUserManager {
     }
 
     @Override
-    public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
+    public SystemUser systemUserValidLogin(SystemUser user, boolean rememberLogin) throws Exception {
 
         SystemUser systemUser = systemUserDAO.systemUserValidLogin(user);
 
         if(BCrypt.checkpw(user.getPassword(), systemUser.getPassword())){
+            if (rememberLogin) {
+                rememberLogin(user);
+            }
+            else {
+                deleteRememberedLogin();
+            }
+
             return systemUser;
         }
         return null;
@@ -71,5 +79,19 @@ public class SystemUserManager implements ISystemUserManager {
     @Override
     public List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception {
         return systemUserDAO.getAllModifiedUsers(lastUpdateTime);
+    }
+
+    @Override
+    public SystemUser isLoginRemembered() {
+        return RememberLogin.getRememberedLogin();
+    }
+
+    @Override
+    public void deleteRememberedLogin() {
+        RememberLogin.deleteRememberedLogin();
+    }
+
+    private void rememberLogin(SystemUser user) {
+        RememberLogin.rememberLogin(user.getEmail(), user.getPassword());
     }
 }

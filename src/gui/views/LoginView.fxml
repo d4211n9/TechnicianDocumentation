@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../stylesheets/Login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../stylesheets/Login.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginController">
    <children>
       <Label fx:id="sideField" alignment="CENTER" contentDisplay="CENTER" layoutY="-1.0" prefHeight="400.0" prefWidth="243.0" />
       <ImageView fx:id="ivLogo" fitHeight="225.0" fitWidth="225.0" layoutX="14.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
@@ -46,6 +47,11 @@
                      </VBox.margin>
                   </Label>
                   <PasswordField fx:id="pwfPassword" onKeyPressed="#handleEnter" promptText="Password" />
+                  <JFXCheckBox fx:id="jfxcbRememberLogin" checkedColor="#90aed6" text="remember me" textFill="#90aed6" unCheckedColor="#d9d9d9">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </JFXCheckBox>
                </children>
             </VBox>
             <JFXButton buttonType="RAISED" onAction="#handleLogin" prefHeight="40.0" prefWidth="100.0" text="Login">

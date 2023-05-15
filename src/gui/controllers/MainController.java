@@ -105,6 +105,12 @@ public class MainController extends BaseController implements Initializable {
     }
 
     public void handleLogout() {
-        close();
+        try {
+            getModelsHandler().getSystemUserModel().deleteRememberedLogin();
+            close();
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
     }
 }
