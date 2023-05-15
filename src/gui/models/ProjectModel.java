@@ -16,16 +16,24 @@ import java.util.List;
 
 public class ProjectModel implements Runnable {
     private IProjectManager projectManager;
-    private List<Project> allProjects;
-    private ObservableList<Project> filteredProjectList;
 
     private String searchString;
+    private String userSearchString;
 
     private Timestamp lastUpdateTime;
 
+    private List<Project> allProjects;
+    private ObservableList<Project> filteredProjectList;
     private List<Project> copyAllProjects;
 
     private ObservableList<SystemUser> users;
+
+    private List<SystemUser> allUsersOnProject;
+    private ObservableList<SystemUser> filteredUserList;
+    private List<SystemUser> copyUsersOnProject;
+
+    private List<SystemUser> allUsersNotOnProject;
+    private List<SystemUser> copyUsersNotOnProject;
 
     public ProjectModel() throws Exception {
         projectManager = new ProjectManager();
@@ -33,9 +41,27 @@ public class ProjectModel implements Runnable {
 
         allProjects = retrieveAllProjects();
         copyAllProjects = new ArrayList<>(allProjects);
-
         filteredProjectList = FXCollections.observableList(copyAllProjects);
+
         lastUpdateTime = new Timestamp(System.currentTimeMillis());
+    }
+
+    public ObservableList<SystemUser> getAllUsersOnProject(int projectID) throws Exception {
+        System.out.println("kfkfkf");
+        allUsersOnProject = projectManager.getSystemUsersAssignedToProject(projectID);
+        System.out.println("kfkfkf");
+        copyUsersOnProject = new ArrayList<>(allUsersOnProject);
+        System.out.println("kfkfkf");
+        filteredUserList = FXCollections.observableList(copyUsersOnProject);
+        System.out.println("kfkfkf");
+        return filteredUserList;
+    }
+
+    public ObservableList<SystemUser> getAllUsersNotOnProject(int projectID) throws Exception {
+        allUsersNotOnProject = projectManager.getAllUserNotAssignedToProject(projectID);
+        copyUsersNotOnProject = new ArrayList<>(allUsersNotOnProject);
+        filteredUserList = FXCollections.observableList(copyUsersNotOnProject);
+        return filteredUserList;
     }
 
     public Task<Project> createProject(Project project) {
@@ -99,12 +125,12 @@ public class ProjectModel implements Runnable {
         projectManager.deleteProject(deletedProject);
     }
 
-    public Task<Void> assignSystemUserToProject(int projectId, String systemUserEmail) {
+    public Task<Void> assignSystemUserToProject(int projectId, SystemUser user) {
 
         Task<Void> assignUserToProjectTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                projectManager.assignSystemUserToProject(projectId, systemUserEmail);
+                projectManager.assignSystemUserToProject(projectId, user.getEmail());
                 return null;
             }
         };
@@ -119,7 +145,7 @@ public class ProjectModel implements Runnable {
                 List<SystemUser> usersAssignedToProject = projectManager.getSystemUsersAssignedToProject(projectId);
 
                 updateValue(usersAssignedToProject);
-
+                copyUsersOnProject = new ArrayList<SystemUser>(usersAssignedToProject);
                 return usersAssignedToProject;
             }
         };
@@ -151,14 +177,13 @@ public class ProjectModel implements Runnable {
 
     }
 
+
     public ObservableList<ProjectStatus> getAllStatuses() {
         return FXCollections.observableList(Arrays.stream(ProjectStatus.values()).toList());
     }
 
     @Override
     public void run() {
-        System.out.println("projects update");
-
         List<Project> updatedProjects;
         try {
             updatedProjects = projectManager.getModifiedProjects(lastUpdateTime);
@@ -178,6 +203,8 @@ public class ProjectModel implements Runnable {
         users = FXCollections.observableList(projectManager.getAllUserNotAssignedToProject(projectId));
         return users;
     }
+
+
 
 
 }

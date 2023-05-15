@@ -122,34 +122,11 @@ public class ProjectInfoController extends BaseController implements Initializab
         addAssignedButton(assignUser);
 
         assignUser.setOnMouseClicked(event -> {
-            //FXMLLoader loader = openStage("/gui/views/projectViews/AddUserToProjectView.fxml", "Assign User");
                 FXMLLoader loader = loadView("/gui/views/projectViews/AddUserToProjectView.fxml");
                 AddUserToProjectController controller = loader.getController();
-                //controller.setEditContent((SystemUser) tableView.getSelectionModel().getSelectedItem());//todo
                 loadInMainView(loader.getRoot(), projectsView);
                 controller.setProject(project);
-
         });
-    }
-
-    private void assignUserToProject(SystemUser selectedUser) {
-        try {
-            Task<Void> assignUserToProjectTask = getModelsHandler()
-                    .getProjectModel()
-                    .assignSystemUserToProject(project.getID(),
-                    selectedUser.getEmail());
-
-            assignUserToProjectTask.setOnSucceeded(succeddedEvent -> {
-                obsAssignedUsers.add(selectedUser);
-                obsUnAssignedUsers.remove(selectedUser);
-            });
-
-            assignUserToProjectTask.setOnFailed(failedEvent -> displayError(assignUserToProjectTask.getException()));
-
-            TaskExecutor.executeTask(assignUserToProjectTask);
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     private void addUnAssignUserBtn() {
@@ -158,12 +135,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 unAssignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(unAssignUser);
-        unAssignUser.setDisable(true);
 
         unAssignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-
-            unAssignUser(selectedUser);
+            FXMLLoader loader = loadView("/gui/views/projectViews/RemoveUserFormProjectView.fxml");
+            RemoveUserFromProject controller = loader.getController();
+            loadInMainView(loader.getRoot(), projectsView);
+            controller.setContent(project);
         });
     }
 

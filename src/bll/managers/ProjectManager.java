@@ -70,7 +70,7 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
-    public List<Project> search(List<Project> allProjects, String query) {
+    public List search(List allProjects, String query) {
         return search.searchForString(allProjects, query);
     }
 }

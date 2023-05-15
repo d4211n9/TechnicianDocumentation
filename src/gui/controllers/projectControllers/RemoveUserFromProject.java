@@ -4,43 +4,35 @@ import be.Project;
 import be.SystemUser;
 import gui.controllers.TableViewController;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class AddUserToProjectController extends TableViewController implements Initializable {
+public class RemoveUserFromProject extends TableViewController {
+
     public TableColumn tcName;
     public TableColumn tcEmail;
     public TableColumn tcRole;
-
-    public Project project;
-    public HBox buttonArea;
-    public TextField txtfSearch;
     public VBox usersView;
+    private Project project;
 
-
-    public void setProject(Project project){
+    public void setContent(Project project){
         this.project = project;
-
         loadTableView();
- 
         tableViewListener();
     }
+
+
 
     private void tableViewListener() {
         tableView.setOnMouseClicked(event -> {
             try {
                 SystemUser s = ((SystemUser)tableView.getSelectionModel().getSelectedItem());
-                Task t = getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(), s);
+                Task t = getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(), s.getEmail());
                 tableView.setDisable(true);
                 t.run();
                 t.setOnSucceeded(event1 -> {
@@ -52,36 +44,25 @@ public class AddUserToProjectController extends TableViewController implements I
             }
         });
     }
-
-
-    public void handleBack() {
-        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
-    }
-
     private void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcRole.setCellValueFactory(new PropertyValueFactory<>("role"));
         try {
-            tableView.setItems(getModelsHandler().getProjectModel().getAllUsersNotAssignedProject(project.getID()));
+            tableView.setItems(getModelsHandler().getProjectModel().getAllUsersOnProject(project.getID()));
         } catch (Exception e) {
             displayError(e);
         }
     }
 
-    public void handleRemoveUsers(MouseEvent mouseEvent) {
-        FXMLLoader loader = loadView("/gui/views/projectViews/RemoveUserFormProjectView.fxml");
-        RemoveUserFromProject controller = loader.getController();
-        loadInMainView(loader.getRoot(), usersView);
-        controller.setContent(project);
+    public void handleBack(ActionEvent actionEvent) {
+        getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Button b = createButton("Confirm");
-        b.setOnMousePressed(event -> {
-            handleBack();
-        });
-        buttonArea.getChildren().add(0, b);
+    public void handleAddUsers(MouseEvent mouseEvent) {
+        FXMLLoader loader = loadView("/gui/views/projectViews/AddUserToProjectView.fxml");
+        AddUserToProjectController controller = loader.getController();
+        loadInMainView(loader.getRoot(), usersView);
+        controller.setProject(project);
     }
 }
