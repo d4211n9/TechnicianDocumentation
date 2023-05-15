@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import util.ViewPaths;
 
 
 public class RemoveUserFromProject extends TableViewController {
@@ -60,7 +61,7 @@ public class RemoveUserFromProject extends TableViewController {
     }
 
     public void handleAddUsers(MouseEvent mouseEvent) {
-        FXMLLoader loader = loadView("/gui/views/projectViews/AddUserToProjectView.fxml");
+        FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
         AddUserToProjectController controller = loader.getController();
         loadInMainView(loader.getRoot(), usersView);
         controller.setProject(project);

@@ -4,6 +4,7 @@ import be.Project;
 import be.SystemUser;
 import gui.controllers.TableViewController;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,19 +14,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import util.ViewPaths;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddUserToProjectController extends TableViewController implements Initializable {
-    public TableColumn tcName;
-    public TableColumn tcEmail;
-    public TableColumn tcRole;
-
-    public Project project;
-    public HBox buttonArea;
-    public TextField txtfSearch;
-    public VBox usersView;
+    @FXML
+    private TableColumn tcName, tcEmail, tcRole;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private VBox usersView;
+    private Project project;
 
 
     public void setProject(Project project){
@@ -48,7 +49,7 @@ public class AddUserToProjectController extends TableViewController implements I
                     tableView.setDisable(false);
                 });
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                displayError(e);
             }
         });
     }
@@ -70,7 +71,7 @@ public class AddUserToProjectController extends TableViewController implements I
     }
 
     public void handleRemoveUsers(MouseEvent mouseEvent) {
-        FXMLLoader loader = loadView("/gui/views/projectViews/RemoveUserFormProjectView.fxml");
+        FXMLLoader loader = loadView(ViewPaths.REMOVE_FROM_PROJECT);
         RemoveUserFromProject controller = loader.getController();
         loadInMainView(loader.getRoot(), usersView);
         controller.setContent(project);

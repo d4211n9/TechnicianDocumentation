@@ -47,13 +47,9 @@ public class ProjectModel implements Runnable {
     }
 
     public ObservableList<SystemUser> getAllUsersOnProject(int projectID) throws Exception {
-        System.out.println("kfkfkf");
         allUsersOnProject = projectManager.getSystemUsersAssignedToProject(projectID);
-        System.out.println("kfkfkf");
         copyUsersOnProject = new ArrayList<>(allUsersOnProject);
-        System.out.println("kfkfkf");
         filteredUserList = FXCollections.observableList(copyUsersOnProject);
-        System.out.println("kfkfkf");
         return filteredUserList;
     }
 
@@ -91,10 +87,6 @@ public class ProjectModel implements Runnable {
 
     public ObservableList<Project> getAllProjects() throws Exception {
         return filteredProjectList;
-    }
-
-    public Project softDeleteProject (Project project) throws Exception {
-        return null;
     }
 
     public Task<Boolean> updateProject(Project updatedProject) {
