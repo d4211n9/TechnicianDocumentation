@@ -77,7 +77,7 @@ public class Client implements Searchable {
 
     @Override
     public Object search(String query) {
-        String searchableFields = ("#" + ID + ": " + name + "(" + type + ")").toLowerCase();
+        String searchableFields = ("#" + ID + ": " + name + "(" + type + ") " + clientAddress).toLowerCase();
         String lowerCaseQuery = query.toLowerCase();
 
         if (searchableFields.contains(lowerCaseQuery)) return this;
