@@ -127,7 +127,6 @@ public class SystemUsersAssignedToProjectsDAO implements ISystemUsersAssignedToP
                 SystemUser assignedSystemUser = new SystemUser(email, role, name);
 
                 unAssignedSystemUsers.add(assignedSystemUser);
-                System.out.println(assignedSystemUser);
             }
 
             return unAssignedSystemUsers;

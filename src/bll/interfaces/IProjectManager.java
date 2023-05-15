@@ -17,7 +17,7 @@ public interface IProjectManager {
     Project updateProject(Project project) throws Exception;
     void deleteProject(Project deletedProject) throws Exception;
 
-    List<Project> search(List<Project> allProjects, String query);
+    List search(List allProjects, String query);
 
     List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception;
 

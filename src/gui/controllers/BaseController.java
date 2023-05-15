@@ -45,7 +45,7 @@ public class BaseController {
 
     public static void backgroundUpdate(List<Runnable> runnable) throws Exception {
         if (executorService != null) {
-            executorService.shutdownNow();
+            executorService.shutdown();
         }
 
         executorService = Executors.newScheduledThreadPool(runnable.size(), r -> {

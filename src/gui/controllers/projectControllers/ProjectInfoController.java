@@ -122,34 +122,11 @@ public class ProjectInfoController extends BaseController implements Initializab
         addAssignedButton(assignUser);
 
         assignUser.setOnMouseClicked(event -> {
-            //FXMLLoader loader = openStage("/gui/views/projectViews/AddUserToProjectView.fxml", "Assign User");
-                FXMLLoader loader = loadView("/gui/views/projectViews/AddUserToProjectView.fxml");
+                FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
                 AddUserToProjectController controller = loader.getController();
-                //controller.setEditContent((SystemUser) tableView.getSelectionModel().getSelectedItem());//todo
                 loadInMainView(loader.getRoot(), projectsView);
                 controller.setProject(project);
-
         });
-    }
-
-    private void assignUserToProject(SystemUser selectedUser) {
-        try {
-            Task<Void> assignUserToProjectTask = getModelsHandler()
-                    .getProjectModel()
-                    .assignSystemUserToProject(project.getID(),
-                    selectedUser.getEmail());
-
-            assignUserToProjectTask.setOnSucceeded(succeddedEvent -> {
-                obsAssignedUsers.add(selectedUser);
-                obsUnAssignedUsers.remove(selectedUser);
-            });
-
-            assignUserToProjectTask.setOnFailed(failedEvent -> displayError(assignUserToProjectTask.getException()));
-
-            TaskExecutor.executeTask(assignUserToProjectTask);
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     private void addUnAssignUserBtn() {
@@ -158,31 +135,13 @@ public class ProjectInfoController extends BaseController implements Initializab
                 unAssignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(unAssignUser);
-        unAssignUser.setDisable(true);
 
         unAssignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-
-            unAssignUser(selectedUser);
+            FXMLLoader loader = loadView(ViewPaths.REMOVE_FROM_PROJECT);
+            RemoveUserFromProject controller = loader.getController();
+            loadInMainView(loader.getRoot(), projectsView);
+            controller.setContent(project);
         });
-    }
-
-    private void unAssignUser(SystemUser selectedUser) {
-        try {
-            Task<Void> deleteUserAssignedToProjectTask = getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
-                    selectedUser.getEmail());
-
-            deleteUserAssignedToProjectTask.setOnSucceeded(succeddedEvent -> {
-                obsAssignedUsers.remove(selectedUser);
-                obsUnAssignedUsers.add(selectedUser);
-            });
-
-            deleteUserAssignedToProjectTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToProjectTask.getException()));
-
-            TaskExecutor.executeTask(deleteUserAssignedToProjectTask);
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     private void addAssignedButton(Button button) {
@@ -232,7 +191,6 @@ public class ProjectInfoController extends BaseController implements Initializab
 
     private void loadUsers() {
         loadAssignedUsers();
-        loadUnAssignedUsers();
     }
 
     private void loadAssignedUsers() {
@@ -247,43 +205,10 @@ public class ProjectInfoController extends BaseController implements Initializab
             });
 
             assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
-
             TaskExecutor.executeTask(assignedUsersTask);
         }
         catch (Exception e) {
             displayError(e);
-        }
-    }
-
-    private void loadUnAssignedUsers() {
-        try {
-            Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
-
-            unAssignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                obsUnAssignedUsers = FXCollections.observableList(newValue);
-            });
-
-            unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
-
-            TaskExecutor.executeTask(unAssignedUsersTask);
-        }
-        catch (Exception e) {
-            displayError(e);
-        }
-    }
-
-    /**
-     * Switches between showing list of assigned and unassigned users
-     */
-    public void handleToggleUsers() {
-        listUsers.getSelectionModel().select(null); //De-select user to avoid "hanging" selection
-        if(toggleUsers.isSelected()) {
-            listUsers.setItems(obsAssignedUsers);
-            lblAssignedUsers.setText("Users Assigned");
-        } else {
-            listUsers.setItems(obsUnAssignedUsers);
-            lblAssignedUsers.setText("Users Not Assigned");
         }
     }
 

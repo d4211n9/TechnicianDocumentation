@@ -4,6 +4,7 @@ import be.Address;
 import be.Client;
 import be.Enum.ProjectStatus;
 import be.Project;
+import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXToggleButton;
@@ -95,15 +96,14 @@ public class AddProjectController extends BaseController implements Initializabl
 
     private void assignLoggedInSystemUserToProject(Project project) {
         try {
-            String loggedInUserEmail = getModelsHandler()
+            SystemUser loggedInUser = getModelsHandler()
                     .getSystemUserModel()
                     .getLoggedInSystemUser()
-                    .getValue()
-                    .getEmail();
+                    .getValue();
 
             Task<Void> assignLoggedInUserToProjectTask = getModelsHandler()
                     .getProjectModel()
-                    .assignSystemUserToProject(project.getID(), loggedInUserEmail);
+                    .assignSystemUserToProject(project.getID(), loggedInUser);
 
             assignLoggedInUserToProjectTask.setOnSucceeded(event -> {
                 openProjectInfo(project);

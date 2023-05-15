@@ -29,19 +29,6 @@
                         <Insets left="10.0" top="10.0" />
                     </HBox.margin>
                 </Label>
-                <TextField fx:id="txtfSearch" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#handleSearch" prefHeight="35.0" prefWidth="237.0" promptText="Search..." HBox.hgrow="ALWAYS">
-                    <HBox.margin>
-                        <Insets right="10.0" top="10.0" />
-                    </HBox.margin>
-                </TextField>
-                <JFXButton fx:id="btnSearch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="35.0" text="🔍" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
-                    <HBox.margin>
-                        <Insets right="10.0" top="10.0" />
-                    </HBox.margin>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </JFXButton>
             </children>
             <VBox.margin>
                 <Insets bottom="10.0" />
@@ -49,28 +36,14 @@
         </HBox>
       <HBox alignment="CENTER" prefHeight="58.0" prefWidth="840.0" VBox.vgrow="NEVER">
          <children>
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="569.0" text="Select User To Assign Them" wrapText="true" HBox.hgrow="ALWAYS">
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="569.0" text="Select User To Assign Them" wrapText="true" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </Label>
-            <HBox fillHeight="false" minWidth="-Infinity" onMouseClicked="#handleAddUser" prefHeight="28.0" prefWidth="246.0" HBox.hgrow="NEVER">
-               <HBox.margin>
-                  <Insets bottom="20.0" right="10.0" top="10.0" />
-               </HBox.margin>
-               <children>
-                  <Label prefHeight="28.0" prefWidth="232.0" text="Want to See Users Assigned To Project?" underline="true" wrapText="true">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Label>
-                  <JFXButton fx:id="btnSearch1" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" text="👤" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </JFXButton>
-               </children>
-            </HBox>
          </children>
       </HBox>
         <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
@@ -83,5 +56,25 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" />
             </VBox.margin>
         </TableView>
+      <HBox fx:id="buttonArea" alignment="CENTER" prefHeight="68.0" prefWidth="840.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT" minWidth="-Infinity" onMouseClicked="#handleRemoveUsers" prefHeight="80.0" prefWidth="260.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="20.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <children>
+                  <Label prefHeight="38.0" prefWidth="198.0" text="Want to Remove User From Project?" underline="true" wrapText="true">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <JFXButton buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="35.0" text="👤" textOverrun="CLIP" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children></HBox>
     </children>
 </VBox>
