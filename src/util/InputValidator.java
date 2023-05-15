@@ -47,7 +47,7 @@ public class InputValidator {
     public static boolean isStreet(String street) {
         return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$");
     }
-    
+
     public static boolean isCity(String city) {
         return city.matches("[A-Z][a-zA-Z]*");
     }
