@@ -48,8 +48,8 @@ public class PhotoDAO implements IPhotoDAO {
             if (resultSet.next()) {
                 int ID = resultSet.getInt(1);
 
-                ByteArrayInputStream bais = new ByteArrayInputStream(photo.getPhotoBytes());
-                Image imgPhoto = convertToFxImage(ImageIO.read(bais));
+                Image imgPhoto = convertToFxImage(photo.getPhotoBytes());
+
                 newPhoto = new Photo(ID, photo.getInstallationID(), imgPhoto, photo.getDescription());
             }
         } catch (SQLException e) {
@@ -79,8 +79,8 @@ public class PhotoDAO implements IPhotoDAO {
                 byte[] photoBytes = resultSet.getBytes("Image");
                 String description = resultSet.getString("Description");
 
-                ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
-                Image imgPhoto = convertToFxImage(ImageIO.read(bais));
+                Image imgPhoto = convertToFxImage(photoBytes);
+
                 Photo photo = new Photo(ID, installationID, imgPhoto, description);
 
                 allPhotos.add(photo);

@@ -313,7 +313,7 @@ public class InstallationInfoController extends BaseController implements Initia
             {
                 try {
                     byte[] fileContent = Files.readAllBytes(f.toPath());
-                    Photo photo = new Photo(installation.getID(), fileContent, "billede beskrivelse..");
+                    Photo photo = new Photo(installation.getID(), fileContent, f.getName());
                     photo = getModelsHandler().getPhotoModel().uploadPhoto(photo);
                     showPhotoCard(photo);
 

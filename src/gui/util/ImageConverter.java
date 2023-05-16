@@ -14,7 +14,9 @@ import java.io.*;
 
 public class ImageConverter {
 
-    public static Image convertToFxImage(BufferedImage image) {
+    public static Image convertToFxImage(byte[] fileContent) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(fileContent);
+        BufferedImage image = ImageIO.read(bais);
         WritableImage wr = null;
         if (image != null) {
             wr = new WritableImage(image.getWidth(), image.getHeight());
