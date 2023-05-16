@@ -5,6 +5,8 @@ import be.Enum.SystemRole;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -105,8 +107,12 @@ public class ClientController extends TableViewController implements Initializab
 
     private void handleDelete(Client client) {
         try {
-            getModelsHandler().getClientModel().deleteClient(client);
-            handleSearch();
+            Task<Void> deleteClientTask = getModelsHandler().getClientModel().deleteClient(client);
+
+            deleteClientTask.setOnSucceeded(event -> handleSearch());
+            deleteClientTask.setOnFailed(event -> displayError(deleteClientTask.getException()));
+
+            TaskExecutor.executeTask(deleteClientTask);
         } catch (Exception e) {
             displayError(e);
         }

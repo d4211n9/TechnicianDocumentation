@@ -114,7 +114,15 @@ public class ClientModel implements Runnable {
         }
     }
 
-    public void deleteClient(Client deletedClient) throws Exception {
-        clientManager.deleteClient(deletedClient);
+    public Task<Void> deleteClient(Client deletedClient) throws Exception {
+        Task<Void> deleteClientTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                clientManager.deleteClient(deletedClient);
+                return null;
+            }
+        };
+
+        return deleteClientTask;
     }
 }

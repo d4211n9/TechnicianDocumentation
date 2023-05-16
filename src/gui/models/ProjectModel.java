@@ -135,8 +135,17 @@ public class ProjectModel implements Runnable {
         return updateProjectTask;
     }
 
-    public void deleteProject(Project deletedProject) throws Exception {
-        projectManager.deleteProject(deletedProject);
+    public Task<Void> deleteProject(Project deletedProject) throws Exception {
+
+        Task<Void> deleteProjectTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                projectManager.deleteProject(deletedProject);
+                return null;
+            }
+        };
+
+        return deleteProjectTask;
     }
 
     public Task<Void> assignSystemUserToProject(int projectId, SystemUser user) {

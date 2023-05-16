@@ -18,6 +18,7 @@ public class ProjectManager implements IProjectManager {
 
     public ProjectManager() throws Exception {
         projectFacade = new ProjectFacade();
+        deleteFacade = new DeleteFacade();
         search = new Search();
     }
 
