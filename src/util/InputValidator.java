@@ -1,14 +1,8 @@
 package util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class InputValidator {
     public static boolean isEmail(String email) {
-        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
-        Matcher mat = pattern.matcher(email);
-
-        return mat.matches() && !email.isEmpty();
+        return email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}") && !email.isEmpty();
     }
 
     /**
@@ -27,36 +21,44 @@ public class InputValidator {
      * @return true if password is validated
      */
     public static boolean isPassword(String password) {
-        Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$");
-        Matcher mat = pattern.matcher(password);
-
-        return mat.matches() && !password.isEmpty();
+        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$") && !password.isEmpty();
     }
 
 
     //todo make validation
     public static boolean isName(String name){
-        return true;
+        return name.matches("[A-Z][a-zA-Z]*");
     }
 
-    //TODO Make validation of phone no.
+    /**
+     * Must include at least 8 digits, but can include more digits and characters (for +45, 0045 and so on)
+     * @param phone, the user input to validate
+     * @return true if the input matches a DK phone no.
+     */
     public static boolean isPhone(String phone) {
-        return true;
+        return phone.matches("^\\D*(?:\\d\\D*){8,}$");
     }
 
-    //TODO Make validation of street name and no.
+    /**
+     * Must include min. 1 character for street name and min. 1 digit for street no.
+     * @param street, the user input to validate
+     * @return true if street input matches pattern
+     */
     public static boolean isStreet(String street) {
-        return true;
+        return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$");
     }
 
-    //TODO Make validation of city.
     public static boolean isCity(String city) {
-        return true;
+        return city.matches("[A-Z][a-zA-Z]*");
     }
 
-    //TODO Make validation of postal code.
+    /**
+     * Checks for DK postal codes only, which must be 4 digits
+     * @param postalCode, the user input to validate
+     * @return true if the input matches a DK postal code.
+     */
     public static boolean isPostalCode(int postalCode) {
-        return true;
+        String zip = "" + postalCode;
+        return zip.matches("\\d{4}");
     }
-
 }

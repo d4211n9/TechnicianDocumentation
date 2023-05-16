@@ -10,5 +10,5 @@ public interface IPhotoManager {
 
     List<Photo> getPhotoFromInstallation(int installationID) throws Exception;
 
-    public Photo deletePhoto(Photo photo) throws Exception;
+    void deletePhoto(Photo photo) throws Exception;
 }

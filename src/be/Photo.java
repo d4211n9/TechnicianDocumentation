@@ -20,22 +20,10 @@ public class Photo implements Serializable {
         this.description = description;
     }
 
-    public Photo (int installationID, Image photo, String description){
-        this.installationID = installationID;
-        this.photo = photo;
-        this.description = description;
-    }
-
-    public Photo (int ID, int installationID, byte[] photoBytes, String description) {
+    public Photo (int installationID, byte[] photoBytes, String description) {
         this.ID = ID;
         this.installationID = installationID;
         this.photoBytes = photoBytes;
-        this.description = description;
-    }
-
-    public Photo(int id, byte[] fileContent, String description) {
-        this.ID = ID;
-        this.photoBytes = fileContent;
         this.description = description;
     }
 

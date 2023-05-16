@@ -9,4 +9,6 @@ public interface ISystemUsersAssignedToProjectsDAO {
 
     void deleteSystemUserAssignedToProject(int projectId, String systemUserEmail) throws Exception;
     void assignSystemUserToProject(int projectId, String systemUserEmail) throws Exception;
+
+    List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception;
 }

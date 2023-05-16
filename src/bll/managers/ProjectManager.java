@@ -4,16 +4,21 @@ import be.Project;
 import be.SystemUser;
 import bll.interfaces.IProjectManager;
 import bll.util.Search;
+import dal.facades.DeleteFacade;
 import dal.facades.ProjectFacade;
+import exceptions.DALException;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ProjectManager implements IProjectManager {
     private ProjectFacade projectFacade;
+    private DeleteFacade deleteFacade;
     private Search search;
 
     public ProjectManager() throws Exception {
         projectFacade = new ProjectFacade();
+        deleteFacade = new DeleteFacade();
         search = new Search();
     }
 
@@ -33,6 +38,11 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
+    public void deleteProject(Project deletedProject) throws Exception {
+        deleteFacade.deleteProject(deletedProject);
+    }
+
+    @Override
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
         return projectFacade.getSystemUsersAssignedToProject(projectId);
     }
@@ -47,13 +57,22 @@ public class ProjectManager implements IProjectManager {
         projectFacade.assignSystemUserToProject(projectId, systemUserEmail);
     }
 
-    @Override
-    public Project softDeleteProject(Project project) throws Exception {
-        return projectFacade.softDeleteProject(project);
+    public List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception{
+        return projectFacade.getAllUserNotAssignedToProject(projectId);
     }
 
     @Override
-    public List<Project> search(List<Project> allProjects, String query) {
+    public List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException {
+        return projectFacade.getAllProjectsAssignedToUser(systemUserID);
+    }
+
+    @Override
+    public List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception {
+        return projectFacade.getModifiedProjects(lastCheck);
+    }
+
+    @Override
+    public List search(List allProjects, String query) {
         return search.searchForString(allProjects, query);
     }
 }

@@ -26,7 +26,7 @@ public class PhotoManager implements IPhotoManager {
     }
 
     @Override
-    public Photo deletePhoto(Photo photo) throws Exception {
-        return projectFacade.deletePhoto(photo);
+    public void deletePhoto(Photo photo) throws Exception {
+        projectFacade.deletePhoto(photo);
     }
 }

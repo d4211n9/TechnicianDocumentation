@@ -10,9 +10,11 @@ import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.controllers.photo.PhotoCardController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -59,9 +61,9 @@ public class InstallationInfoController extends BaseController implements Initia
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
     private final List<Image> images = new ArrayList<>();
-    private List<Photo> photoList;
+    private List<Photo> photos;
 
-    //public Photo photo;
+    public Photo photo;
     private int currentImageIndex = 0;
     private ObservableList<SystemUser> obsAssignedUsers = null;
     private ObservableList<SystemUser> obsUnAssignedUsers = null;
@@ -70,14 +72,17 @@ public class InstallationInfoController extends BaseController implements Initia
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
         userListener();
+    }
 
-        /*
-        hbImage.widthProperty().addListener((observable, oldValue, newValue) ->
+    private void installationBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getInstallationModel());
 
-                imgPhoto.setFitWidth((Double) newValue));
-        hbImage.heightProperty().addListener((observable, oldValue, newValue) ->
-                imgPhoto.setFitHeight((Double) newValue));
-        */
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -88,10 +93,6 @@ public class InstallationInfoController extends BaseController implements Initia
 
         loadUsers();
         loadPhotosToInstallation();
-
-        if(installation.getDrawingBytes() != null) {
-            Platform.runLater(() -> loadPhotos());
-        }
     }
 
     /**
@@ -118,6 +119,13 @@ public class InstallationInfoController extends BaseController implements Initia
                 btnEditInfo,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
         addInfoButton(btnEditInfo);
+
+        btnEditInfo.setOnAction(event -> {
+            FXMLLoader loader = loadView(ViewPaths.CREATE_INSTALLATION);
+            CreateInstallationController controller = loader.getController();
+            controller.setEditContent(installation);
+            loadInMainView(loader.getRoot(), installationInfo);
+        });
     }
 
     private void addAssignUserBtn() {
@@ -130,20 +138,32 @@ public class InstallationInfoController extends BaseController implements Initia
 
         assignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                if(getModelsHandler().getInstallationModel().assignSystemUserToInstallation(
-                        installation.getID(),
-                        selectedUser.getEmail())) {
+
+            assignUserToInstallation(selectedUser);
+        });
+    }
+
+    private void assignUserToInstallation(SystemUser selectedUser) {
+        try {
+            Task<Boolean> assignUserToInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .assignSystemUserToInstallation(installation.getID(), selectedUser.getEmail());
+
+            assignUserToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue) {
                     obsAssignedUsers.add(selectedUser);
                     obsUnAssignedUsers.remove(selectedUser);
                 } else {
                     displayError(new Throwable("Failed to add the user to the installation"));
                 }
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
-        });
+            });
+
+            assignUserToInstallationTask.setOnFailed(failedEvent -> displayError(assignUserToInstallationTask.getException()));
+
+            TaskExecutor.executeTask(assignUserToInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void addUnAssignUserBtn() {
@@ -156,37 +176,77 @@ public class InstallationInfoController extends BaseController implements Initia
 
         unAssignUser.setOnAction(event -> {
             SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                if(getModelsHandler().getInstallationModel().deleteSystemUserAssignedToInstallation(
-                        installation.getID(),
-                        selectedUser.getEmail())) {
+
+            unAssignUser(selectedUser);
+        });
+    }
+
+    private void unAssignUser(SystemUser selectedUser) {
+        try {
+            Task<Boolean> deleteUserAssignedToInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .deleteSystemUserAssignedToInstallation(installation.getID(), selectedUser.getEmail());
+
+            deleteUserAssignedToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue) {
                     obsAssignedUsers.remove(selectedUser);
                     obsUnAssignedUsers.add(selectedUser);
                 } else {
                     displayError(new Throwable("Failed to remove the user from the installation"));
                 }
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
-        });
+            });
+
+            deleteUserAssignedToInstallationTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToInstallationTask.getException()));
+
+            TaskExecutor.executeTask(deleteUserAssignedToInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void loadUsers() {
+        loadAssignedUsers();
+        loadUnAssignedUsers();
+    }
+
+    private void loadAssignedUsers() {
         try {
-            List<SystemUser> assignedUsers = getModelsHandler().getInstallationModel().
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getInstallationModel().
                     getSystemUsersAssignedToInstallation(installation.getID());
-            obsAssignedUsers = FXCollections.observableList(assignedUsers);
 
-            List<SystemUser> unAssignedUsers = getModelsHandler().getInstallationModel().
-                    getSystemUsersNotAssignedToInstallation(installation.getID());
-            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
-        } catch (Exception e) {
-            displayError(e);
-            e.printStackTrace(); //TODO replace with log to the database?
+            assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                List<SystemUser> assignedUsers = newValue;
+                obsAssignedUsers = FXCollections.observableList(assignedUsers);
+
+                listUsers.setItems(obsAssignedUsers);
+            });
+
+            assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
+
+            TaskExecutor.executeTask(assignedUsersTask);
         }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
 
-        listUsers.setItems(obsAssignedUsers);
+    private void loadUnAssignedUsers() {
+        try {
+            Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getInstallationModel().
+                    getSystemUsersNotAssignedToInstallation(installation.getID());
+
+            unAssignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                List<SystemUser> unAssignedUsers = newValue;
+                obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
+            });
+
+            unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
+
+            TaskExecutor.executeTask(unAssignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void userListener() {
@@ -277,23 +337,31 @@ public class InstallationInfoController extends BaseController implements Initia
             files.forEach((File f) ->
             {
                 try {
-                    //TODO opret Photo med byte[] constructor
                     byte[] fileContent = Files.readAllBytes(f.toPath());
                     Photo photo = new Photo(installation.getID(), fileContent, "billede beskrivelse..");
-                    //getModelsHandler().getPhotoModel().getPhotoFromInstallation(photo.getInstallationID());
-                    //getPhotoModel.Create(photo);
-                    installation.setDrawingBytes(fileContent);
+                    getModelsHandler().getPhotoModel().uploadPhoto(photo);
+
                 } catch (Exception e) {
                     displayError(e);
                 }
-                images.add(new Image(f.toURI().toString()));
             });
             displayImage();
-            try {
-                getModelsHandler().getInstallationModel().updateInstallation(installation);
-            } catch (Exception e) {
-                displayError(e);
-            }
+
+            updateInstallation();
+        }
+    }
+
+    private void updateInstallation() {
+        try {
+            Task<Installation> updateInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .updateInstallation(installation);
+
+            updateInstallationTask.setOnFailed(event -> displayError(updateInstallationTask.getException()));
+
+            TaskExecutor.executeTask(updateInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -320,20 +388,22 @@ public class InstallationInfoController extends BaseController implements Initia
     private void loadPhotosToInstallation() {
 
         try{
-            photoList = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());
+            photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());
         } catch (Exception e) {
             e.printStackTrace();
             displayError(e);
         }
-        for (Photo p : photoList) {
-            showPhotoCard(p);
+        if (photos != null) {
+            for (Photo p : photos) {
+                showPhotoCard(p);
+            }
         }
     }
 
     private void showPhotoCard(Photo photo) {
         FXMLLoader photoCardLoader = loadView(ViewPaths.PHOTO_CARD);
 
-        VBox photoCard =  photoCardLoader.getRoot();
+        VBox photoCard = photoCardLoader.getRoot();
         PhotoCardController cardController = photoCardLoader.getController();
         cardController.setContent(photo);
 

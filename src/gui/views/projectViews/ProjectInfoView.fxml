@@ -2,11 +2,11 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
-<?import com.jfoenix.controls.JFXToggleButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/ProjectInfoStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.projectControllers.ProjectInfoController">
+<VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/ProjectInfoStylesheet.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.projectControllers.ProjectInfoController">
    <children>
       <HBox prefHeight="55.0" prefWidth="840.0">
          <children>
@@ -28,7 +28,7 @@
                   <Font size="16.0" />
                </font>
             </JFXButton>
-            <Label fx:id="lblProjectTitle" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="548.0" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblProjectTitle" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="500.0" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -39,6 +39,26 @@
                   <Insets left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Label>
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Label text="Status" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cbStatus" disable="true" prefWidth="120.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+               <HBox.margin>
+                  <Insets right="45.0" />
+               </HBox.margin>
+            </HBox>
          </children>
          <VBox.margin>
             <Insets bottom="10.0" />
@@ -151,16 +171,12 @@
                                           <Insets bottom="10.0" left="45.0" top="10.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <HBox fx:id="hbProjectInfoBtnArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="68.0" prefWidth="758.0" VBox.vgrow="ALWAYS">
+                                    <HBox fx:id="hbProjectDescription" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="68.0" prefWidth="758.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
                                           <Insets left="10.0" right="10.0" />
                                        </VBox.margin>
                                        <children>
-                                          <TextArea fx:id="taDescription" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="85.0" prefWidth="800.0" wrapText="true" HBox.hgrow="ALWAYS">
-                                             <HBox.margin>
-                                                <Insets bottom="5.0" />
-                                             </HBox.margin>
-                                          </TextArea>
+                                          <JFXTextArea fx:id="txtaDescription" editable="false" focusColor="#90aed6" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" unFocusColor="#333333" wrapText="true" />
                                        </children>
                                     </HBox>
                                     <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="462.0" VBox.vgrow="NEVER">
@@ -218,11 +234,6 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXToggleButton fx:id="toggleUsers" onAction="#handleToggleUsers" prefHeight="58.0" prefWidth="0.0" selected="true" text=" " toggleColor="#657e9e" toggleLineColor="#90aed6" />
-                                 </children>
-                              </HBox>
                               <JFXListView fx:id="listUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="150.0" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" />
@@ -263,10 +274,5 @@
             </VBox>
          </content>
       </ScrollPane>
-      <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="820.0" VBox.vgrow="NEVER">
-         <VBox.margin>
-            <Insets left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-      </HBox>
    </children>
 </VBox>
