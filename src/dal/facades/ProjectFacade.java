@@ -11,6 +11,7 @@ import dal.interfaces.IInstallationDAO;
 import dal.interfaces.IProjectDAO;
 import dal.interfaces.ISystemUserAssignedToInstallationDAO;
 import dal.interfaces.ISystemUsersAssignedToProjectsDAO;
+import exceptions.DALException;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -87,5 +88,9 @@ public class ProjectFacade {
 
     public List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception{
         return systemUsersAssignedToProjectsDAO.getAllUserNotAssignedToProject(projectId);
+    }
+
+    public List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException{
+        return projectDAO.getAllProjectsAssignedToUser(systemUserID);
     }
 }

@@ -6,6 +6,7 @@ import bll.interfaces.IProjectManager;
 import bll.util.Search;
 import dal.facades.DeleteFacade;
 import dal.facades.ProjectFacade;
+import exceptions.DALException;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -58,6 +59,11 @@ public class ProjectManager implements IProjectManager {
 
     public List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception{
         return projectFacade.getAllUserNotAssignedToProject(projectId);
+    }
+
+    @Override
+    public List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException {
+        return projectFacade.getAllProjectsAssignedToUser(systemUserID);
     }
 
     @Override
