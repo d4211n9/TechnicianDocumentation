@@ -53,14 +53,11 @@ public class InstallationInfoController extends BaseController implements Initia
     @FXML
     private JFXListView listUsers;
     @FXML
-    private ImageView imgPhoto;
-    @FXML
     private JFXButton assignUser, unAssignUser;
     @FXML
     private JFXToggleButton toggleUsers;
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
-    private final List<Image> images = new ArrayList<>();
     private List<Photo> photos;
 
     public Photo photo;
@@ -92,6 +89,8 @@ public class InstallationInfoController extends BaseController implements Initia
         lblDescription.setText(installation.getDescription());
 
         loadUsers();
+
+        fpPhotos.prefWrapLengthProperty().bind(fpPhotos.widthProperty());
         loadPhotosToInstallation();
     }
 
@@ -301,31 +300,6 @@ public class InstallationInfoController extends BaseController implements Initia
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
-    private void loadPhotos() {
-        ByteArrayInputStream bais = new ByteArrayInputStream(installation.getDrawingBytes());
-        try {
-            images.add(convertToFxImage(ImageIO.read(bais)));
-            displayImage();
-        } catch (IOException e) {
-            displayError(e);
-        }
-    }
-
-    private static Image convertToFxImage(BufferedImage image) {
-        WritableImage wr = null;
-        if (image != null) {
-            wr = new WritableImage(image.getWidth(), image.getHeight());
-            PixelWriter pw = wr.getPixelWriter();
-            for (int x = 0; x < image.getWidth(); x++) {
-                for (int y = 0; y < image.getHeight(); y++) {
-                    pw.setArgb(x, y, image.getRGB(x, y));
-                }
-            }
-        }
-
-        return new ImageView(wr).getImage();
-    }
-
     public void handleBtnLoadAction() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select image files");
@@ -339,13 +313,13 @@ public class InstallationInfoController extends BaseController implements Initia
                 try {
                     byte[] fileContent = Files.readAllBytes(f.toPath());
                     Photo photo = new Photo(installation.getID(), fileContent, "billede beskrivelse..");
-                    getModelsHandler().getPhotoModel().uploadPhoto(photo);
+                    photo = getModelsHandler().getPhotoModel().uploadPhoto(photo);
+                    showPhotoCard(photo);
 
                 } catch (Exception e) {
                     displayError(e);
                 }
             });
-            displayImage();
 
             updateInstallation();
         }
@@ -362,26 +336,6 @@ public class InstallationInfoController extends BaseController implements Initia
             TaskExecutor.executeTask(updateInstallationTask);
         } catch (Exception e) {
             displayError(e);
-        }
-    }
-
-    public void handleBtnPreviousAction() {
-        if (!images.isEmpty()) {
-            currentImageIndex = (currentImageIndex - 1 + images.size()) % images.size();
-            displayImage();
-        }
-    }
-
-    public void handleBtnNextAction() {
-        if (!images.isEmpty()) {
-            currentImageIndex = (currentImageIndex + 1) % images.size();
-            displayImage();
-        }
-    }
-
-    private void displayImage() {
-        if (!images.isEmpty()) {
-            imgPhoto.setImage(images.get(currentImageIndex));
         }
     }
 

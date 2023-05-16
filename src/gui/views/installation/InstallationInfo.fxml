@@ -9,9 +9,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -106,18 +105,14 @@
                <content>
                   <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="150.0" minWidth="150.0" prefHeight="0.0">
                      <children>
-                        <HBox fx:id="hbImage" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                           <children>
-                              <ScrollPane fx:id="spPhotos" prefHeight="364.0" prefWidth="773.0">
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" top="10.0" />
-                                 </HBox.margin>
-                                 <content>
-                                    <FlowPane fx:id="fpPhotos" prefHeight="329.0" prefWidth="759.0" />
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </HBox>
+                        <ScrollPane fx:id="spPhotos" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="150.0" prefHeight="354.0" prefWidth="820.0" VBox.vgrow="ALWAYS">
+                           <content>
+                              <FlowPane fx:id="fpPhotos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="350.0" prefWidth="800.0" prefWrapLength="800.0" />
+                           </content>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ScrollPane>
                         <HBox fx:id="photosBtnArea" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="60.0" prefWidth="820.0" VBox.vgrow="NEVER">
                            <VBox.margin>
                               <Insets />
@@ -129,19 +124,6 @@
                                  </opaqueInsets>
                                  <HBox.margin>
                                     <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button id="btnPrevious" fx:id="btnPrevious" mnemonicParsing="false" onAction="#handleBtnPreviousAction" prefHeight="60.0" prefWidth="150.0" text="Previous">
-                                 <opaqueInsets>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </opaqueInsets>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button id="btnNext" fx:id="btnNext" mnemonicParsing="false" onAction="#handleBtnNextAction" prefHeight="60.0" prefWidth="150.0" text="Next">
-                                 <HBox.margin>
-                                    <Insets left="10.0" right="10.0" />
                                  </HBox.margin>
                               </Button>
                            </children>

@@ -21,7 +21,6 @@ public class Photo implements Serializable {
     }
 
     public Photo (int installationID, byte[] photoBytes, String description) {
-        this.ID = ID;
         this.installationID = installationID;
         this.photoBytes = photoBytes;
         this.description = description;
