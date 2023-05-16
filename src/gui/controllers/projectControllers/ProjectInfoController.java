@@ -12,7 +12,6 @@ import gui.controllers.BaseController;
 import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
-import gui.controllers.userController.CreateUserController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
