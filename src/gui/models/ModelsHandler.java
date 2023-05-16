@@ -11,6 +11,7 @@ public class ModelsHandler {
     private ClientModel clientModel;
     private InstallationModel installationModel;
     private AddressModel addressModel;
+    private DrawingModel drawingModel;
 
 
     private ModelsHandler() throws Exception {
@@ -26,6 +27,7 @@ public class ModelsHandler {
             clientModel = clientModelFuture.get();
             installationModel = installationModelFuture.get();
             addressModel =  addressModelFuture.get();
+            drawingModel = new DrawingModel();
         }
     }
 
