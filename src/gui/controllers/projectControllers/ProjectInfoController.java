@@ -1,10 +1,7 @@
 package gui.controllers.projectControllers;
 
-import be.Client;
+import be.*;
 import be.Enum.SystemRole;
-import be.Installation;
-import be.Project;
-import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleButton;
@@ -201,6 +198,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         });
         fpInstallations.getChildren().add(installationCard);
     }
+
 
     private void loadUsers() {
         try {

@@ -12,6 +12,7 @@ public class Photo implements Serializable {
     private byte[] photoBytes;
 
 
+
     public Photo (int ID, int installationID, Image photo, String description){
         this.ID = ID;
         this.installationID = installationID;
@@ -25,10 +26,26 @@ public class Photo implements Serializable {
         this.description = description;
     }
 
-    public Photo (int installationID, byte[] photoBytes, String description){
+    public Photo (int ID, int installationID, byte[] photoBytes, String description) {
+        this.ID = ID;
         this.installationID = installationID;
         this.photoBytes = photoBytes;
         this.description = description;
+    }
+
+    public Photo(int id, byte[] fileContent, String description) {
+        this.ID = ID;
+        this.photoBytes = fileContent;
+        this.description = description;
+    }
+
+
+    public byte[] getPhotoBytes() {
+        return photoBytes;
+    }
+
+    public void setPhotoBytes(byte[] photoBytes) {
+        this.photoBytes = photoBytes;
     }
 
     public int getID() {

@@ -8,11 +8,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
+import gui.controllers.photo.PhotoCardController;
 import gui.util.NodeAccessLevel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,11 +22,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import util.ViewPaths;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -40,11 +41,14 @@ import java.util.ResourceBundle;
 
 public class InstallationInfoController extends BaseController implements Initializable {
     @FXML
+    public FlowPane fpPhotos;
+    @FXML
     private VBox installationInfo, vbUserBtnArea;
     @FXML
     private HBox infoBtnArea, photosBtnArea, drawingBtnArea, deviceBtnArea, hbImage;
     @FXML
     private Label lblName, lblDescription, lblAssignedUsers;
+
     @FXML
     private JFXListView listUsers;
     @FXML
@@ -57,6 +61,9 @@ public class InstallationInfoController extends BaseController implements Initia
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
     private final List<Image> images = new ArrayList<>();
+    private List<Photo> photos;
+
+    public Photo photo;
     private int currentImageIndex = 0;
     private ObservableList<SystemUser> obsAssignedUsers = null;
     private ObservableList<SystemUser> obsUnAssignedUsers = null;
@@ -65,11 +72,17 @@ public class InstallationInfoController extends BaseController implements Initia
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
         userListener();
+        loadPhotosToInstallation();
 
+
+        /*
         hbImage.widthProperty().addListener((observable, oldValue, newValue) ->
+
                 imgPhoto.setFitWidth((Double) newValue));
         hbImage.heightProperty().addListener((observable, oldValue, newValue) ->
                 imgPhoto.setFitHeight((Double) newValue));
+        */
+
     }
 
 
@@ -307,11 +320,28 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
-public void loadPhotoInPhotoTab() {
+    private void loadPhotosToInstallation() {
 
+        try{
+            photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(photo.getInstallationID());
+        } catch (Exception e) {
+            e.printStackTrace();
+            displayError(e);
+        }
+        for (Photo p : photos) {
+            showPhotoCard(p);
+        }
+    }
 
+    private void showPhotoCard(Photo photo) {
+        FXMLLoader photoCardLoader = loadView(ViewPaths.PHOTO_CARD);
 
-}
+        VBox photoCard =  photoCardLoader.getRoot();
+        PhotoCardController cardController = photoCardLoader.getController();
+        cardController.setContent(photo);
+
+        fpPhotos.getChildren().add(photoCard);
+    }
 
 
 }

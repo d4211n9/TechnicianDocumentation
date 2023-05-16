@@ -20,7 +20,6 @@ public class PhotoCardController extends BaseController implements Initializable
 
     public Label lblPhotoDescription;
     public ImageView imgPhoto;
-    public Label lblPhotoName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -29,33 +28,12 @@ public class PhotoCardController extends BaseController implements Initializable
 
     public void setContent(Photo photo) {
         lblPhotoDescription.setText(photo.getDescription());
+        //imgPhoto.setImage(new Image(SymbolPaths.LOGO));
+        imgPhoto.setImage(photo.getPhoto());
 
-        FileChooser fileChooser = new FileChooser();
-        lblPhotoName.setText(fileChooser.getInitialFileName());
 
-    }
-
-    public VBox createPhotoCard(Photo photo) {
-        VBox photoCard = null;
-
-        try{
-            photoCard = FXMLLoader.load(getClass().getResource("/gui/views/photoViews/PhotoCard.fxml"));
-            //photoCard = ViewPaths.PHOTO_CARD;
-
-        } catch (Exception e) {
-            displayError(e);
-        }
-
-        Image img = new Image(SymbolPaths.LOGO);
-        ImageView imgView = new ImageView(img);
-
-        imgView.setPreserveRatio(true);
-        imgView.setFitWidth(200);
-        imgView.setFitHeight(160);
-
-        //lblPhotoDescription = photo.getDescription();
-
-        return photoCard;
+        //FileChooser fileChooser = new FileChooser();
+        //lblPhotoName.setText(fileChooser.getInitialFileName());
     }
 
 }

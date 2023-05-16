@@ -38,4 +38,8 @@ public class ModelsHandler {
     public InstallationModel getInstallationModel() {
         return installationModel;
     }
+
+    public PhotoModel getPhotoModel() {
+        return photoModel;
+    }
 }

@@ -71,20 +71,19 @@ public class PhotoDAO implements IPhotoDAO {
 
             ResultSet resultSet = statement.executeQuery();
 
-            int ID = resultSet.getInt(1);
-            int installationID = resultSet.getInt(2);
-            Image photo = resultSet.getBytes(3);
-            String description = resultSet.getString(4);
+            while (resultSet.next()) {
+                int ID = resultSet.getInt(1);
+                byte[] photoBytes = resultSet.getBytes(3);
+                String description = resultSet.getString(4);
 
+                Photo photo = new Photo(ID, installationID, photoBytes, description);
 
-            Photo photo = new Photo(ID, installationID, photo, description);
-
-            allPhotos.add(photo);
-
+                allPhotos.add(photo);
+            }
 
         } catch (SQLException e) {
         e.printStackTrace();
-        throw new DALException("Failed to read installations from project", e);
+        throw new DALException("Failed to read photo from installation", e);
     }
         return allPhotos;
     }
