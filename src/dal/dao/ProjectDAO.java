@@ -234,4 +234,69 @@ public class ProjectDAO implements IProjectDAO {
 
         return allProjects;
     }
+
+    public List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException {
+        ArrayList<Project> allProjects = new ArrayList<>();
+        String sql = "SELECT " +
+                "Project.ID AS 'ProjectID', Project.Name AS 'ProjectName', Project.[AddressID] AS 'ProjectAddressID', Project.Created AS 'ProjectCreated', Project.[Description] AS 'ProjectDescription', Project.Status AS 'Status', " +
+                "Client.ID AS 'ClientID', Client.Name AS 'ClientName', Client.AddressID AS 'ClientAddressID', Client.Email 'ClientEmail', Client.Phone AS 'ClientPhone', Client.[Type] AS 'ClientType', " +
+                "ClientAddress.ID AS 'ClientAddressID', ClientAddress.Street AS 'ClientStreet', ClientAddress.PostalCode AS 'ClientPostalCode', ClientAddress.City AS 'ClientCity', " +
+                "ProjectAddress.ID AS 'ProjectAddressID', ProjectAddress.Street AS 'ProjectStreet', ProjectAddress.PostalCode AS 'ProjectPostalCode', ProjectAddress.City AS 'ProjectCity' " +
+                "FROM Project " +
+                "INNER JOIN Client ON Client.ID=Project.Client " +
+                "INNER JOIN Address ClientAddress ON ClientAddress.ID = Client.AddressID " +
+                "INNER JOIN Address ProjectAddress ON ProjectAddress.ID = Project.AddressID " +
+                "INNER JOIN SystemUsersAssignedToProjects SystemUser ON Project.ID = SystemUser.ProjectID " +
+                "WHERE Project.SoftDelete IS NULL AND SystemUser.SystemUserEmail =?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, systemUserID);
+
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                //Mapping the client address
+                int clientAddressID = resultSet.getInt("ClientAddressID");
+                String clientStreet = resultSet.getString("ClientStreet");
+                String clientPostalCode = resultSet.getString("ClientPostalCode");
+                String clientCity = resultSet.getString("ClientCity");
+                Address clientAddress = new Address(clientAddressID, clientStreet, clientPostalCode, clientCity);
+
+                //Mapping the client
+                int clientID = resultSet.getInt("ClientID");
+                String clientName = resultSet.getString("ClientName");
+                String email = resultSet.getString("ClientEmail");
+                String phone = resultSet.getString("ClientPhone");
+                String type = resultSet.getString("ClientType");
+
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+
+                //Mapping the project address
+                int projectAddressID = resultSet.getInt("ProjectAddressID");
+                String projectStreet = resultSet.getString("ProjectStreet");
+                String projectPostalCode = resultSet.getString("ProjectPostalCode");
+                String projectCity = resultSet.getString("ProjectCity");
+                Address projectAddress = new Address(projectAddressID, projectStreet, projectPostalCode, projectCity);
+
+                //Mapping the project
+                int ID = resultSet.getInt("ProjectID");
+                String name = resultSet.getString("ProjectName");
+                Date created = resultSet.getDate("ProjectCreated");
+                String description = resultSet.getString("ProjectDescription");
+                String status = resultSet.getString("Status");
+                ProjectStatus projectStatus = ProjectStatus.getProjectStatus(status);
+
+                Project project = new Project(ID, name, client, projectAddress, created, description, projectStatus);
+                allProjects.add(project);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DALException("Failed to read all projects", e);
+        }
+
+        return allProjects;
+    }
+
 }
