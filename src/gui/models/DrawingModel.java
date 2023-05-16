@@ -3,7 +3,6 @@ package gui.models;
 import be.DeviceType;
 import bll.interfaces.IDrawingManager;
 import bll.managers.DrawingManager;
-import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -19,6 +18,21 @@ public class DrawingModel {
         drawingManager = new DrawingManager();
 
         updateAllDeviceTypes();
+    }
+
+    public Task<Boolean> createDeviceType(DeviceType deviceTypeToCreate) {
+        Task<Boolean> createDeviceTypeTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                boolean successfullyCreatedDeviceType = drawingManager.createDeviceType(deviceTypeToCreate);
+
+                updateValue(successfullyCreatedDeviceType);
+
+                return successfullyCreatedDeviceType;
+            }
+        };
+
+        return createDeviceTypeTask;
     }
 
     /**

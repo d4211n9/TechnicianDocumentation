@@ -16,4 +16,8 @@ public class DrawingFacade {
     public List<DeviceType> getAllDeviceTypes() throws Exception {
         return deviceTypeDAO.getAllDeviceTypes();
     }
+
+    public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
+        return deviceTypeDAO.createDeviceType(deviceTypeToCreate);
+    }
 }

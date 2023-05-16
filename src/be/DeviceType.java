@@ -19,7 +19,7 @@ public class DeviceType {
         return imagePath;
     }
 
-    public boolean isHasLoginDetails() {
+    public boolean hasLoginDetails() {
         return hasLoginDetails;
     }
 }

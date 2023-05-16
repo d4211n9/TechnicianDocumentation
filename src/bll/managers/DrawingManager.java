@@ -17,4 +17,9 @@ public class DrawingManager implements IDrawingManager {
     public List<DeviceType> getAllDeviceTypes() throws Exception {
         return drawingFacade.getAllDeviceTypes();
     }
+
+    @Override
+    public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
+        return drawingFacade.createDeviceType(deviceTypeToCreate);
+    }
 }
