@@ -17,16 +17,8 @@ public class PhotoModel implements Runnable {
         return photoManager.uploadPhoto(photo);
     }
 
-    public Photo uploadPhoto(Photo photo) throws Exception {
-        return photoManager.uploadPhoto(photo);
-    }
-
     public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
         return photoManager.getPhotoFromInstallation(installationID);
-    }
-
-    public Photo deletePhoto(Photo photo) throws Exception {
-        return photoManager.deletePhoto(photo);
     }
 
     public void deletePhoto(Photo photo) throws Exception {
