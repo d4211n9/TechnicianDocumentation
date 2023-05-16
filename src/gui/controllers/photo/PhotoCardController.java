@@ -3,6 +3,7 @@ package gui.controllers.photo;
 import be.Photo;
 import gui.controllers.BaseController;
 import gui.controllers.ErrorDisplayController;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -18,8 +19,10 @@ import java.util.ResourceBundle;
 
 public class PhotoCardController extends BaseController implements Initializable {
 
-    public Label lblPhotoDescription;
-    public ImageView imgPhoto;
+    @FXML
+    private Label lblPhotoDescription;
+    @FXML
+    private ImageView imgPhoto;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -28,12 +31,7 @@ public class PhotoCardController extends BaseController implements Initializable
 
     public void setContent(Photo photo) {
         lblPhotoDescription.setText(photo.getDescription());
-        //imgPhoto.setImage(new Image(SymbolPaths.LOGO));
         imgPhoto.setImage(photo.getPhoto());
-
-
-        //FileChooser fileChooser = new FileChooser();
-        //lblPhotoName.setText(fileChooser.getInitialFileName());
     }
 
 }

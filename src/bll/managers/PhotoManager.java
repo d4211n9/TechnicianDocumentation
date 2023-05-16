@@ -22,7 +22,7 @@ public class PhotoManager implements IPhotoManager {
 
     @Override
     public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
-        return null;
+        return projectFacade.getPhotoFromInstallation(installationID);
     }
 
     @Override
