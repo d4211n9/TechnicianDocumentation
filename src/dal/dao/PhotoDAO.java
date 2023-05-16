@@ -5,6 +5,7 @@ import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IPhotoDAO;
 import exceptions.DALException;
+import gui.util.ImageConverter;
 import javafx.scene.image.Image;
 import jdk.jfr.Description;
 
@@ -14,6 +15,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static gui.util.ImageConverter.convertToFxImage;
 
 public class PhotoDAO implements IPhotoDAO {
 
@@ -28,17 +31,14 @@ public class PhotoDAO implements IPhotoDAO {
     public Photo uploadPhoto(Photo photo) throws Exception {
         Photo newPhoto = null;
 
-        InputStream is = new FileInputStream(new File("resources/images/WUAV_logo.jpg"));
-
-        //InputStream is = new FileInputStream(new Image(photo.getPhoto()));
-
         String sql = "INSERT INTO Photo (InstallationID, Image, Description) VALUES (?, ?, ?)";
+        System.out.println("Installation ID: " + photo.getInstallationID());
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setInt(1, photo.getInstallationID());
-            statement.setBinaryStream(2, is);
+            statement.setBytes(2, photo.getPhotoBytes());
             statement.setString(3, photo.getDescription());
 
 
@@ -47,7 +47,10 @@ public class PhotoDAO implements IPhotoDAO {
 
             if (resultSet.next()) {
                 int ID = resultSet.getInt(1);
-                newPhoto = new Photo(ID, photo.getInstallationID(), photo.getPhoto(), photo.getDescription());
+
+                ByteArrayInputStream bais = new ByteArrayInputStream(photo.getPhotoBytes());
+                Image imgPhoto = convertToFxImage(ImageIO.read(bais));
+                newPhoto = new Photo(ID, photo.getInstallationID(), imgPhoto, photo.getDescription());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,11 +75,13 @@ public class PhotoDAO implements IPhotoDAO {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                int ID = resultSet.getInt(1);
-                byte[] photoBytes = resultSet.getBytes(3);
-                String description = resultSet.getString(4);
+                int ID = resultSet.getInt("ID");
+                byte[] photoBytes = resultSet.getBytes("Image");
+                String description = resultSet.getString("Description");
 
-                Photo photo = new Photo(ID, installationID, photoBytes, description);
+                ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
+                Image imgPhoto = convertToFxImage(ImageIO.read(bais));
+                Photo photo = new Photo(ID, installationID, imgPhoto, description);
 
                 allPhotos.add(photo);
             }
@@ -90,9 +95,7 @@ public class PhotoDAO implements IPhotoDAO {
 
 
         @Override
-    public Photo deletePhoto (Photo photo) throws Exception {
-
-            Photo deletedPhoto = null;
+        public void deletePhoto (Photo photo) throws Exception {
 
             String sql = "DELETE FROM Photo WHERE ID=?;";
 
@@ -102,13 +105,10 @@ public class PhotoDAO implements IPhotoDAO {
                 statement.setInt(1, photo.getID());
                 statement.executeUpdate();
 
-                deletedPhoto = photo;
-
             } catch (SQLException e) {
                 e.printStackTrace();
-                throw new DALException("Failed to upload", e);
+                throw new DALException("Failed to delete photo", e);
             }
-            return deletedPhoto;
         }
     }
 

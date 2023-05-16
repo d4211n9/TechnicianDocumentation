@@ -6,7 +6,7 @@ import bll.managers.PhotoManager;
 
 import java.util.List;
 
-public class PhotoModel {
+public class PhotoModel implements Runnable {
 
     private IPhotoManager photoManager;
 
@@ -15,8 +15,21 @@ public class PhotoModel {
 
     }
 
+    public Photo uploadPhoto(Photo photo) throws Exception {
+        return photoManager.uploadPhoto(photo);
+    }
+
     public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
         return photoManager.getPhotoFromInstallation(installationID);
 
+    }
+
+    public void deletePhoto(Photo photo) throws Exception {
+        photoManager.deletePhoto(photo);
+    }
+
+    @Override
+    public void run() {
+        //TODO
     }
 }

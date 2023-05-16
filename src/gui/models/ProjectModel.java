@@ -234,8 +234,4 @@ public class ProjectModel implements Runnable {
         users = FXCollections.observableList(projectManager.getAllUserNotAssignedToProject(projectId));
         return users;
     }
-
-
-
-
 }

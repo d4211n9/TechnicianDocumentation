@@ -1,6 +1,5 @@
 package gui.util;
 
-/*
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -15,17 +14,7 @@ import java.io.*;
 
 public class ImageConverter {
 
-    private void loadPhotos() {
-        ByteArrayInputStream bais = new ByteArrayInputStream(installation.getDrawingBytes());
-        try {
-            images.add(convertToFxImage(ImageIO.read(bais)));
-            displayImage();
-        } catch (IOException e) {
-            displayError(e);
-        }
-    }
-
-    private static Image convertToFxImage(BufferedImage image) {
+    public static Image convertToFxImage(BufferedImage image) {
         WritableImage wr = null;
         if (image != null) {
             wr = new WritableImage(image.getWidth(), image.getHeight());
@@ -39,19 +28,8 @@ public class ImageConverter {
 
         return new ImageView(wr).getImage();
     }
-
-    private static byte[] convertImageToBytes(Image image) {
-
-
-
-
-        return new byte[0];
-    }
-
-
 }
 
- */
 
 
 

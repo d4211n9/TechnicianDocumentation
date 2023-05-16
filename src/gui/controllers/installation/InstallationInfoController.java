@@ -74,17 +74,6 @@ public class InstallationInfoController extends BaseController implements Initia
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
         userListener();
-        loadPhotosToInstallation();
-
-
-        /*
-        hbImage.widthProperty().addListener((observable, oldValue, newValue) ->
-
-                imgPhoto.setFitWidth((Double) newValue));
-        hbImage.heightProperty().addListener((observable, oldValue, newValue) ->
-                imgPhoto.setFitHeight((Double) newValue));
-        */
-
     }
 
     private void installationBackgroundUpdate() {
@@ -105,10 +94,7 @@ public class InstallationInfoController extends BaseController implements Initia
         lblDescription.setText(installation.getDescription());
 
         loadUsers();
-
-        if(installation.getDrawingBytes() != null) {
-            Platform.runLater(() -> loadPhotos());
-        }
+        loadPhotosToInstallation();
     }
 
     /**
@@ -353,15 +339,13 @@ public class InstallationInfoController extends BaseController implements Initia
             files.forEach((File f) ->
             {
                 try {
-                    //TODO opret Photo med byte[] constructor
                     byte[] fileContent = Files.readAllBytes(f.toPath());
                     Photo photo = new Photo(installation.getID(), fileContent, "billede beskrivelse..");
-                    //getPhotoModel.Create(photo);
-                    //installation.setDrawingBytes(fileContent);
+                    getModelsHandler().getPhotoModel().uploadPhoto(photo);
+
                 } catch (Exception e) {
                     displayError(e);
                 }
-                //images.add(new Image(f.toURI().toString()));
             });
             displayImage();
 
@@ -406,20 +390,22 @@ public class InstallationInfoController extends BaseController implements Initia
     private void loadPhotosToInstallation() {
 
         try{
-            photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(photo.getInstallationID());
+            photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());
         } catch (Exception e) {
             e.printStackTrace();
             displayError(e);
         }
-        for (Photo p : photos) {
-            showPhotoCard(p);
+        if (photos != null) {
+            for (Photo p : photos) {
+                showPhotoCard(p);
+            }
         }
     }
 
     private void showPhotoCard(Photo photo) {
         FXMLLoader photoCardLoader = loadView(ViewPaths.PHOTO_CARD);
 
-        VBox photoCard =  photoCardLoader.getRoot();
+        VBox photoCard = photoCardLoader.getRoot();
         PhotoCardController cardController = photoCardLoader.getController();
         cardController.setContent(photo);
 
