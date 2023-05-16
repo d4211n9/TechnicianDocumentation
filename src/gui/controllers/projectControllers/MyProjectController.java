@@ -22,8 +22,10 @@ import java.util.ResourceBundle;
 
 public class MyProjectController extends TableViewController implements Initializable{
 
-    public VBox projectsView;
-    public TextField txtfSearch;
+    @FXML
+    private VBox projectsView;
+    @FXML
+    private TextField txtfSearch;
     @FXML
     private TableColumn<Project, String> tcProjectName, tcClient, tcStreet, tcPostalCode, tcCity;
     @FXML
@@ -31,11 +33,13 @@ public class MyProjectController extends TableViewController implements Initiali
     @FXML
     private TableColumn<Project, Date> tcCreated;
 
-    public void handleBack(ActionEvent actionEvent) {
+    @FXML
+    private void handleBack(ActionEvent actionEvent) {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
-    public void handleSearch(KeyEvent keyEvent) {
+    @FXML
+    private void handleSearch(KeyEvent keyEvent) {
         try {
             getModelsHandler().getProjectModel().searchMyProjects(txtfSearch.getText());
         } catch (Exception e) {
@@ -43,7 +47,8 @@ public class MyProjectController extends TableViewController implements Initiali
         }
     }
 
-    public void handleDoubleClick(MouseEvent mouseEvent) {
+    @FXML
+    private void handleDoubleClick(MouseEvent mouseEvent) {
         if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && isTvSelected()){
             if(mouseEvent.getClickCount() == 2){
                 FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
