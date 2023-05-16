@@ -2,7 +2,7 @@ package gui.controllers.drawing;
 
 import be.Device;
 import gui.controllers.BaseController;
-import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -12,16 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import util.DraggableMaker;
+import util.ViewPaths;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DrawingController extends BaseController implements Initializable {
 
@@ -32,9 +30,9 @@ public class DrawingController extends BaseController implements Initializable {
     public Label lbl;
     public VBox background;
     public Pane pane;
-    public VBox sidebar;
 
     public ImageView selectedElementImg;
+    public VBox sidebarDevice;
     private double mouseAnchorX;
     private double mouseAnchorY;
 
@@ -53,7 +51,7 @@ public class DrawingController extends BaseController implements Initializable {
         FXMLLoader loader = loadView("/gui/views/drawing/deviceCard.fxml");
 
         Node deviceElement = loader.getRoot();
-        sidebar.getChildren().add(deviceElement);
+        sidebarDevice.getChildren().add(0, deviceElement);
 
         DeviceCard controller = loader.getController();
         controller.setContent(device);
@@ -105,5 +103,12 @@ public class DrawingController extends BaseController implements Initializable {
             });
         });
     }
+
+    public void handleAddDevice(ActionEvent actionEvent) {
+        openStage(ViewPaths.CREATE_DEVICE, "Create Device");
+
+        //todo
+    }
+
 }
 

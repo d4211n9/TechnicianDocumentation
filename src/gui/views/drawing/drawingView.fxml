@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <VBox fx:id="background" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.DrawingController">
    <children>
@@ -12,7 +15,41 @@
                   <Pane fx:id="pane" prefHeight="1000.0" prefWidth="1000.0" />
                </content>
             </ScrollPane>
-            <VBox fx:id="sidebar" alignment="TOP_CENTER" minWidth="200.0" prefHeight="400.0" prefWidth="200.0" HBox.hgrow="NEVER" />
+            <VBox alignment="TOP_CENTER" minWidth="200.0" prefHeight="400.0" prefWidth="200.0" HBox.hgrow="NEVER">
+               <children>
+                  <Accordion>
+                    <panes>
+                      <TitledPane animated="false" text="Devices">
+                           <content>
+                              <ScrollPane>
+                                 <content>
+                                    <VBox fx:id="sidebarDevice" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0">
+                                       <children>
+                                          <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddDevice" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP" HBox.hgrow="NEVER">
+                                             <HBox.margin>
+                                                <Insets left="10.0" top="10.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                          </JFXButton>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </content>
+                        </TitledPane>
+                      <TitledPane animated="false" text="Wires">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0" />
+                           </content>
+                        </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children></VBox>
          </children>
       </HBox>
    </children>
