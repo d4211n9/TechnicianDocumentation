@@ -48,7 +48,6 @@ public class InstallationInfoController extends BaseController implements Initia
     private HBox infoBtnArea, photosBtnArea, drawingBtnArea, deviceBtnArea, hbImage;
     @FXML
     private Label lblName, lblDescription, lblAssignedUsers;
-
     @FXML
     private JFXListView listUsers;
     @FXML
@@ -57,13 +56,12 @@ public class InstallationInfoController extends BaseController implements Initia
     private JFXButton assignUser, unAssignUser;
     @FXML
     private JFXToggleButton toggleUsers;
-
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
     private final List<Image> images = new ArrayList<>();
-    private List<Photo> photos;
+    private List<Photo> photoList;
 
-    public Photo photo;
+    //public Photo photo;
     private int currentImageIndex = 0;
     private ObservableList<SystemUser> obsAssignedUsers = null;
     private ObservableList<SystemUser> obsUnAssignedUsers = null;
@@ -72,8 +70,6 @@ public class InstallationInfoController extends BaseController implements Initia
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
         userListener();
-        loadPhotosToInstallation();
-
 
         /*
         hbImage.widthProperty().addListener((observable, oldValue, newValue) ->
@@ -82,7 +78,6 @@ public class InstallationInfoController extends BaseController implements Initia
         hbImage.heightProperty().addListener((observable, oldValue, newValue) ->
                 imgPhoto.setFitHeight((Double) newValue));
         */
-
     }
 
 
@@ -92,6 +87,7 @@ public class InstallationInfoController extends BaseController implements Initia
         lblDescription.setText(installation.getDescription());
 
         loadUsers();
+        loadPhotosToInstallation();
 
         if(installation.getDrawingBytes() != null) {
             Platform.runLater(() -> loadPhotos());
@@ -284,12 +280,13 @@ public class InstallationInfoController extends BaseController implements Initia
                     //TODO opret Photo med byte[] constructor
                     byte[] fileContent = Files.readAllBytes(f.toPath());
                     Photo photo = new Photo(installation.getID(), fileContent, "billede beskrivelse..");
+                    //getModelsHandler().getPhotoModel().getPhotoFromInstallation(photo.getInstallationID());
                     //getPhotoModel.Create(photo);
-                    //installation.setDrawingBytes(fileContent);
+                    installation.setDrawingBytes(fileContent);
                 } catch (Exception e) {
                     displayError(e);
                 }
-                //images.add(new Image(f.toURI().toString()));
+                images.add(new Image(f.toURI().toString()));
             });
             displayImage();
             try {
@@ -323,12 +320,12 @@ public class InstallationInfoController extends BaseController implements Initia
     private void loadPhotosToInstallation() {
 
         try{
-            photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(photo.getInstallationID());
+            photoList = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());
         } catch (Exception e) {
             e.printStackTrace();
             displayError(e);
         }
-        for (Photo p : photos) {
+        for (Photo p : photoList) {
             showPhotoCard(p);
         }
     }

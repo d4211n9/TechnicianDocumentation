@@ -4,10 +4,7 @@ import be.Installation;
 import be.Photo;
 import be.Project;
 import be.SystemUser;
-import dal.dao.InstallationDAO;
-import dal.dao.ProjectDAO;
-import dal.dao.SystemUserAssignedToInstallationDAO;
-import dal.dao.SystemUsersAssignedToProjectsDAO;
+import dal.dao.*;
 import dal.interfaces.*;
 import exceptions.DALException;
 
@@ -25,6 +22,7 @@ public class ProjectFacade {
         systemUsersAssignedToProjectsDAO = new SystemUsersAssignedToProjectsDAO();
         installationDAO = new InstallationDAO();
         systemUsersAssignedToInstallationDAO = new SystemUserAssignedToInstallationDAO();
+        photoDAO = new PhotoDAO();
     }
 
     public Project createProject(Project project) throws Exception {

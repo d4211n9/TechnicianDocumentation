@@ -24,6 +24,7 @@ public class Main extends Application {
         //PhotoDAO photoDAP = new PhotoDAO();
         //photoDAP.uploadPhoto(photo);
         //photoDAP.deletePhoto(photo);
+        //photoDAP.getPhotoFromInstallation(photo.getInstallationID());
     }
 
     @Override

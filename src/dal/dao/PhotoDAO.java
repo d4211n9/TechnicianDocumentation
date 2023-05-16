@@ -89,8 +89,8 @@ public class PhotoDAO implements IPhotoDAO {
     }
 
 
-        @Override
-    public Photo deletePhoto (Photo photo) throws Exception {
+    @Override
+    public Photo deletePhoto(Photo photo) throws Exception {
 
             Photo deletedPhoto = null;
 
