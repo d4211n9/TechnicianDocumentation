@@ -8,6 +8,8 @@ public class ViewPaths {
     public static final String PROJECTS_VIEW = "/gui/views/projectViews/ProjectsView.fxml";
     public static final String ADD_PROJECT_VIEW = "/gui/views/projectViews/CreateProjectView.fxml";
     public static final String PROJECT_INFO_VIEW = "/gui/views/projectViews/ProjectInfoView.fxml";
+    public static final String ADD_TO_PROJECT = "/gui/views/projectViews/AddUserToProjectView.fxml";
+    public static final String REMOVE_FROM_PROJECT = "/gui/views/projectViews/RemoveUserFormProjectView.fxml";
     public static final String CLIENTS_VIEW = "/gui/views/clientViews/ClientView.fxml";
     public static final String CREATE_CLIENTS_VIEW = "/gui/views/clientViews/CreateClientView.fxml";
     public static final String CREATE_USER_VIEW = "/gui/views/userViews/CreateUserView.fxml";

@@ -6,6 +6,7 @@ import exceptions.GUIException;
 import gui.models.ModelsHandler;
 import gui.util.MainControllerHandler;
 import gui.util.NodeAccessLevel;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,11 +25,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.*;
 
 public class BaseController {
 
 
     public NodeAccessLevel buttonAccessLevel;
+
+    public static ScheduledExecutorService executorService;
 
 
     public ModelsHandler getModelsHandler() throws Exception {
@@ -38,6 +42,28 @@ public class BaseController {
     public MainController getMainController() {
         return MainControllerHandler.getInstance().getController();
     }
+
+    public static void backgroundUpdate(List<Runnable> runnable) throws Exception {
+        if (executorService != null) {
+            executorService.shutdown();
+        }
+
+        executorService = Executors.newScheduledThreadPool(runnable.size(), r -> {
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            return thread;
+        });
+        for (Runnable run: runnable) {
+            try {
+                executorService.scheduleWithFixedDelay(run, 0, 3, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                GUIException guiException = new GUIException("Failed to background update", e);
+                guiException.printStackTrace();
+                throw guiException;
+            }
+        }
+    }
+
 
     /**
      * Opens a new window

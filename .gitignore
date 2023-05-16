@@ -6,6 +6,8 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 resources/config/sql_config
+resources/config/sql_test_config
+resources/config/sql_dev_config
 
 # User-specific stuff
 .idea/**/workspace.xml

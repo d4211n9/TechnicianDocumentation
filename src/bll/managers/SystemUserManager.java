@@ -3,30 +3,41 @@ package bll.managers;
 import be.SystemUser;
 import bll.interfaces.ISystemUserManager;
 import bll.util.BCrypt;
+import bll.util.RememberLogin;
 import bll.util.Search;
 import dal.dao.SystemUserDAO;
+import dal.facades.DeleteFacade;
 import dal.interfaces.ISystemUserDAO;
+import util.Searchable;
 
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
 public class SystemUserManager implements ISystemUserManager {
-    ISystemUserDAO systemUserDAO;
-    Search search;
+    private ISystemUserDAO systemUserDAO;
+    private DeleteFacade deleteFacade;
+    private Search<SystemUser> search;
     public SystemUserManager() throws Exception {
         systemUserDAO = new SystemUserDAO();
-        search = new Search();
-
-
+        deleteFacade = new DeleteFacade();
+        search = new Search<>();
     }
 
     @Override
-    public SystemUser systemUserValidLogin(SystemUser user) throws Exception {
+    public SystemUser systemUserValidLogin(SystemUser user, boolean rememberLogin) throws Exception {
 
         SystemUser systemUser = systemUserDAO.systemUserValidLogin(user);
 
         if(BCrypt.checkpw(user.getPassword(), systemUser.getPassword())){
+            if (rememberLogin) {
+                rememberLogin(user);
+            }
+            else {
+                deleteRememberedLogin();
+            }
+
             return systemUser;
         }
         return null;
@@ -58,5 +69,29 @@ public class SystemUserManager implements ISystemUserManager {
         user.setPassword(hashedPassword);
 
         return systemUserDAO.updateSystemUser(user);
+    }
+
+    @Override
+    public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {
+        deleteFacade.deleteSystemUser(deletedSystemUser);
+    }
+
+    @Override
+    public List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception {
+        return systemUserDAO.getAllModifiedUsers(lastUpdateTime);
+    }
+
+    @Override
+    public SystemUser isLoginRemembered() {
+        return RememberLogin.getRememberedLogin();
+    }
+
+    @Override
+    public void deleteRememberedLogin() {
+        RememberLogin.deleteRememberedLogin();
+    }
+
+    private void rememberLogin(SystemUser user) {
+        RememberLogin.rememberLogin(user.getEmail(), user.getPassword());
     }
 }

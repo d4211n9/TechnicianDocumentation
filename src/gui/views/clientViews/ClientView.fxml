@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="clientView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.clientController.ClientController">
+<VBox fx:id="clientView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/Projects.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.clientController.ClientController">
    <children>
       <HBox>
          <children>
@@ -49,10 +53,12 @@
       </HBox>
       <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="tcName" prefWidth="200.0" text="Name" />
-          <TableColumn fx:id="tcLocation" prefWidth="200.0" text="Location" />
-            <TableColumn fx:id="tcEmail" prefWidth="200.0" text="Email" />
-            <TableColumn fx:id="tcPhone" prefWidth="200.0" text="Phone" />
+          <TableColumn fx:id="tcName" prefWidth="150.0" text="Name" />
+            <TableColumn fx:id="tcPhone" prefWidth="125.0" text="Phone" />
+            <TableColumn fx:id="tcEmail" prefWidth="140.0" text="Email" />
+            <TableColumn fx:id="tcStreet" prefWidth="175.0" text="Street" />
+            <TableColumn fx:id="tcPostalCode" prefWidth="75.0" text="ZIP" />
+            <TableColumn fx:id="tcCity" prefWidth="150.0" text="City" />
         </columns>
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />

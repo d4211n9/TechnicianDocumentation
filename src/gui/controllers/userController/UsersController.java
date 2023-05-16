@@ -14,7 +14,9 @@ import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -28,13 +30,25 @@ public class UsersController extends TableViewController implements Initializabl
     private VBox usersView;
     @FXML
     private TextField txtfSearch;
-
         @Override
     public void initialize(URL location, ResourceBundle resources) {
             loadTableView();
             initializeButtonAccessLevels();
             usersView.getChildren().add(addButtons());
             tvListener();
+
+            userBackgroundUpdate();
+        }
+
+    private void userBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getSystemUserModel());
+
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadTableView() {
@@ -81,9 +95,14 @@ public class UsersController extends TableViewController implements Initializabl
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object user = tableView.getSelectionModel().getSelectedItem();
+            SystemUser user = (SystemUser) tableView.getSelectionModel().getSelectedItem();
             if(showQuestionDialog(user.toString(), true)){
-                System.out.println("delete " + user.toString());
+                try {
+                    getModelsHandler().getSystemUserModel().deleteSystemUser(user);
+                    handleSearch();
+                } catch (Exception e) {
+                    displayError(e);
+                }
             }
         });
     }
@@ -91,6 +110,7 @@ public class UsersController extends TableViewController implements Initializabl
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
         getMainController().saveLastView(usersView);
+
     }
 
     public void handleSearch() {

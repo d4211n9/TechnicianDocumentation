@@ -1,10 +1,13 @@
 package gui.controllers.clientController;
 
+import be.Address;
 import be.Client;
 import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -30,12 +33,24 @@ public class CreateClientController extends BaseController {
         if(isTextFieldInfoValid()){
 
             Client client = bindClientInfo();
-            try {
-                getModelsHandler().getClientModel().createClient(client);
-                handleCancel();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+
+            createClient(client);
+        }
+    }
+
+    private void createClient(Client client) {
+        try {
+            Task<Client> createClientTask = getModelsHandler()
+                    .getClientModel()
+                    .createClient(client);
+
+            createClientTask.setOnFailed(event -> displayError(createClientTask.getException()));
+
+            TaskExecutor.executeTask(createClientTask);
+
+            handleCancel();
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -61,13 +76,15 @@ public class CreateClientController extends BaseController {
         txtfName.setText(selectedItem.getName());
         txtfEmail.setText(selectedItem.getEmail());
         txtfPhone.setText(selectedItem.getPhone());
+        txtfAddress.setText(selectedItem.getAddress().getStreet());
+        txtfPostalCode.setText(selectedItem.getAddress().getPostalCode());
+        txtfCity.setText(selectedItem.getAddress().getCity());
 
         lblCreateUser.setText("Edit Client");
 
         addEditBtn();
         buttonArea.getChildren().remove(btnConfirm);
         selectedClient = selectedItem;
-        //todo vi skal have lavet en location tabel for at kunne sætte det sidste information
     }
 
     private void addEditBtn() {
@@ -78,15 +95,29 @@ public class CreateClientController extends BaseController {
             if(isTextFieldInfoValid()) {
                 Client client = bindClientInfo();
                 client = bindClientID(client);
-                try {
-                    getModelsHandler().getClientModel().updateClient(client, selectedClient);
-                    handleCancel();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+
+                updateClient(client);
             }
         });
     }
+
+    private void updateClient(Client client) {
+        try {
+            Task<Boolean> updateClientTask = getModelsHandler()
+                    .getClientModel()
+                    .updateClient(client, selectedClient);
+
+            updateClientTask
+                    .setOnFailed(failedEvent -> displayError(updateClientTask.getException()));
+
+            TaskExecutor.executeTask(updateClientTask);
+
+            handleCancel();
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
     private Client bindClientInfo(){
         String name = txtfName.getText();
         String email = txtfEmail.getText();
@@ -95,15 +126,21 @@ public class CreateClientController extends BaseController {
         String city = txtfCity.getText();
         String street = txtfAddress.getText();
         String postalCode = txtfPostalCode.getText();
-        String location = street + " " +city + " " + postalCode;
 
-        return new Client(name, location,email, phone, "b2b");
+        Address address = null;
+        try {
+            address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
+        } catch (Exception e) {
+            displayError(e);
+        }
+
+        return new Client(name, address, email, phone, "b2b");
         //TODO type burde være en enum...
         //TODO Type skal også tilføjes til .fxml så man kan vælge ved create og edit
     }
 
     private Client bindClientID(Client client) {
-        return new Client(selectedClient.getID(), client.getName(), client.getLocation(),
+        return new Client(selectedClient.getID(), client.getName(), client.getAddress(),
                 client.getEmail(), client.getPhone(), "b2b");
     }
 }

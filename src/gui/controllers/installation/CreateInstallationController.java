@@ -5,6 +5,8 @@ import be.Project;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
 import gui.controllers.installation.InstallationInfoController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -38,18 +40,34 @@ public class CreateInstallationController extends BaseController implements Init
     public void handleConfirm() {
         Installation installation = createInstallationFromFields();
         if(installation != null){
-            try {
-                getModelsHandler().getInstallationModel().createInstallation(installation);
-            } catch (Exception e) {
-                displayError(e);
-            }
-            
-            FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
-            VBox installationInfo = infoLoader.getRoot();
-            InstallationInfoController infoController = infoLoader.getController();
-            infoController.setContent(installation);
-            getMainController().mainBorderPane.setCenter(installationInfo);
+            createInstallation(installation);
         }
+    }
+
+    private void createInstallation(Installation installation) {
+        try {
+            Task<Installation> createInstallationTask = getModelsHandler()
+                    .getInstallationModel()
+                    .createInstallation(installation);
+
+            createInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                openInstallationInfo(installation);
+            });
+
+            createInstallationTask.setOnFailed(event -> displayError(createInstallationTask.getException()));
+
+            TaskExecutor.executeTask(createInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void openInstallationInfo(Installation installation) {
+        FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
+        VBox installationInfo = infoLoader.getRoot();
+        InstallationInfoController infoController = infoLoader.getController();
+        infoController.setContent(installation);
+        getMainController().mainBorderPane.setCenter(installationInfo);
     }
 
     private Installation createInstallationFromFields() {

@@ -4,15 +4,13 @@ package be;
 import be.Enum.SystemRole;
 import util.Searchable;
 
+import java.sql.Timestamp;
+
 public class SystemUser implements Searchable<SystemUser> {
 
-    private String email;
+    private String email, name, password;
     private SystemRole role;
-
-
-    private String password;
-
-    private String name;
+    private Timestamp deleted;
 
     public SystemUser(String email, String password){
         this.email = email;
@@ -59,6 +57,15 @@ public class SystemUser implements Searchable<SystemUser> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Timestamp getDeleted() {
+
+        return deleted;
+    }
+
+    public void setDeleted(Timestamp deleted) {
+        this.deleted = deleted;
     }
 
     @Override

@@ -12,14 +12,17 @@ import gui.controllers.BaseController;
 import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
+import gui.controllers.userController.CreateUserController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -44,8 +47,10 @@ public class ProjectInfoController extends BaseController implements Initializab
     @FXML
     private JFXToggleButton toggleUsers;
     @FXML
+    private ComboBox cbStatus;
+    @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone,
-            lblCreated, lblProjectLocation, lblAssignedUsers;
+            lblCreated, lblProjectLocation, lblAssignedUsers, lblDescription;
 
     private Client client;
     private Project project;
@@ -64,14 +69,19 @@ public class ProjectInfoController extends BaseController implements Initializab
         this.project = project;
         client = project.getClient();
 
-        lblProjectTitle.setText(project.getName());
         lblClientName.setText(client.getName());
-        lblClientLocation.setText(client.getLocation());
+        lblClientLocation.setText(client.getAddress().toString());
         lblClientType.setText(client.getType());
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
-        lblProjectLocation.setText(client.getLocation());
+
+        lblProjectTitle.setText(project.getName());
+        lblDescription.setText(project.getDescription());
+        lblProjectLocation.setText(project.getAddress().toString());
         lblCreated.setText(project.getCreated()+"");
+
+        loadComboBoxOptions();
+        cbStatus.getSelectionModel().select(project.getStatus());
 
         loadInstallations();
         loadUsers();
@@ -110,19 +120,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 assignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(assignUser);
-        assignUser.setDisable(true);
 
-        assignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
-                        selectedUser.getEmail());
-                obsAssignedUsers.add(selectedUser);
-                obsUnAssignedUsers.remove(selectedUser);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+        assignUser.setOnMouseClicked(event -> {
+                FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
+                AddUserToProjectController controller = loader.getController();
+                loadInMainView(loader.getRoot(), projectsView);
+                controller.setProject(project);
         });
     }
 
@@ -132,19 +135,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 unAssignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(unAssignUser);
-        unAssignUser.setDisable(true);
 
         unAssignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
-                        selectedUser.getEmail());
-                obsAssignedUsers.remove(selectedUser);
-                obsUnAssignedUsers.add(selectedUser);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+            FXMLLoader loader = loadView(ViewPaths.REMOVE_FROM_PROJECT);
+            RemoveUserFromProject controller = loader.getController();
+            loadInMainView(loader.getRoot(), projectsView);
+            controller.setContent(project);
         });
     }
 
@@ -155,14 +151,24 @@ public class ProjectInfoController extends BaseController implements Initializab
 
     private void loadInstallations() {
         try {
-            installations = getModelsHandler().getInstallationModel().getAllInstallations(project.getID());
-        } catch (Exception e) {
-            e.printStackTrace();
-            displayError(e);
-        }
+            Task<ObservableList<Installation>> allInstallationsTask = getModelsHandler()
+                    .getInstallationModel()
+                    .getAllInstallations(project.getID());
 
-        for (Installation i : installations) {
-            showInstallation(i);
+            allInstallationsTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                installations = newValue;
+
+                for (Installation i : installations) {
+                    showInstallation(i);
+                }
+            });
+
+            allInstallationsTask.setOnFailed(event -> displayError(allInstallationsTask.getException()));
+
+            TaskExecutor.executeTask(allInstallationsTask);
+
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -184,33 +190,33 @@ public class ProjectInfoController extends BaseController implements Initializab
     }
 
     private void loadUsers() {
-        try {
-            List<SystemUser> assignedUsers = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID());
-            obsAssignedUsers = FXCollections.observableList(assignedUsers);
-
-            List<SystemUser> unAssignedUsers = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
-            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
-        } catch (Exception e) {
-            displayError(e);
-            e.printStackTrace(); //TODO replace with log to the database?
-        }
-
-        listUsers.setItems(obsAssignedUsers);
+        loadAssignedUsers();
     }
 
-    /**
-     * Switches between showing list of assigned and unassigned users
-     */
-    public void handleToggleUsers() {
-        listUsers.getSelectionModel().select(null); //De-select user to avoid "hanging" selection
-        if(toggleUsers.isSelected()) {
-            listUsers.setItems(obsAssignedUsers);
-            lblAssignedUsers.setText("Users Assigned");
-        } else {
-            listUsers.setItems(obsUnAssignedUsers);
-            lblAssignedUsers.setText("Users Not Assigned");
+    private void loadAssignedUsers() {
+        try {
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getProjectModel().
+                    getSystemUsersAssignedToProject(project.getID());
+
+            assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                obsAssignedUsers = FXCollections.observableList(newValue);
+
+                listUsers.setItems(obsAssignedUsers);
+            });
+
+            assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
+            TaskExecutor.executeTask(assignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void loadComboBoxOptions() {
+        try {
+            cbStatus.setItems(getModelsHandler().getProjectModel().getAllStatuses());
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 }

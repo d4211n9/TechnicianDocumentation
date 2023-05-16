@@ -2,22 +2,26 @@ package be;
 
 import util.Searchable;
 
-public class Client implements Searchable {
-    private String name, location, email, phone, type;
-    private int ID;
+import java.sql.Timestamp;
 
-    public Client(String name, String location, String email, String phone, String type) {
+public class Client implements Searchable {
+    private String name, email, phone, type;
+    private int ID;
+    private Timestamp deleted;
+    private Address clientAddress;
+
+    public Client(String name, Address clientAddress, String email, String phone, String type) {
         this.name = name;
-        this.location = location;
+        this.clientAddress = clientAddress;
         this.email = email;
         this.phone = phone;
         this.type = type;
     }
 
-    public Client(int ID, String name, String location, String email, String phone, String type) {
+    public Client(int ID, String name, Address clientAddress, String email, String phone, String type) {
         this.ID = ID;
         this.name = name;
-        this.location = location;
+        this.clientAddress = clientAddress;
         this.email = email;
         this.phone = phone;
         this.type = type;
@@ -31,8 +35,19 @@ public class Client implements Searchable {
         return name;
     }
 
-    public String getLocation() {
-        return location;
+    public Address getAddress() {
+        return clientAddress;
+    }
+    public String getStreet() {
+        return clientAddress.getStreet();
+    }
+
+    public String getPostalCode() {
+        return clientAddress.getPostalCode();
+    }
+
+    public String getCity() {
+        return clientAddress.getCity();
     }
 
     public String getEmail() {
@@ -47,6 +62,14 @@ public class Client implements Searchable {
         return type;
     }
 
+    public Timestamp getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Timestamp deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "#" + ID + ": " + name + " (" + type + ")";
@@ -54,7 +77,7 @@ public class Client implements Searchable {
 
     @Override
     public Object search(String query) {
-        String searchableFields = ("#" + ID + ": " + name + "(" + type + ")").toLowerCase();
+        String searchableFields = ("#" + ID + ": " + name + "(" + type + ") " + clientAddress).toLowerCase();
         String lowerCaseQuery = query.toLowerCase();
 
         if (searchableFields.contains(lowerCaseQuery)) return this;

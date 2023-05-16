@@ -4,16 +4,20 @@ import be.Client;
 import bll.interfaces.IClientManager;
 import bll.util.Search;
 import dal.dao.ClientDAO;
+import dal.facades.DeleteFacade;
 import dal.interfaces.IClientDAO;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ClientManager implements IClientManager {
     private IClientDAO clientDAO;
+    private DeleteFacade deleteFacade;
     private Search search;
 
     public ClientManager() throws Exception {
         clientDAO = new ClientDAO();
+        deleteFacade = new DeleteFacade();
         search = new Search();
     }
 
@@ -35,5 +39,15 @@ public class ClientManager implements IClientManager {
     @Override
     public Client updateClient(Client client) throws Exception {
         return clientDAO.updateClient(client);
+    }
+
+    @Override
+    public void deleteClient(Client deletedClient) throws Exception {
+        deleteFacade.deleteClient(deletedClient);
+    }
+
+    @Override
+    public List<Client> getAllModifiedClients(Timestamp lastCheck) throws Exception {
+        return clientDAO.getAllModifiedClients(lastCheck);
     }
 }

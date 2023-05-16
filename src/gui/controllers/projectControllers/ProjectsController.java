@@ -1,38 +1,40 @@
 package gui.controllers.projectControllers;
 
+import be.Enum.ProjectStatus;
 import be.Enum.SystemRole;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ProjectsController extends TableViewController implements Initializable {
 
     @FXML
     private VBox projectsView;
     @FXML
-    private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
+    private TableColumn<Project, String> tcProjectName, tcClient, tcStreet, tcPostalCode, tcCity;
     @FXML
-    private TableColumn<Project, Integer> tcID;
+    private TableColumn<Project, ProjectStatus> tcStatus;
     @FXML
     private TableColumn<Project, Date> tcCreated;
     @FXML
     private TextField txtfSearch;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -40,6 +42,18 @@ public class ProjectsController extends TableViewController implements Initializ
         initializeButtonAccessLevels();
         projectsView.getChildren().add(addButtons());
         tvListener();
+        projectBackgroundUpdate();
+    }
+
+    private void projectBackgroundUpdate() {
+        try {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getProjectModel());
+
+            backgroundUpdate(backgroundUpdateList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void initializeButtonAccessLevels() {
@@ -74,17 +88,33 @@ public class ProjectsController extends TableViewController implements Initializ
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object project = tableView.getSelectionModel().getSelectedItem();
+            Project project = (Project) tableView.getSelectionModel().getSelectedItem();//todo den burde lige vise hvis der er nogle installationer der ikke er færdige
             if(showQuestionDialog(project.toString(), true)){
-                //TODO Delete ned i lagene
+                handleDelete(project);
             }
         });
     }
 
+    private void handleDelete(Project project) {
+        try {
+            Task<Void> deleteProjectTask = getModelsHandler().getProjectModel().deleteProject(project);
+
+            deleteProjectTask.setOnSucceeded(event -> handleSearch());
+            deleteProjectTask.setOnFailed(event -> displayError(deleteProjectTask.getException()));
+
+            TaskExecutor.executeTask(deleteProjectTask);
+
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
     private void loadTableView() {
-        tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        tcStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tcStreet.setCellValueFactory(new PropertyValueFactory<>("street"));
+        tcPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
         try {
@@ -107,7 +137,7 @@ public class ProjectsController extends TableViewController implements Initializ
     }
 
     public void handleDoubleClick(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && isTvSelected()){
             if(mouseEvent.getClickCount() == 2){
                 FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
                 getMainController().mainBorderPane.setCenter(loader.getRoot());
