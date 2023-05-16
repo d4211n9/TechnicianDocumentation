@@ -5,7 +5,8 @@ import be.Enum.SystemRole;
 import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
-import javafx.collections.ObservableList;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -95,8 +96,13 @@ public class ProjectsController extends TableViewController implements Initializ
 
     private void handleDelete(Project project) {
         try {
-            getModelsHandler().getProjectModel().deleteProject(project);
-            handleSearch();
+            Task<Void> deleteProjectTask = getModelsHandler().getProjectModel().deleteProject(project);
+
+            deleteProjectTask.setOnSucceeded(event -> handleSearch());
+            deleteProjectTask.setOnFailed(event -> displayError(deleteProjectTask.getException()));
+
+            TaskExecutor.executeTask(deleteProjectTask);
+
         } catch (Exception e) {
             displayError(e);
         }

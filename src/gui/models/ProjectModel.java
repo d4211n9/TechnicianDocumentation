@@ -26,6 +26,12 @@ public class ProjectModel implements Runnable {
     private ObservableList<Project> filteredProjectList;
     private List<Project> copyAllProjects;
 
+    private List<Project> allMyProjects;
+    private ObservableList<Project> myFilteredProjectList;
+    private List<Project> copyAllMyProjects;
+
+
+
     private ObservableList<SystemUser> users;
 
     private List<SystemUser> allUsersOnProject;
@@ -85,6 +91,22 @@ public class ProjectModel implements Runnable {
         return copyAllProjects;
     }
 
+    public List<Project> retrieveAllMyProjects(String systemUserEmail) throws Exception {
+        allMyProjects = projectManager.getAllProjectsAssignedToUser(systemUserEmail);
+        copyAllMyProjects = new ArrayList<>(allMyProjects);
+        myFilteredProjectList = FXCollections.observableList(copyAllMyProjects);
+        copyAllMyProjects = new ArrayList<>(
+                projectManager.getAllProjectsAssignedToUser(systemUserEmail));
+
+        return copyAllMyProjects;
+    }
+
+
+    public ObservableList<Project> getAllMyProjects(String userEmail) throws Exception {
+        retrieveAllMyProjects(userEmail);
+        return myFilteredProjectList;
+    }
+
     public ObservableList<Project> getAllProjects() throws Exception {
         return filteredProjectList;
     }
@@ -113,8 +135,17 @@ public class ProjectModel implements Runnable {
         return updateProjectTask;
     }
 
-    public void deleteProject(Project deletedProject) throws Exception {
-        projectManager.deleteProject(deletedProject);
+    public Task<Void> deleteProject(Project deletedProject) throws Exception {
+
+        Task<Void> deleteProjectTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                projectManager.deleteProject(deletedProject);
+                return null;
+            }
+        };
+
+        return deleteProjectTask;
     }
 
     public Task<Void> assignSystemUserToProject(int projectId, SystemUser user) {
@@ -166,7 +197,15 @@ public class ProjectModel implements Runnable {
             } else {
             filteredProjectList.addAll(allProjects);
         }
-
+    }
+    public void searchMyProjects(String query) {
+        myFilteredProjectList.clear();
+        if(query != null) {
+            searchString = query;
+            myFilteredProjectList.addAll(projectManager.search(allMyProjects, query));
+        } else {
+            myFilteredProjectList.addAll(allMyProjects);
+        }
     }
 
 

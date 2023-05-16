@@ -108,8 +108,16 @@ public class InstallationModel implements Runnable {
         return assignUserToInstallationTask;
     }
 
-    public void deleteInstallation(Installation deletedInstallation) throws Exception {
-        installationManager.deleteInstallation(deletedInstallation);
+    public Task<Void> deleteInstallation(Installation deletedInstallation) throws Exception {
+        Task<Void> deleteInstallationTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                installationManager.deleteInstallation(deletedInstallation);
+                return null;
+            }
+        };
+
+        return deleteInstallationTask;
     }
 
     public Task<Boolean> deleteSystemUserAssignedToInstallation(int installationId, String systemUserEmailToDelete) {

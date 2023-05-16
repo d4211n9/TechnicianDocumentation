@@ -1,11 +1,13 @@
 package gui.controllers;
 
 import be.SystemUser;
+import com.jfoenix.controls.JFXCheckBox;
 import gui.util.MainControllerHandler;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -30,9 +32,12 @@ public class LoginController extends BaseController implements Initializable {
     private TextField txtfEmail;
     @FXML
     private PasswordField pwfPassword;
+    @FXML
+    private JFXCheckBox jfxcbRememberLogin;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        isLoginRemembered();
         showLogo();
         easyLogin();
     }
@@ -41,6 +46,21 @@ public class LoginController extends BaseController implements Initializable {
     private void easyLogin() {
         txtfEmail.setText("steffan@gmail.com");
         pwfPassword.setText("P4$$word");
+    }
+
+    private void isLoginRemembered() {
+        try {
+            SystemUser rememberedUser = getModelsHandler().getSystemUserModel().isLoginRemembered();
+
+            if (rememberedUser != null) {
+                txtfEmail.setText(rememberedUser.getEmail());
+                pwfPassword.setText(rememberedUser.getPassword());
+                jfxcbRememberLogin.setSelected(true);
+            }
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void showLogo() {
@@ -75,7 +95,7 @@ public class LoginController extends BaseController implements Initializable {
 
     private void login(SystemUser user) {
         try {
-            Task<Boolean> validLoginTask = getModelsHandler().getSystemUserModel().SystemUserValidLogin(user);
+            Task<Boolean> validLoginTask = getModelsHandler().getSystemUserModel().SystemUserValidLogin(user, jfxcbRememberLogin.isSelected());
 
             validLoginTask
                     .valueProperty()
