@@ -169,6 +169,7 @@ public class BaseController {
     public JFXButton createButton(String text){
         JFXButton button = new JFXButton(text);
         button.setFont(Font.font(16));
+        button.setMinWidth(150);
         button.setPrefWidth(150);
         button.setPrefHeight(60);
         return button;

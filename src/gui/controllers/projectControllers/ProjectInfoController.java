@@ -7,6 +7,7 @@ import be.Project;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.controllers.installation.CreateInstallationController;
@@ -24,10 +25,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -41,7 +40,7 @@ public class ProjectInfoController extends BaseController implements Initializab
     @FXML
     private FlowPane fpInstallations;
     @FXML
-    private HBox hbUserBtnArea;
+    private HBox hbUserBtnArea, hbProjectDescription;
     @FXML
     private JFXListView listUsers;
     @FXML
@@ -50,7 +49,9 @@ public class ProjectInfoController extends BaseController implements Initializab
     private ComboBox cbStatus;
     @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone,
-            lblCreated, lblProjectLocation, lblAssignedUsers, lblDescription;
+            lblCreated, lblProjectLocation, lblAssignedUsers;
+    @FXML
+    private JFXTextArea txtaDescription;
 
     private Client client;
     private Project project;
@@ -76,7 +77,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         lblClientPhone.setText(client.getPhone());
 
         lblProjectTitle.setText(project.getName());
-        lblDescription.setText(project.getDescription());
+        txtaDescription.setText(project.getDescription());
         lblProjectLocation.setText(project.getAddress().toString());
         lblCreated.setText(project.getCreated()+"");
 
@@ -97,6 +98,43 @@ public class ProjectInfoController extends BaseController implements Initializab
         addAssignUserBtn();
         addUnAssignUserBtn();
         addCreateInstallationBtn();
+        addEditSaveDescriptionBtn();
+    }
+
+    private void addEditSaveDescriptionBtn() {
+        String editText = "✏ Edit";
+        String saveText = "💾 Save";
+
+        Button btnEditSaveDescription = createButton(editText);
+
+        NodeAccessLevel descriptionButtonAccess = new NodeAccessLevel();
+
+        descriptionButtonAccess.addNodeAccessLevel(
+                btnEditSaveDescription,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+
+        btnEditSaveDescription.setOnAction(event -> {
+            boolean isDescriptionEditable = txtaDescription.isEditable();
+
+            if (isDescriptionEditable) {
+                project.setDescription(txtaDescription.getText());
+
+                try {
+                    Task<Boolean> updateProjectTask = getModelsHandler().getProjectModel().updateProject(project);
+
+                    TaskExecutor.executeTask(updateProjectTask);
+                }
+                catch (Exception e) {
+                    displayError(e);
+                }
+            }
+
+            txtaDescription.setEditable(!isDescriptionEditable);
+
+            btnEditSaveDescription.setText(!isDescriptionEditable ? saveText : editText);
+        });
+
+        hbProjectDescription.getChildren().add(btnEditSaveDescription);
     }
 
     private void addCreateInstallationBtn() {
