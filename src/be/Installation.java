@@ -1,5 +1,6 @@
 package be;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ public class Installation {
     private byte[] drawingBytes;
     private boolean isDone;
     private List<SystemUser> assignedSystemUsers;
+    private Timestamp deleted;
+
 
     public Installation(int projectID, String name, String description, byte[] drawingBytes, boolean isDone) {
         this.projectID = projectID;
@@ -67,6 +70,14 @@ public class Installation {
 
     public List<SystemUser> getAssignedSystemUsers() {
         return assignedSystemUsers;
+    }
+
+    public Timestamp getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Timestamp deleted) {
+        this.deleted = deleted;
     }
 
     @Override

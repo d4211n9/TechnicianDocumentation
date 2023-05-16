@@ -57,7 +57,7 @@ public class InstallationDAO implements IInstallationDAO {
     public List<Installation> getInstallationsFromProject(int projectID) throws Exception {
         List<Installation> allInstallations = new ArrayList<>();
 
-        String sql = "SELECT * FROM Installation WHERE ProjectID = ?;";
+        String sql = "SELECT * FROM Installation WHERE ProjectID = ? AND SoftDelete IS NULL;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public class InstallationDAO implements IInstallationDAO {
             statement.setString(2, installation.getDescription());
             statement.setBytes(3, installation.getDrawingBytes());
             statement.setInt(4, installation.getIsDoneInt());
-            statement.setTimestamp(5, null);
+            statement.setTimestamp(5, installation.getDeleted());
             statement.setInt(6, installation.getID());
 
             statement.executeUpdate();

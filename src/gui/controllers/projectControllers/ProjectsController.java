@@ -1,99 +1,65 @@
 package gui.controllers.projectControllers;
 
+import be.Enum.ProjectStatus;
 import be.Enum.SystemRole;
 import be.Project;
-import com.jfoenix.controls.JFXButton;
-import gui.controllers.BaseController;
-import gui.controllers.clientController.CreateClientController;
+import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
-public class ProjectsController extends BaseController implements Initializable {
-    @FXML
-    private TextField txtfSearch;
+public class ProjectsController extends TableViewController implements Initializable {
+
     @FXML
     private VBox projectsView;
     @FXML
-    private HBox buttonArea;
+    private TableColumn<Project, String> tcProjectName, tcClient, tcStreet, tcPostalCode, tcCity;
     @FXML
-    private TableView<Project> tvProjects;
-    @FXML
-    private TableColumn<Project, String> tcLocation, tcProjectName, tcClient;
-    @FXML
-    private TableColumn<Project, Integer> tcID;
+    private TableColumn<Project, ProjectStatus> tcStatus;
     @FXML
     private TableColumn<Project, Date> tcCreated;
-    private NodeAccessLevel buttonAccessLevel;
+    @FXML
+    private TextField txtfSearch;
 
-    private JFXButton editButton, deleteButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadTableView();
-        addLoadedButtons();
+        initializeButtonAccessLevels();
+        projectsView.getChildren().add(addButtons());
         tvListener();
+        projectBackgroundUpdate();
     }
 
-    private void addLoadedButtons() {
-        initializeButtonAccessLevels();
-
+    private void projectBackgroundUpdate() {
         try {
-            SystemRole loggedInUserRole = getLoggedInUser();
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
+            List<Runnable> backgroundUpdateList = new ArrayList<>();
+            backgroundUpdateList.add(getModelsHandler().getProjectModel());
 
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
-            }
+            backgroundUpdate(backgroundUpdateList);
         } catch (Exception e) {
-            displayError(e);
+            throw new RuntimeException(e);
         }
     }
-
-    private void tvListener() {
-        tvProjects.setOnMouseClicked(event -> {
-            if(isTvSelected()){
-                deleteButton.setDisable(false);
-                editButton.setDisable(false);
-            }else {
-                deleteButton.setDisable(true);
-                editButton.setDisable(true);
-            }
-        });
-    }
-    private boolean isTvSelected() {
-        return tvProjects.getSelectionModel().getSelectedItem() != null;
-    }
-
-    private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);}
 
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
         addDeleteBtn();
         addEditBtn();
-
 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
@@ -109,7 +75,7 @@ public class ProjectsController extends BaseController implements Initializable 
         editButton.setOnMouseClicked(event -> {
             FXMLLoader loader = loadView(ViewPaths.ADD_PROJECT_VIEW);
             AddProjectController controller = loader.getController();
-            controller.setEditContent(tvProjects.getSelectionModel().getSelectedItem());
+            controller.setEditContent((Project) tableView.getSelectionModel().getSelectedItem());
             loadInMainView(loader.getRoot(), projectsView);
         });
     }
@@ -121,27 +87,43 @@ public class ProjectsController extends BaseController implements Initializable 
         deleteButton.setDisable(true);
 
         deleteButton.setOnMouseClicked(event -> {
-            Object project = tvProjects.getSelectionModel().getSelectedItem();
+            Project project = (Project) tableView.getSelectionModel().getSelectedItem();//todo den burde lige vise hvis der er nogle installationer der ikke er færdige
             if(showQuestionDialog(project.toString(), true)){
-                //TODO Delete ned i lagene
+                handleDelete(project);
             }
         });
     }
 
-    private void loadTableView() {
-        tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        tcLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
+    private void handleDelete(Project project) {
         try {
-            tvProjects.setItems(getModelsHandler().getProjectModel().getAllProjects());
+            Task<Void> deleteProjectTask = getModelsHandler().getProjectModel().deleteProject(project);
+
+            deleteProjectTask.setOnSucceeded(event -> handleSearch());
+            deleteProjectTask.setOnFailed(event -> displayError(deleteProjectTask.getException()));
+
+            TaskExecutor.executeTask(deleteProjectTask);
+
         } catch (Exception e) {
             displayError(e);
         }
     }
 
-    public void handleSearch(KeyEvent keyEvent) {
+    private void loadTableView() {
+        tcStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        tcClient.setCellValueFactory(new PropertyValueFactory<>("clientName"));
+        tcStreet.setCellValueFactory(new PropertyValueFactory<>("street"));
+        tcPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
+        tcProjectName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tcCreated.setCellValueFactory(new PropertyValueFactory<>("created"));
+        try {
+            tableView.setItems(getModelsHandler().getProjectModel().getAllProjects());
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    public void handleSearch() {
         try {
             getModelsHandler().getProjectModel().search(txtfSearch.getText());
         } catch (Exception e) {
@@ -154,14 +136,14 @@ public class ProjectsController extends BaseController implements Initializable 
     }
 
     public void handleDoubleClick(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && isTvSelected()){
             if(mouseEvent.getClickCount() == 2){
                 FXMLLoader loader = loadView(ViewPaths.PROJECT_INFO_VIEW);
                 getMainController().mainBorderPane.setCenter(loader.getRoot());
                 getMainController().saveLastView(projectsView);
 
                 ProjectInfoController controller = loader.getController();
-                Project selected = tvProjects.getSelectionModel().getSelectedItem();
+                Project selected = (Project) tableView.getSelectionModel().getSelectedItem();
                 controller.setContent(selected);
             }
         }

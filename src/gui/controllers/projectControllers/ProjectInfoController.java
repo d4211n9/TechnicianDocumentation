@@ -4,24 +4,25 @@ import be.*;
 import be.Enum.SystemRole;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
 import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
+import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -35,40 +36,49 @@ public class ProjectInfoController extends BaseController implements Initializab
     @FXML
     private FlowPane fpInstallations;
     @FXML
-    private HBox buttonArea, hbUserBtnArea;
+    private HBox hbUserBtnArea, hbProjectDescription;
     @FXML
     private JFXListView listUsers;
     @FXML
     private JFXToggleButton toggleUsers;
     @FXML
+    private ComboBox cbStatus;
+    @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone,
             lblCreated, lblProjectLocation, lblAssignedUsers;
+    @FXML
+    private JFXTextArea txtaDescription;
 
     private Client client;
     private Project project;
     private List<Installation> installations;
-    private NodeAccessLevel buttonAccessLevel;
     private JFXButton assignUser, unAssignUser;
     private ObservableList<SystemUser> obsAssignedUsers = null;
     private ObservableList<SystemUser> obsUnAssignedUsers = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addLoadedButtons();
+        initializeButtonAccessLevels();
+        projectsView.getChildren().add(addButtons());
     }
 
     public void setContent(Project project) {
         this.project = project;
         client = project.getClient();
 
-        lblProjectTitle.setText(project.getName());
         lblClientName.setText(client.getName());
-        lblClientLocation.setText(client.getLocation());
+        lblClientLocation.setText(client.getAddress().toString());
         lblClientType.setText(client.getType());
         lblClientEmail.setText(client.getEmail());
         lblClientPhone.setText(client.getPhone());
-        lblProjectLocation.setText(client.getLocation());
+
+        lblProjectTitle.setText(project.getName());
+        txtaDescription.setText(project.getDescription());
+        lblProjectLocation.setText(project.getAddress().toString());
         lblCreated.setText(project.getCreated()+"");
+
+        loadComboBoxOptions();
+        cbStatus.getSelectionModel().select(project.getStatus());
 
         loadInstallations();
         loadUsers();
@@ -84,6 +94,43 @@ public class ProjectInfoController extends BaseController implements Initializab
         addAssignUserBtn();
         addUnAssignUserBtn();
         addCreateInstallationBtn();
+        addEditSaveDescriptionBtn();
+    }
+
+    private void addEditSaveDescriptionBtn() {
+        String editText = "✏ Edit";
+        String saveText = "💾 Save";
+
+        Button btnEditSaveDescription = createButton(editText);
+
+        NodeAccessLevel descriptionButtonAccess = new NodeAccessLevel();
+
+        descriptionButtonAccess.addNodeAccessLevel(
+                btnEditSaveDescription,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+
+        btnEditSaveDescription.setOnAction(event -> {
+            boolean isDescriptionEditable = txtaDescription.isEditable();
+
+            if (isDescriptionEditable) {
+                project.setDescription(txtaDescription.getText());
+
+                try {
+                    Task<Boolean> updateProjectTask = getModelsHandler().getProjectModel().updateProject(project);
+
+                    TaskExecutor.executeTask(updateProjectTask);
+                }
+                catch (Exception e) {
+                    displayError(e);
+                }
+            }
+
+            txtaDescription.setEditable(!isDescriptionEditable);
+
+            btnEditSaveDescription.setText(!isDescriptionEditable ? saveText : editText);
+        });
+
+        hbProjectDescription.getChildren().add(btnEditSaveDescription);
     }
 
     private void addCreateInstallationBtn() {
@@ -107,19 +154,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 assignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(assignUser);
-        assignUser.setDisable(true);
 
-        assignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(),
-                        selectedUser.getEmail());
-                obsAssignedUsers.add(selectedUser);
-                obsUnAssignedUsers.remove(selectedUser);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+        assignUser.setOnMouseClicked(event -> {
+                FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
+                AddUserToProjectController controller = loader.getController();
+                loadInMainView(loader.getRoot(), projectsView);
+                controller.setProject(project);
         });
     }
 
@@ -129,56 +169,40 @@ public class ProjectInfoController extends BaseController implements Initializab
                 unAssignUser,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
         addAssignedButton(unAssignUser);
-        unAssignUser.setDisable(true);
 
         unAssignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-            try {
-                getModelsHandler().getProjectModel().deleteSystemUserAssignedToProject(project.getID(),
-                        selectedUser.getEmail());
-                obsAssignedUsers.remove(selectedUser);
-                obsUnAssignedUsers.add(selectedUser);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
+            FXMLLoader loader = loadView(ViewPaths.REMOVE_FROM_PROJECT);
+            RemoveUserFromProject controller = loader.getController();
+            loadInMainView(loader.getRoot(), projectsView);
+            controller.setContent(project);
         });
     }
-
-    private void addButton(Button button) {
-        buttonArea.getChildren().add(0, button);}
 
     private void addAssignedButton(Button button) {
         hbUserBtnArea.getChildren().add(button);
     }
 
 
-    private void addLoadedButtons() {
-        initializeButtonAccessLevels();
-
-        try {
-            SystemRole loggedInUserRole = getLoggedInUser();
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
-
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-                if(accessLevel.contains(loggedInUserRole)) addButton((Button) button);
-            }
-        } catch (Exception e) {
-            displayError(e);
-        }
-    }
-
     private void loadInstallations() {
         try {
-            installations = getModelsHandler().getInstallationModel().getAllInstallations(project.getID());
-        } catch (Exception e) {
-            e.printStackTrace();
-            displayError(e);
-        }
+            Task<ObservableList<Installation>> allInstallationsTask = getModelsHandler()
+                    .getInstallationModel()
+                    .getAllInstallations(project.getID());
 
-        for (Installation i : installations) {
-            showInstallation(i);
+            allInstallationsTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                installations = newValue;
+
+                for (Installation i : installations) {
+                    showInstallation(i);
+                }
+            });
+
+            allInstallationsTask.setOnFailed(event -> displayError(allInstallationsTask.getException()));
+
+            TaskExecutor.executeTask(allInstallationsTask);
+
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
@@ -201,51 +225,33 @@ public class ProjectInfoController extends BaseController implements Initializab
 
 
     private void loadUsers() {
-        try {
-            List<SystemUser> assignedUsers = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID());
-            obsAssignedUsers = FXCollections.observableList(assignedUsers);
+        loadAssignedUsers();
+    }
 
-            List<SystemUser> unAssignedUsers = getModelsHandler().getProjectModel().
-                    getSystemUsersAssignedToProject(project.getID()); //TODO Hent Un-assigned
-            obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
+    private void loadAssignedUsers() {
+        try {
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getProjectModel().
+                    getSystemUsersAssignedToProject(project.getID());
+
+            assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                obsAssignedUsers = FXCollections.observableList(newValue);
+
+                listUsers.setItems(obsAssignedUsers);
+            });
+
+            assignedUsersTask.setOnFailed(event -> displayError(assignedUsersTask.getException()));
+            TaskExecutor.executeTask(assignedUsersTask);
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void loadComboBoxOptions() {
+        try {
+            cbStatus.setItems(getModelsHandler().getProjectModel().getAllStatuses());
         } catch (Exception e) {
             displayError(e);
-            e.printStackTrace(); //TODO replace with log to the database?
-        }
-
-        listUsers.setItems(obsAssignedUsers);
-    }
-
-    private void userListener() {
-        listUsers.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
-            //If a user is selected from the assigned users list we enable the remove button
-            if(n != null && toggleUsers.isSelected()) {
-                unAssignUser.setDisable(false);
-            }
-            //If a user is selected from the unassigned users list we enable the add button
-            else if (n != null && !toggleUsers.isSelected()) {
-                assignUser.setDisable(false);
-            }
-            //If no user is selected we disable both buttons
-            else {
-                assignUser.setDisable(true);
-                unAssignUser.setDisable(true);
-            }
-        });
-    }
-
-    /**
-     * Switches between showing list of assigned and unassigned users
-     */
-    public void handleToggleUsers() {
-        listUsers.getSelectionModel().select(null); //De-select user to avoid "hanging" selection
-        if(toggleUsers.isSelected()) {
-            listUsers.setItems(obsAssignedUsers);
-            lblAssignedUsers.setText("Users Assigned");
-        } else {
-            listUsers.setItems(obsUnAssignedUsers);
-            lblAssignedUsers.setText("Users Not Assigned");
         }
     }
 }

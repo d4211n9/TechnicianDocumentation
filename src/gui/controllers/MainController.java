@@ -17,10 +17,7 @@ import util.SymbolPaths;
 import util.ViewPaths;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Stack;
+import java.util.*;
 
 public class MainController extends BaseController implements Initializable {
     @FXML
@@ -33,42 +30,22 @@ public class MainController extends BaseController implements Initializable {
     private NodeAccessLevel buttonAccessLevel;
     private Stack<Node> viewHistory = new Stack<>();
 
+    ArrayList<Button> buttons;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadImages();
-        addLoadedButtons();
-    }
-
-    private void addButtonToSidebar(Button button) {
-        sidebar.getChildren().add(1, button);
-    }
-
-    /**
-     * Adds buttons in the sidebar menu,
-     * based on the logged-in user's role.
-     */
-    private void addLoadedButtons() {
         initializeButtonAccessLevels();
+        buttons = addLoadedButtons(buttonAccessLevel);
+        addButtonsToBottomArea(buttons);
+    }
 
-        try {
-            //Gets the logged-in user's role
-            SystemRole loggedInUserRole = getModelsHandler()
-                    .getSystemUserModel()
-                    .getLoggedInSystemUser()
-                    .getValue()
-                    .getRole();
-
-            // Loops through the buttons and adds them to the sidebar if the user has the right access level
-            for (Node button : buttonAccessLevel.getNodes()) {
-
-                List<SystemRole> accessLevel = buttonAccessLevel.getAccessLevelsForNode(button);
-
-                if(accessLevel.contains(loggedInUserRole)) addButtonToSidebar((Button) button);
-            }
-        } catch (Exception e) {
-            displayError(e);
+    private void addButtonsToBottomArea(ArrayList<Button> buttons) {
+        for (Button button: buttons){
+            sidebar.getChildren().add(1, button);
         }
     }
+
 
     /**
      * Adds all buttons to the buttonAccessLevel variable
@@ -89,10 +66,14 @@ public class MainController extends BaseController implements Initializable {
 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("📁 Projects", ViewPaths.PROJECTS_VIEW),
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("💰 Clients", ViewPaths.CLIENTS_VIEW),
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
+
+        buttonAccessLevel.addNodeAccessLevel(
+                loadButton("📁 My Projects", ViewPaths.MY_PROJECTS),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 
@@ -128,6 +109,12 @@ public class MainController extends BaseController implements Initializable {
     }
 
     public void handleLogout() {
-        close();
+        try {
+            getModelsHandler().getSystemUserModel().deleteRememberedLogin();
+            close();
+        }
+        catch (Exception e) {
+            displayError(e);
+        }
     }
 }

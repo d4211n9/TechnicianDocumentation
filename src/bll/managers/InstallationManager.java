@@ -3,15 +3,18 @@ package bll.managers;
 import be.Installation;
 import be.SystemUser;
 import bll.interfaces.IInstallationManager;
+import dal.facades.DeleteFacade;
 import dal.facades.ProjectFacade;
 
 import java.util.List;
 
 public class InstallationManager implements IInstallationManager {
     private ProjectFacade projectFacade;
+    private DeleteFacade deleteFacade;
 
     public InstallationManager() throws Exception {
         projectFacade = new ProjectFacade();
+        deleteFacade = new DeleteFacade();
     }
 
     @Override
@@ -27,6 +30,11 @@ public class InstallationManager implements IInstallationManager {
     @Override
     public Installation updateInstallation(Installation installation) throws Exception {
         return projectFacade.updateInstallation(installation);
+    }
+
+    @Override
+    public void deleteInstallation(Installation deletedInstallation) throws Exception {
+        deleteFacade.deleteInstallation(deletedInstallation);
     }
 
     @Override
