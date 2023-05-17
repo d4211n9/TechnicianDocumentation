@@ -27,7 +27,7 @@ public class InputValidator {
 
     //todo make validation
     public static boolean isName(String name){
-        return name.matches("[A-Z][a-zA-Z]*");
+        return name.matches("[A-ZÆØÅ -.][æøåa-zÆØÅA-Z -.]*");
     }
 
     /**

@@ -1,6 +1,7 @@
 package gui.controllers.drawing;
 
 import be.Device;
+import be.DeviceType;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -33,5 +34,10 @@ public class DeviceCard implements Initializable {
         lbl.setText("højtaler");
 
         this.device = device;
+    }
+
+    public void setTypeContent(DeviceType deviceType) {
+        lbl.setText(deviceType.getName());
+        imgView.setImage(new Image(deviceType.getImagePath()));
     }
 }

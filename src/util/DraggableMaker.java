@@ -21,7 +21,6 @@ public class DraggableMaker {
             double x = mouseEvent.getSceneX() - mouseAnchorX - area.getParent().getParent().getParent().getParent().getLayoutX();
             node.setLayoutX(x);
             node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY - area.getParent().getLayoutY());
-            System.out.println("jfie");
         });
     }
 

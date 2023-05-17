@@ -34,6 +34,7 @@ public class AddDeviceController extends BaseController implements Initializable
     private ImageView ivDevice;
     @FXML
     private CheckBox chbLoginDetails;
+    private DrawingController drawingController;
     private ObservableList<DeviceType> allDeviceIcons = FXCollections.observableArrayList();
 
 
@@ -41,6 +42,10 @@ public class AddDeviceController extends BaseController implements Initializable
     public void initialize(URL location, ResourceBundle resources) {
         loadAllDeviceIcons();
         createComboBoxContent();
+    }
+
+    public void setDrawingController(DrawingController drawingController) {
+        this.drawingController = drawingController;
     }
 
     private void createComboBoxContent() {
@@ -65,21 +70,16 @@ public class AddDeviceController extends BaseController implements Initializable
     }
 
     public void handleConfirm() {
-        System.out.println("Pressed confirm");
         DeviceType newDeviceType = createDeviceTypeFromFields();
-        System.out.println(newDeviceType.getName() + ", " + newDeviceType.getImagePath() + ", " + newDeviceType.hasLoginDetails());
 
         if(newDeviceType != null) {
             createDeviceType(newDeviceType);
         }
-
-        //TODO Indlæs det nye devicetype på listen i drawing viewet
         handleBack();
     }
 
     private DeviceType createDeviceTypeFromFields() {
         if(validateInput()) {
-            System.out.println("Valid input");
             String name = txtName.getText();
 
             DeviceType selectedIcon = cbDeviceIcons.getSelectionModel().getSelectedItem();
@@ -99,6 +99,15 @@ public class AddDeviceController extends BaseController implements Initializable
             Task<Boolean> createDeviceTask = getModelsHandler()
                     .getDrawingModel().createDeviceType(newDeviceType);
 
+            createDeviceTask.setOnSucceeded(event -> {
+                try {
+                    getModelsHandler().getDrawingModel().updateAllDeviceTypes();
+                    drawingController.loadDeviceTypes();
+                } catch (Exception e) {
+                    displayError(e);
+                }
+            });
+
             createDeviceTask.setOnFailed(event -> displayError(createDeviceTask.getException()));
 
             TaskExecutor.executeTask(createDeviceTask);
@@ -108,7 +117,8 @@ public class AddDeviceController extends BaseController implements Initializable
     }
 
     private boolean validateInput() {
-        return InputValidator.isName(txtName.getText()) && cbDeviceIcons.getSelectionModel().getSelectedItem() != null;
+        return !txtName.getText().isBlank() &&
+                cbDeviceIcons.getSelectionModel().getSelectedItem() != null;
     }
 
     //TODO loadAllDeviceIcons + showFile skal rykkes til DAL

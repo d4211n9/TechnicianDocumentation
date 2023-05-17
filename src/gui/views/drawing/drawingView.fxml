@@ -27,12 +27,9 @@
                            <content>
                               <ScrollPane>
                                  <content>
-                                    <VBox fx:id="sidebarDevice" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0">
+                                    <VBox alignment="TOP_CENTER">
                                        <children>
-                                          <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddDevice" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP" HBox.hgrow="NEVER">
-                                             <HBox.margin>
-                                                <Insets left="10.0" top="10.0" />
-                                             </HBox.margin>
+                                          <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddDevice" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -40,6 +37,7 @@
                                                 <Insets bottom="10.0" />
                                              </VBox.margin>
                                           </JFXButton>
+                                          <VBox fx:id="sidebarDevice" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0" />
                                        </children>
                                     </VBox>
                                  </content>

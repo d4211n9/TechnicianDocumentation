@@ -44,7 +44,7 @@ public class DrawingModel {
         return allDeviceTypes;
     }
 
-    private void updateAllDeviceTypes() throws Exception {
+    public void updateAllDeviceTypes() throws Exception {
         List<DeviceType> allDeviceTypes = drawingManager.getAllDeviceTypes();
 
         if (this.allDeviceTypes == null) {
