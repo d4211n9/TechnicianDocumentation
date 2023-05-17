@@ -55,4 +55,8 @@ public class ModelsHandler {
     public AddressModel getAddressModel() {
         return addressModel;
     }
+
+    public DrawingModel getDrawingModel() {
+        return drawingModel;
+    }
 }
