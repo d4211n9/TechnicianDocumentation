@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import util.SymbolPaths;
@@ -33,5 +34,6 @@ public class PhotoCardController extends BaseController implements Initializable
         lblPhotoDescription.setText(photo.getDescription());
         imgPhoto.setImage(photo.getPhoto());
     }
+
 
 }

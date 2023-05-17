@@ -339,6 +339,7 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
+
     private void loadPhotosToInstallation() {
 
         try{
@@ -361,6 +362,9 @@ public class InstallationInfoController extends BaseController implements Initia
         PhotoCardController cardController = photoCardLoader.getController();
         cardController.setContent(photo);
 
+        photoCard.setOnMouseClicked(event -> {
+            System.out.println("photo clicked");
+        });
         fpPhotos.getChildren().add(photoCard);
     }
 

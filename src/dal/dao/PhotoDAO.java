@@ -5,13 +5,7 @@ import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IPhotoDAO;
 import exceptions.DALException;
-import gui.util.ImageConverter;
 import javafx.scene.image.Image;
-import jdk.jfr.Description;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,33 +87,50 @@ public class PhotoDAO implements IPhotoDAO {
         return allPhotos;
     }
 
+    public Photo updatePhoto(Photo photo) throws Exception {
 
-        @Override
-        public void deletePhoto (Photo photo) throws Exception {
+        Photo updatedPhoto = null;
 
-            String sql = "DELETE FROM Photo WHERE ID=?;";
+        String sql = "UPDATE Photo SET InstallationID=?, Image=?, Description=? WHERE ID=?;";
 
-            try (Connection connection = connector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-                statement.setInt(1, photo.getID());
-                statement.executeUpdate();
+            statement.setInt(1, photo.getInstallationID());
+            statement.setBytes(2, photo.getPhotoBytes());
+            statement.setString(3, photo.getDescription());
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new DALException("Failed to delete photo", e);
-            }
+            statement.executeUpdate();
+
+            updatedPhoto = photo;
+
+        } catch (SQLException e) {
+            DALException dalException = new DALException("Failed to update photo", e);
+            dalException.printStackTrace(); //TODO replace with log to the database.
+
+            throw dalException;
         }
+        return updatedPhoto;
     }
 
 
+    @Override
+    public void deletePhoto (Photo photo) throws Exception {
 
-   /* public byte[] convertToBytes(Photo photo) throws IOException {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-             ObjectOutput out = new ObjectOutputStream(bos)) {
-            out.writeObject(photo);
-            return bos.toByteArray();
+        String sql = "DELETE FROM Photo WHERE ID=?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, photo.getID());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to delete photo", e);
         }
-    }*/
+    }
+}
+
 
 

@@ -19,8 +19,8 @@ public class ViewPaths {
     public static final String INSTALLATION_INFO = "/gui/views/installation/InstallationInfo.fxml";
     public static final String CREATE_INSTALLATION = "/gui/views/installation/CreateInstallation.fxml";
     public static final String MY_PROJECTS = "/gui/views/projectViews/MyProject.fxml";
-
     public static final String PHOTO_CARD = "/gui/views/photoViews/PhotoCard.fxml";
+    public static final String PHOTO_INFO = "src/gui/views/photoViews/PhotoInfoView.fxml";
 
 
     private ViewPaths() {}
