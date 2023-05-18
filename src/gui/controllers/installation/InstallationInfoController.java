@@ -375,6 +375,7 @@ public class InstallationInfoController extends BaseController implements Initia
         photoCard.setOnMouseClicked(event -> {
             System.out.println("photo clicked");
 
+
             FXMLLoader photoInfoLoader = loadView(ViewPaths.PHOTO_INFO);
             //photoCard = photoInfoLoader.getRoot();
 
