@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.controllers.photo.PhotoCardController;
+import gui.controllers.photo.PhotoController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.application.Platform;
@@ -99,10 +100,6 @@ public class InstallationInfoController extends BaseController implements Initia
         loadPhotosToInstallation();
     }
 
-    public void setPhotoInfoContent(Photo photo) {
-        this.photo = photo;
-        txtaPhotoDescription.setText(photo.getDescription());
-    }
 
     /**
      * Shows buttons relevant for each tab.
@@ -349,7 +346,23 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
+    public void showPhotoCard(Photo photo) {
+        FXMLLoader photoCardLoader = loadView(ViewPaths.PHOTO_CARD);
 
+        VBox photoCard = photoCardLoader.getRoot();
+        PhotoCardController cardController = photoCardLoader.getController();
+        cardController.setContent(photo);
+
+        photoCard.setOnMouseClicked(event -> {
+            System.out.println("photo clicked");
+            FXMLLoader loader = openStage(ViewPaths.PHOTO_INFO, "photo info");
+            PhotoController photoController = loader.getController();
+            photoController.setPhotoInfoContent(photo);
+
+        });
+
+        fpPhotos.getChildren().add(photoCard);
+    }
     private void loadPhotosToInstallation() {
 
         try{
@@ -365,27 +378,5 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
-    private void showPhotoCard(Photo photo) {
-        FXMLLoader photoCardLoader = loadView(ViewPaths.PHOTO_CARD);
-
-        VBox photoCard = photoCardLoader.getRoot();
-        PhotoCardController cardController = photoCardLoader.getController();
-        cardController.setContent(photo);
-
-        photoCard.setOnMouseClicked(event -> {
-            System.out.println("photo clicked");
-
-
-            FXMLLoader photoInfoLoader = loadView(ViewPaths.PHOTO_INFO);
-            //photoCard = photoInfoLoader.getRoot();
-
-
-            //openStage(ViewPaths.PHOTO_INFO, "photo info");
-
-            //openPhotoInfo(photo);
-        });
-
-        fpPhotos.getChildren().add(photoCard);
-    }
 
 }
