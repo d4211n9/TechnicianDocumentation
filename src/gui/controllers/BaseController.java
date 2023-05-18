@@ -1,8 +1,11 @@
 package gui.controllers;
 
 import be.Enum.SystemRole;
+import be.Photo;
 import com.jfoenix.controls.JFXButton;
 import exceptions.GUIException;
+import gui.controllers.installation.InstallationInfoController;
+import gui.controllers.photo.PhotoCardController;
 import gui.models.ModelsHandler;
 import gui.util.MainControllerHandler;
 import gui.util.NodeAccessLevel;

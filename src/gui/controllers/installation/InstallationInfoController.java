@@ -6,6 +6,7 @@ import be.Photo;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.controllers.photo.PhotoCardController;
@@ -15,6 +16,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,6 +29,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import util.SymbolPaths;
 import util.ViewPaths;
 
 import javax.imageio.ImageIO;
@@ -44,6 +47,8 @@ import java.util.ResourceBundle;
 public class InstallationInfoController extends BaseController implements Initializable {
     @FXML
     public FlowPane fpPhotos;
+    public ImageView imgPhotoArea;
+    public JFXTextArea txtaPhotoDescription;
     @FXML
     private VBox installationInfo, vbUserBtnArea;
     @FXML
@@ -92,6 +97,11 @@ public class InstallationInfoController extends BaseController implements Initia
 
         fpPhotos.prefWrapLengthProperty().bind(fpPhotos.widthProperty());
         loadPhotosToInstallation();
+    }
+
+    public void setPhotoInfoContent(Photo photo) {
+        this.photo = photo;
+        txtaPhotoDescription.setText(photo.getDescription());
     }
 
     /**
@@ -364,9 +374,17 @@ public class InstallationInfoController extends BaseController implements Initia
 
         photoCard.setOnMouseClicked(event -> {
             System.out.println("photo clicked");
+
+            FXMLLoader photoInfoLoader = loadView(ViewPaths.PHOTO_INFO);
+            photoCard = photoInfoLoader.getRoot();
+
+
+            //openStage(ViewPaths.PHOTO_INFO, "photo info");
+
+            //openPhotoInfo(photo);
         });
+
         fpPhotos.getChildren().add(photoCard);
     }
-
 
 }
