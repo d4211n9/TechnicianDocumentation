@@ -34,7 +34,7 @@
                                                 <Font size="14.0" />
                                              </font>
                                              <VBox.margin>
-                                                <Insets bottom="10.0" />
+                                                <Insets bottom="10.0" top="10.0" />
                                              </VBox.margin>
                                           </JFXButton>
                                           <VBox fx:id="sidebarDevice" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0" />
@@ -46,7 +46,15 @@
                         </TitledPane>
                       <TitledPane animated="false" text="Wires">
                            <content>
-                              <VBox prefHeight="200.0" prefWidth="100.0" />
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddWire" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <VBox fx:id="sidebarWire" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0" />
+                                 </children></VBox>
                            </content>
                         </TitledPane>
                     </panes>

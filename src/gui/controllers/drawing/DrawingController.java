@@ -5,6 +5,7 @@ import be.DeviceType;
 import gui.controllers.BaseController;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -13,13 +14,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import util.ViewPaths;
 
@@ -40,7 +41,9 @@ public class DrawingController extends BaseController implements Initializable {
     DataFormat dataFormat = new DataFormat("DragDropFormat");
 
     public ImageView selectedElementImg;
-    public VBox sidebarDevice;
+    public VBox sidebarDevice, sidebarWire;
+    private double startX, startY;
+
     ArrayList<Device> devicesesOnDrawing;
 
     @Override
@@ -58,7 +61,15 @@ public class DrawingController extends BaseController implements Initializable {
                 controller.setTypeContent(deviceType);
 
                 HBox deviceCard = loader.getRoot();
-                sidebarDevice.getChildren().add(0, deviceCard);
+
+                if(deviceType.getImagePath().contains("/device_icons/")) {
+                    sidebarDevice.getChildren().add(0, deviceCard);
+                }
+
+                if(deviceType.getImagePath().contains("/wire_icons/")) {
+                    sidebarWire.getChildren().add(0, deviceCard);
+                }
+
                 addDeviceCardListener(loader, deviceType);
             }
         } catch (Exception e) {
@@ -82,8 +93,6 @@ public class DrawingController extends BaseController implements Initializable {
 
         pane.getChildren().add(deviceImg);
     }
-
-    
 
     private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {
         Node deviceElement = loader.getRoot();
@@ -117,7 +126,13 @@ public class DrawingController extends BaseController implements Initializable {
         addDeviceController.setDrawingController(this);
     }
 
-    public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card){
+    public void handleAddWire() {
+        FXMLLoader loader = openStage(ViewPaths.CREATE_WIRE, "Create Wire");
+        AddWireController addWireController = loader.getController();
+        addWireController.setDrawingController(this);
+    }
+
+    public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
         card.setOnDragDetected(event -> {
             Dragboard db = node.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
@@ -128,7 +143,7 @@ public class DrawingController extends BaseController implements Initializable {
 
         pane.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
-            if(db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer){
+            if (db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer) {
                 int index = (Integer) db.getContent(dataFormat);
                 Node node1 = (Node) pane.getChildren().get(index);
                 node1.setManaged(false);
