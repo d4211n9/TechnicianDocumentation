@@ -3,20 +3,17 @@ package gui.controllers.drawing;
 import be.Device;
 import be.DeviceType;
 import gui.controllers.BaseController;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -32,13 +29,15 @@ public class DrawingController extends BaseController implements Initializable {
 
 
     public Button button;
-    public Canvas canvas;
     public ScrollPane contentArea;
     public Label lbl;
     public VBox background;
     public Pane pane;
 
-    DataFormat dataFormat = new DataFormat("DragDropFormat");
+    private int selectedIndex;
+
+    DataFormat dataFormat = new DataFormat("DragDropFormat1");
+
 
     public ImageView selectedElementImg;
     public VBox sidebarDevice;
@@ -91,8 +90,17 @@ public class DrawingController extends BaseController implements Initializable {
         Node deviceElement = loader.getRoot();
 
         deviceElement.setOnMousePressed(event -> {
-            Device d = new Device(deviceType, devicesesOnDrawing.size());
-            ImageView imgview = new ImageView(new Image(d.getDeviceType().getImagePath()));
+            Device d = new Device(deviceType, pane.getChildren().size());
+            FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
+            DeviceController controller1 = loader1.getController();
+            controller1.setContent(d);
+
+            ImageView imgview = controller1.getImgView();
+            imgview.setOnMousePressed(event1 -> {
+                selectedIndex = controller1.getDevice().getId();
+                System.out.println(controller1.getDevice().getId());
+            });
+
 
             selectedElementImg = imgview;
             selectedElementImg.setFitWidth(80);
@@ -108,8 +116,8 @@ public class DrawingController extends BaseController implements Initializable {
             pane.getChildren().add(selectedElementImg);
             problem(selectedElementImg, contentArea, pane, dataFormat, d, deviceElement);
             DeviceCard controller = loader.getController();
-            problem(selectedElementImg, contentArea, pane, dataFormat, d, selectedElementImg);
             devicesesOnDrawing.add(controller.getDevice());
+            problem(selectedElementImg, contentArea, pane, dataFormat, d, selectedElementImg);
         });
     }
 
@@ -119,17 +127,36 @@ public class DrawingController extends BaseController implements Initializable {
         addDeviceController.setDrawingController(this);
     }
 
+
     public void handleAddLine() {
         pane.setOnMousePressed(e -> {
-            currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
-            pane.getChildren().add(currentLine);
+            Node source = (Node)e.getPickResult().getIntersectedNode();
+            if(!source.equals(pane)) {
+                currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
+                pane.getChildren().add(currentLine);
+
+                pane.setOnMousePressed(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Node source = (Node) event.getPickResult().getIntersectedNode();
+                        if (!source.equals(pane)) {
+                            //currentLine.setEndX(source.getTranslateX());
+                            //currentLine.setEndY(source.getTranslateY());
+
+                            currentLine.setEndX(event.getX());
+                            currentLine.setEndY(event.getY());
+                            System.out.println(source);
+                            pane.setOnMousePressed(null);
+                        }
+                    }
+                });
+                e.consume();
+            }
         });
 
-        pane.setOnMouseDragged(e -> {
-            currentLine.setEndX(e.getX());
-            currentLine.setEndY(e.getY());
-        });
+
     }
+
 
     public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
         card.setOnDragDetected(event -> {
@@ -139,6 +166,7 @@ public class DrawingController extends BaseController implements Initializable {
             db.setContent(content);
             event.consume();
         });
+
 
         pane.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
