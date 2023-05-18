@@ -49,6 +49,20 @@
                               <VBox prefHeight="200.0" prefWidth="100.0" />
                            </content>
                         </TitledPane>
+                        <TitledPane prefHeight="200.0" prefWidth="200.0" text="Lines">
+                           <content>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddLine" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <VBox fx:id="sidebarLine" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
                     </panes>
                   </Accordion>
                </children></VBox>

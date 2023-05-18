@@ -20,6 +20,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import util.ViewPaths;
 
@@ -41,6 +42,7 @@ public class DrawingController extends BaseController implements Initializable {
 
     public ImageView selectedElementImg;
     public VBox sidebarDevice;
+    private Line currentLine;
     ArrayList<Device> devicesesOnDrawing;
 
     @Override
@@ -117,7 +119,19 @@ public class DrawingController extends BaseController implements Initializable {
         addDeviceController.setDrawingController(this);
     }
 
-    public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card){
+    public void handleAddLine() {
+        pane.setOnMousePressed(e -> {
+            currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
+            pane.getChildren().add(currentLine);
+        });
+
+        pane.setOnMouseDragged(e -> {
+            currentLine.setEndX(e.getX());
+            currentLine.setEndY(e.getY());
+        });
+    }
+
+    public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
         card.setOnDragDetected(event -> {
             Dragboard db = node.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
