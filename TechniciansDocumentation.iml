@@ -14,5 +14,8 @@
     <orderEntry type="library" name="controlsfx" level="project" />
     <orderEntry type="library" name="controlsfx1" level="project" />
     <orderEntry type="library" name="junit.jupiter" level="project" />
+    <orderEntry type="library" name="itextpdf.kernel" level="project" />
+    <orderEntry type="library" name="itextpdf.layout" level="project" />
+    <orderEntry type="library" name="slf4j.simple" level="project" />
   </component>
 </module>
