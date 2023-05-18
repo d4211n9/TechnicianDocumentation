@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 
 public class ProjectInfoController extends BaseController implements Initializable {
     @FXML
-    private VBox projectsView;
+    private VBox projectInfoView;
     @FXML
     private FlowPane fpInstallations;
     @FXML
@@ -62,7 +62,7 @@ public class ProjectInfoController extends BaseController implements Initializab
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
-        projectsView.getChildren().add(addButtons());
+        projectInfoView.getChildren().add(addButtons());
     }
 
     public void setContent(Project project) {
@@ -142,12 +142,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 btnAddInstallation,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
         btnAddInstallation.setOnMouseClicked(event -> {
-            getMainController().saveLastView(projectsView);
             FXMLLoader createLoader = loadView(ViewPaths.CREATE_INSTALLATION);
             VBox createInstallation = createLoader.getRoot();
             CreateInstallationController controller = createLoader.getController();
             controller.setContent(project);
             getMainController().mainBorderPane.setCenter(createInstallation);
+            getMainController().saveLastView(projectInfoView);
         });
     }
 
@@ -161,7 +161,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         assignUser.setOnMouseClicked(event -> {
                 FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
                 AddUserToProjectController controller = loader.getController();
-                loadInMainView(loader.getRoot(), projectsView);
+                loadInMainView(loader.getRoot(), projectInfoView);
                 controller.setProject(project);
         });
     }
@@ -176,7 +176,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         unAssignUser.setOnAction(event -> {
             FXMLLoader loader = loadView(ViewPaths.REMOVE_FROM_PROJECT);
             RemoveUserFromProject controller = loader.getController();
-            loadInMainView(loader.getRoot(), projectsView);
+            loadInMainView(loader.getRoot(), projectInfoView);
             controller.setContent(project);
         });
     }
@@ -214,14 +214,13 @@ public class ProjectInfoController extends BaseController implements Initializab
         Pane installationCard = cardLoader.getRoot();
         InstallationCardController cardController = cardLoader.getController();
         cardController.setContent(i);
-        installationCard.setOnMouseClicked(event -> {
-            getMainController().saveLastView(projectsView);
 
+        installationCard.setOnMouseClicked(event -> {
             FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
-            VBox installationInfo = infoLoader.getRoot();
             InstallationInfoController infoController = infoLoader.getController();
             infoController.setContent(i);
-            getMainController().mainBorderPane.setCenter(installationInfo);
+            getMainController().mainBorderPane.setCenter(infoLoader.getRoot());
+            getMainController().saveLastView(projectInfoView);
         });
         fpInstallations.getChildren().add(installationCard);
     }
