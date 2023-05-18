@@ -358,7 +358,6 @@ public class InstallationInfoController extends BaseController implements Initia
             FXMLLoader loader = openStage(ViewPaths.PHOTO_INFO, "photo info");
             PhotoController photoController = loader.getController();
             photoController.setPhotoInfoContent(photo);
-
         });
 
         fpPhotos.getChildren().add(photoCard);

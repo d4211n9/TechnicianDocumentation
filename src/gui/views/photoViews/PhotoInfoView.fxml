@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox fx:id="vBoxPhotoView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/PhotoStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.photo.PhotoController">
    <children>
@@ -31,34 +29,6 @@
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
-         <children>
-            <JFXButton fx:id="btnConfirm" buttonType="RAISED" prefHeight="60.0" prefWidth="150.0" text="✔ Confirm">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </JFXButton>
-            <JFXButton buttonType="RAISED" prefHeight="60.0" prefWidth="150.0" text="❌ Delete">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </JFXButton>
-            <JFXButton buttonType="RAISED" prefHeight="60.0" prefWidth="150.0" text="❌ Edit">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </JFXButton>
-            <JFXButton buttonType="RAISED" prefHeight="60.0" prefWidth="150.0" text="❌ Cancel">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </JFXButton>
-         </children>
       </HBox>
    </children>
 </VBox>

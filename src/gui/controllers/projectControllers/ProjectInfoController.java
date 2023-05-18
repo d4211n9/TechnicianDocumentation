@@ -133,6 +133,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         hbProjectDescription.getChildren().add(btnEditSaveDescription);
     }
 
+
     private void addCreateInstallationBtn() {
         Button btnAddInstallation = createButton("➕🛠 Installation");
         buttonAccessLevel.addNodeAccessLevel(

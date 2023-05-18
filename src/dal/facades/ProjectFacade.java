@@ -38,6 +38,10 @@ public class ProjectFacade {
         return projectDAO.updateProject(project);
     }
 
+    public Photo updatePhoto(Photo photo) throws Exception {
+        return photoDAO.updatePhoto(photo);
+    }
+
     public Project softDeleteProject(Project project) throws Exception {
         return projectDAO.softDeleteProject(project);
     }
@@ -101,4 +105,6 @@ public class ProjectFacade {
     public void deletePhoto(Photo photo) throws Exception{
         photoDAO.deletePhoto(photo);
     }
+
+
 }

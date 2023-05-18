@@ -9,6 +9,8 @@ public interface IPhotoDAO {
 
     List<Photo> getPhotoFromInstallation(int installationID) throws Exception;
 
+    Photo updatePhoto(Photo photo) throws Exception;
+
     void deletePhoto(Photo photo) throws Exception;
 
 }

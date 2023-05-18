@@ -115,7 +115,7 @@ public class PhotoDAO implements IPhotoDAO {
 
 
     @Override
-    public void deletePhoto (Photo photo) throws Exception {
+    public void deletePhoto(Photo photo) throws Exception {
 
         String sql = "DELETE FROM Photo WHERE ID=?;";
 
