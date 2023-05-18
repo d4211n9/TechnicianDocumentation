@@ -3,7 +3,6 @@ package gui.controllers.drawing;
 import be.Device;
 import be.DeviceType;
 import gui.controllers.BaseController;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -14,7 +13,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -64,14 +66,31 @@ public class DrawingController extends BaseController implements Initializable {
         }
     }
 
+    public void loadDeviceInPane(Device device){
+
+        ImageView deviceImg = new ImageView(new Image(device.getDeviceType().getImagePath()));
+
+        deviceImg.setFitHeight(device.getHeight());
+        deviceImg.setFitWidth(device.getWidth());
+
+        deviceImg.setLayoutX(device.getPosX());
+        deviceImg.setLayoutY(device.getWidth());
+
+        Tooltip imgName = new Tooltip(device.getDeviceType().getName());
+        imgName.setShowDelay(Duration.millis(200));
+        Tooltip.install(deviceImg, imgName);
+
+        pane.getChildren().add(deviceImg);
+    }
+
+    
+
     private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {
         Node deviceElement = loader.getRoot();
 
         deviceElement.setOnMousePressed(event -> {
             Device d = new Device(deviceType, devicesesOnDrawing.size());
-
             ImageView imgview = new ImageView(new Image(d.getDeviceType().getImagePath()));
-
 
             selectedElementImg = imgview;
             selectedElementImg.setFitWidth(80);
@@ -99,43 +118,33 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
     public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card){
-        card.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Dragboard db = node.startDragAndDrop(TransferMode.ANY);
-                ClipboardContent content = new ClipboardContent();
-                content.put(dataFormat, d.getId()); // normally, ID of node
-                db.setContent(content);
+        card.setOnDragDetected(event -> {
+            Dragboard db = node.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.put(dataFormat, d.getId()); // normally, ID of node
+            db.setContent(content);
+            event.consume();
+        });
+
+        pane.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if(db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer){
+                int index = (Integer) db.getContent(dataFormat);
+                Node node1 = (Node) pane.getChildren().get(index);
+                node1.setManaged(false);
+                // this is the problematic part
+                node1.setTranslateX(event.getX() - node1.getLayoutX() - (node1.getBoundsInParent().getHeight() / 2));
+                node1.setTranslateY(event.getY() - node1.getLayoutY() - (node1.getBoundsInParent().getWidth() / 2));
+
+                event.setDropCompleted(true);
                 event.consume();
             }
         });
 
-        pane.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if(db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer){
-                    int index = (Integer) db.getContent(dataFormat);
-                    Node node = (Node) pane.getChildren().get(index);
-                    node.setManaged(false);
-                    // this is the problematic part
-                    node.setTranslateX(event.getX() - node.getLayoutX() - (node.getBoundsInParent().getHeight() / 2));
-                    node.setTranslateY(event.getY() - node.getLayoutY() - (node.getBoundsInParent().getWidth() / 2));
-
-                    event.setDropCompleted(true);
-                    event.consume();
-                }
-            }
-        });
-
-        scrollPane.setOnDragOver(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.ANY);
-                event.consume();
-            }
+        scrollPane.setOnDragOver(event -> {
+            event.acceptTransferModes(TransferMode.ANY);
+            event.consume();
         });
     }
-
-
 }
 
