@@ -61,7 +61,16 @@
                         </TitledPane>
                     </panes>
                   </Accordion>
-                  <VBox fx:id="objectInfo" prefHeight="117.0" prefWidth="200.0" />
+                  <VBox fx:id="objectInfo" alignment="TOP_CENTER" prefHeight="117.0" prefWidth="200.0" spacing="10.0" />
+                  <Pane prefHeight="0.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                   <JFXButton buttonType="RAISED" onAction="#save" prefHeight="40.0" prefWidth="100.0" text="Save">
+                       <VBox.margin>
+                           <Insets top="25.0" />
+                       </VBox.margin>
+                       <font>
+                           <Font size="16.0" />
+                       </font>
+                   </JFXButton>
                </children></VBox>
          </children>
       </HBox>
