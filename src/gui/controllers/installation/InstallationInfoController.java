@@ -364,6 +364,7 @@ public class InstallationInfoController extends BaseController implements Initia
         fpPhotos.getChildren().add(photoCard);
     }
 
+    /**
     public void refreshPhotoView(Photo photo, boolean isDeleted) {
 
         photos.remove(photo);
@@ -372,10 +373,10 @@ public class InstallationInfoController extends BaseController implements Initia
         if (!isDeleted) {
             photos.add(photo);
         }
-    }
+    } */
 
     public void loadPhotosToInstallation() {
-
+        fpPhotos.getChildren().clear();
         try{
             photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());
         } catch (Exception e) {

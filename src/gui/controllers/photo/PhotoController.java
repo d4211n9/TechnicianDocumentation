@@ -71,7 +71,8 @@ public class PhotoController extends BaseController implements Initializable {
             try {
                 Task<Void> deletePhoto = getModelsHandler().getPhotoModel().deletePhoto(photo);
 
-                deletePhoto.setOnSucceeded(event1 -> installationInfoController.refreshPhotoView(photo, true));
+                deletePhoto.setOnSucceeded(event1 -> installationInfoController.loadPhotosToInstallation());
+                deletePhoto.setOnFailed(e -> displayError(deletePhoto.getException()));
 
                 TaskExecutor.executeTask(deletePhoto);
                 closeWindow();
@@ -123,7 +124,8 @@ public class PhotoController extends BaseController implements Initializable {
                 try {
                     Task<Boolean> updatePhotoTask = getModelsHandler().getPhotoModel().updatePhoto(photo);
 
-                    updatePhotoTask.setOnSucceeded(event1 -> installationInfoController.refreshPhotoView(photo, false));
+                    updatePhotoTask.setOnSucceeded(event1 -> installationInfoController.loadPhotosToInstallation());
+                    updatePhotoTask.setOnFailed(e -> displayError(updatePhotoTask.getException()));
 
                     TaskExecutor.executeTask(updatePhotoTask);
                 }
