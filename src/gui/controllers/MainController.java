@@ -66,10 +66,14 @@ public class MainController extends BaseController implements Initializable {
 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("📁 Projects", ViewPaths.PROJECTS_VIEW),
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
 
         buttonAccessLevel.addNodeAccessLevel(
                 loadButton("💰 Clients", ViewPaths.CLIENTS_VIEW),
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
+
+        buttonAccessLevel.addNodeAccessLevel(
+                loadButton("📁 My Projects", ViewPaths.MY_PROJECTS),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
 
         //todo test delete after

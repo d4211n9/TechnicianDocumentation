@@ -2,6 +2,7 @@ package bll.interfaces;
 
 import be.Project;
 import be.SystemUser;
+import exceptions.DALException;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface IProjectManager {
     List<Project> getModifiedProjects(Timestamp lastCheck) throws Exception;
 
     List<SystemUser> getAllUserNotAssignedToProject(int projectId)  throws Exception;
+
+    List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException;
 }

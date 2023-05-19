@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import util.ViewPaths;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -120,6 +122,13 @@ public class InstallationInfoController extends BaseController implements Initia
                 btnEditInfo,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
         addInfoButton(btnEditInfo);
+
+        btnEditInfo.setOnAction(event -> {
+            FXMLLoader loader = loadView(ViewPaths.CREATE_INSTALLATION);
+            CreateInstallationController controller = loader.getController();
+            controller.setEditContent(installation);
+            loadInMainView(loader.getRoot(), installationInfo);
+        });
     }
 
     private void addAssignUserBtn() {

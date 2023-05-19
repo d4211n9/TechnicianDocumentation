@@ -6,7 +6,6 @@ import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
