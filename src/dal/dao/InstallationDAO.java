@@ -20,7 +20,7 @@ public class InstallationDAO implements IInstallationDAO {
     @Override
     public Installation createInstallation(Installation installation) throws Exception {
         Installation newInstallation = null;
-        String sql = "INSERT INTO Installation (ProjectID, Name, Description, Drawing, Is_Done) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Installation (ProjectID, Name, Description, Is_Done) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -28,8 +28,7 @@ public class InstallationDAO implements IInstallationDAO {
             statement.setInt(1, installation.getProjectID());
             statement.setString(2, installation.getName());
             statement.setString(3, installation.getDescription());
-            statement.setBytes(4, installation.getDrawingBytes());
-            statement.setInt(5, installation.getIsDoneInt());
+            statement.setInt(4, installation.getIsDoneInt());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -43,7 +42,7 @@ public class InstallationDAO implements IInstallationDAO {
                     isDone = true;
 
                 newInstallation = new Installation(ID, installation.getProjectID(), installation.getName(),
-                        installation.getDescription(), installation.getDrawingBytes(), isDone);
+                        installation.getDescription(), null, isDone);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,15 +69,14 @@ public class InstallationDAO implements IInstallationDAO {
                 int ID = resultSet.getInt(1);
                 String name = resultSet.getString(3);
                 String description = resultSet.getString(4);
-                byte[] drawingBytes = resultSet.getBytes(5);
-                int isDoneInt = resultSet.getInt(6);
+                int isDoneInt = resultSet.getInt(5);
 
                 //Converting int to boolean
                 boolean isDone = false;
                 if(isDoneInt == 1)
                     isDone = true;
 
-                Installation installation = new Installation(ID, projectID, name, description, drawingBytes, isDone);
+                Installation installation = new Installation(ID, projectID, name, description, null, isDone);
 
                 allInstallations.add(installation);
             }
@@ -93,17 +91,16 @@ public class InstallationDAO implements IInstallationDAO {
     public Installation updateInstallation(Installation installation) throws Exception {
 
         Installation updatedInstallation = null;
-        String sql = "UPDATE Installation SET Name=?, Description=?, Drawing=?, Is_Done=?, SoftDelete=? WHERE ID=?;";
+        String sql = "UPDATE Installation SET Name=?, Description=?, Is_Done=?, SoftDelete=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, installation.getName());
             statement.setString(2, installation.getDescription());
-            statement.setBytes(3, installation.getDrawingBytes());
-            statement.setInt(4, installation.getIsDoneInt());
-            statement.setTimestamp(5, installation.getDeleted());
-            statement.setInt(6, installation.getID());
+            statement.setInt(3, installation.getIsDoneInt());
+            statement.setTimestamp(4, installation.getDeleted());
+            statement.setInt(5, installation.getID());
 
             statement.executeUpdate();
 

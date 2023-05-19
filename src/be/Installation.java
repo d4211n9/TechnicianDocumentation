@@ -7,28 +7,28 @@ import java.util.List;
 public class Installation {
     private String name, description;
     private int ID, projectID, isDoneInt;
-    private byte[] drawingBytes;
     private boolean isDone;
     private List<SystemUser> assignedSystemUsers;
+    private Drawing drawing;
     private Timestamp deleted;
 
 
-    public Installation(int projectID, String name, String description, byte[] drawingBytes, boolean isDone) {
+    public Installation(int projectID, String name, String description, Drawing drawing, boolean isDone) {
         this.projectID = projectID;
         this.name = name;
         this.description = description;
-        this.drawingBytes = drawingBytes;
+        this.drawing = drawing;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
         assignedSystemUsers = new ArrayList<>();
     }
 
-    public Installation(int ID, int projectID, String name, String description, byte[] drawingBytes, boolean isDone) {
+    public Installation(int ID, int projectID, String name, String description, Drawing drawing, boolean isDone) {
         this.ID = ID;
         this.projectID = projectID;
         this.name = name;
         this.description = description;
-        this.drawingBytes = drawingBytes;
+        this.drawing = drawing;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
         assignedSystemUsers = new ArrayList<>();
@@ -50,12 +50,12 @@ public class Installation {
         return description;
     }
 
-    public byte[] getDrawingBytes() {
-        return drawingBytes;
+    public Drawing getDrawing() {
+        return drawing;
     }
 
-    public void setDrawingBytes(byte[] drawingBytes) {
-        this.drawingBytes = drawingBytes;
+    public void setDrawing(Drawing drawing) {
+        this.drawing = drawing;
     }
 
     //TODO Check: usikker på om int eller boolean skal bruges i isDone getter...
