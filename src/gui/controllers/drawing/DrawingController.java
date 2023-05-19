@@ -130,22 +130,33 @@ public class DrawingController extends BaseController implements Initializable {
         objectInfo.getChildren().add(name);
 
         //creates the pos x filed
-        Label label = new Label("PosX");
+        Label label = new Label("PosX   ");
         TextField txtFiled = new TextField();
         txtFiled.setText(String.valueOf(device.getPosX()));
         HBox hbox = new HBox(label, txtFiled);
         hbox.setSpacing(10);
         objectInfo.getChildren().add(hbox);
 
-        Label posY = new Label("PosY");
+        Label posY = new Label("PosY   ");
         TextField txtField = new TextField();
         txtField.setText(String.valueOf(device.getPosY()));
-        System.out.println(String.valueOf(device.getPosY()));
         HBox hboxPosY = new HBox(posY, txtField);
         hboxPosY.setSpacing(10);
         objectInfo.getChildren().add(hboxPosY);
 
-        
+        Label lblHeight = new Label("Height");
+        TextField txtFieldHeight = new TextField();
+        txtFieldHeight.setText(String.valueOf(device.getHeight()));
+        HBox hboxHeight = new HBox(lblHeight, txtFieldHeight);
+        hboxHeight.setSpacing(10);
+        objectInfo.getChildren().add(hboxHeight);
+
+        Label lblWidth = new Label("Width ");
+        TextField txtFieldWidth = new TextField();
+        txtFieldWidth.setText(String.valueOf(device.getWidth()));
+        HBox hboxWidth = new HBox(lblWidth, txtFieldWidth);
+        hboxWidth.setSpacing(10);
+        objectInfo.getChildren().add(hboxWidth);
     }
 
 

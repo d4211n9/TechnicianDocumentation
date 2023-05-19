@@ -86,6 +86,8 @@ public class Project implements Searchable<Project> {
         return description;
     }
 
+    public void setDescription(String description) { this.description = description; }
+
     public Timestamp getDeleted() {
         return deleted;
     }

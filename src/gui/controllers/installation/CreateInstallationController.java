@@ -2,41 +2,75 @@ package gui.controllers.installation;
 
 import be.Installation;
 import be.Project;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
-import gui.controllers.installation.InstallationInfoController;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+public class CreateInstallationController extends BaseController {
 
-public class CreateInstallationController extends BaseController implements Initializable {
-
-    @FXML
-    private HBox hbUserBtnArea;
     @FXML
     private JFXTextArea txtDescription;
     @FXML
     private TextField txtfName;
+    @FXML
+    private HBox buttonArea;
+    @FXML
+    private JFXButton btnConfirm;
 
     private Project project;
+    private Installation installation;
+    private int installationToEditId = -1;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     public void setContent(Project project) {
         this.project = project;
     }
+
+    public void setEditContent(Installation installation) {
+        buttonArea.getChildren().remove(btnConfirm);
+
+        this.installation = installation;
+        installationToEditId = installation.getID();
+        txtfName.setText(installation.getName());
+        txtDescription.setText(installation.getDescription());
+
+        addEditButton();
+    }
+
+    private void addEditButton() {
+        JFXButton button = createButton("✔ Confirm Edit");
+        buttonArea.getChildren().add(0, button);
+
+        button.setOnMouseClicked(event -> {
+            if (validateInput()) {
+                Installation installation = createInstallationFromFields();
+
+                updateInstallation(installation);
+            }
+        });
+    }
+
+    private void updateInstallation(Installation installation) {
+        try {
+            Task<Installation> updateInstallationTask = getModelsHandler().getInstallationModel().updateInstallation(installation);
+
+            updateInstallationTask.setOnSucceeded(event -> openInstallationInfo(installation));
+            updateInstallationTask.setOnFailed(failedEvent -> displayError(updateInstallationTask.getException()));
+
+            TaskExecutor.executeTask(updateInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
     public void handleConfirm() {
         Installation installation = createInstallationFromFields();
         if(installation != null){
@@ -74,6 +108,11 @@ public class CreateInstallationController extends BaseController implements Init
         if(validateInput()){
             String name = txtfName.getText();
             String description = txtDescription.getText();
+
+            if(installationToEditId != -1) {
+                return new Installation(installationToEditId, installation.getProjectID(), name, description,
+                        null, installation.getIsDone());
+            }
 
             return new Installation(project.getID(), name, description, null,false);
         }

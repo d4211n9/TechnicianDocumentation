@@ -26,6 +26,12 @@ public class ProjectModel implements Runnable {
     private ObservableList<Project> filteredProjectList;
     private List<Project> copyAllProjects;
 
+    private List<Project> allMyProjects;
+    private ObservableList<Project> myFilteredProjectList;
+    private List<Project> copyAllMyProjects;
+
+
+
     private ObservableList<SystemUser> users;
 
     private List<SystemUser> allUsersOnProject;
@@ -83,6 +89,22 @@ public class ProjectModel implements Runnable {
     public List<Project> retrieveAllProjects() throws Exception {
         copyAllProjects = new ArrayList<>(projectManager.getAllProjects());
         return copyAllProjects;
+    }
+
+    public List<Project> retrieveAllMyProjects(String systemUserEmail) throws Exception {
+        allMyProjects = projectManager.getAllProjectsAssignedToUser(systemUserEmail);
+        copyAllMyProjects = new ArrayList<>(allMyProjects);
+        myFilteredProjectList = FXCollections.observableList(copyAllMyProjects);
+        copyAllMyProjects = new ArrayList<>(
+                projectManager.getAllProjectsAssignedToUser(systemUserEmail));
+
+        return copyAllMyProjects;
+    }
+
+
+    public ObservableList<Project> getAllMyProjects(String userEmail) throws Exception {
+        retrieveAllMyProjects(userEmail);
+        return myFilteredProjectList;
     }
 
     public ObservableList<Project> getAllProjects() throws Exception {
@@ -175,7 +197,15 @@ public class ProjectModel implements Runnable {
             } else {
             filteredProjectList.addAll(allProjects);
         }
-
+    }
+    public void searchMyProjects(String query) {
+        myFilteredProjectList.clear();
+        if(query != null) {
+            searchString = query;
+            myFilteredProjectList.addAll(projectManager.search(allMyProjects, query));
+        } else {
+            myFilteredProjectList.addAll(allMyProjects);
+        }
     }
 
 
