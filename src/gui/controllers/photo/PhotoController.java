@@ -126,8 +126,6 @@ public class PhotoController extends BaseController implements Initializable {
                     updatePhotoTask.setOnSucceeded(event1 -> installationInfoController.refreshPhotoView(photo, false));
 
                     TaskExecutor.executeTask(updatePhotoTask);
-
-
                 }
                 catch (Exception e) {
                     displayError(e);
