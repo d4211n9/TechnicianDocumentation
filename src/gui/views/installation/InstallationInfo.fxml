@@ -144,7 +144,7 @@
                </content></Tab>
             <Tab text="📝 Drawing">
                <content>
-                  <fx:include fx:id="background" source="/gui/views/drawing/drawingView.fxml" />
+                  <fx:include fx:id="background" source="/gui/views/drawing/DrawingView.fxml" />
                </content>
             </Tab>
             <Tab text="🔌 Device">

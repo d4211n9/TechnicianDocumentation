@@ -78,7 +78,7 @@ public class MainController extends BaseController implements Initializable {
 
         //todo test delete after
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("💰 draw", "/gui/views/drawing/drawingView.fxml"),
+                loadButton("💰 draw", "/gui/views/drawing/DrawingView.fxml"),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 
