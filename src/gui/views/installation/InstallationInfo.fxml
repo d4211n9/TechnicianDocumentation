@@ -144,19 +144,9 @@
                </content></Tab>
             <Tab text="📝 Drawing">
                <content>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="0.0">
-                     <children>
-                        <HBox fx:id="drawingBtnArea" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="60.0" prefWidth="820.0" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
-               </content></Tab>
+                  <fx:include fx:id="background" source="/gui/views/drawing/drawingView.fxml" />
+               </content>
+            </Tab>
             <Tab text="🔌 Device">
                <content>
                   <fx:include fx:id="vbDeviceTab" source="DeviceTab.fxml" />
