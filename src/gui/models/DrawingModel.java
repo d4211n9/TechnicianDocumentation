@@ -8,6 +8,7 @@ import bll.managers.DrawingManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.scene.input.DataFormat;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class DrawingModel {
 
     private ObservableList<DeviceType> allDeviceTypes;
     private Drawing selectedDrawing;
+
+    private DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
     public DrawingModel() throws Exception {
         drawingManager = new DrawingManager();
@@ -75,5 +78,13 @@ public class DrawingModel {
         //todo should delete the drawing 
         //todo create a new drawing
         //todo should create a device for each item in the list linking to the drawing
+    }
+
+    public DataFormat getDataFormat() {
+        return dataFormat;
+    }
+
+    public void setDataFormat(DataFormat dataFormat) {
+        this.dataFormat = dataFormat;
     }
 }

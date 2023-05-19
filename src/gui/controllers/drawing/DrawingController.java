@@ -21,6 +21,7 @@ import util.ViewPaths;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DrawingController extends BaseController implements Initializable {
@@ -35,8 +36,8 @@ public class DrawingController extends BaseController implements Initializable {
 
     private DeviceController selectedDevice;
 
+    private Node source;
 
-    public DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
     public ImageView selectedElementImg;
     public VBox sidebarDevice;
@@ -47,7 +48,6 @@ public class DrawingController extends BaseController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         loadDeviceTypes();
         devicesesOnDrawing = new ArrayList<>();
-
     }
 
     public void loadDeviceTypes() {
@@ -99,12 +99,13 @@ public class DrawingController extends BaseController implements Initializable {
             imgview.setOnMousePressed(event1 -> {
                 selectedDevice = controller1;
                 showDeviceInfo(controller1);
+                source = (Node)event1.getPickResult().getIntersectedNode();
                 System.out.println(controller1.getDevice());
             });
             selectedDevice = controller1;
 
-            d.setHeight(80);
-            d.setWidth(80);
+            d.setHeight(100);
+            d.setWidth(100);
             selectedElementImg = imgview;
             selectedElementImg.setFitWidth(d.getHeight());
             selectedElementImg.setFitHeight(d.getWidth());
@@ -116,14 +117,22 @@ public class DrawingController extends BaseController implements Initializable {
             selectedElementImg.setLayoutY(-100);
 
             pane.getChildren().add(selectedElementImg);
-            problem(selectedElementImg, contentArea, pane, dataFormat, d, deviceElement);
+            try {
+                problem(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, deviceElement);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             DeviceCard controller = loader.getController();
             try {
                 //getModelsHandler().getDrawingModel().addDeviceToDrawing(controller.getDevice()); //todo run line when drawing is not null
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            problem(selectedElementImg, contentArea, pane, dataFormat, d, selectedElementImg);
+            try {
+                problem(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, selectedElementImg);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -139,24 +148,40 @@ public class DrawingController extends BaseController implements Initializable {
         TextField txtFiled = new TextField();
         txtFiled.setText(String.valueOf(device.getPosX()));
         txtFiled.textProperty().addListener((obs, oldVal, newVal) -> {
-            device.setPosX(Double.parseDouble(newVal));
-            controller.imgView.setLayoutX(Double.parseDouble(newVal));
-            System.out.println(device.getPosX());
+            if(!Objects.equals(newVal, "")){
+                device.setPosX(Double.parseDouble(newVal));
+                controller.imgView.setTranslateX(Double.parseDouble(newVal));
+            }
         });
         HBox hbox = new HBox(label, txtFiled);
         hbox.setSpacing(10);
         objectInfo.getChildren().add(hbox);
 
+
         Label posY = new Label("PosY   ");
         TextField txtField = new TextField();
         txtField.setText(String.valueOf(device.getPosY()));
+        txtField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if(!Objects.equals(newVal, "")){
+                device.setPosY(Double.parseDouble(newVal));
+                controller.imgView.setTranslateY(Double.parseDouble(newVal));
+            }
+        });
         HBox hboxPosY = new HBox(posY, txtField);
         hboxPosY.setSpacing(10);
         objectInfo.getChildren().add(hboxPosY);
 
+
         Label lblHeight = new Label("Height");
         TextField txtFieldHeight = new TextField();
         txtFieldHeight.setText(String.valueOf(device.getHeight()));
+        txtFieldHeight.textProperty().addListener((obs, oldVal, newVal) -> {
+            if(!Objects.equals(newVal, "")){
+                device.setHeight(Double.parseDouble(newVal));
+                controller.settingImgHeight(Double.valueOf(newVal));
+                source.getParent().prefHeight(Double.parseDouble(newVal));
+            }
+        });
         HBox hboxHeight = new HBox(lblHeight, txtFieldHeight);
         hboxHeight.setSpacing(10);
         objectInfo.getChildren().add(hboxHeight);
@@ -184,7 +209,7 @@ public class DrawingController extends BaseController implements Initializable {
 
     public void handleAddLine() {
         pane.setOnMousePressed(e -> {
-            Node source = (Node)e.getPickResult().getIntersectedNode();
+            source = (Node)e.getPickResult().getIntersectedNode();
             if(!source.equals(pane)) {
                 currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
                 pane.getChildren().add(currentLine);
