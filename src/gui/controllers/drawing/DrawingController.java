@@ -7,10 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -33,8 +30,9 @@ public class DrawingController extends BaseController implements Initializable {
     public Label lbl;
     public VBox background;
     public Pane pane;
+    public VBox objectInfo;
 
-    private int selectedIndex;
+    private DeviceController selectedDevice;
 
     DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
@@ -97,13 +95,14 @@ public class DrawingController extends BaseController implements Initializable {
 
             ImageView imgview = controller1.getImgView();
             imgview.setOnMousePressed(event1 -> {
-                selectedIndex = controller1.getDevice().getId();
+                //selectedIndex = controller1.getDevice().getId();
+                showDeviceInfo(controller1.getDevice());
                 System.out.println(controller1.getDevice().getId());
             });
 
 
             selectedElementImg = imgview;
-            selectedElementImg.setFitWidth(80);
+            selectedElementImg.setFitWidth(80);//todo should just load from objecrt
             selectedElementImg.setFitHeight(80);
 
             Tooltip imgName = new Tooltip(deviceType.getName());
@@ -120,6 +119,22 @@ public class DrawingController extends BaseController implements Initializable {
             problem(selectedElementImg, contentArea, pane, dataFormat, d, selectedElementImg);
         });
     }
+
+    private void showDeviceInfo(Device device){
+
+        Label label = new Label("PosX");
+        TextField txtFiled = new TextField();
+        txtFiled.setText(String.valueOf(device.getPosX()));
+        HBox hbox = new HBox(label, txtFiled);
+
+        objectInfo.getChildren().add(hbox);
+    }
+
+
+
+
+
+
 
     public void handleAddDevice() {
         FXMLLoader loader = openStage(ViewPaths.CREATE_DEVICE, "Create Device");
@@ -140,8 +155,6 @@ public class DrawingController extends BaseController implements Initializable {
                     public void handle(MouseEvent event) {
                         Node source = (Node) event.getPickResult().getIntersectedNode();
                         if (!source.equals(pane)) {
-                            //currentLine.setEndX(source.getTranslateX());
-                            //currentLine.setEndY(source.getTranslateY());
 
                             currentLine.setEndX(event.getX());
                             currentLine.setEndY(event.getY());
@@ -153,8 +166,6 @@ public class DrawingController extends BaseController implements Initializable {
                 e.consume();
             }
         });
-
-
     }
 
 
