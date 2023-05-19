@@ -4,6 +4,7 @@ import be.Enum.SystemRole;
 import be.Photo;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
+import gui.controllers.installation.InstallationInfoController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
@@ -30,6 +31,8 @@ public class PhotoController extends BaseController implements Initializable {
 
     @FXML
     private HBox buttonArea;
+
+    private InstallationInfoController installationInfoController;
 
 
     @Override
@@ -67,6 +70,8 @@ public class PhotoController extends BaseController implements Initializable {
         btnDeletePhoto.setOnAction(event -> {
             try {
                 Task<Void> deletePhoto = getModelsHandler().getPhotoModel().deletePhoto(photo);
+
+                deletePhoto.setOnSucceeded(event1 -> installationInfoController.refreshPhotoView(photo, true));
 
                 TaskExecutor.executeTask(deletePhoto);
                 closeWindow();
@@ -118,7 +123,10 @@ public class PhotoController extends BaseController implements Initializable {
                 try {
                     Task<Boolean> updatePhotoTask = getModelsHandler().getPhotoModel().updatePhoto(photo);
 
+                    updatePhotoTask.setOnSucceeded(event1 -> installationInfoController.refreshPhotoView(photo, false));
+
                     TaskExecutor.executeTask(updatePhotoTask);
+
 
                 }
                 catch (Exception e) {
@@ -138,6 +146,10 @@ public class PhotoController extends BaseController implements Initializable {
 
         Stage stage = (Stage) imgPhotoArea.getScene().getWindow();
         stage.close();
+    }
+
+    public void setInstallationController(InstallationInfoController i) {
+        installationInfoController = i;
 
     }
 

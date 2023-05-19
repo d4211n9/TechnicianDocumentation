@@ -59,16 +59,14 @@ public class PhotoDAO implements IPhotoDAO {
 
         Photo updatedPhoto = null;
 
-        String sql = "UPDATE Photo SET InstallationID=?, Image=?, Description=? WHERE ID=?;";
+        String sql = "UPDATE Photo SET Description=? WHERE ID=?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, photo.getInstallationID());
-            statement.setBytes(2, photo.getPhotoBytes());
-            statement.setString(3, photo.getDescription());
-            statement.setInt(4, photo.getID());
 
+            statement.setString(1, photo.getDescription());
+            statement.setInt(2, photo.getID());
 
             statement.executeUpdate();
 

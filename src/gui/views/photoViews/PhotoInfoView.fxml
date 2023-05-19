@@ -23,7 +23,7 @@
                   <Insets bottom="10.0" left="200.0" />
                </VBox.margin>
                <children>
-                  <JFXTextArea fx:id="txtaDescription" maxWidth="500.0" />
+                  <JFXTextArea fx:id="txtaDescription" editable="false" maxWidth="500.0" />
                </children>
             </HBox>
          </children>
