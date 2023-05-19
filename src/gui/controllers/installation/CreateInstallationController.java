@@ -111,7 +111,7 @@ public class CreateInstallationController extends BaseController {
 
             if(installationToEditId != -1) {
                 return new Installation(installationToEditId, installation.getProjectID(), name, description,
-                        installation.getDrawingBytes(), installation.getIsDone());
+                        null, installation.getIsDone());
             }
 
             return new Installation(project.getID(), name, description, null,false);
