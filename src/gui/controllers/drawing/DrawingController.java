@@ -3,6 +3,7 @@ package gui.controllers.drawing;
 import be.Device;
 import be.DeviceType;
 import gui.controllers.BaseController;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,8 +35,8 @@ public class DrawingController extends BaseController implements Initializable {
 
     private DeviceController selectedDevice;
 
-    DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
+    public DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
     public ImageView selectedElementImg;
     public VBox sidebarDevice;
@@ -46,6 +47,7 @@ public class DrawingController extends BaseController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         loadDeviceTypes();
         devicesesOnDrawing = new ArrayList<>();
+
     }
 
     public void loadDeviceTypes() {
@@ -95,16 +97,17 @@ public class DrawingController extends BaseController implements Initializable {
 
             ImageView imgview = controller1.getImgView();
             imgview.setOnMousePressed(event1 -> {
-                //selectedIndex = controller1.getDevice().getId();
+                selectedDevice = controller1;
                 showDeviceInfo(controller1.getDevice());
-                System.out.println(controller1.getDevice().getId());
+                System.out.println(controller1.getDevice());
             });
+            selectedDevice = controller1;
 
-
+            d.setHeight(80);
+            d.setWidth(80);
             selectedElementImg = imgview;
-            selectedElementImg.setFitWidth(80);//todo should just load from objecrt
-            selectedElementImg.setFitHeight(80);
-
+            selectedElementImg.setFitWidth(d.getHeight());
+            selectedElementImg.setFitHeight(d.getWidth());
             Tooltip imgName = new Tooltip(deviceType.getName());
             imgName.setShowDelay(Duration.millis(200));
             Tooltip.install(selectedElementImg, imgName);
@@ -121,13 +124,39 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
     private void showDeviceInfo(Device device){
+        objectInfo.getChildren().clear();
 
-        Label label = new Label("PosX");
+        Label name = new Label(device.getDeviceType().getName());
+        objectInfo.getChildren().add(name);
+
+        //creates the pos x filed
+        Label label = new Label("PosX   ");
         TextField txtFiled = new TextField();
         txtFiled.setText(String.valueOf(device.getPosX()));
         HBox hbox = new HBox(label, txtFiled);
-
+        hbox.setSpacing(10);
         objectInfo.getChildren().add(hbox);
+
+        Label posY = new Label("PosY   ");
+        TextField txtField = new TextField();
+        txtField.setText(String.valueOf(device.getPosY()));
+        HBox hboxPosY = new HBox(posY, txtField);
+        hboxPosY.setSpacing(10);
+        objectInfo.getChildren().add(hboxPosY);
+
+        Label lblHeight = new Label("Height");
+        TextField txtFieldHeight = new TextField();
+        txtFieldHeight.setText(String.valueOf(device.getHeight()));
+        HBox hboxHeight = new HBox(lblHeight, txtFieldHeight);
+        hboxHeight.setSpacing(10);
+        objectInfo.getChildren().add(hboxHeight);
+
+        Label lblWidth = new Label("Width ");
+        TextField txtFieldWidth = new TextField();
+        txtFieldWidth.setText(String.valueOf(device.getWidth()));
+        HBox hboxWidth = new HBox(lblWidth, txtFieldWidth);
+        hboxWidth.setSpacing(10);
+        objectInfo.getChildren().add(hboxWidth);
     }
 
 
@@ -169,7 +198,7 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
 
-    public static void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
+    public void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
         card.setOnDragDetected(event -> {
             Dragboard db = node.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
@@ -188,7 +217,8 @@ public class DrawingController extends BaseController implements Initializable {
                 // this is the problematic part
                 node1.setTranslateX(event.getX() - node1.getLayoutX() - (node1.getBoundsInParent().getHeight() / 2));
                 node1.setTranslateY(event.getY() - node1.getLayoutY() - (node1.getBoundsInParent().getWidth() / 2));
-
+                selectedDevice.getDevice().setPosX(node1.getTranslateX());
+                selectedDevice.getDevice().setPosY(node1.getTranslateY());
                 event.setDropCompleted(true);
                 event.consume();
             }
@@ -198,6 +228,10 @@ public class DrawingController extends BaseController implements Initializable {
             event.acceptTransferModes(TransferMode.ANY);
             event.consume();
         });
+    }
+
+    public void save(ActionEvent actionEvent) {
+        //todo create safe method that calls down the layer and sends devicesOnDrawing
     }
 }
 

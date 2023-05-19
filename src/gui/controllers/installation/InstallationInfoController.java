@@ -92,10 +92,6 @@ public class InstallationInfoController extends BaseController implements Initia
         lblDescription.setText(installation.getDescription());
 
         loadUsers();
-
-        if(installation.getDrawingBytes() != null) {
-            Platform.runLater(() -> loadPhotos());
-        }
     }
 
     /**
@@ -304,16 +300,6 @@ public class InstallationInfoController extends BaseController implements Initia
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
-    private void loadPhotos() {
-        ByteArrayInputStream bais = new ByteArrayInputStream(installation.getDrawingBytes());
-        try {
-            images.add(convertToFxImage(ImageIO.read(bais)));
-            displayImage();
-        } catch (IOException e) {
-            displayError(e);
-        }
-    }
-
     private static Image convertToFxImage(BufferedImage image) {
         WritableImage wr = null;
         if (image != null) {
@@ -337,16 +323,7 @@ public class InstallationInfoController extends BaseController implements Initia
         List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
 
         if (files != null && !files.isEmpty()) {
-            files.forEach((File f) ->
-            {
-                try {
-                    byte[] fileContent = Files.readAllBytes(f.toPath());
-                    installation.setDrawingBytes(fileContent);
-                } catch (Exception e) {
-                    displayError(e);
-                }
-                images.add(new Image(f.toURI().toString()));
-            });
+            files.forEach((File f) -> images.add(new Image(f.toURI().toString())));
             displayImage();
 
             updateInstallation();
