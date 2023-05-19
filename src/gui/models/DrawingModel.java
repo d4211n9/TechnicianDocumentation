@@ -75,7 +75,7 @@ public class DrawingModel {
     }
 
     public void saveAllDevicesOnDrawing(Drawing drawing){
-        //todo should delete the drawing 
+        //todo should delete the drawing
         //todo create a new drawing
         //todo should create a device for each item in the list linking to the drawing
     }
@@ -86,5 +86,8 @@ public class DrawingModel {
 
     public void setDataFormat(DataFormat dataFormat) {
         this.dataFormat = dataFormat;
+
+    public void deleteDrawing(Drawing drawing) throws Exception {
+        drawingManager.deleteDrawing(drawing);
     }
 }

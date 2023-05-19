@@ -28,4 +28,9 @@ public class DrawingManager implements IDrawingManager {
     public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
         return drawingFacade.createDeviceType(deviceTypeToCreate);
     }
+
+    @Override
+    public void deleteDrawing(Drawing drawing) throws Exception {
+        drawingFacade.deleteDrawing(drawing);
+    }
 }

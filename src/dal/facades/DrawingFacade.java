@@ -18,8 +18,8 @@ public class DrawingFacade {
 
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
-        deviceDAO = new DeviceDAO();
         drawingDAO = new DrawingDAO();
+        deviceDAO = new DeviceDAO();
     }
 
     public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
@@ -35,5 +35,9 @@ public class DrawingFacade {
 
     public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
         return deviceTypeDAO.createDeviceType(deviceTypeToCreate);
+    }
+
+    public void deleteDrawing(Drawing drawing) throws Exception {
+        drawingDAO.deleteDrawing(drawing);
     }
 }
