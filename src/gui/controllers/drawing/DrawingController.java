@@ -137,6 +137,10 @@ public class DrawingController extends BaseController implements Initializable {
         Label label = new Label("PosX   ");
         TextField txtFiled = new TextField();
         txtFiled.setText(String.valueOf(device.getPosX()));
+        txtFiled.textProperty().addListener((obs, oldVal, newVal) -> {
+            device.setPosX(Double.parseDouble(newVal));
+            System.out.println(device.getPosX());
+        });
         HBox hbox = new HBox(label, txtFiled);
         hbox.setSpacing(10);
         objectInfo.getChildren().add(hbox);
