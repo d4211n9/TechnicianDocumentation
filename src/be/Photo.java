@@ -2,9 +2,7 @@ package be;
 
 import javafx.scene.image.Image;
 
-import java.io.Serializable;
-
-public class Photo implements Serializable {
+public class Photo {
 
     private int ID, installationID;
     private Image photo;
@@ -66,4 +64,5 @@ public class Photo implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

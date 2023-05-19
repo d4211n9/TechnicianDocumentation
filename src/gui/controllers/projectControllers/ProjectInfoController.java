@@ -1,7 +1,10 @@
 package gui.controllers.projectControllers;
 
-import be.*;
+import be.Client;
 import be.Enum.SystemRole;
+import be.Installation;
+import be.Project;
+import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
@@ -21,8 +24,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;

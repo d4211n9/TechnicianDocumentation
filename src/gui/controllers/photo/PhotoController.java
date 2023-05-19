@@ -3,30 +3,34 @@ package gui.controllers.photo;
 import be.Enum.SystemRole;
 import be.Photo;
 import com.jfoenix.controls.JFXTextArea;
-import gui.controllers.TableViewController;
+import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
 
-public class PhotoController extends TableViewController implements Initializable {
-    @FXML
-    public JFXTextArea txtaPhotoDescription;
-    @FXML
-    public ImageView imgPhotoArea;
+public class PhotoController extends BaseController implements Initializable {
+    public JFXTextArea txtaDescription;
+    public HBox hbPhotoDescription;
 
-    public Photo photo;
-    public HBox buttonArea;
+    @FXML
+    private ImageView imgPhotoArea;
+
+    private Photo photo;
+
+    @FXML
+    private HBox buttonArea;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -36,16 +40,16 @@ public class PhotoController extends TableViewController implements Initializabl
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
-        addConfirmButton();
+        //addConfirmButton();
         addEditButton();
         addDeletePhotoBtn();
-        addCancelButton();
+        addCloseButton();
     }
 
 
     public void setPhotoInfoContent(Photo photo) {
         this.photo = photo;
-        txtaPhotoDescription.setText(photo.getDescription());
+        txtaDescription.setText(photo.getDescription());
         imgPhotoArea.setImage(photo.getPhoto());
     }
 
@@ -65,6 +69,8 @@ public class PhotoController extends TableViewController implements Initializabl
                 Task<Void> deletePhoto = getModelsHandler().getPhotoModel().deletePhoto(photo);
 
                 TaskExecutor.executeTask(deletePhoto);
+                closeWindow();
+
             } catch (Exception e){
                 displayError(e);
             }
@@ -72,26 +78,8 @@ public class PhotoController extends TableViewController implements Initializabl
         buttonArea.getChildren().add(btnDeletePhoto);
     }
 
-    private void addConfirmButton() {
-        String confirmText = "✔ Confirm";
-
-        Button btnConfirm = createButton(confirmText);
-
-        NodeAccessLevel descriptionButtonAccess = new NodeAccessLevel();
-
-        descriptionButtonAccess.addNodeAccessLevel(btnConfirm,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager,
-                        SystemRole.Technician, SystemRole.SalesPerson));
-
-        btnConfirm.setOnAction(event -> {
-
-        });
-        buttonArea.getChildren().add(btnConfirm);
-
-    }
-
-    private void addCancelButton() {
-        String cancelText = "❌ Cancel";
+    private void addCloseButton() {
+        String cancelText = "❌ Close";
 
         Button btnCancel = createButton(cancelText);
 
@@ -102,42 +90,55 @@ public class PhotoController extends TableViewController implements Initializabl
                         SystemRole.Technician, SystemRole.SalesPerson));
 
         btnCancel.setOnAction(event -> {
-
+            closeWindow();
         });
         buttonArea.getChildren().add(btnCancel);
     }
 
+
+
     private void addEditButton() {
         String editText = "✏ Edit";
+        String saveText = "💾 Save";
 
-        Button btnEdit = createButton(editText);
+        Button btnEditSaveDescription = createButton(editText);
 
         NodeAccessLevel descriptionButtonAccess = new NodeAccessLevel();
 
-        descriptionButtonAccess.addNodeAccessLevel(btnEdit,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager,
-                        SystemRole.Technician, SystemRole.SalesPerson));
+        descriptionButtonAccess.addNodeAccessLevel(
+                btnEditSaveDescription,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
 
-        btnEdit.setOnAction(event -> {
-            boolean isDescriptionEditable = txtaPhotoDescription.isEditable();
+        btnEditSaveDescription.setOnAction(event -> {
+            boolean isDescriptionEditable = txtaDescription.isEditable();
 
             if (isDescriptionEditable) {
-                photo.setDescription(txtaPhotoDescription.getText());
+                photo.setDescription(txtaDescription.getText());
 
                 try {
                     Task<Boolean> updatePhotoTask = getModelsHandler().getPhotoModel().updatePhoto(photo);
 
                     TaskExecutor.executeTask(updatePhotoTask);
-                } catch (Exception e) {
+
+                }
+                catch (Exception e) {
                     displayError(e);
                 }
             }
-            txtaPhotoDescription.setEditable(!isDescriptionEditable);
 
-            btnEdit.setText(editText);
+            txtaDescription.setEditable(!isDescriptionEditable);
 
+            btnEditSaveDescription.setText(!isDescriptionEditable ? saveText : editText);
         });
-        buttonArea.getChildren().add(btnEdit);
+
+        hbPhotoDescription.getChildren().add(btnEditSaveDescription);
+    }
+
+    private void closeWindow() {
+
+        Stage stage = (Stage) imgPhotoArea.getScene().getWindow();
+        stage.close();
+
     }
 
 }

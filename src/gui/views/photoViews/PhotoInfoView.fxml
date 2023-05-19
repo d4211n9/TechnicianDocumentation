@@ -18,11 +18,14 @@
                   <Insets bottom="10.0" left="200.0" top="20.0" />
                </VBox.margin>
             </ImageView>
-            <JFXTextArea fx:id="txtaPhotoDescription" maxWidth="500.0">
+            <HBox fx:id="hbPhotoDescription">
                <VBox.margin>
                   <Insets bottom="10.0" left="200.0" />
                </VBox.margin>
-            </JFXTextArea>
+               <children>
+                  <JFXTextArea fx:id="txtaDescription" maxWidth="500.0" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <HBox fx:id="buttonArea" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" VBox.vgrow="NEVER">

@@ -102,6 +102,12 @@ public class ProjectFacade {
         return photoDAO.getPhotoFromInstallation(installationID);
     }
 
+    /*
+    public List<Photo> getAllModifiedPhotos(Timestamp lastCheck) throws Exception {
+        return null;
+    }
+     */
+
     public void deletePhoto(Photo photo) throws Exception{
         photoDAO.deletePhoto(photo);
     }

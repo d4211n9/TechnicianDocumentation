@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import util.SymbolPaths;
 import util.ViewPaths;
 
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
 
 public class PhotoCardController extends BaseController implements Initializable {
 
+    public VBox photoCard;
     @FXML
     private Label lblPhotoDescription;
     @FXML
@@ -34,7 +36,5 @@ public class PhotoCardController extends BaseController implements Initializable
         lblPhotoDescription.setText(photo.getDescription());
         imgPhoto.setImage(photo.getPhoto());
     }
-
-
 
 }

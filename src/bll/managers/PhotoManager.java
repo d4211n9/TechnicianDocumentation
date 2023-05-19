@@ -34,4 +34,11 @@ public class PhotoManager implements IPhotoManager {
     public void deletePhoto(Photo deletedPhoto) throws Exception {
         projectFacade.deletePhoto(deletedPhoto);
     }
+
+    /*
+    @Override
+    public List<Photo> getAllModifiedPhotos(Timestamp lastCheck) throws Exception {
+        return projectFacade.getAllModifiedPhotos(lastCheck);
+    }
+     */
 }

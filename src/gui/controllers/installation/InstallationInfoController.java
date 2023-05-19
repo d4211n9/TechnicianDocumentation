@@ -355,14 +355,14 @@ public class InstallationInfoController extends BaseController implements Initia
 
         photoCard.setOnMouseClicked(event -> {
             System.out.println("photo clicked");
-            FXMLLoader loader = openStage(ViewPaths.PHOTO_INFO, "photo info");
+            FXMLLoader loader = openStage(ViewPaths.PHOTO_INFO, "Photo info");
             PhotoController photoController = loader.getController();
             photoController.setPhotoInfoContent(photo);
         });
 
         fpPhotos.getChildren().add(photoCard);
     }
-    private void loadPhotosToInstallation() {
+    public void loadPhotosToInstallation() {
 
         try{
             photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());

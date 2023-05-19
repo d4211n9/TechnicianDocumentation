@@ -5,16 +5,22 @@ import bll.interfaces.IPhotoManager;
 import bll.managers.PhotoManager;
 import javafx.concurrent.Task;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoModel implements Runnable {
-
-    private List<Photo> allPhotos;
+public class PhotoModel {
 
     private IPhotoManager photoManager;
 
+    private List<Photo> allPhotos;
+
+    //private Timestamp lastUpdatedTime;
+    //private List<Photo> copyAllPhotos;
+
     public PhotoModel() throws Exception {
         this.photoManager = new PhotoManager();
+
     }
 
     public Photo uploadPhoto(Photo photo) throws Exception {
@@ -44,6 +50,7 @@ public class PhotoModel implements Runnable {
                 return successfullyUpdatedPhoto;
             }
         };
+
         return updatePhotoTask;
     }
 
@@ -63,8 +70,31 @@ public class PhotoModel implements Runnable {
         return deletePhoto;
     }
 
+    /*
+    public List<Photo> retrieveAllPhotos() throws Exception {
+        copyAllPhotos = new ArrayList<>(photoManager.getPhotoFromInstallation());
+        return copyAllPhotos;
+    }
+     */
+
+    /*
     @Override
     public void run() {
-        //TODO
+        System.out.println("photo update");
+
+        List<Photo> updatedPhotos;
+        try {
+            updatedPhotos = photoManager.getAllModifiedPhotos(lastUpdatedTime);
+            lastUpdatedTime.setTime(System.currentTimeMillis());
+
+            if (updatedPhotos.size() > 0) {
+                allPhotos = retrieveAllPhotos();
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
+     */
 }
