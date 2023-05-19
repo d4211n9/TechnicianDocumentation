@@ -98,7 +98,7 @@ public class DrawingController extends BaseController implements Initializable {
             ImageView imgview = controller1.getImgView();
             imgview.setOnMousePressed(event1 -> {
                 selectedDevice = controller1;
-                showDeviceInfo(controller1.getDevice());
+                showDeviceInfo(controller1);
                 System.out.println(controller1.getDevice());
             });
             selectedDevice = controller1;
@@ -127,7 +127,8 @@ public class DrawingController extends BaseController implements Initializable {
         });
     }
 
-    private void showDeviceInfo(Device device){
+    private void showDeviceInfo(DeviceController controller){
+        Device device = controller.getDevice();
         objectInfo.getChildren().clear();
 
         Label name = new Label(device.getDeviceType().getName());
@@ -139,6 +140,7 @@ public class DrawingController extends BaseController implements Initializable {
         txtFiled.setText(String.valueOf(device.getPosX()));
         txtFiled.textProperty().addListener((obs, oldVal, newVal) -> {
             device.setPosX(Double.parseDouble(newVal));
+            controller.imgView.setLayoutX(Double.parseDouble(newVal));
             System.out.println(device.getPosX());
         });
         HBox hbox = new HBox(label, txtFiled);
