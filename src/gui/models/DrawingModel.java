@@ -1,6 +1,8 @@
 package gui.models;
 
+import be.Device;
 import be.DeviceType;
+import be.Drawing;
 import bll.interfaces.IDrawingManager;
 import bll.managers.DrawingManager;
 import javafx.collections.FXCollections;
@@ -13,11 +15,16 @@ public class DrawingModel {
     private IDrawingManager drawingManager;
 
     private ObservableList<DeviceType> allDeviceTypes;
+    private Drawing selectedDrawing;
 
     public DrawingModel() throws Exception {
         drawingManager = new DrawingManager();
 
         updateAllDeviceTypes();
+    }
+
+    public void addDeviceToDrawing(Device device){
+        selectedDrawing.getDevices().add(device);
     }
 
     public Task<Boolean> createDeviceType(DeviceType deviceTypeToCreate) {
@@ -54,5 +61,22 @@ public class DrawingModel {
             this.allDeviceTypes.clear();
             this.allDeviceTypes.addAll(allDeviceTypes);
         }
+    }
+
+    public Drawing getSelectedDrawing() {
+        return selectedDrawing;
+    }
+
+    public void setSelectedDrawing(int installationId) {
+        //todo should get the drawing from id
+        this.selectedDrawing = selectedDrawing;
+    }
+
+    public void saveAllDevicesOnDrawing(){
+
+        //todo should delete the drawing
+        //todo create a new drawing
+        //todo should create a device for each item in the list linking to the drawing
+
     }
 }

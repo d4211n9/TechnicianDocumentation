@@ -9,7 +9,6 @@ import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -28,13 +27,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import util.ViewPaths;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -363,4 +358,6 @@ public class InstallationInfoController extends BaseController implements Initia
             imgPhoto.setImage(images.get(currentImageIndex));
         }
     }
+
+
 }

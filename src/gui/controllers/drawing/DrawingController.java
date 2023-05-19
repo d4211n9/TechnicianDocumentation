@@ -118,7 +118,11 @@ public class DrawingController extends BaseController implements Initializable {
             pane.getChildren().add(selectedElementImg);
             problem(selectedElementImg, contentArea, pane, dataFormat, d, deviceElement);
             DeviceCard controller = loader.getController();
-            devicesesOnDrawing.add(controller.getDevice());
+            try {
+                //getModelsHandler().getDrawingModel().addDeviceToDrawing(controller.getDevice()); //todo run line when drawing is not null
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             problem(selectedElementImg, contentArea, pane, dataFormat, d, selectedElementImg);
         });
     }
