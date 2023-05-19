@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -23,6 +24,8 @@ import java.util.ResourceBundle;
 public class PhotoController extends BaseController implements Initializable {
     public JFXTextArea txtaDescription;
     public HBox hbPhotoDescription;
+    @FXML
+    private VBox vBoxBackground;
 
     @FXML
     private ImageView imgPhotoArea;
@@ -54,6 +57,9 @@ public class PhotoController extends BaseController implements Initializable {
         this.photo = photo;
         txtaDescription.setText(photo.getDescription());
         imgPhotoArea.setImage(photo.getPhoto());
+
+        imgPhotoArea.fitWidthProperty().bind(vBoxBackground.widthProperty());
+        imgPhotoArea.fitHeightProperty().bind(vBoxBackground.heightProperty());
     }
 
     private void addDeletePhotoBtn() {
@@ -139,7 +145,7 @@ public class PhotoController extends BaseController implements Initializable {
             btnEditSaveDescription.setText(!isDescriptionEditable ? saveText : editText);
         });
 
-        hbPhotoDescription.getChildren().add(btnEditSaveDescription);
+        buttonArea.getChildren().add(btnEditSaveDescription);
     }
 
     private void closeWindow() {
