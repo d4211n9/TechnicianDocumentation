@@ -27,7 +27,7 @@ public class DrawingDAO implements IDrawingDAO {
         String sql = "SELECT " +
                 "Drawing.ID AS 'DrawingID', Drawing.Image AS 'DrawingImage' " +
                 "FROM Drawing " +
-                "WHERE" +
+                "WHERE " +
                 "Drawing.ID = (SELECT Installation.DrawingID FROM Installation WHERE Installation.ID = ?)";
 
         try (Connection connection = connector.getConnection();

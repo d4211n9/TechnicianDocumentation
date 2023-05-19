@@ -67,9 +67,8 @@ public class DrawingModel {
         return selectedDrawing;
     }
 
-    public void setSelectedDrawing(int installationId) {
-        //todo should get the drawing from id
-        this.selectedDrawing = selectedDrawing;
+    public void setSelectedDrawing(int installationId) throws Exception {
+        selectedDrawing = drawingManager.getDrawingFromInstallationId(installationId);
     }
 
     public void saveAllDevicesOnDrawing(){

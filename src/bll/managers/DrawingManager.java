@@ -1,6 +1,7 @@
 package bll.managers;
 
 import be.DeviceType;
+import be.Drawing;
 import bll.interfaces.IDrawingManager;
 import dal.facades.DrawingFacade;
 
@@ -11,6 +12,11 @@ public class DrawingManager implements IDrawingManager {
 
     public DrawingManager() throws Exception {
         drawingFacade = new DrawingFacade();
+    }
+
+    @Override
+    public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
+        return drawingFacade.getDrawingFromInstallationId(installationId);
     }
 
     @Override
