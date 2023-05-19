@@ -1,6 +1,5 @@
 package gui.controllers.installation;
 
-import be.Enum.SystemRole;
 import be.Installation;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
@@ -9,10 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import util.ViewPaths;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class LoginTabController extends TableViewController implements Initializable {

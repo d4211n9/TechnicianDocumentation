@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public class InstallationModel implements Runnable {

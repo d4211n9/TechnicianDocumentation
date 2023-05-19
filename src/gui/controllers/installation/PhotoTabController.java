@@ -45,7 +45,6 @@ public class PhotoTabController extends BaseController implements Initializable 
         }
         fpPhotos.prefWrapLengthProperty().bind(fpPhotos.widthProperty());
         loadPhotosToInstallation();
-        //get installation
     }
 
     public void showPhotoCard(Photo photo) {
@@ -56,7 +55,6 @@ public class PhotoTabController extends BaseController implements Initializable 
         cardController.setContent(photo);
 
         photoCard.setOnMouseClicked(event -> {
-            System.out.println("photo clicked");
             FXMLLoader loader = openStage(ViewPaths.PHOTO_INFO, "Photo info");
             PhotoController photoController = loader.getController();
             photoController.setPhotoInfoContent(photo);
