@@ -86,6 +86,7 @@ public class DrawingModel {
 
     public void setDataFormat(DataFormat dataFormat) {
         this.dataFormat = dataFormat;
+    }
 
     public void deleteDrawing(Drawing drawing) throws Exception {
         drawingManager.deleteDrawing(drawing);
