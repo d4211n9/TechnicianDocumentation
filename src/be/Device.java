@@ -22,6 +22,15 @@ public class Device {
         this.id = id;
     }
 
+    public Device(int id, DeviceType deviceType, double posX, double posY, double width, double height) {
+        this.id = id;
+        this.deviceType = deviceType;
+        this.posX = posX;
+        this.posY = posY;
+        this.width = width;
+        this.height = height;
+    }
+
     public DeviceType getDeviceType() {
         return deviceType;
     }
