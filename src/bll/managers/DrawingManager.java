@@ -15,6 +15,11 @@ public class DrawingManager implements IDrawingManager {
     }
 
     @Override
+    public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
+        return drawingFacade.getDrawingFromInstallationId(installationId);
+    }
+
+    @Override
     public List<DeviceType> getAllDeviceTypes() throws Exception {
         return drawingFacade.getAllDeviceTypes();
     }

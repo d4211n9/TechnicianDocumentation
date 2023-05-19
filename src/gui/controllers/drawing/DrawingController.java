@@ -98,7 +98,7 @@ public class DrawingController extends BaseController implements Initializable {
             ImageView imgview = controller1.getImgView();
             imgview.setOnMousePressed(event1 -> {
                 selectedDevice = controller1;
-                showDeviceInfo(controller1.getDevice());
+                showDeviceInfo(controller1);
                 System.out.println(controller1.getDevice());
             });
             selectedDevice = controller1;
@@ -118,12 +118,17 @@ public class DrawingController extends BaseController implements Initializable {
             pane.getChildren().add(selectedElementImg);
             problem(selectedElementImg, contentArea, pane, dataFormat, d, deviceElement);
             DeviceCard controller = loader.getController();
-            devicesesOnDrawing.add(controller.getDevice());
+            try {
+                //getModelsHandler().getDrawingModel().addDeviceToDrawing(controller.getDevice()); //todo run line when drawing is not null
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             problem(selectedElementImg, contentArea, pane, dataFormat, d, selectedElementImg);
         });
     }
 
-    private void showDeviceInfo(Device device){
+    private void showDeviceInfo(DeviceController controller){
+        Device device = controller.getDevice();
         objectInfo.getChildren().clear();
 
         Label name = new Label(device.getDeviceType().getName());
@@ -133,6 +138,11 @@ public class DrawingController extends BaseController implements Initializable {
         Label label = new Label("PosX   ");
         TextField txtFiled = new TextField();
         txtFiled.setText(String.valueOf(device.getPosX()));
+        txtFiled.textProperty().addListener((obs, oldVal, newVal) -> {
+            device.setPosX(Double.parseDouble(newVal));
+            controller.imgView.setLayoutX(Double.parseDouble(newVal));
+            System.out.println(device.getPosX());
+        });
         HBox hbox = new HBox(label, txtFiled);
         hbox.setSpacing(10);
         objectInfo.getChildren().add(hbox);

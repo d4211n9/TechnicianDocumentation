@@ -2,6 +2,7 @@ package dal.facades;
 
 import be.DeviceType;
 import be.Drawing;
+import dal.dao.DeviceDAO;
 import dal.dao.DeviceTypeDAO;
 import dal.dao.DrawingDAO;
 import dal.interfaces.IDeviceDAO;
@@ -18,6 +19,14 @@ public class DrawingFacade {
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
         drawingDAO = new DrawingDAO();
+        deviceDAO = new DeviceDAO();
+    }
+
+    public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
+        Drawing drawing = drawingDAO.getDrawingFromInstallationId(installationId);
+        drawing.getDevices().addAll(deviceDAO.getAllDevicesFromDrawingId(drawing.getId()));
+
+        return drawing;
     }
 
     public List<DeviceType> getAllDeviceTypes() throws Exception {
