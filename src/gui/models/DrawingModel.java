@@ -1,6 +1,7 @@
 package gui.models;
 
 import be.DeviceType;
+import be.Drawing;
 import bll.interfaces.IDrawingManager;
 import bll.managers.DrawingManager;
 import javafx.collections.FXCollections;
@@ -54,5 +55,9 @@ public class DrawingModel {
             this.allDeviceTypes.clear();
             this.allDeviceTypes.addAll(allDeviceTypes);
         }
+    }
+
+    public void deleteDrawing(Drawing drawing) throws Exception {
+        drawingManager.deleteDrawing(drawing);
     }
 }

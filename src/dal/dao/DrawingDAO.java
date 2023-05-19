@@ -54,4 +54,23 @@ public class DrawingDAO implements IDrawingDAO {
             throw dalException;
         }
     }
+
+    @Override
+    public void deleteDrawing(Drawing drawing) throws Exception {
+
+        String sql = "DELETE FROM Drawing WHERE ID=?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, drawing.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to delete drawing", e);
+        }
+
+    }
 }
