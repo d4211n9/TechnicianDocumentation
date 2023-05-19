@@ -13,31 +13,23 @@ import gui.controllers.photo.PhotoCardController;
 import gui.controllers.photo.PhotoController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import util.SymbolPaths;
 import util.ViewPaths;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -363,17 +355,6 @@ public class InstallationInfoController extends BaseController implements Initia
 
         fpPhotos.getChildren().add(photoCard);
     }
-
-    /**
-    public void refreshPhotoView(Photo photo, boolean isDeleted) {
-
-        photos.remove(photo);
-        fpPhotos.getChildren().remove(photo);
-
-        if (!isDeleted) {
-            photos.add(photo);
-        }
-    } */
 
     public void loadPhotosToInstallation() {
         fpPhotos.getChildren().clear();
