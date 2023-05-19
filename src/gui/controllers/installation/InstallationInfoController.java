@@ -67,6 +67,12 @@ public class InstallationInfoController extends BaseController implements Initia
                 imgPhoto.setFitWidth((Double) newValue));
         hbImage.heightProperty().addListener((observable, oldValue, newValue) ->
                 imgPhoto.setFitHeight((Double) newValue));
+
+        try {
+            getModelsHandler().getDrawingModel().setSelectedDrawing(installation.getID());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void installationBackgroundUpdate() {

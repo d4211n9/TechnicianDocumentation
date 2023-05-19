@@ -73,10 +73,8 @@ public class DrawingModel {
     }
 
     public void saveAllDevicesOnDrawing(){
-
         //todo should delete the drawing
         //todo create a new drawing
         //todo should create a device for each item in the list linking to the drawing
-
     }
 }
