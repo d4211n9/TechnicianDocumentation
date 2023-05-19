@@ -45,7 +45,7 @@ public class PhotoController extends BaseController implements Initializable {
 
         addEditButton();
         addDeletePhotoBtn();
-        addCloseButton();
+
     }
 
 
@@ -65,45 +65,28 @@ public class PhotoController extends BaseController implements Initializable {
 
         NodeAccessLevel descriptionButtonAccess = new NodeAccessLevel();
 
-        descriptionButtonAccess.addNodeAccessLevel(btnDeletePhoto,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager,
-                        SystemRole.Technician, SystemRole.SalesPerson));
+        descriptionButtonAccess.addNodeAccessLevel
+                (btnDeletePhoto,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
 
         btnDeletePhoto.setOnAction(event -> {
-            try {
-                Task<Void> deletePhoto = getModelsHandler().getPhotoModel().deletePhoto(photo);
+            if (showQuestionDialog(photo.getDescription(), true)) {
+                try {
+                    Task<Void> deletePhoto = getModelsHandler().getPhotoModel().deletePhoto(photo);
 
-                deletePhoto.setOnSucceeded(event1 -> photoTabController.loadPhotosToInstallation());
-                deletePhoto.setOnFailed(e -> displayError(deletePhoto.getException()));
+                    deletePhoto.setOnSucceeded(event1 -> photoTabController.loadPhotosToInstallation());
+                    deletePhoto.setOnFailed(e -> displayError(deletePhoto.getException()));
 
-                TaskExecutor.executeTask(deletePhoto);
-                closeWindow();
+                    TaskExecutor.executeTask(deletePhoto);
+                    closeWindow();
 
-            } catch (Exception e){
-                displayError(e);
+                } catch (Exception e){
+                    displayError(e);
+                }
             }
         });
         buttonArea.getChildren().add(btnDeletePhoto);
     }
-
-    private void addCloseButton() {
-        String cancelText = "❌ Close";
-
-        Button btnCancel = createButton(cancelText);
-
-        NodeAccessLevel descriptionButtonAccess = new NodeAccessLevel();
-
-        descriptionButtonAccess.addNodeAccessLevel(btnCancel,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager,
-                        SystemRole.Technician, SystemRole.SalesPerson));
-
-        btnCancel.setOnAction(event -> {
-            closeWindow();
-        });
-        buttonArea.getChildren().add(btnCancel);
-    }
-
-
 
     private void addEditButton() {
         String editText = "✏ Edit";
@@ -115,7 +98,7 @@ public class PhotoController extends BaseController implements Initializable {
 
         descriptionButtonAccess.addNodeAccessLevel(
                 btnEditSaveDescription,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
 
         btnEditSaveDescription.setOnAction(event -> {
             boolean isDescriptionEditable = txtaDescription.isEditable();
