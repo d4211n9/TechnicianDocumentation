@@ -4,7 +4,7 @@ import be.Enum.SystemRole;
 import be.Photo;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
-import gui.controllers.installation.InstallationInfoController;
+import gui.controllers.installation.PhotoTabController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
@@ -22,20 +22,17 @@ import java.util.ResourceBundle;
 
 
 public class PhotoController extends BaseController implements Initializable {
-    public JFXTextArea txtaDescription;
-    public HBox hbPhotoDescription;
+    @FXML
+    private JFXTextArea txtaDescription;
     @FXML
     private VBox vBoxBackground;
-
     @FXML
     private ImageView imgPhotoArea;
-
-    private Photo photo;
-
     @FXML
     private HBox buttonArea;
 
-    private InstallationInfoController installationInfoController;
+    private Photo photo;
+    private PhotoTabController photoTabController;
 
 
     @Override
@@ -46,7 +43,6 @@ public class PhotoController extends BaseController implements Initializable {
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
-        //addConfirmButton();
         addEditButton();
         addDeletePhotoBtn();
         addCloseButton();
@@ -77,7 +73,7 @@ public class PhotoController extends BaseController implements Initializable {
             try {
                 Task<Void> deletePhoto = getModelsHandler().getPhotoModel().deletePhoto(photo);
 
-                deletePhoto.setOnSucceeded(event1 -> installationInfoController.loadPhotosToInstallation());
+                deletePhoto.setOnSucceeded(event1 -> photoTabController.loadPhotosToInstallation());
                 deletePhoto.setOnFailed(e -> displayError(deletePhoto.getException()));
 
                 TaskExecutor.executeTask(deletePhoto);
@@ -130,7 +126,7 @@ public class PhotoController extends BaseController implements Initializable {
                 try {
                     Task<Boolean> updatePhotoTask = getModelsHandler().getPhotoModel().updatePhoto(photo);
 
-                    updatePhotoTask.setOnSucceeded(event1 -> installationInfoController.loadPhotosToInstallation());
+                    updatePhotoTask.setOnSucceeded(event1 -> photoTabController.loadPhotosToInstallation());
                     updatePhotoTask.setOnFailed(e -> displayError(updatePhotoTask.getException()));
 
                     TaskExecutor.executeTask(updatePhotoTask);
@@ -154,9 +150,8 @@ public class PhotoController extends BaseController implements Initializable {
         stage.close();
     }
 
-    public void setInstallationController(InstallationInfoController i) {
-        installationInfoController = i;
-
+    public void setPhotoTabController(PhotoTabController photoTabController) {
+        this.photoTabController = photoTabController;
     }
 
 }

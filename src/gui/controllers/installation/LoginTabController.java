@@ -1,6 +1,7 @@
 package gui.controllers.installation;
 
 import be.Enum.SystemRole;
+import be.Installation;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import javafx.fxml.FXML;
@@ -23,8 +24,15 @@ public class LoginTabController extends TableViewController implements Initializ
     @FXML
     private HBox loginBtnArea;
 
+    private Installation installation;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            installation = getModelsHandler().getInstallationModel().getSelectedInstallation();
+        } catch (Exception e) {
+            displayError(e);
+        }
         initializeButtonAccessLevels();
         loginBtnArea.getChildren().add(addButtons());
     }

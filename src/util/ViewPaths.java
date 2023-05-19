@@ -21,6 +21,7 @@ public class ViewPaths {
     public static final String MY_PROJECTS = "/gui/views/projectViews/MyProject.fxml";
     public static final String PHOTO_CARD = "/gui/views/photoViews/PhotoCard.fxml";
     public static final String PHOTO_INFO = "/gui/views/photoViews/PhotoInfoView.fxml";
+    public static final String PHOTO_TAB = "/gui/views/installation/PhotoTab.fxml";
 
 
     private ViewPaths() {}
