@@ -35,6 +35,10 @@ public class Device {
         return deviceType;
     }
 
+    public String getDeviceTypeName() {
+        return deviceType.getName();
+    }
+
     public void setDeviceType(DeviceType deviceType) {
         this.deviceType = deviceType;
     }

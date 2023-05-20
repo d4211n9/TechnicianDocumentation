@@ -141,9 +141,9 @@
                   <fx:include fx:id="background" source="/gui/views/drawing/DrawingView.fxml" />
                </content>
             </Tab>
-            <Tab text="🔌 Device">
+            <Tab onSelectionChanged="#handleDeviceTab" text="🔌 Device">
                <content>
-                  <fx:include fx:id="vbDeviceTab" source="DeviceTab.fxml" />
+                  <fx:include fx:id="deviceTab" source="DeviceTab.fxml" />
                </content>
             </Tab>
             <Tab text="🔑 Login">

@@ -12,6 +12,7 @@ import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,6 +37,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class InstallationInfoController extends BaseController implements Initializable {
+    @FXML
+    private DeviceTabController deviceTabController;
     @FXML
     private VBox installationInfo, vbUserBtnArea;
     @FXML
@@ -62,17 +65,6 @@ public class InstallationInfoController extends BaseController implements Initia
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
         userListener();
-
-        hbImage.widthProperty().addListener((observable, oldValue, newValue) ->
-                imgPhoto.setFitWidth((Double) newValue));
-        hbImage.heightProperty().addListener((observable, oldValue, newValue) ->
-                imgPhoto.setFitHeight((Double) newValue));
-
-        try {
-            getModelsHandler().getDrawingModel().setSelectedDrawing(installation.getID());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void installationBackgroundUpdate() {
@@ -93,6 +85,13 @@ public class InstallationInfoController extends BaseController implements Initia
         lblDescription.setText(installation.getDescription());
 
         loadUsers();
+
+        try {
+            //TODO OBS: den her driller på installationer uden tegning
+            getModelsHandler().getDrawingModel().setSelectedDrawing(installation.getID());
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     /**
@@ -365,5 +364,7 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
-
+    public void handleDeviceTab() {
+        deviceTabController.loadTableView();
+    }
 }
