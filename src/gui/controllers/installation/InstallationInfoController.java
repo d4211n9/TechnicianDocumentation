@@ -39,6 +39,8 @@ public class InstallationInfoController extends BaseController implements Initia
     @FXML
     private DeviceTabController deviceTabController;
     @FXML
+    private LoginTabController loginTabController;
+    @FXML
     private VBox installationInfo, vbUserBtnArea;
     @FXML
     private HBox infoBtnArea, photosBtnArea, drawingBtnArea, deviceBtnArea, hbImage;
@@ -365,5 +367,9 @@ public class InstallationInfoController extends BaseController implements Initia
 
     public void handleDeviceTab() {
         deviceTabController.loadTableView();
+    }
+
+    public void handleLoginTab() {
+        loginTabController.loadTableView();
     }
 }

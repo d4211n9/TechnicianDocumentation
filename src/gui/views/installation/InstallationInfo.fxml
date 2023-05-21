@@ -146,7 +146,7 @@
                   <fx:include fx:id="deviceTab" source="DeviceTab.fxml" />
                </content>
             </Tab>
-            <Tab text="🔑 Login">
+            <Tab onSelectionChanged="#handleLoginTab" text="🔑 Login">
                <content>
                   <fx:include fx:id="vbLoginTab" source="LoginTab.fxml" />
                </content>
