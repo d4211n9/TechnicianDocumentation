@@ -136,7 +136,7 @@ public class BaseController {
     }
     public Button loadButton(String text, String fxmlPath, Node pageNode) {
         JFXButton button = new JFXButton(text);
-        button.setFont(Font.font(16));
+        button.setFont(Font.font(14));
         button.setPrefWidth(150);
         button.setPrefHeight(60);
 

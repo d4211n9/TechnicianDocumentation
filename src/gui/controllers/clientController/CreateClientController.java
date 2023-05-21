@@ -80,7 +80,7 @@ public class CreateClientController extends BaseController {
         txtfPostalCode.setText(selectedItem.getAddress().getPostalCode());
         txtfCity.setText(selectedItem.getAddress().getCity());
 
-        lblCreateUser.setText("Edit Client");
+        lblCreateUser.setText("Edit Customer");
 
         addEditBtn();
         buttonArea.getChildren().remove(btnConfirm);

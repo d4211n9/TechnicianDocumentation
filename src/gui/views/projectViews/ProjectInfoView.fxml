@@ -77,7 +77,7 @@
                            <children>
                               <VBox fx:id="vbClientInfo" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="151.0" prefWidth="384.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="lblClientInfo" prefHeight="30.0" prefWidth="458.0" text="Client Information">
+                                    <Label fx:id="lblClientInfo" prefHeight="30.0" prefWidth="458.0" text="Customer Information">
                                        <VBox.margin>
                                           <Insets top="10.0" />
                                        </VBox.margin>

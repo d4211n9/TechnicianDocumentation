@@ -73,12 +73,12 @@ public class ClientController extends TableViewController implements Initializab
         addEditBtn();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕💰 Add Client", ViewPaths.CREATE_CLIENTS_VIEW, clientView),
+                loadButton("➕👨‍💼 Add", ViewPaths.CREATE_CLIENTS_VIEW, clientView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
     private void addEditBtn() {
-        editButton = createButton("✏ Edit Client");
+        editButton = createButton("✏ Edit");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -92,7 +92,7 @@ public class ClientController extends TableViewController implements Initializab
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("🗑 Delete Client");
+        deleteButton = createButton("🗑 Delete");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);

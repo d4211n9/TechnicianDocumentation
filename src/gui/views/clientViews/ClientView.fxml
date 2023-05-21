@@ -22,7 +22,7 @@
                   <Font size="16.0" />
                </font>
             </JFXButton>
-            <Label prefHeight="35.0" prefWidth="840.0" text="Clients" HBox.hgrow="ALWAYS">
+            <Label prefHeight="35.0" prefWidth="840.0" text="Customers" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

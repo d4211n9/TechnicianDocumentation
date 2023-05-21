@@ -40,6 +40,20 @@ public class MainController extends BaseController implements Initializable {
         addButtonsToBottomArea(buttons);
     }
 
+    public void setLandingPage() {
+        try {
+            saveLastView(null); //To avoid exception when clicking "back" as the first thing
+            if(getModelsHandler().getSystemUserModel().getLoggedInSystemUser().getValue().getRole()
+                    == SystemRole.Technician) {
+                mainBorderPane.setCenter(loadView(ViewPaths.MY_PROJECTS).getRoot());
+            } else {
+                mainBorderPane.setCenter(loadView(ViewPaths.PROJECTS_VIEW).getRoot());
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
     private void addButtonsToBottomArea(ArrayList<Button> buttons) {
         for (Button button: buttons){
             sidebar.getChildren().add(1, button);
@@ -65,11 +79,11 @@ public class MainController extends BaseController implements Initializable {
                 Arrays.asList(SystemRole.Administrator));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("📁 Projects", ViewPaths.PROJECTS_VIEW),
+                loadButton("👨‍💼 Customers", ViewPaths.CLIENTS_VIEW),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("💰 Clients", ViewPaths.CLIENTS_VIEW),
+                loadButton("📁 Projects", ViewPaths.PROJECTS_VIEW),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
 
         buttonAccessLevel.addNodeAccessLevel(
@@ -84,7 +98,7 @@ public class MainController extends BaseController implements Initializable {
 
     private Button loadButton(String text, String fxmlPath) {
         JFXButton button = new JFXButton(text);
-        button.setFont(Font.font(16));
+        button.setFont(Font.font(14));
         button.setPrefWidth(120);
         button.setPrefHeight(60);
         button.setOnAction(e -> {
