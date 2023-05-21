@@ -11,15 +11,14 @@ import util.SymbolPaths;
 import util.ViewPaths;
 
 public class Main extends Application {
-    public static void main(String[] args) throws Exception {//Application.launch();
+    public static void main(String[] args) throws Exception {Application.launch();
 
-        byte[] image = SymbolPaths.LOGO.getBytes();
-        Drawing drawing = new Drawing(1, image);
-        DrawingDAO drawingDAO = new DrawingDAO();
-        DrawingModel drawingModel = new DrawingModel();
+        //byte[] image = SymbolPaths.LOGO.getBytes();
+        //Drawing drawing = new Drawing(5, image);
+        //DrawingDAO drawingDAO = new DrawingDAO();
+        //DrawingModel drawingModel = new DrawingModel();
         //drawingModel.createDrawing(drawing);
-        //drawingDAO.createDrawing(drawing);
-        drawingModel.deleteDrawing(drawing);
+        //drawingModel.deleteDrawing(drawing);
 
     }
 
