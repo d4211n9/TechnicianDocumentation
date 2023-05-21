@@ -80,8 +80,8 @@ public class DrawingModel {
 
     public void saveAllDevicesOnDrawing() throws Exception {
         deleteDrawing(selectedDrawing);
+        System.out.println(selectedDrawing.getDevices().size());//todo
         selectedDrawing = createDrawing(selectedDrawing);
-
 
         //todo create a new drawing
         drawingManager.createDevices(selectedDrawing.getDevices(), selectedDrawing.getId());

@@ -95,7 +95,7 @@ public class DrawingController extends BaseController implements Initializable {
 
         deviceImg.setOnMousePressed(event1 -> {
             selectedDevice = controller1;
-            showDeviceInfo(controller1);
+            showDeviceInfo(selectedDevice);
             source = (Node)event1.getPickResult().getIntersectedNode();
         });
         selectedDevice = controller1;
@@ -103,14 +103,14 @@ public class DrawingController extends BaseController implements Initializable {
         deviceImg.setFitHeight(device.getHeight());
         deviceImg.setFitWidth(device.getWidth());
 
-        deviceImg.setLayoutX(device.getPosX());
-        deviceImg.setLayoutY(device.getWidth());
+        deviceImg.setTranslateX(device.getPosX());
+        deviceImg.setTranslateY(device.getPosY());
 
 
         Tooltip imgName = new Tooltip(device.getDeviceType().getName());
         imgName.setShowDelay(Duration.millis(200));
         Tooltip.install(deviceImg, imgName);
-        device.setId(pane.getChildren().size());
+        device.setId(getIndex());
 
         problem(deviceImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), device, deviceImg);
 
@@ -123,7 +123,7 @@ public class DrawingController extends BaseController implements Initializable {
         Node deviceElement = loader.getRoot();
 
         deviceElement.setOnMousePressed(event -> {
-            Device d = new Device(deviceType, pane.getChildren().size());
+            Device d = new Device(deviceType, getIndex());
             FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
             DeviceController controller1 = loader1.getController();
             controller1.setContent(d);
@@ -221,14 +221,22 @@ public class DrawingController extends BaseController implements Initializable {
         Label lblWidth = new Label("Width ");
         TextField txtFieldWidth = new TextField();
         txtFieldWidth.setText(String.valueOf(device.getWidth()));
+        txtFieldWidth.textProperty().addListener((obs, oldVal, newVal) -> {
+            if(!Objects.equals(newVal, "")){
+                device.setWidth(Double.parseDouble(newVal));
+                controller.settingImgHeight(Double.valueOf(newVal));
+                source.getParent().prefWidth(Double.parseDouble(newVal));
+            }
+        });
         HBox hboxWidth = new HBox(lblWidth, txtFieldWidth);
         hboxWidth.setSpacing(10);
         objectInfo.getChildren().add(hboxWidth);
 
-        JFXButton deleteBtn = new JFXButton("delete");
+        JFXButton deleteBtn = createButton("delete");
         deleteBtn.setOnMouseClicked(event -> {
-            pane.getChildren().remove(selectedDevice);
+            pane.getChildren().remove(source);
             devicesesOnDrawing.remove(controller.getDevice());
+            objectInfo.getChildren().clear();
         });
         objectInfo.getChildren().add(deleteBtn);
     }
@@ -284,7 +292,7 @@ public class DrawingController extends BaseController implements Initializable {
             Dragboard db = event.getDragboard();
             if(db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer){
                 int index = (Integer) db.getContent(dataFormat);
-                Node node1 = (Node) event.getPickResult().getIntersectedNode();
+                Node node1 = (Node) selectedDevice.getImgView();
                 node1.setManaged(false);
                 // this is the problematic part
                 node1.setTranslateX(event.getX() - node1.getLayoutX() - (node1.getBoundsInParent().getHeight() / 2));
@@ -292,6 +300,7 @@ public class DrawingController extends BaseController implements Initializable {
                 selectedDevice.getDevice().setPosX(node1.getTranslateX());
                 selectedDevice.getDevice().setPosY(node1.getTranslateY());
                 event.setDropCompleted(true);
+                showDeviceInfo(selectedDevice);
                 event.consume();
             }
         });

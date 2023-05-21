@@ -221,9 +221,12 @@ public class ProjectInfoController extends BaseController implements Initializab
         InstallationCardController cardController = cardLoader.getController();
         cardController.setContent(i);
 
-        getModelsHandler().getDrawingModel().setSelectedDrawing(i.getID());
-
         installationCard.setOnMouseClicked(event -> {
+            try {
+                getModelsHandler().getDrawingModel().setSelectedDrawing(i.getID());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
             InstallationInfoController infoController = infoLoader.getController();
             infoController.setContent(i);
