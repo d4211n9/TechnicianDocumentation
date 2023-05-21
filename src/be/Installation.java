@@ -58,7 +58,6 @@ public class Installation {
         this.drawing = drawing;
     }
 
-    //TODO Check: usikker på om int eller boolean skal bruges i isDone getter...
     public boolean getIsDone() {
         return isDone;
     }

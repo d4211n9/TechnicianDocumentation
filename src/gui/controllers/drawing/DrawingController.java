@@ -2,6 +2,7 @@ package gui.controllers.drawing;
 
 import be.Device;
 import be.DeviceType;
+import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -223,8 +224,14 @@ public class DrawingController extends BaseController implements Initializable {
         HBox hboxWidth = new HBox(lblWidth, txtFieldWidth);
         hboxWidth.setSpacing(10);
         objectInfo.getChildren().add(hboxWidth);
-    }
 
+        JFXButton deleteBtn = new JFXButton("delete");
+        deleteBtn.setOnMouseClicked(event -> {
+            pane.getChildren().remove(source);
+            devicesesOnDrawing.remove(controller.getDevice());
+        });
+        objectInfo.getChildren().add(deleteBtn);
+    }
 
 
 
@@ -296,6 +303,7 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
     public void save(ActionEvent actionEvent) throws Exception {
+        getModelsHandler().getDrawingModel().saveAllDevicesOnDrawing();
         //todo create safe method that calls down the layer and sends devicesOnDrawing
     }
 }
