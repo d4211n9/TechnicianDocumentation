@@ -23,12 +23,21 @@ public class Device {
     }
 
     public Device(int id, DeviceType deviceType, double posX, double posY, double width, double height) {
+        this(deviceType, posX, posY, width, height);
         this.id = id;
+    }
+
+    public Device(DeviceType deviceType, double posX, double posY, double width, double height) {
         this.deviceType = deviceType;
         this.posX = posX;
         this.posY = posY;
         this.width = width;
         this.height = height;
+    }
+
+    public Device(int id, Device deviceToCopy) {
+        this(deviceToCopy.getDeviceType(), deviceToCopy.getPosX(), deviceToCopy.getPosY(), deviceToCopy.getWidth(), deviceToCopy.getHeight());
+        this.id = id;
     }
 
     public DeviceType getDeviceType() {

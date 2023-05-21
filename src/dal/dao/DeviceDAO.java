@@ -7,11 +7,9 @@ import dal.connectors.SqlConnector;
 import dal.interfaces.IDeviceDAO;
 import exceptions.DALException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DeviceDAO implements IDeviceDAO {
@@ -67,6 +65,45 @@ public class DeviceDAO implements IDeviceDAO {
             DALException dalException = new DALException("Failed to retrieve devices", e);
             dalException.printStackTrace();
             throw dalException;
+        }
+    }
+
+    @Override
+    public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
+        String sql = "INSERT INTO Device " +
+                "(DrawingID, DeviceType, PosX, PosY, Width, Height) " +
+                "VALUES (?, ?, ?, ?, ?, ?);";
+
+        PreparedStatement statement = null;
+
+        try (Connection connection = connector.getConnection()) {
+
+            List<Device> createdDevices = new ArrayList<>();
+
+            for (Device deviceToCreate : devicesToCreate) {
+                statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+                statement.setInt(1, drawingId);
+                statement.setString(2, deviceToCreate.getDeviceType().getName());
+                statement.setDouble(3, deviceToCreate.getPosX());
+                statement.setDouble(4, deviceToCreate.getPosY());
+                statement.setDouble(5, deviceToCreate.getWidth());
+                statement.setDouble(6, deviceToCreate.getHeight());
+
+                statement.executeUpdate();
+
+                int id = statement.getGeneratedKeys().getInt(1);
+                createdDevices.add(new Device(id, deviceToCreate));
+            }
+
+            return createdDevices;
+        } catch (SQLException e) {
+            DALException dalException = new DALException("Failed to create devices", e);
+            dalException.printStackTrace();
+            throw dalException;
+        }
+        finally {
+            if (statement != null) statement.close();
         }
     }
 }

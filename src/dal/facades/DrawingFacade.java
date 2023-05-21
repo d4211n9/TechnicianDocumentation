@@ -1,5 +1,6 @@
 package dal.facades;
 
+import be.Device;
 import be.DeviceType;
 import be.Drawing;
 import dal.dao.DeviceDAO;
@@ -35,5 +36,9 @@ public class DrawingFacade {
 
     public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
         return deviceTypeDAO.createDeviceType(deviceTypeToCreate);
+    }
+
+    public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
+        return deviceDAO.createDevices(devicesToCreate, drawingId);
     }
 }

@@ -1,5 +1,6 @@
 package bll.managers;
 
+import be.Device;
 import be.DeviceType;
 import be.Drawing;
 import bll.interfaces.IDrawingManager;
@@ -27,5 +28,10 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
         return drawingFacade.createDeviceType(deviceTypeToCreate);
+    }
+
+    @Override
+    public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
+        return drawingFacade.createDevices(devicesToCreate, drawingId);
     }
 }
