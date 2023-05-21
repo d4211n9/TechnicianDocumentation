@@ -6,10 +6,8 @@ import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.ISystemUserDAO;
 import exceptions.DALException;
-import javafx.util.converter.LocalDateTimeStringConverter;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +121,7 @@ public class SystemUserDAO implements ISystemUserDAO {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());//todo
+            statement.setString(2, user.getPassword());
             statement.setString(3, user.getRole().toString());
             statement.setString(4, user.getName());
             statement.setTimestamp(5, user.getDeleted());

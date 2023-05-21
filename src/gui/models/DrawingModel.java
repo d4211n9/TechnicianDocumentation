@@ -78,13 +78,13 @@ public class DrawingModel {
         selectedDrawing = drawingManager.getDrawingFromInstallationId(installationId);
     }
 
-    public void saveAllDevicesOnDrawing(Drawing drawing) throws Exception {
-        deleteDrawing(drawing);
-        selectedDrawing = createDrawing(drawing);
+    public void saveAllDevicesOnDrawing() throws Exception {
+        deleteDrawing(selectedDrawing);
+        selectedDrawing = createDrawing(selectedDrawing);
 
 
         //todo create a new drawing
-        drawingManager.createDevices(drawing.getDevices(), drawing.getId());
+        drawingManager.createDevices(selectedDrawing.getDevices(), selectedDrawing.getId());
     }
 
     public DataFormat getDataFormat() {
