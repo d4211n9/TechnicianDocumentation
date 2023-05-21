@@ -24,8 +24,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -196,7 +198,11 @@ public class ProjectInfoController extends BaseController implements Initializab
                 installations = newValue;
 
                 for (Installation i : installations) {
-                    showInstallation(i);
+                    try {
+                        showInstallation(i);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
 
@@ -209,11 +215,13 @@ public class ProjectInfoController extends BaseController implements Initializab
         }
     }
 
-    private void showInstallation(Installation i) {
+    private void showInstallation(Installation i) throws Exception {
         FXMLLoader cardLoader = loadView(ViewPaths.INSTALLATION_CARD);
         Pane installationCard = cardLoader.getRoot();
         InstallationCardController cardController = cardLoader.getController();
         cardController.setContent(i);
+
+        getModelsHandler().getDrawingModel().setSelectedDrawing(i.getID());
 
         installationCard.setOnMouseClicked(event -> {
             FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);

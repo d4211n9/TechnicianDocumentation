@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
@@ -38,7 +37,6 @@ public class DrawingController extends BaseController implements Initializable {
 
     private Node source;
 
-
     public ImageView selectedElementImg;
     public VBox sidebarDevice;
     private Line currentLine;
@@ -47,7 +45,25 @@ public class DrawingController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadDeviceTypes();
-        devicesesOnDrawing = new ArrayList<>();
+
+        try {
+            devicesesOnDrawing = new ArrayList<>();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (Device device: getModelsHandler().getDrawingModel().getSelectedDrawing().getDevices()){
+                try {
+                    loadDeviceInPane(device);
+                    devicesesOnDrawing.add(device);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void loadDeviceTypes() {
@@ -67,9 +83,21 @@ public class DrawingController extends BaseController implements Initializable {
         }
     }
 
-    public void loadDeviceInPane(Device device){
+    public void loadDeviceInPane(Device device) throws Exception {
 
-        ImageView deviceImg = new ImageView(new Image(device.getDeviceType().getImagePath()));
+
+        FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
+        DeviceController controller1 = loader1.getController();
+        controller1.setContent(device);
+
+        ImageView deviceImg = controller1.getImgView();
+
+        deviceImg.setOnMousePressed(event1 -> {
+            selectedDevice = controller1;
+            showDeviceInfo(controller1);
+            source = (Node)event1.getPickResult().getIntersectedNode();
+        });
+        selectedDevice = controller1;
 
         deviceImg.setFitHeight(device.getHeight());
         deviceImg.setFitWidth(device.getWidth());
@@ -77,9 +105,13 @@ public class DrawingController extends BaseController implements Initializable {
         deviceImg.setLayoutX(device.getPosX());
         deviceImg.setLayoutY(device.getWidth());
 
+
         Tooltip imgName = new Tooltip(device.getDeviceType().getName());
         imgName.setShowDelay(Duration.millis(200));
         Tooltip.install(deviceImg, imgName);
+        device.setId(pane.getChildren().size());
+
+        problem(deviceImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), device, deviceImg);
 
         pane.getChildren().add(deviceImg);
     }
@@ -100,7 +132,6 @@ public class DrawingController extends BaseController implements Initializable {
                 selectedDevice = controller1;
                 showDeviceInfo(controller1);
                 source = (Node)event1.getPickResult().getIntersectedNode();
-                System.out.println(controller1.getDevice());
             });
             selectedDevice = controller1;
 
@@ -222,7 +253,6 @@ public class DrawingController extends BaseController implements Initializable {
 
                             currentLine.setEndX(event.getX());
                             currentLine.setEndY(event.getY());
-                            System.out.println(source);
                             pane.setOnMousePressed(null);
                         }
                     }
@@ -265,7 +295,7 @@ public class DrawingController extends BaseController implements Initializable {
         });
     }
 
-    public void save(ActionEvent actionEvent) {
+    public void save(ActionEvent actionEvent) throws Exception {
         //todo create safe method that calls down the layer and sends devicesOnDrawing
     }
 }

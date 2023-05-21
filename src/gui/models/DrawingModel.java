@@ -78,8 +78,11 @@ public class DrawingModel {
         selectedDrawing = drawingManager.getDrawingFromInstallationId(installationId);
     }
 
-    public void saveAllDevicesOnDrawing(Drawing drawing){
-        //todo should delete the drawing
+    public void saveAllDevicesOnDrawing(Drawing drawing) throws Exception {
+        deleteDrawing(drawing);
+        selectedDrawing = createDrawing(drawing);
+
+
         //todo create a new drawing
         //todo should create a device for each item in the list linking to the drawing
     }
