@@ -99,14 +99,13 @@ public class DrawingDAO implements IDrawingDAO {
 
             connection.commit();
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Transaction is being rolled back");
             connection.rollback();
             throw new DALException("Failed to delete drawing", e);
         }
-
+        connection.setAutoCommit(true);
     }
 
 
