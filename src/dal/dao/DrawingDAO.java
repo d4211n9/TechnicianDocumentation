@@ -86,12 +86,10 @@ public class DrawingDAO implements IDrawingDAO {
         String sqlDeleteDrawing = "DELETE FROM Drawing WHERE ID=?;";
 
         Connection connection = connector.getConnection();
+        connection.setAutoCommit(false);
 
-        try (
-            PreparedStatement stmtUpdateInstallation = connection.prepareStatement(sqlUpdateInstallation);
-            PreparedStatement stmtDeleteDrawing = connection.prepareStatement(sqlDeleteDrawing)) {
-
-            connection.setAutoCommit(false);
+        try (PreparedStatement stmtUpdateInstallation = connection.prepareStatement(sqlUpdateInstallation);
+             PreparedStatement stmtDeleteDrawing = connection.prepareStatement(sqlDeleteDrawing)) {
 
             stmtUpdateInstallation.setInt(1, drawing.getId());
             stmtUpdateInstallation.executeUpdate();
@@ -100,7 +98,6 @@ public class DrawingDAO implements IDrawingDAO {
             stmtDeleteDrawing.executeUpdate();
 
             connection.commit();
-
 
         }
         catch (SQLException e) {
