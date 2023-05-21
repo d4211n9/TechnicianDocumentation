@@ -54,12 +54,14 @@ public class DrawingController extends BaseController implements Initializable {
         }
 
         try {
-            for (Device device: getModelsHandler().getDrawingModel().getSelectedDrawing().getDevices()){
-                try {
-                    loadDeviceInPane(device);
-                    devicesesOnDrawing.add(device);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            if(getModelsHandler().getDrawingModel().getSelectedDrawing() != null) {
+                for (Device device: getModelsHandler().getDrawingModel().getSelectedDrawing().getDevices()){
+                    try {
+                        loadDeviceInPane(device);
+                        devicesesOnDrawing.add(device);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         } catch (Exception e) {

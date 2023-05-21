@@ -1,6 +1,7 @@
 package bll.managers;
 
 import be.Device;
+import be.DeviceLogin;
 import be.DeviceType;
 import be.Drawing;
 import bll.interfaces.IDrawingManager;
@@ -43,5 +44,20 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public void deleteDrawing(Drawing drawing) throws Exception {
         drawingFacade.deleteDrawing(drawing);
+    }
+
+    @Override
+    public DeviceLogin createDeviceLogin(DeviceLogin deviceLogin) throws Exception {
+        return drawingFacade.createDeviceLogin(deviceLogin);
+    }
+
+    @Override
+    public DeviceLogin getDeviceLogin(Device device) throws Exception {
+        return drawingFacade.getDeviceLogin(device);
+    }
+
+    @Override
+    public DeviceLogin updateDeviceLogin(DeviceLogin deviceLogin) throws Exception {
+        return drawingFacade.updateDeviceLogin(deviceLogin);
     }
 }

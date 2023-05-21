@@ -1,6 +1,7 @@
 package gui.models;
 
 import be.Device;
+import be.DeviceLogin;
 import be.DeviceType;
 import be.Drawing;
 import bll.interfaces.IDrawingManager;
@@ -97,5 +98,18 @@ public class DrawingModel {
 
     public void deleteDrawing(Drawing drawing) throws Exception {
         drawingManager.deleteDrawing(drawing);
+    }
+
+    //TODO Lav til tasks ?
+    public DeviceLogin createDeviceLogin(DeviceLogin deviceLogin) throws Exception {
+        return drawingManager.createDeviceLogin(deviceLogin);
+    }
+
+    public DeviceLogin getDeviceLogin(Device device) throws Exception {
+        return drawingManager.getDeviceLogin(device);
+    }
+
+    public DeviceLogin updateDeviceLogin(DeviceLogin deviceLogin) throws Exception {
+        return drawingManager.updateDeviceLogin(deviceLogin);
     }
 }

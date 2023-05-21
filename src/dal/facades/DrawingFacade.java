@@ -1,12 +1,15 @@
 package dal.facades;
 
 import be.Device;
+import be.DeviceLogin;
 import be.DeviceType;
 import be.Drawing;
 import dal.dao.DeviceDAO;
+import dal.dao.DeviceLoginDAO;
 import dal.dao.DeviceTypeDAO;
 import dal.dao.DrawingDAO;
 import dal.interfaces.IDeviceDAO;
+import dal.interfaces.IDeviceLoginDAO;
 import dal.interfaces.IDeviceTypeDAO;
 import dal.interfaces.IDrawingDAO;
 
@@ -16,11 +19,13 @@ public class DrawingFacade {
     private IDeviceTypeDAO deviceTypeDAO;
     private IDeviceDAO deviceDAO;
     private IDrawingDAO drawingDAO;
+    private IDeviceLoginDAO deviceLoginDAO;
 
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
         drawingDAO = new DrawingDAO();
         deviceDAO = new DeviceDAO();
+        deviceLoginDAO = new DeviceLoginDAO();
     }
 
 
@@ -30,7 +35,10 @@ public class DrawingFacade {
 
     public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
         Drawing drawing = drawingDAO.getDrawingFromInstallationId(installationId);
-        drawing.getDevices().addAll(deviceDAO.getAllDevicesFromDrawingId(drawing.getId()));
+
+        if(drawing != null) {
+            drawing.getDevices().addAll(deviceDAO.getAllDevicesFromDrawingId(drawing.getId()));
+        }
 
         return drawing;
     }
@@ -49,5 +57,17 @@ public class DrawingFacade {
 
     public void deleteDrawing(Drawing drawing) throws Exception {
         drawingDAO.deleteDrawing(drawing);
+    }
+
+    public DeviceLogin createDeviceLogin(DeviceLogin deviceLogin) throws Exception {
+        return deviceLoginDAO.createDeviceLogin(deviceLogin);
+    }
+
+    public DeviceLogin getDeviceLogin(Device device) throws Exception {
+        return deviceLoginDAO.getDeviceLogin(device);
+    }
+
+    public DeviceLogin updateDeviceLogin(DeviceLogin deviceLogin) throws Exception {
+        return deviceLoginDAO.updateDeviceLogin(deviceLogin);
     }
 }

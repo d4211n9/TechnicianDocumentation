@@ -148,7 +148,7 @@
             </Tab>
             <Tab onSelectionChanged="#handleLoginTab" text="🔑 Login">
                <content>
-                  <fx:include fx:id="vbLoginTab" source="LoginTab.fxml" />
+                  <fx:include fx:id="loginTab" source="LoginTab.fxml" />
                </content>
             </Tab>
         </tabs>

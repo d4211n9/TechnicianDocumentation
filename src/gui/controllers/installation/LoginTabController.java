@@ -1,6 +1,7 @@
 package gui.controllers.installation;
 
 import be.Device;
+import be.DeviceLogin;
 import be.Drawing;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
@@ -23,11 +24,13 @@ public class LoginTabController extends TableViewController implements Initializ
     @FXML
     private VBox loginTab;
     @FXML
-    private TableColumn<Device, String> tcDevice, tcUsername, tcPassword;
+    private TableColumn<DeviceLogin, String> tcDevice, tcUsername, tcPassword;
+    @FXML
+    private TableColumn<DeviceLogin, Integer> tcID;
     @FXML
     private HBox loginBtnArea;
 
-    private ObservableList<Device> allDevicesWithLogin;
+    private ObservableList<DeviceLogin> allDevicesWithLogin;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,16 +50,20 @@ public class LoginTabController extends TableViewController implements Initializ
 
     public void loadTableView() {
         tcDevice.setCellValueFactory(new PropertyValueFactory<>("deviceTypeName"));
+        tcUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        tcPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
+        tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 
         try {
             Drawing selectedDrawing = getModelsHandler().getDrawingModel().getSelectedDrawing();
 
             if (selectedDrawing != null) {
-                List<Device> allDevicesFromDrawingWithLogin = new ArrayList<>();
+                List<DeviceLogin> allDevicesFromDrawingWithLogin = new ArrayList<>();
 
                 for(Device device : selectedDrawing.getDevices()) {
                     if (device.getDeviceType().hasLoginDetails()) {
-                        allDevicesFromDrawingWithLogin.add(device);
+                        DeviceLogin deviceLogin = getModelsHandler().getDrawingModel().getDeviceLogin(device);
+                        allDevicesFromDrawingWithLogin.add(deviceLogin);
                     }
                 }
 
@@ -66,5 +73,7 @@ public class LoginTabController extends TableViewController implements Initializ
         } catch (Exception e) {
             displayError(e);
         }
+
+        tableView.setItems(allDevicesWithLogin);
     }
 }
