@@ -16,6 +16,11 @@ public class DrawingManager implements IDrawingManager {
     }
 
     @Override
+    public Drawing createDrawing(Drawing drawing) throws Exception {
+        return drawingFacade.createDrawing(drawing);
+    }
+
+    @Override
     public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
         return drawingFacade.getDrawingFromInstallationId(installationId);
     }
@@ -33,5 +38,10 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
         return drawingFacade.createDevices(devicesToCreate, drawingId);
+    }
+
+    @Override
+    public void deleteDrawing(Drawing drawing) throws Exception {
+        drawingFacade.deleteDrawing(drawing);
     }
 }

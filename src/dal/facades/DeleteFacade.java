@@ -54,4 +54,5 @@ public class DeleteFacade {
         deletedClient.setDeleted(new Timestamp(System.currentTimeMillis()));
         clientDAO.updateClient(deletedClient);
     }
+
 }

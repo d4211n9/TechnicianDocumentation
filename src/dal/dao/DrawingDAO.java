@@ -6,10 +6,7 @@ import dal.connectors.SqlConnector;
 import dal.interfaces.IDrawingDAO;
 import exceptions.DALException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DrawingDAO implements IDrawingDAO {
     private AbstractConnector connector;
@@ -20,6 +17,34 @@ public class DrawingDAO implements IDrawingDAO {
 
     public DrawingDAO(AbstractConnector connector) {
         this.connector = connector;
+    }
+
+    @Override
+    public Drawing createDrawing(Drawing drawing) throws Exception {
+        Drawing newDrawing = null;
+
+        String sql = "INSERT INTO Drawing (ID, Image) VALUES (?, ?);";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setInt(1, drawing.getId());
+            statement.setBytes(2, drawing.getImage());
+
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                int ID = resultSet.getInt(1);
+
+                newDrawing = new Drawing(ID, drawing.getImage());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to create drawing", e);
+        }
+        
+        return newDrawing;
     }
 
     @Override
@@ -53,5 +78,24 @@ public class DrawingDAO implements IDrawingDAO {
             dalException.printStackTrace();
             throw dalException;
         }
+    }
+
+    @Override
+    public void deleteDrawing(Drawing drawing) throws Exception {
+
+        String sql = "DELETE FROM Drawing WHERE ID=?;";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, drawing.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DALException("Failed to delete drawing", e);
+        }
+
     }
 }

@@ -5,6 +5,7 @@ import be.DeviceType;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IDeviceDAO;
+import dal.interfaces.IDeviceTypeDAO;
 import exceptions.DALException;
 
 import java.sql.*;
@@ -92,7 +93,9 @@ public class DeviceDAO implements IDeviceDAO {
 
                 statement.executeUpdate();
 
-                int id = statement.getGeneratedKeys().getInt(1);
+                ResultSet resultSet = statement.getGeneratedKeys();
+
+                int id = resultSet.next() ? resultSet.getInt(1) : -1;
                 createdDevices.add(new Device(id, deviceToCreate));
             }
 

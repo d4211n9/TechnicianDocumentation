@@ -19,8 +19,13 @@ public class DrawingFacade {
 
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
-        deviceDAO = new DeviceDAO();
         drawingDAO = new DrawingDAO();
+        deviceDAO = new DeviceDAO();
+    }
+
+
+    public Drawing createDrawing(Drawing drawing) throws Exception {
+        return drawingDAO.createDrawing(drawing);
     }
 
     public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
@@ -40,5 +45,9 @@ public class DrawingFacade {
 
     public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
         return deviceDAO.createDevices(devicesToCreate, drawingId);
+    }
+
+    public void deleteDrawing(Drawing drawing) throws Exception {
+        drawingDAO.deleteDrawing(drawing);
     }
 }

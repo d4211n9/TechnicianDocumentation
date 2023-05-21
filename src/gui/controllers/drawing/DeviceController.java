@@ -3,10 +3,12 @@ package gui.controllers.drawing;
 import be.Device;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 public class DeviceController {
 
     public ImageView imgView;
+    public VBox vBox;
     private int index;
 
     private Device device;
@@ -34,5 +36,10 @@ public class DeviceController {
 
     public void setDevice(Device device) {
         this.device = device;
+    }
+
+    public void settingImgHeight(Double height){
+        imgView.setFitHeight(height);
+        vBox.setMinHeight(height);
     }
 }
