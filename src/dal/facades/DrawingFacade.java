@@ -22,6 +22,11 @@ public class DrawingFacade {
         deviceDAO = new DeviceDAO();
     }
 
+
+    public Drawing createDrawing(Drawing drawing) throws Exception {
+        return drawingDAO.createDrawing(drawing);
+    }
+
     public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
         Drawing drawing = drawingDAO.getDrawingFromInstallationId(installationId);
         drawing.getDevices().addAll(deviceDAO.getAllDevicesFromDrawingId(drawing.getId()));

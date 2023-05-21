@@ -26,6 +26,10 @@ public class DrawingModel {
         updateAllDeviceTypes();
     }
 
+    public Drawing createDrawing(Drawing drawing) throws Exception {
+        return drawingManager.createDrawing(drawing);
+    }
+
     public void addDeviceToDrawing(Device device){
         selectedDrawing.getDevices().add(device);
     }
