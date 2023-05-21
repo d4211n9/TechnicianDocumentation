@@ -23,13 +23,12 @@ public class DrawingDAO implements IDrawingDAO {
     public Drawing createDrawing(Drawing drawing) throws Exception {
         Drawing newDrawing = null;
 
-        String sql = "INSERT INTO Drawing (ID, Image) VALUES (?, ?);";
+        String sql = "INSERT INTO Drawing (Image) VALUES (?);";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            statement.setInt(1, drawing.getId());
-            statement.setBytes(2, drawing.getImage());
+            statement.setBytes(1, drawing.getImage());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -83,7 +82,7 @@ public class DrawingDAO implements IDrawingDAO {
     @Override
     public void deleteDrawing(Drawing drawing) throws Exception {
 
-        String sql = "DELETE FROM Drawing WHERE ID=?;";
+        String sql = "DELETE FROM Installation WHERE DrawingID=?;";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

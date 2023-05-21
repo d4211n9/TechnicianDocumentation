@@ -1,13 +1,27 @@
+import be.Drawing;
+import dal.dao.DrawingDAO;
+import gui.models.DrawingModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import util.SymbolPaths;
 import util.ViewPaths;
 
 public class Main extends Application {
-    public static void main(String[] args) {Application.launch();}
+    public static void main(String[] args) throws Exception {//Application.launch();
+
+        byte[] image = SymbolPaths.LOGO.getBytes();
+        Drawing drawing = new Drawing(1, image);
+        DrawingDAO drawingDAO = new DrawingDAO();
+        DrawingModel drawingModel = new DrawingModel();
+        //drawingModel.createDrawing(drawing);
+        //drawingDAO.createDrawing(drawing);
+        drawingModel.deleteDrawing(drawing);
+
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
