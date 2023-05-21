@@ -19,7 +19,7 @@ public class Main extends Application {
         DrawingModel drawingModel = new DrawingModel();
         //drawingModel.createDrawing(drawing);
         //drawingDAO.createDrawing(drawing);
-        drawingModel.deleteDrawing(drawing);
+        //drawingModel.deleteDrawing(drawing);
 
     }
 

@@ -227,7 +227,7 @@ public class DrawingController extends BaseController implements Initializable {
 
         JFXButton deleteBtn = new JFXButton("delete");
         deleteBtn.setOnMouseClicked(event -> {
-            pane.getChildren().remove(source);
+            pane.getChildren().remove(selectedDevice);
             devicesesOnDrawing.remove(controller.getDevice());
         });
         objectInfo.getChildren().add(deleteBtn);
@@ -284,7 +284,7 @@ public class DrawingController extends BaseController implements Initializable {
             Dragboard db = event.getDragboard();
             if(db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer){
                 int index = (Integer) db.getContent(dataFormat);
-                Node node1 = (Node) pane.getChildren().get(index);
+                Node node1 = (Node) event.getPickResult().getIntersectedNode();
                 node1.setManaged(false);
                 // this is the problematic part
                 node1.setTranslateX(event.getX() - node1.getLayoutX() - (node1.getBoundsInParent().getHeight() / 2));
@@ -305,6 +305,13 @@ public class DrawingController extends BaseController implements Initializable {
     public void save(ActionEvent actionEvent) throws Exception {
         getModelsHandler().getDrawingModel().saveAllDevicesOnDrawing();
         //todo create safe method that calls down the layer and sends devicesOnDrawing
+    }
+
+    public int index = 0;
+
+    private int getIndex(){
+        index += 1;
+        return index;
     }
 }
 
