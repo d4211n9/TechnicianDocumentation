@@ -82,19 +82,33 @@ public class DrawingDAO implements IDrawingDAO {
     @Override
     public void deleteDrawing(Drawing drawing) throws Exception {
 
-        String sql = "DELETE FROM Installation WHERE DrawingID=?;";
+        String sqlUpdateInstallation = "UPDATE Installation SET DrawingID = null WHERE DrawingID=?;";
+        String sqlDeleteDrawing = "DELETE FROM Drawing WHERE ID=?;";
 
-        try (Connection connection = connector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        Connection connection = connector.getConnection();
+        connection.setAutoCommit(false);
 
-            statement.setInt(1, drawing.getId());
+        try (PreparedStatement stmtUpdateInstallation = connection.prepareStatement(sqlUpdateInstallation);
+             PreparedStatement stmtDeleteDrawing = connection.prepareStatement(sqlDeleteDrawing)) {
 
-            statement.executeUpdate();
+            stmtUpdateInstallation.setInt(1, drawing.getId());
+            stmtUpdateInstallation.executeUpdate();
 
-        } catch (SQLException e) {
+            stmtDeleteDrawing.setInt(1, drawing.getId());
+            stmtDeleteDrawing.executeUpdate();
+
+            connection.commit();
+
+        }
+        catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Transaction is being rolled back");
+            connection.rollback();
             throw new DALException("Failed to delete drawing", e);
         }
 
     }
+
+
+
 }
