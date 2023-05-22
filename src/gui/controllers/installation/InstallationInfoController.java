@@ -10,6 +10,7 @@ import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -137,5 +138,13 @@ public class InstallationInfoController extends BaseController implements Initia
 
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+    }
+
+    public void handleDeviceTab() {
+        deviceTabController.loadTableView();
+    }
+
+    public void handleLoginTab() {
+        loginTabController.loadTableView();
     }
 }

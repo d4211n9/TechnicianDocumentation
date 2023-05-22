@@ -72,10 +72,9 @@ public class SystemUserDAO implements ISystemUserDAO {
             statement.setString(2, systemUser.getPassword());
             statement.setString(3, systemUser.getRole().getRole());
             statement.setString(4, systemUser.getName());
-            statement.setTimestamp(5, systemUser.getDeleted());
-            statement.setDate(6, null);
+            statement.setDate(5, null);
             Timestamp t = new Timestamp(System.currentTimeMillis());
-            statement.setTimestamp(7, t);
+            statement.setTimestamp(6, t);
             statement.executeUpdate();
 
             user = systemUser;
