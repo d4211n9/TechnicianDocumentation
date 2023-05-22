@@ -103,7 +103,7 @@
                   <fx:include fx:id="photoTab" source="PhotoTab.fxml" />
                </content>
             </Tab>
-            <Tab text="📝 Drawing">
+            <Tab onSelectionChanged="#handleDrawingTab" text="📝 Drawing">
                <content>
                   <fx:include fx:id="background" source="/gui/views/drawing/DrawingView.fxml" />
                </content>

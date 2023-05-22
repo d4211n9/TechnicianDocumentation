@@ -50,9 +50,12 @@ public class DrawingController extends BaseController implements Initializable {
         try {
             devicesesOnDrawing = new ArrayList<>();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            displayError(e);
         }
 
+    }
+
+    public void loadStuff() {
         try {
             if(getModelsHandler().getDrawingModel().getSelectedDrawing() != null) {
                 for (Device device: getModelsHandler().getDrawingModel().getSelectedDrawing().getDevices()){
@@ -60,7 +63,7 @@ public class DrawingController extends BaseController implements Initializable {
                         loadDeviceInPane(device);
                         devicesesOnDrawing.add(device);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        displayError(e);
                     }
                 }
             }
