@@ -60,6 +60,8 @@ public class DrawingController extends BaseController implements Initializable {
         this.installation = installation;
 
         try {
+            devicesOnDrawing.clear();
+            pane.getChildren().clear();
             for(Device device : getModelsHandler().getDrawingModel().getDevicesFromInstallation(installation.getID())) {
                 loadDeviceInPane(device);
                 devicesOnDrawing.add(device);
