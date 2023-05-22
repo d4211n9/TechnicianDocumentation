@@ -54,7 +54,7 @@ public class DeviceLoginDAO implements IDeviceLoginDAO {
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, deviceLogin.getDevice().getId());
+            statement.setInt(1, device.getId());
 
             ResultSet resultSet = statement.executeQuery();
 

@@ -2,7 +2,6 @@ package gui.controllers.installation;
 
 import be.Device;
 import be.DeviceLogin;
-import be.Drawing;
 import be.Installation;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
@@ -30,7 +29,7 @@ public class LoginTabController extends TableViewController implements Initializ
     private TableColumn<DeviceLogin, Integer> tcID;
     @FXML
     private HBox loginBtnArea;
-
+    private Installation installation;
     private ObservableList<DeviceLogin> allDevicesWithLogin;
 
     @Override
@@ -56,25 +55,29 @@ public class LoginTabController extends TableViewController implements Initializ
         tcID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 
         try {
-            Drawing selectedDrawing = getModelsHandler().getDrawingModel().getSelectedDrawing();
+            List<DeviceLogin> allDevicesFromDrawingWithLogin = new ArrayList<>();
 
-            if (selectedDrawing != null) {
-                List<DeviceLogin> allDevicesFromDrawingWithLogin = new ArrayList<>();
+            for(Device device : getModelsHandler().getDrawingModel().getDevicesFromInstallation(installation.getID())) {
+                if (device.getDeviceType().hasLoginDetails()) {
+                    DeviceLogin deviceLogin = getModelsHandler().getDrawingModel().getDeviceLogin(device);
 
-                for(Device device : selectedDrawing.getDevices()) {
-                    if (device.getDeviceType().hasLoginDetails()) {
-                        DeviceLogin deviceLogin = getModelsHandler().getDrawingModel().getDeviceLogin(device);
-                        allDevicesFromDrawingWithLogin.add(deviceLogin);
+                    if(deviceLogin == null) {
+                        deviceLogin = new DeviceLogin(device, "", "");
                     }
+                    allDevicesFromDrawingWithLogin.add(deviceLogin);
                 }
-
-                allDevicesWithLogin = FXCollections.observableArrayList(allDevicesFromDrawingWithLogin);
-                tableView.setItems(allDevicesWithLogin);
             }
+
+            allDevicesWithLogin = FXCollections.observableArrayList(allDevicesFromDrawingWithLogin);
+            tableView.setItems(allDevicesWithLogin);
         } catch (Exception e) {
             displayError(e);
         }
 
         tableView.setItems(allDevicesWithLogin);
+    }
+
+    public void setInstallation(Installation installation) {
+        this.installation = installation;
     }
 }

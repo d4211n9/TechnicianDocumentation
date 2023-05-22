@@ -1,6 +1,5 @@
 package dal.facades;
 
-import be.Drawing;
 import be.Installation;
 import be.Photo;
 import be.Project;
@@ -8,7 +7,6 @@ import be.SystemUser;
 import dal.dao.*;
 import dal.interfaces.*;
 import exceptions.DALException;
-import util.SymbolPaths;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -18,7 +16,6 @@ public class ProjectFacade {
     private ISystemUsersAssignedToProjectsDAO systemUsersAssignedToProjectsDAO;
     private IInstallationDAO installationDAO;
     private ISystemUserAssignedToInstallationDAO systemUsersAssignedToInstallationDAO;
-    private IDrawingDAO drawingDAO;
     private IPhotoDAO photoDAO;
 
     public ProjectFacade() throws Exception {
@@ -26,7 +23,6 @@ public class ProjectFacade {
         systemUsersAssignedToProjectsDAO = new SystemUsersAssignedToProjectsDAO();
         installationDAO = new InstallationDAO();
         systemUsersAssignedToInstallationDAO = new SystemUserAssignedToInstallationDAO();
-        drawingDAO = new DrawingDAO();
         photoDAO = new PhotoDAO();
     }
 
@@ -46,10 +42,6 @@ public class ProjectFacade {
         return photoDAO.updatePhoto(photo);
     }
 
-    public Project softDeleteProject(Project project) throws Exception {
-        return projectDAO.softDeleteProject(project);
-    }
-
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
         return systemUsersAssignedToProjectsDAO.getSystemUsersAssignedToProject(projectId);
     }
@@ -63,10 +55,6 @@ public class ProjectFacade {
     }
 
     public Installation createInstallation(Installation installation) throws Exception {
-        byte[] image = SymbolPaths.LOGO.getBytes();
-
-        Drawing drawing = drawingDAO.createDrawing(new Drawing(1, image));
-        installation.setDrawing(drawing);
         return installationDAO.createInstallation(installation);
     }
 
@@ -110,15 +98,7 @@ public class ProjectFacade {
         return photoDAO.getPhotoFromInstallation(installationID);
     }
 
-    /*
-    public List<Photo> getAllModifiedPhotos(Timestamp lastCheck) throws Exception {
-        return null;
-    }
-     */
-
     public void deletePhoto(Photo photo) throws Exception{
         photoDAO.deletePhoto(photo);
     }
-
-
 }

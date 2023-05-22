@@ -11,7 +11,6 @@ import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -69,13 +68,6 @@ public class InstallationInfoController extends BaseController implements Initia
         lblDescription.setText(installation.getDescription());
 
         loadUsers();
-
-        try {
-            //TODO OBS: den her driller på installationer uden tegning
-            getModelsHandler().getDrawingModel().setSelectedDrawing(installation.getID());
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     /**
@@ -144,14 +136,16 @@ public class InstallationInfoController extends BaseController implements Initia
     }
 
     public void handleDeviceTab() {
+        deviceTabController.setInstallation(installation);
         deviceTabController.loadTableView();
     }
 
     public void handleLoginTab() {
+        loginTabController.setInstallation(installation);
         loginTabController.loadTableView();
     }
 
     public void handleDrawingTab() {
-        backgroundController.loadStuff();
+        backgroundController.setInstallation(installation);
     }
 }

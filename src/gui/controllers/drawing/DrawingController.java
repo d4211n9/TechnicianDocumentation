@@ -2,10 +2,11 @@ package gui.controllers.drawing;
 
 import be.Device;
 import be.DeviceType;
+import be.Installation;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -27,48 +28,44 @@ import java.util.ResourceBundle;
 public class DrawingController extends BaseController implements Initializable {
 
 
-    public Button button;
-    public ScrollPane contentArea;
-    public Label lbl;
-    public VBox background;
-    public Pane pane;
-    public VBox objectInfo;
+    @FXML
+    private VBox background, objectInfo, sidebarDevice;
+    @FXML
+    private Button button;
+    @FXML
+    private ScrollPane contentArea;
+    @FXML
+    private Pane pane;
+    @FXML
+    private ImageView selectedElementImg;
 
     private DeviceController selectedDevice;
-
     private Node source;
-
-    public ImageView selectedElementImg;
-    public VBox sidebarDevice;
     private Line currentLine;
-    ArrayList<Device> devicesesOnDrawing;
+    ArrayList<Device> devicesOnDrawing;
+    private Installation installation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadDeviceTypes();
 
         try {
-            devicesesOnDrawing = new ArrayList<>();
+            devicesOnDrawing = new ArrayList<>();
         } catch (Exception e) {
             displayError(e);
         }
-
     }
 
-    public void loadStuff() {
+    public void setInstallation(Installation installation) {
+        this.installation = installation;
+
         try {
-            if(getModelsHandler().getDrawingModel().getSelectedDrawing() != null) {
-                for (Device device: getModelsHandler().getDrawingModel().getSelectedDrawing().getDevices()){
-                    try {
-                        loadDeviceInPane(device);
-                        devicesesOnDrawing.add(device);
-                    } catch (Exception e) {
-                        displayError(e);
-                    }
-                }
+            for(Device device : getModelsHandler().getDrawingModel().getDevicesFromInstallation(installation.getID())) {
+                loadDeviceInPane(device);
+                devicesOnDrawing.add(device);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            displayError(e);
         }
     }
 
@@ -90,8 +87,6 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
     public void loadDeviceInPane(Device device) throws Exception {
-
-
         FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
         DeviceController controller1 = loader1.getController();
         controller1.setContent(device);
@@ -122,14 +117,12 @@ public class DrawingController extends BaseController implements Initializable {
         pane.getChildren().add(deviceImg);
     }
 
-    
-
     private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {
         Node deviceElement = loader.getRoot();
 
         deviceElement.setOnMousePressed(event -> {
             Device d = new Device(deviceType, getIndex());
-            FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
+            FXMLLoader loader1 = loadView(ViewPaths.DEVICE_VIEW);
             DeviceController controller1 = loader1.getController();
             controller1.setContent(d);
 
@@ -156,19 +149,13 @@ public class DrawingController extends BaseController implements Initializable {
             pane.getChildren().add(selectedElementImg);
             try {
                 problem(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, deviceElement);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            DeviceCard controller = loader.getController();
-            try {
-                //getModelsHandler().getDrawingModel().addDeviceToDrawing(controller.getDevice()); //todo run line when drawing is not null
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            try {
+
+                devicesOnDrawing.add(d);
+                getModelsHandler().getDrawingModel().addDeviceToInstallation(d, installation.getID());
+
                 problem(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, selectedElementImg);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                displayError(e);
             }
         });
     }
@@ -240,23 +227,22 @@ public class DrawingController extends BaseController implements Initializable {
         JFXButton deleteBtn = createButton("delete");
         deleteBtn.setOnMouseClicked(event -> {
             pane.getChildren().remove(source);
-            devicesesOnDrawing.remove(controller.getDevice());
+            devicesOnDrawing.remove(controller.getDevice());
+            try {
+                save();
+            } catch (Exception e) {
+                displayError(e);
+            }
             objectInfo.getChildren().clear();
         });
         objectInfo.getChildren().add(deleteBtn);
     }
-
-
-
-
-
 
     public void handleAddDevice() {
         FXMLLoader loader = openStage(ViewPaths.CREATE_DEVICE, "Create Device");
         AddDeviceController addDeviceController = loader.getController();
         addDeviceController.setDrawingController(this);
     }
-
 
     public void handleAddLine() {
         pane.setOnMousePressed(e -> {
@@ -316,9 +302,18 @@ public class DrawingController extends BaseController implements Initializable {
         });
     }
 
-    public void save(ActionEvent actionEvent) throws Exception {
-        getModelsHandler().getDrawingModel().saveAllDevicesOnDrawing();
-        //todo create safe method that calls down the layer and sends devicesOnDrawing
+    public void save() throws Exception {
+        //delete all saved devices from the installation
+        getModelsHandler().getDrawingModel().removeDevicesFromInstallation(installation.getID());
+
+        //save all the devices from current drawing
+        for(Device device : devicesOnDrawing) {
+            getModelsHandler().getDrawingModel().addDeviceToInstallation(device, installation.getID());
+        }
+
+        //Clear the list and make sure it now reflects the changes from DB
+        devicesOnDrawing.clear();
+        devicesOnDrawing.addAll(getModelsHandler().getDrawingModel().getDevicesFromInstallation(installation.getID()));
     }
 
     public int index = 0;

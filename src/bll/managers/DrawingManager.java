@@ -3,7 +3,6 @@ package bll.managers;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
-import be.Drawing;
 import bll.interfaces.IDrawingManager;
 import dal.facades.DrawingFacade;
 
@@ -17,16 +16,6 @@ public class DrawingManager implements IDrawingManager {
     }
 
     @Override
-    public Drawing createDrawing(Drawing drawing) throws Exception {
-        return drawingFacade.createDrawing(drawing);
-    }
-
-    @Override
-    public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
-        return drawingFacade.getDrawingFromInstallationId(installationId);
-    }
-
-    @Override
     public List<DeviceType> getAllDeviceTypes() throws Exception {
         return drawingFacade.getAllDeviceTypes();
     }
@@ -34,16 +23,6 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
         return drawingFacade.createDeviceType(deviceTypeToCreate);
-    }
-
-    @Override
-    public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
-        return drawingFacade.createDevices(devicesToCreate, drawingId);
-    }
-
-    @Override
-    public void deleteDrawing(Drawing drawing) throws Exception {
-        drawingFacade.deleteDrawing(drawing);
     }
 
     @Override
@@ -59,5 +38,20 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public DeviceLogin updateDeviceLogin(DeviceLogin deviceLogin) throws Exception {
         return drawingFacade.updateDeviceLogin(deviceLogin);
+    }
+
+    @Override
+    public boolean addDeviceToInstallation(Device device, int installationID) throws Exception {
+        return drawingFacade.addDeviceToInstallation(device, installationID);
+    }
+
+    @Override
+    public List<Device> getDevicesFromInstallation(int installationID) throws Exception {
+        return drawingFacade.getDevicesFromInstallation(installationID);
+    }
+
+    @Override
+    public boolean removeDevicesFromInstallation(int installationID) throws Exception {
+        return drawingFacade.removeDevicesFromInstallation(installationID);
     }
 }

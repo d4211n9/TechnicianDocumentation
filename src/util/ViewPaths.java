@@ -19,9 +19,9 @@ public class ViewPaths {
     public static final String MY_PROJECTS = "/gui/views/projectViews/MyProject.fxml";
     public static final String PHOTO_CARD = "/gui/views/photoViews/PhotoCard.fxml";
     public static final String PHOTO_INFO = "/gui/views/photoViews/PhotoInfoView.fxml";
-    public static final String PHOTO_TAB = "/gui/views/installation/PhotoTab.fxml";
     public static final String CREATE_DEVICE = "/gui/views/drawing/AddDeviceView.fxml";
     public static final String DEVICE_CARD = "/gui/views/drawing/DeviceCard.fxml";
+    public static final String DEVICE_VIEW = "/gui/views/drawing/DeviceView.fxml";
 
 
     private ViewPaths() {}

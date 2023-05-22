@@ -20,7 +20,7 @@ public class InstallationDAO implements IInstallationDAO {
     @Override
     public Installation createInstallation(Installation installation) throws Exception {
         Installation newInstallation = null;
-        String sql = "INSERT INTO Installation (ProjectID, Name, Description, Is_Done, DrawingID) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Installation (ProjectID, Name, Description, Is_Done) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -29,7 +29,6 @@ public class InstallationDAO implements IInstallationDAO {
             statement.setString(2, installation.getName());
             statement.setString(3, installation.getDescription());
             statement.setInt(4, installation.getIsDoneInt());
-            statement.setInt(5, installation.getDrawing().getId());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -43,7 +42,7 @@ public class InstallationDAO implements IInstallationDAO {
                     isDone = true;
 
                 newInstallation = new Installation(ID, installation.getProjectID(), installation.getName(),
-                        installation.getDescription(), null, isDone);
+                        installation.getDescription(), isDone);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +76,7 @@ public class InstallationDAO implements IInstallationDAO {
                 if(isDoneInt == 1)
                     isDone = true;
 
-                Installation installation = new Installation(ID, projectID, name, description, null, isDone);
+                Installation installation = new Installation(ID, projectID, name, description, isDone);
 
                 allInstallations.add(installation);
             }

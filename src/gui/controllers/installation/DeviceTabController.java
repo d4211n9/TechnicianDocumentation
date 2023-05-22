@@ -1,11 +1,9 @@
 package gui.controllers.installation;
 
 import be.Device;
-import be.DeviceType;
-import be.Drawing;
+import be.Installation;
 import gui.controllers.TableViewController;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -24,7 +22,7 @@ public class DeviceTabController extends TableViewController implements Initiali
     @FXML
     private TableColumn<Device, Integer> tcID;
 
-    private ObservableList<Device> allDevicesFromDrawing;
+    private Installation installation;
 
 
     @Override
@@ -37,14 +35,14 @@ public class DeviceTabController extends TableViewController implements Initiali
         tcID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         try {
-            Drawing selectedDrawing = getModelsHandler().getDrawingModel().getSelectedDrawing();
-
-            if (selectedDrawing != null) {
-                allDevicesFromDrawing = FXCollections.observableArrayList(selectedDrawing.getDevices());
-                tableView.setItems(allDevicesFromDrawing);
-            }
+            tableView.setItems(FXCollections.observableArrayList(getModelsHandler().getDrawingModel()
+                    .getDevicesFromInstallation(installation.getID())));
         } catch (Exception e) {
             displayError(e);
         }
+    }
+
+    public void setInstallation(Installation installation) {
+        this.installation = installation;
     }
 }

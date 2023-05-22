@@ -3,7 +3,6 @@ package gui.models;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
-import be.Drawing;
 import bll.interfaces.IDrawingManager;
 import bll.managers.DrawingManager;
 import javafx.collections.FXCollections;
@@ -11,28 +10,24 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.input.DataFormat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DrawingModel {
     private IDrawingManager drawingManager;
-
     private ObservableList<DeviceType> allDeviceTypes;
-    private Drawing selectedDrawing;
-
+    private List<Device> devices;
     private DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
     public DrawingModel() throws Exception {
         drawingManager = new DrawingManager();
+        devices = new ArrayList<>();
 
         updateAllDeviceTypes();
     }
 
-    public Drawing createDrawing(Drawing drawing) throws Exception {
-        return drawingManager.createDrawing(drawing);
-    }
-
     public void addDeviceToDrawing(Device device){
-        selectedDrawing.getDevices().add(device);
+        devices.add(device);
     }
 
     public Task<Boolean> createDeviceType(DeviceType deviceTypeToCreate) {
@@ -71,33 +66,12 @@ public class DrawingModel {
         }
     }
 
-    public Drawing getSelectedDrawing() {
-        return selectedDrawing;
-    }
-
-    public void setSelectedDrawing(int installationId) throws Exception {
-        selectedDrawing = drawingManager.getDrawingFromInstallationId(installationId);
-    }
-
-    public void saveAllDevicesOnDrawing() throws Exception {
-        deleteDrawing(selectedDrawing);
-        System.out.println(selectedDrawing.getDevices().size());//todo
-        selectedDrawing = createDrawing(selectedDrawing);
-
-        //todo create a new drawing
-        drawingManager.createDevices(selectedDrawing.getDevices(), selectedDrawing.getId());
-    }
-
     public DataFormat getDataFormat() {
         return dataFormat;
     }
 
     public void setDataFormat(DataFormat dataFormat) {
         this.dataFormat = dataFormat;
-    }
-
-    public void deleteDrawing(Drawing drawing) throws Exception {
-        drawingManager.deleteDrawing(drawing);
     }
 
     //TODO Lav til tasks ?
@@ -111,5 +85,17 @@ public class DrawingModel {
 
     public DeviceLogin updateDeviceLogin(DeviceLogin deviceLogin) throws Exception {
         return drawingManager.updateDeviceLogin(deviceLogin);
+    }
+
+    public List<Device> getDevicesFromInstallation(int installationID) throws Exception {
+        return drawingManager.getDevicesFromInstallation(installationID);
+    }
+
+    public boolean addDeviceToInstallation(Device device, int installationID) throws Exception {
+        return drawingManager.addDeviceToInstallation(device, installationID);
+    }
+
+    public boolean removeDevicesFromInstallation(int installationID) throws Exception {
+        return drawingManager.removeDevicesFromInstallation(installationID);
     }
 }

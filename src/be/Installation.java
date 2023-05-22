@@ -9,26 +9,23 @@ public class Installation {
     private int ID, projectID, isDoneInt;
     private boolean isDone;
     private List<SystemUser> assignedSystemUsers;
-    private Drawing drawing;
     private Timestamp deleted;
 
 
-    public Installation(int projectID, String name, String description, Drawing drawing, boolean isDone) {
+    public Installation(int projectID, String name, String description, boolean isDone) {
         this.projectID = projectID;
         this.name = name;
         this.description = description;
-        this.drawing = drawing;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
         assignedSystemUsers = new ArrayList<>();
     }
 
-    public Installation(int ID, int projectID, String name, String description, Drawing drawing, boolean isDone) {
+    public Installation(int ID, int projectID, String name, String description, boolean isDone) {
         this.ID = ID;
         this.projectID = projectID;
         this.name = name;
         this.description = description;
-        this.drawing = drawing;
         this.isDone = isDone;
         isDoneInt = isDone ? 1 : 0;
         assignedSystemUsers = new ArrayList<>();
@@ -48,14 +45,6 @@ public class Installation {
 
     public String getDescription() {
         return description;
-    }
-
-    public Drawing getDrawing() {
-        return drawing;
-    }
-
-    public void setDrawing(Drawing drawing) {
-        this.drawing = drawing;
     }
 
     public boolean getIsDone() {

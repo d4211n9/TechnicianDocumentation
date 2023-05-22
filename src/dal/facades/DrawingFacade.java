@@ -3,44 +3,28 @@ package dal.facades;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
-import be.Drawing;
 import dal.dao.DeviceDAO;
 import dal.dao.DeviceLoginDAO;
+import dal.dao.DeviceOnInstallationDAO;
 import dal.dao.DeviceTypeDAO;
-import dal.dao.DrawingDAO;
 import dal.interfaces.IDeviceDAO;
 import dal.interfaces.IDeviceLoginDAO;
+import dal.interfaces.IDeviceOnInstallationDAO;
 import dal.interfaces.IDeviceTypeDAO;
-import dal.interfaces.IDrawingDAO;
 
 import java.util.List;
 
 public class DrawingFacade {
     private IDeviceTypeDAO deviceTypeDAO;
     private IDeviceDAO deviceDAO;
-    private IDrawingDAO drawingDAO;
     private IDeviceLoginDAO deviceLoginDAO;
+    private IDeviceOnInstallationDAO deviceOnInstallationDAO;
 
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
-        drawingDAO = new DrawingDAO();
         deviceDAO = new DeviceDAO();
         deviceLoginDAO = new DeviceLoginDAO();
-    }
-
-
-    public Drawing createDrawing(Drawing drawing) throws Exception {
-        return drawingDAO.createDrawing(drawing);
-    }
-
-    public Drawing getDrawingFromInstallationId(int installationId) throws Exception {
-        Drawing drawing = drawingDAO.getDrawingFromInstallationId(installationId);
-
-        if(drawing != null) {
-            drawing.getDevices().addAll(deviceDAO.getAllDevicesFromDrawingId(drawing.getId()));
-        }
-
-        return drawing;
+        deviceOnInstallationDAO = new DeviceOnInstallationDAO();
     }
 
     public List<DeviceType> getAllDeviceTypes() throws Exception {
@@ -49,14 +33,6 @@ public class DrawingFacade {
 
     public boolean createDeviceType(DeviceType deviceTypeToCreate) throws Exception {
         return deviceTypeDAO.createDeviceType(deviceTypeToCreate);
-    }
-
-    public List<Device> createDevices(List<Device> devicesToCreate, int drawingId) throws Exception {
-        return deviceDAO.createDevices(devicesToCreate, drawingId);
-    }
-
-    public void deleteDrawing(Drawing drawing) throws Exception {
-        drawingDAO.deleteDrawing(drawing);
     }
 
     public DeviceLogin createDeviceLogin(DeviceLogin deviceLogin) throws Exception {
@@ -69,5 +45,18 @@ public class DrawingFacade {
 
     public DeviceLogin updateDeviceLogin(DeviceLogin deviceLogin) throws Exception {
         return deviceLoginDAO.updateDeviceLogin(deviceLogin);
+    }
+
+    public boolean addDeviceToInstallation(Device device, int installationID) throws Exception {
+        Device newDevice = deviceDAO.createDevice(device);
+        return deviceOnInstallationDAO.addDeviceToInstallation(newDevice, installationID);
+    }
+
+    public List<Device> getDevicesFromInstallation(int installationID) throws Exception {
+        return deviceOnInstallationDAO.getDevicesFromInstallation(installationID);
+    }
+
+    public boolean removeDevicesFromInstallation(int installationID) throws Exception {
+        return deviceOnInstallationDAO.removeDevicesFromInstallation(installationID);
     }
 }
