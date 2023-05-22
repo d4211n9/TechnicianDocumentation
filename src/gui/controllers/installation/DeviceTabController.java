@@ -3,6 +3,7 @@ package gui.controllers.installation;
 import be.Device;
 import be.DeviceType;
 import be.Drawing;
+import be.Installation;
 import gui.controllers.TableViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,12 +27,16 @@ public class DeviceTabController extends TableViewController implements Initiali
 
     private ObservableList<Device> allDevicesFromDrawing;
 
+    private Installation installation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        try {
+            installation = getModelsHandler().getInstallationModel().getSelectedInstallation();
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
-
     public void loadTableView() {
         tcName.setCellValueFactory(new PropertyValueFactory<>("deviceTypeName"));
         tcID.setCellValueFactory(new PropertyValueFactory<>("id"));

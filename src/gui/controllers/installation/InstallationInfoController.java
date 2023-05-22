@@ -3,9 +3,7 @@ package gui.controllers.installation;
 import be.Enum.SystemRole;
 import be.Installation;
 import be.SystemUser;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
@@ -17,14 +15,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import util.ViewPaths;
 
 import java.awt.image.BufferedImage;
@@ -43,24 +35,14 @@ public class InstallationInfoController extends BaseController implements Initia
     @FXML
     private VBox installationInfo, vbUserBtnArea;
     @FXML
-    private HBox infoBtnArea, photosBtnArea, drawingBtnArea, deviceBtnArea, hbImage;
+    private HBox infoBtnArea;
     @FXML
-    private Label lblName, lblDescription, lblAssignedUsers;
+    private Label lblName, lblDescription;
     @FXML
     private JFXListView listUsers;
-    @FXML
-    private ImageView imgPhoto;
-    @FXML
-    private JFXButton assignUser, unAssignUser;
-    @FXML
-    private JFXToggleButton toggleUsers;
-
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
-    private final List<Image> images = new ArrayList<>();
-    private int currentImageIndex = 0;
     private ObservableList<SystemUser> obsAssignedUsers = null;
-    private ObservableList<SystemUser> obsUnAssignedUsers = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,7 +60,6 @@ public class InstallationInfoController extends BaseController implements Initia
             throw new RuntimeException(e);
         }
     }
-
 
     public void setContent(Installation installation) {
         this.installation = installation;
@@ -109,8 +90,6 @@ public class InstallationInfoController extends BaseController implements Initia
         buttonAccessLevel = new NodeAccessLevel();
 
         addEditBtn();
-        addAssignUserBtn();
-        addUnAssignUserBtn();
     }
 
     private void addEditBtn() {
@@ -128,91 +107,15 @@ public class InstallationInfoController extends BaseController implements Initia
         });
     }
 
-    private void addAssignUserBtn() {
-        assignUser = createButton("➕👤 Add");
-        buttonAccessLevel.addNodeAccessLevel(
-                assignUser,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
-        addAssignedButton(assignUser);
-        assignUser.setDisable(true);
-
-        assignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-
-            assignUserToInstallation(selectedUser);
-        });
-    }
-
-    private void assignUserToInstallation(SystemUser selectedUser) {
-        try {
-            Task<Boolean> assignUserToInstallationTask = getModelsHandler()
-                    .getInstallationModel()
-                    .assignSystemUserToInstallation(installation.getID(), selectedUser.getEmail());
-
-            assignUserToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                if(newValue) {
-                    obsAssignedUsers.add(selectedUser);
-                    obsUnAssignedUsers.remove(selectedUser);
-                } else {
-                    displayError(new Throwable("Failed to add the user to the installation"));
-                }
-            });
-
-            assignUserToInstallationTask.setOnFailed(failedEvent -> displayError(assignUserToInstallationTask.getException()));
-
-            TaskExecutor.executeTask(assignUserToInstallationTask);
-        } catch (Exception e) {
-            displayError(e);
-        }
-    }
-
-    private void addUnAssignUserBtn() {
-        unAssignUser = createButton("➖👤 Remove");
-        buttonAccessLevel.addNodeAccessLevel(
-                unAssignUser,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
-        addAssignedButton(unAssignUser);
-        unAssignUser.setDisable(true);
-
-        unAssignUser.setOnAction(event -> {
-            SystemUser selectedUser = (SystemUser) listUsers.getSelectionModel().getSelectedItem();
-
-            unAssignUser(selectedUser);
-        });
-    }
-
-    private void unAssignUser(SystemUser selectedUser) {
-        try {
-            Task<Boolean> deleteUserAssignedToInstallationTask = getModelsHandler()
-                    .getInstallationModel()
-                    .deleteSystemUserAssignedToInstallation(installation.getID(), selectedUser.getEmail());
-
-            deleteUserAssignedToInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                if(newValue) {
-                    obsAssignedUsers.remove(selectedUser);
-                    obsUnAssignedUsers.add(selectedUser);
-                } else {
-                    displayError(new Throwable("Failed to remove the user from the installation"));
-                }
-            });
-
-            deleteUserAssignedToInstallationTask.setOnFailed(failedEvent -> displayError(deleteUserAssignedToInstallationTask.getException()));
-
-            TaskExecutor.executeTask(deleteUserAssignedToInstallationTask);
-        } catch (Exception e) {
-            displayError(e);
-        }
-    }
-
     private void loadUsers() {
         loadAssignedUsers();
-        loadUnAssignedUsers();
     }
 
     private void loadAssignedUsers() {
         try {
-            Task<List<SystemUser>> assignedUsersTask = getModelsHandler().getInstallationModel().
-                    getSystemUsersAssignedToInstallation(installation.getID());
+            Task<List<SystemUser>> assignedUsersTask = getModelsHandler()
+                    .getProjectModel()
+                    .getSystemUsersAssignedToProject(installation.getProjectID());
 
             assignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
                 List<SystemUser> assignedUsers = newValue;
@@ -230,71 +133,8 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
-    private void loadUnAssignedUsers() {
-        try {
-            Task<List<SystemUser>> unAssignedUsersTask = getModelsHandler().getInstallationModel().
-                    getSystemUsersNotAssignedToInstallation(installation.getID());
-
-            unAssignedUsersTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                List<SystemUser> unAssignedUsers = newValue;
-                obsUnAssignedUsers = FXCollections.observableList(unAssignedUsers);
-            });
-
-            unAssignedUsersTask.setOnFailed(event -> displayError(unAssignedUsersTask.getException()));
-
-            TaskExecutor.executeTask(unAssignedUsersTask);
-        }
-        catch (Exception e) {
-            displayError(e);
-        }
-    }
-
-    private void userListener() {
-        listUsers.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
-            //If a user is selected from the assigned users list we enable the remove button
-            if(n != null && toggleUsers.isSelected()) {
-                unAssignUser.setDisable(false);
-            }
-            //If a user is selected from the unassigned users list we enable the add button
-            else if (n != null && !toggleUsers.isSelected()) {
-                assignUser.setDisable(false);
-            }
-            //If no user is selected we disable both buttons
-            else {
-                assignUser.setDisable(true);
-                unAssignUser.setDisable(true);
-            }
-        });
-    }
-
-    /**
-     * Switches between showing list of assigned and unassigned users
-     */
-    public void handleToggleUsers() {
-        listUsers.getSelectionModel().select(null); //De-select user to avoid "hanging" selection
-        if(toggleUsers.isSelected()) {
-            listUsers.setItems(obsAssignedUsers);
-            lblAssignedUsers.setText("Users Assigned");
-        } else {
-            listUsers.setItems(obsUnAssignedUsers);
-            lblAssignedUsers.setText("Users Not Assigned");
-        }
-    }
-
     private void addInfoButton(Button button) {
         infoBtnArea.getChildren().add(button);
-    }
-    private void addAssignedButton(Button button) {
-        vbUserBtnArea.getChildren().add(button);
-    }
-    private void addPhotosButton(Button button) {
-        photosBtnArea.getChildren().add(button);
-    }
-    private void addDrawingButton(Button button) {
-        drawingBtnArea.getChildren().add(button);
-    }
-    private void addDeviceButton(Button button) {
-        deviceBtnArea.getChildren().add(button);
     }
 
     public void handleBack() {

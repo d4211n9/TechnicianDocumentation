@@ -2,6 +2,7 @@ package dal.facades;
 
 import be.Drawing;
 import be.Installation;
+import be.Photo;
 import be.Project;
 import be.SystemUser;
 import dal.dao.*;
@@ -18,6 +19,7 @@ public class ProjectFacade {
     private IInstallationDAO installationDAO;
     private ISystemUserAssignedToInstallationDAO systemUsersAssignedToInstallationDAO;
     private IDrawingDAO drawingDAO;
+    private IPhotoDAO photoDAO;
 
     public ProjectFacade() throws Exception {
         projectDAO = new ProjectDAO();
@@ -25,6 +27,7 @@ public class ProjectFacade {
         installationDAO = new InstallationDAO();
         systemUsersAssignedToInstallationDAO = new SystemUserAssignedToInstallationDAO();
         drawingDAO = new DrawingDAO();
+        photoDAO = new PhotoDAO();
     }
 
     public Project createProject(Project project) throws Exception {
@@ -37,6 +40,10 @@ public class ProjectFacade {
 
     public Project updateProject(Project project) throws Exception {
         return projectDAO.updateProject(project);
+    }
+
+    public Photo updatePhoto(Photo photo) throws Exception {
+        return photoDAO.updatePhoto(photo);
     }
 
     public Project softDeleteProject(Project project) throws Exception {
@@ -95,4 +102,23 @@ public class ProjectFacade {
     public List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException{
         return projectDAO.getAllProjectsAssignedToUser(systemUserID);
     }
+
+    public Photo uploadPhoto(Photo photo) throws Exception {
+        return photoDAO.uploadPhoto(photo);
+    }
+    public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
+        return photoDAO.getPhotoFromInstallation(installationID);
+    }
+
+    /*
+    public List<Photo> getAllModifiedPhotos(Timestamp lastCheck) throws Exception {
+        return null;
+    }
+     */
+
+    public void deletePhoto(Photo photo) throws Exception{
+        photoDAO.deletePhoto(photo);
+    }
+
+
 }

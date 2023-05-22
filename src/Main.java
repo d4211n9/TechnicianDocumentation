@@ -11,14 +11,14 @@ import util.SymbolPaths;
 import util.ViewPaths;
 
 public class Main extends Application {
-    public static void main(String[] args) throws Exception {Application.launch();
+    public static void main(String[] args) throws Exception {
+        Application.launch();
 
-        //byte[] image = SymbolPaths.LOGO.getBytes();
-        //Drawing drawing = new Drawing(5, image);
-        //DrawingDAO drawingDAO = new DrawingDAO();
-        //DrawingModel drawingModel = new DrawingModel();
-        //drawingModel.createDrawing(drawing);
-
+        //Photo photo = new Photo(16,1, new Image(SymbolPaths.LOGO), "ello");
+        //PhotoDAO photoDAP = new PhotoDAO();
+        //photoDAP.updatePhoto(photo);
+        //photoDAP.deletePhoto(photo);
+        //photoDAP.getPhotoFromInstallation(photo.getInstallationID());
     }
 
     @Override

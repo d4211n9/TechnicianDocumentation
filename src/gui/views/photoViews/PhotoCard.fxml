@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="photoCard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="247.0" prefWidth="260.0" stylesheets="@../../stylesheets/PhotoStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.photo.PhotoCardController">
+   <children>
+      <ImageView fx:id="imgPhoto" fitHeight="164.0" fitWidth="216.0" pickOnBounds="true" preserveRatio="true">
+         <VBox.margin>
+            <Insets left="20.0" top="10.0" />
+         </VBox.margin>
+      </ImageView>
+      <Label fx:id="lblPhotoDescription" text="Photo description">
+         <VBox.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+   </children>
+</VBox>

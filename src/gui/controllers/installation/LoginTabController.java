@@ -3,6 +3,7 @@ package gui.controllers.installation;
 import be.Device;
 import be.DeviceLogin;
 import be.Drawing;
+import be.Installation;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import javafx.collections.FXCollections;
@@ -32,8 +33,15 @@ public class LoginTabController extends TableViewController implements Initializ
 
     private ObservableList<DeviceLogin> allDevicesWithLogin;
 
+    private Installation installation;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            installation = getModelsHandler().getInstallationModel().getSelectedInstallation();
+        } catch (Exception e) {
+            displayError(e);
+        }
         initializeButtonAccessLevels();
         loginBtnArea.getChildren().add(addButtons());
     }
