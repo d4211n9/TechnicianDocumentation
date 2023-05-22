@@ -90,10 +90,6 @@ public class MainController extends BaseController implements Initializable {
                 loadButton("📁 My Projects", ViewPaths.MY_PROJECTS),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
 
-        //todo test delete after
-        buttonAccessLevel.addNodeAccessLevel(
-                loadButton("💰 draw", "/gui/views/drawing/DrawingView.fxml"),
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson, SystemRole.Technician));
     }
 
     private Button loadButton(String text, String fxmlPath) {
