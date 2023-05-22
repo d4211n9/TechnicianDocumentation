@@ -15,8 +15,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import util.ViewPaths;
 
 import java.awt.image.BufferedImage;
@@ -47,7 +53,6 @@ public class InstallationInfoController extends BaseController implements Initia
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
-        userListener();
     }
 
     private void installationBackgroundUpdate() {
@@ -141,36 +146,6 @@ public class InstallationInfoController extends BaseController implements Initia
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
     }
 
-    private static Image convertToFxImage(BufferedImage image) {
-        WritableImage wr = null;
-        if (image != null) {
-            wr = new WritableImage(image.getWidth(), image.getHeight());
-            PixelWriter pw = wr.getPixelWriter();
-            for (int x = 0; x < image.getWidth(); x++) {
-                for (int y = 0; y < image.getHeight(); y++) {
-                    pw.setArgb(x, y, image.getRGB(x, y));
-                }
-            }
-        }
-
-        return new ImageView(wr).getImage();
-    }
-
-    public void handleBtnLoadAction() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select image files");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images",
-                "*.png", "*.jpg", "*.gif", "*.tif", "*.bmp"));
-        List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
-
-        if (files != null && !files.isEmpty()) {
-            files.forEach((File f) -> images.add(new Image(f.toURI().toString())));
-            displayImage();
-
-            updateInstallation();
-        }
-    }
-
     private void updateInstallation() {
         try {
             Task<Installation> updateInstallationTask = getModelsHandler()
@@ -182,26 +157,6 @@ public class InstallationInfoController extends BaseController implements Initia
             TaskExecutor.executeTask(updateInstallationTask);
         } catch (Exception e) {
             displayError(e);
-        }
-    }
-
-    public void handleBtnPreviousAction() {
-        if (!images.isEmpty()) {
-            currentImageIndex = (currentImageIndex - 1 + images.size()) % images.size();
-            displayImage();
-        }
-    }
-
-    public void handleBtnNextAction() {
-        if (!images.isEmpty()) {
-            currentImageIndex = (currentImageIndex + 1) % images.size();
-            displayImage();
-        }
-    }
-
-    private void displayImage() {
-        if (!images.isEmpty()) {
-            imgPhoto.setImage(images.get(currentImageIndex));
         }
     }
 
