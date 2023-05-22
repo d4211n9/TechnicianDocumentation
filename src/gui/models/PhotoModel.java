@@ -3,9 +3,9 @@ package gui.models;
 import be.Photo;
 import bll.interfaces.IPhotoManager;
 import bll.managers.PhotoManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-
-import java.util.List;
 
 public class PhotoModel {
 
@@ -20,8 +20,20 @@ public class PhotoModel {
         return photoManager.uploadPhoto(photo);
     }
 
-    public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
-        return photoManager.getPhotoFromInstallation(installationID);
+    public Task<ObservableList<Photo>> getPhotoFromInstallation(int installationID) {
+        Task<ObservableList<Photo>> allPhotosTask = new Task<ObservableList<Photo>>() {
+            @Override
+            protected ObservableList<Photo> call() throws Exception {
+                ObservableList<Photo> allPhotos = FXCollections.observableList
+                        (photoManager.getPhotoFromInstallation(installationID));
+
+                updateValue(allPhotos);
+
+                return allPhotos;
+            }
+        };
+
+        return allPhotosTask;
     }
 
     public Task<Boolean> updatePhoto(Photo updatedPhoto) {

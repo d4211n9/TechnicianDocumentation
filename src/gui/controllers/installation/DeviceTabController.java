@@ -3,7 +3,10 @@ package gui.controllers.installation;
 import be.Device;
 import be.Installation;
 import gui.controllers.TableViewController;
+import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -35,8 +38,18 @@ public class DeviceTabController extends TableViewController implements Initiali
         tcID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         try {
-            tableView.setItems(FXCollections.observableArrayList(getModelsHandler().getDrawingModel()
-                    .getDevicesFromInstallation(installation.getID())));
+            Task<ObservableList<Device>> allDevicesTask = getModelsHandler()
+                    .getDrawingModel()
+                    .getDevicesFromInstallation(installation.getID());
+
+            allDevicesTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                tableView.setItems(FXCollections.observableArrayList(newValue));
+            });
+
+            allDevicesTask.setOnFailed(event -> displayError(allDevicesTask.getException()));
+
+            TaskExecutor.executeTask(allDevicesTask);
+
         } catch (Exception e) {
             displayError(e);
         }

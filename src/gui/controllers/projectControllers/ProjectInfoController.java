@@ -28,10 +28,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import util.ViewPaths;
 
 import java.net.URL;
@@ -206,7 +202,7 @@ public class ProjectInfoController extends BaseController implements Initializab
                     try {
                         showInstallation(i);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        displayError(e);
                     }
                 }
             });
@@ -220,7 +216,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         }
     }
 
-    private void showInstallation(Installation i) throws Exception {
+    private void showInstallation(Installation i) {
         FXMLLoader cardLoader = loadView(ViewPaths.INSTALLATION_CARD);
         Pane installationCard = cardLoader.getRoot();
         InstallationCardController cardController = cardLoader.getController();

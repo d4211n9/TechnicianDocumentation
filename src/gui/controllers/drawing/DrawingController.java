@@ -5,6 +5,9 @@ import be.DeviceType;
 import be.Installation;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -62,10 +65,28 @@ public class DrawingController extends BaseController implements Initializable {
         try {
             devicesOnDrawing.clear();
             pane.getChildren().clear();
-            for(Device device : getModelsHandler().getDrawingModel().getDevicesFromInstallation(installation.getID())) {
-                loadDeviceInPane(device);
-                devicesOnDrawing.add(device);
-            }
+
+            Task<ObservableList<Device>> allDevicesTask = getModelsHandler()
+                    .getDrawingModel()
+                    .getDevicesFromInstallation(installation.getID());
+
+            allDevicesTask.valueProperty().addListener((observable, oldValue, newValue) ->  {
+                ObservableList<Device> allDevices = newValue;
+
+                for(Device device : allDevices) {
+                    devicesOnDrawing.add(device);
+                    try {
+                        loadDeviceInPane(device);
+                    } catch (Exception e) {
+                        displayError(e);
+                    }
+                }
+            });
+
+            allDevicesTask.setOnFailed(event -> allDevicesTask.getException());
+
+            TaskExecutor.executeTask(allDevicesTask);
+
         } catch (Exception e) {
             displayError(e);
         }
@@ -315,7 +336,18 @@ public class DrawingController extends BaseController implements Initializable {
 
         //Clear the list and make sure it now reflects the changes from DB
         devicesOnDrawing.clear();
-        devicesOnDrawing.addAll(getModelsHandler().getDrawingModel().getDevicesFromInstallation(installation.getID()));
+
+        Task<ObservableList<Device>> allDevicesTask = getModelsHandler()
+                .getDrawingModel()
+                .getDevicesFromInstallation(installation.getID());
+
+        allDevicesTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+            devicesOnDrawing.addAll(newValue);
+        });
+
+        allDevicesTask.setOnFailed(event -> displayError(allDevicesTask.getException()));
+
+        TaskExecutor.executeTask(allDevicesTask);
     }
 
     public int index = 0;

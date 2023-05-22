@@ -87,8 +87,20 @@ public class DrawingModel {
         return drawingManager.updateDeviceLogin(deviceLogin);
     }
 
-    public List<Device> getDevicesFromInstallation(int installationID) throws Exception {
-        return drawingManager.getDevicesFromInstallation(installationID);
+    public Task<ObservableList<Device>> getDevicesFromInstallation(int installationID) {
+        Task<ObservableList<Device>> allDevicesTask = new Task<ObservableList<Device>>() {
+            @Override
+            protected ObservableList<Device> call() throws Exception {
+                ObservableList<Device> allDevices = FXCollections.observableList
+                        (drawingManager.getDevicesFromInstallation(installationID));
+
+                updateValue(allDevices);
+
+                return allDevices;
+            }
+        };
+
+        return allDevicesTask;
     }
 
     public boolean addDeviceToInstallation(Device device, int installationID) throws Exception {
