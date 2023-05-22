@@ -1,17 +1,13 @@
 package dal.facades;
 
+import be.Drawing;
 import be.Installation;
 import be.Project;
 import be.SystemUser;
-import dal.dao.InstallationDAO;
-import dal.dao.ProjectDAO;
-import dal.dao.SystemUserAssignedToInstallationDAO;
-import dal.dao.SystemUsersAssignedToProjectsDAO;
-import dal.interfaces.IInstallationDAO;
-import dal.interfaces.IProjectDAO;
-import dal.interfaces.ISystemUserAssignedToInstallationDAO;
-import dal.interfaces.ISystemUsersAssignedToProjectsDAO;
+import dal.dao.*;
+import dal.interfaces.*;
 import exceptions.DALException;
+import util.SymbolPaths;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -21,12 +17,14 @@ public class ProjectFacade {
     private ISystemUsersAssignedToProjectsDAO systemUsersAssignedToProjectsDAO;
     private IInstallationDAO installationDAO;
     private ISystemUserAssignedToInstallationDAO systemUsersAssignedToInstallationDAO;
+    private IDrawingDAO drawingDAO;
 
     public ProjectFacade() throws Exception {
         projectDAO = new ProjectDAO();
         systemUsersAssignedToProjectsDAO = new SystemUsersAssignedToProjectsDAO();
         installationDAO = new InstallationDAO();
         systemUsersAssignedToInstallationDAO = new SystemUserAssignedToInstallationDAO();
+        drawingDAO = new DrawingDAO();
     }
 
     public Project createProject(Project project) throws Exception {
@@ -58,6 +56,10 @@ public class ProjectFacade {
     }
 
     public Installation createInstallation(Installation installation) throws Exception {
+        byte[] image = SymbolPaths.LOGO.getBytes();
+
+        Drawing drawing = drawingDAO.createDrawing(new Drawing(1, image));
+        installation.setDrawing(drawing);
         return installationDAO.createInstallation(installation);
     }
 
