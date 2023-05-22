@@ -30,7 +30,7 @@ public class CreateClientController extends BaseController {
     Client selectedClient;
 
     public void handleConfirm() {
-        if(isTextFieldInfoValid()){
+        if(true){ //isTextFieldInfoValid()
 
             Client client = bindClientInfo();
 

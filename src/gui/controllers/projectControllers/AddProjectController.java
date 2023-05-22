@@ -28,6 +28,8 @@ import java.util.ResourceBundle;
 
 public class AddProjectController extends BaseController implements Initializable {
     @FXML
+    private VBox addProjectView;
+    @FXML
     private Label lblCreateProject;
     @FXML
     private HBox buttonArea;
@@ -163,6 +165,8 @@ public class AddProjectController extends BaseController implements Initializabl
     }
 
     public void handleAddClient() {
+        getMainController().saveLastView(addProjectView);
+        getMainController().mainBorderPane.setCenter(loadView(ViewPaths.CREATE_CLIENTS_VIEW).getRoot());
         //TODO Lav quick create eller åben Create Client view og gå tilbage hertil bagefter
     }
 
