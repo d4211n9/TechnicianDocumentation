@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <VBox fx:id="projectsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/CreateUserStylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.clientController.CreateClientController">
     <children>
         <HBox>
@@ -57,10 +50,30 @@
                             </rowConstraints>
                             <children>
                                 <Label prefHeight="18.0" prefWidth="70.0" text="Name" GridPane.columnIndex="1" />
-                                <Label prefHeight="18.0" prefWidth="96.0" text="Email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <TextField fx:id="txtfName" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" />
-                        <Label layoutX="173.0" layoutY="89.0" prefHeight="18.0" prefWidth="96.0" text="Phone" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="3">
+                           <children>
+                              <Label text="Type" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cbType" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </HBox>
+                                <Label prefHeight="18.0" prefWidth="96.0" text="Email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtfEmail" layoutX="307.0" layoutY="15.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label layoutX="173.0" layoutY="89.0" prefHeight="18.0" prefWidth="96.0" text="Phone" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField fx:id="txtfPhone" layoutX="307.0" layoutY="15.0" prefHeight="26.0" prefWidth="220.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                             </children>
                             <HBox.margin>

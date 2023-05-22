@@ -1,30 +1,32 @@
 package be;
 
+import be.Enum.ClientType;
 import util.Searchable;
 
 import java.sql.Timestamp;
 
 public class Client implements Searchable {
-    private String name, email, phone, type;
+    private String name, email, phone;
     private int ID;
     private Timestamp deleted;
     private Address clientAddress;
+    private ClientType clientType;
 
-    public Client(String name, Address clientAddress, String email, String phone, String type) {
+    public Client(String name, Address clientAddress, String email, String phone, ClientType clientType) {
         this.name = name;
         this.clientAddress = clientAddress;
         this.email = email;
         this.phone = phone;
-        this.type = type;
+        this.clientType = clientType;
     }
 
-    public Client(int ID, String name, Address clientAddress, String email, String phone, String type) {
+    public Client(int ID, String name, Address clientAddress, String email, String phone, ClientType clientType) {
         this.ID = ID;
         this.name = name;
         this.clientAddress = clientAddress;
         this.email = email;
         this.phone = phone;
-        this.type = type;
+        this.clientType = clientType;
     }
 
     public int getID() {
@@ -59,7 +61,7 @@ public class Client implements Searchable {
     }
 
     public String getType() {
-        return type;
+        return clientType.getType();
     }
 
     public Timestamp getDeleted() {
@@ -70,14 +72,18 @@ public class Client implements Searchable {
         this.deleted = deleted;
     }
 
+    public ClientType getClientType() {
+        return clientType;
+    }
+
     @Override
     public String toString() {
-        return "#" + ID + ": " + name + " (" + type + ")";
+        return "#" + ID + ": " + name + " (" + clientType.getType() + ")";
     }
 
     @Override
     public Object search(String query) {
-        String searchableFields = ("#" + ID + ": " + name + "(" + type + ") " + clientAddress).toLowerCase();
+        String searchableFields = ("#" + ID + ": " + name + "(" + clientType.getType() + ") " + clientAddress).toLowerCase();
         String lowerCaseQuery = query.toLowerCase();
 
         if (searchableFields.contains(lowerCaseQuery)) return this;
