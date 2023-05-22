@@ -8,12 +8,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public class InstallationModel implements Runnable {
     private IInstallationManager installationManager;
     private ObservableList<Installation> allInstallations;
+    private Installation selectedInstallation;
 
     public InstallationModel() throws Exception {
         installationManager = new InstallationManager();
@@ -134,6 +134,14 @@ public class InstallationModel implements Runnable {
         };
 
         return deleteUserAssignedToInstallationTask;
+    }
+
+    public Installation getSelectedInstallation() {
+        return selectedInstallation;
+    }
+
+    public void setSelectedInstallation(Installation selectedInstallation) {
+        this.selectedInstallation = selectedInstallation;
     }
 
     @Override

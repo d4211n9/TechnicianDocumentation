@@ -6,8 +6,17 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="installationInfo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/installation/InstallationInfo.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.installation.InstallationInfoController">
+<VBox fx:id="installationInfo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="840.0" stylesheets="@../../stylesheets/installation/InstallationInfo.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.installation.InstallationInfoController">
    <children>
       <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="150.0" prefHeight="55.0" prefWidth="840.0" VBox.vgrow="ALWAYS">
          <children>
@@ -73,11 +82,7 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Label>
-                                          <HBox alignment="CENTER">
-                                             <children>
-                                                <JFXToggleButton fx:id="toggleUsers" onAction="#handleToggleUsers" prefHeight="58.0" prefWidth="0.0" selected="true" text=" " toggleColor="#657e9e" toggleLineColor="#90aed6" />
-                                             </children>
-                                          </HBox>
+                                          <HBox alignment="CENTER" />
                                           <JFXListView fx:id="listUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="250.0" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>
@@ -93,49 +98,11 @@
                      </children>
                   </VBox>
                </content></Tab>
-          <Tab text="📸 Photo">
+            <Tab text="📸 Photo">
                <content>
-                  <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="150.0" minWidth="150.0" prefHeight="0.0">
-                     <children>
-                        <HBox fx:id="hbImage" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                           <children>
-                              <ImageView fx:id="imgPhoto" fitHeight="350.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
-                           </children>
-                        </HBox>
-                        <HBox fx:id="photosBtnArea" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="60.0" prefWidth="820.0" VBox.vgrow="NEVER">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <children>
-                              <Button id="btnLoad" fx:id="btnLoad" mnemonicParsing="false" onAction="#handleBtnLoadAction" prefHeight="60.0" prefWidth="150.0" text="Upload">
-                                 <opaqueInsets>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </opaqueInsets>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button id="btnPrevious" fx:id="btnPrevious" mnemonicParsing="false" onAction="#handleBtnPreviousAction" prefHeight="60.0" prefWidth="150.0" text="Previous">
-                                 <opaqueInsets>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </opaqueInsets>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button id="btnNext" fx:id="btnNext" mnemonicParsing="false" onAction="#handleBtnNextAction" prefHeight="60.0" prefWidth="150.0" text="Next">
-                                 <HBox.margin>
-                                    <Insets left="10.0" right="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
-               </content></Tab>
+                  <fx:include fx:id="photoTab" source="PhotoTab.fxml" />
+               </content>
+            </Tab>
             <Tab text="📝 Drawing">
                <content>
                   <fx:include fx:id="background" source="/gui/views/drawing/DrawingView.fxml" />

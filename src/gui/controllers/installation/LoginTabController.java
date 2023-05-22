@@ -3,6 +3,7 @@ package gui.controllers.installation;
 import be.Device;
 import be.DeviceLogin;
 import be.Drawing;
+import be.Installation;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import javafx.collections.FXCollections;

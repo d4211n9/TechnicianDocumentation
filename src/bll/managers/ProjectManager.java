@@ -72,11 +72,6 @@ public class ProjectManager implements IProjectManager {
     }
 
     @Override
-    public Project softDeleteProject(Project project) throws Exception {
-        return projectFacade.softDeleteProject(project);
-    }
-
-    @Override
     public List search(List allProjects, String query) {
         return search.searchForString(allProjects, query);
     }
