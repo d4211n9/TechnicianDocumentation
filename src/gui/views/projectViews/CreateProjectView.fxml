@@ -78,7 +78,7 @@
                            </font>
                         </Label>
                         <JFXTextArea fx:id="jfxTxtADescription" focusColor="#90aed6" prefWidth="254.0" unFocusColor="#d9d9d9" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
-                        <Label prefHeight="18.0" prefWidth="96.0" text="Client" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <Label prefHeight="18.0" prefWidth="96.0" text="Customer" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <font>
                               <Font size="16.0" />
                            </font></Label>
@@ -97,12 +97,12 @@
                                     <Insets left="10.0" right="25.0" top="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddClient" prefHeight="60.0" prefWidth="150.0" text="➕💰 Add Client">
+                              <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddClient" prefHeight="60.0" prefWidth="150.0" text="➕💰 Add Customer">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font size="14.0" />
                                  </font>
                               </JFXButton>
                            </children>
