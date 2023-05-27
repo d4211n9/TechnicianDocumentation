@@ -4,33 +4,28 @@ import be.Client;
 import be.Installation;
 import be.Project;
 import bll.managers.ProjectManager;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.PdfArray;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfObject;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.colorspace.PdfColorSpace;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
-import com.itextpdf.layout.borders.DashedBorder;
 import com.itextpdf.layout.borders.SolidBorder;
-import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.properties.HorizontalAlignment;
-import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.UnitValue;
-import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.layout.splitting.BreakAllSplitCharacters;
 import exceptions.BLLException;
 import util.SymbolPaths;
-import com.itextpdf.io.font.constants.StandardFonts;
 
-import java.io.IOException;
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 
@@ -57,6 +52,8 @@ public class PDFGenerator {
             addClientInfo(document, project.getClient());
             addProjectInfo(document, project);
             addInstallationInfo(document, installations);
+
+            Desktop.getDesktop().open(new File(destination + "\\" + fileName));
         }
         catch (Exception e) {
             BLLException bllException = new BLLException("Failed to generate project PDF", e);
