@@ -115,7 +115,7 @@ public class ProjectInfoController extends BaseController implements Initializab
             File destination = new DirectoryChooser().showDialog(projectsView.getParent().getScene().getWindow());
             if (destination != null) {
                 try {
-                    PDFGenerator.generateProjectPdf(project, destination.getAbsolutePath());
+                    PDFGenerator.generateProjectPdf(project, installations, destination.getAbsolutePath());
                 } catch (Exception e) {
                     displayError(e);
                 }

@@ -32,11 +32,12 @@ import com.itextpdf.io.font.constants.StandardFonts;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 
 public class PDFGenerator {
 
-    public static void generateProjectPdf(Project project, String destination) throws Exception {
+    public static void generateProjectPdf(Project project, List<Installation> installations, String destination) throws Exception {
         PdfWriter pdfWriter = null;
         PdfDocument pdfDocument = null;
         Document document = null;
@@ -55,6 +56,7 @@ public class PDFGenerator {
             addLogo(document);
             addClientInfo(document, project.getClient());
             addProjectInfo(document, project);
+            addInstallationInfo(document, installations);
         }
         catch (Exception e) {
             BLLException bllException = new BLLException("Failed to generate project PDF", e);
@@ -68,6 +70,27 @@ public class PDFGenerator {
 
             if (pdfWriter != null) pdfWriter.close();
         }
+    }
+
+    private static void addInstallationInfo(Document document, List<Installation> installations) throws Exception {
+        Paragraph installationInfo = new Paragraph("Installation Info").setFont(getFontBold());
+        installationInfo.setMarginTop(getMargin());
+        document.add(installationInfo);
+
+        Table installationTable = new Table(UnitValue.createPercentArray(new float[] {5f, 5f})).useAllAvailableWidth();
+        installationTable.setBorder(new SolidBorder(new DeviceRgb(0f, 0f, 0f), 1f));
+
+        for(Installation installation : installations) {
+            Paragraph installationName = getParagraph("Name: ", getFontBold());
+            installationName.add(getParagraph(installation.getName(), getFont()));
+
+            Paragraph projectDescription = getParagraph("Description: ", getFontBold());
+            projectDescription.add(getParagraph(installation.getDescription(), getFont()));
+
+            installationTable.addCell(getNoBorderedTableCell(installationName));
+            installationTable.addCell(getNoBorderedTableCell(projectDescription));
+        }
+        document.add(installationTable);
     }
 
     private static void addProjectInfo(Document document, Project project) throws Exception {
@@ -160,7 +183,7 @@ public class PDFGenerator {
         try {
             ProjectManager projectManager = new ProjectManager();
 
-            generateProjectPdf(projectManager.getAllProjects().get(0), "C:\\Users\\kaosk\\Desktop");
+            generateProjectPdf(projectManager.getAllProjects().get(0), null, "C:\\Users\\kaosk\\Desktop");
         }
         catch (Exception e) {
             e.printStackTrace();
