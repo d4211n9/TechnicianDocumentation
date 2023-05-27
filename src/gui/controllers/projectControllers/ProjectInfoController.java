@@ -5,6 +5,7 @@ import be.Enum.SystemRole;
 import be.Installation;
 import be.Project;
 import be.SystemUser;
+import bll.util.PDFGenerator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
@@ -24,10 +25,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import util.ViewPaths;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -94,10 +99,28 @@ public class ProjectInfoController extends BaseController implements Initializab
     private void initializeButtonAccessLevels() {
         buttonAccessLevel = new NodeAccessLevel();
 
+        addPrintButton();
         addAssignUserBtn();
         addUnAssignUserBtn();
         addCreateInstallationBtn();
         addEditSaveDescriptionBtn();
+    }
+
+    private void addPrintButton() {
+        Button printButton = createButton("🖨 Print");
+        buttonAccessLevel.addNodeAccessLevel(
+                printButton,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
+        printButton.setOnMouseClicked(event -> {
+            File destination = new DirectoryChooser().showDialog(projectsView.getParent().getScene().getWindow());
+            if (destination != null) {
+                try {
+                    PDFGenerator.generateProjectPdf(project, destination.getAbsolutePath());
+                } catch (Exception e) {
+                    displayError(e);
+                }
+            }
+        });
     }
 
     private void addEditSaveDescriptionBtn() {
