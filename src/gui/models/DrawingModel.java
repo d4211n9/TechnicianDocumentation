@@ -1,11 +1,9 @@
 package gui.models;
 
-import be.Device;
-import be.DeviceLogin;
-import be.DeviceType;
-import be.WireType;
+import be.*;
 import bll.interfaces.IDrawingManager;
 import bll.managers.DrawingManager;
+import exceptions.DALException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -148,5 +146,29 @@ public class DrawingModel {
 
     public ObservableList<WireType> getAllWireTypes() throws Exception {
         return allWireTypes;
+    }
+
+    public boolean removeWiresFromInstallation(int id) throws DALException {
+        return drawingManager.removeWireFromInstallation(id);
+    }
+
+    public boolean addWireToInstallation(Wire wire, int id) throws DALException {
+        return drawingManager.addWireToInstallation(wire, id);
+    }
+
+    public Task<ObservableList<Wire>> getWiresFromInstallation(int id) {
+        Task<ObservableList<Wire>> allWiresTask = new Task<ObservableList<Wire>>() {
+            @Override
+            protected ObservableList<Wire> call() throws Exception {
+                ObservableList<Wire> allWires = FXCollections.observableList
+                        (drawingManager.getWiresFromInstallation(id));
+
+                updateValue(allWires);
+
+                return allWires;
+            }
+        };
+
+        return allWiresTask;
     }
 }

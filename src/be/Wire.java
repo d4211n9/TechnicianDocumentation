@@ -1,30 +1,29 @@
 package be;
 
 
-import javafx.scene.paint.Color;
-
 public class Wire {
     private int id;
     private double startX, startY, endX, endY;
 
-    private Color color;
+    private WireType wireType;
 
 
 
-    public Wire(int id, double startX, double startY, double endX, double endY, Color color) {
+    public Wire(int id, double startX, double startY, double endX, double endY, WireType wireType) {
         this.id = id;
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
         this.endY = endY;
-        this.color = color;
+        this.wireType = wireType;
     }
 
-    public Wire(double startX, double startY, double endX, double endY, Color color) {
+    public Wire(double startX, double startY, double endX, double endY, WireType wireType) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
         this.endY = endY;
+        this.wireType = wireType;
     }
 
     public int getId() {
@@ -61,5 +60,17 @@ public class Wire {
 
     public void setEndY(double endY) {
         this.endY = endY;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public WireType getWireType() {
+        return wireType;
+    }
+
+    public void setWireType(WireType wireType) {
+        this.wireType = wireType;
     }
 }

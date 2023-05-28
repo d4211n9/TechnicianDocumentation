@@ -87,14 +87,41 @@ public class DrawingController extends BaseController implements Initializable {
                     }
                 }
             });
-
-            allDevicesTask.setOnFailed(event -> allDevicesTask.getException());
-
             TaskExecutor.executeTask(allDevicesTask);
+
+            Task<ObservableList<Wire>> allWiresTask = getModelsHandler()
+                    .getDrawingModel()
+                    .getWiresFromInstallation(installation.getID());
+
+            allWiresTask.valueProperty().addListener((observable, oldValue, newValue) ->  {
+                ObservableList<Wire> allWires = newValue;
+                System.out.println(allWires.size());
+
+                for(Wire wire : allWires) {
+                    wiresOnDrawing.add(wire);
+                    try {
+                        addWireToPane(wire);
+
+                        //todo make method for creating wire
+                    } catch (Exception e) {
+                        displayError(e);
+                    }
+                }
+            });
+            TaskExecutor.executeTask(allWiresTask);
+
 
         } catch (Exception e) {
             displayError(e);
         }
+    }
+
+    private void addWireToPane(Wire wire) {
+        currentLine = new Line(wire.getStartX(), wire.getStartY(), wire.getEndX(), wire.getEndY());
+        System.out.println(wire.getStartX() + "dwdwdwdwdwdwdwdwdwdw");
+        currentLine.setStrokeWidth(5.0);
+        currentLine.setStroke(wire.getWireType().getColor());
+        pane.getChildren().add(currentLine);
     }
 
     public void loadDeviceTypes() {
@@ -134,8 +161,6 @@ public class DrawingController extends BaseController implements Initializable {
 
     private void addWireCardListener(FXMLLoader loader, WireType wireType) {
         handleAddLineTest(loader, wireType);
-        System.out.println(wireType.getName());
-
     }
 
 
@@ -330,7 +355,6 @@ public class DrawingController extends BaseController implements Initializable {
                     currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
                     currentLine.setStrokeWidth(5.0);
                     currentLine.setStroke(wireType.getColor());
-                    //todo listener til hvis de klikker på den senere (delete funktion)
                     pane.getChildren().add(currentLine);
 
                     pane.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -341,14 +365,15 @@ public class DrawingController extends BaseController implements Initializable {
                                 currentLine.setEndX(event.getX());
                                 currentLine.setEndY(event.getY());
 
-                                Wire newWire = new Wire(currentLine.getStartX(), currentLine.getStartY(), currentLine.getEndX(), currentLine.getEndY(), wireType.getColor());
-                                wiresOnDrawing.add(newWire);//todo
-                                System.out.println("all lines" + wiresOnDrawing.size());
+                                Wire newWire = new Wire(currentLine.getStartX(), currentLine.getStartY(), currentLine.getEndX(), currentLine.getEndY(), wireType);
+                                wiresOnDrawing.add(newWire);//todo should also add them in model
                                 pane.setOnMousePressed(null);
 
                                 currentLine.setOnMousePressed(event1 -> {
-                                    pane.getChildren().remove(currentLine);
-                                    // todo  should remove wire
+                                    Line line = (Line) event1.getTarget();
+                                    pane.getChildren().remove(line);
+                                    wiresOnDrawing.remove(newWire);
+                                    // todo  should remove wire in model
                                 });
                             }
                         }
@@ -397,11 +422,18 @@ public class DrawingController extends BaseController implements Initializable {
         //delete all saved devices from the installation
         getModelsHandler().getDrawingModel().removeDevicesFromInstallation(installation.getID());
 
+        getModelsHandler().getDrawingModel().removeWiresFromInstallation(installation.getID());
+
+        for (Wire wire: wiresOnDrawing){
+            getModelsHandler().getDrawingModel().addWireToInstallation(wire, installation.getID());
+        }
+
         //save all the devices from current drawing
         for(Device device : devicesOnDrawing) {
             getModelsHandler().getDrawingModel().addDeviceToInstallation(device, installation.getID());
         }
 
+        //todo maybe this should be done for wires also
         //Clear the list and make sure it now reflects the changes from DB
         devicesOnDrawing.clear();
 

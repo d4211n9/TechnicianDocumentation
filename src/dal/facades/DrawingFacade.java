@@ -1,11 +1,9 @@
 package dal.facades;
 
-import be.Device;
-import be.DeviceLogin;
-import be.DeviceType;
-import be.WireType;
+import be.*;
 import dal.dao.*;
 import dal.interfaces.*;
+import exceptions.DALException;
 
 import java.util.List;
 
@@ -17,12 +15,21 @@ public class DrawingFacade {
 
     private IWireTypeDAO wireTypeDAO;
 
+    private IWireDAO wireDAO;
+
+    private IWiresOnInstallationDAO wiresOnInstallationDAO;
+
+
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
         deviceDAO = new DeviceDAO();
         deviceLoginDAO = new DeviceLoginDAO();
         deviceOnInstallationDAO = new DeviceOnInstallationDAO();
+
         wireTypeDAO = new WireTypeDAO();
+        wireDAO = new WireDAO();
+        wiresOnInstallationDAO = new WiresOnInstallation();
+
     }
 
     public List<DeviceType> getAllDeviceTypes() throws Exception {
@@ -65,5 +72,18 @@ public class DrawingFacade {
     public List<WireType> getAllWireTypes() throws Exception {
 
         return wireTypeDAO.getAllWireTypes();
+    }
+
+    public boolean removeWiresFromInstallation(int id) throws DALException {
+        return wiresOnInstallationDAO.removeWiresFromInstallation(id);
+    }
+
+    public boolean addWireToInstallation(Wire wire, int id) throws DALException {
+        Wire newWire = wireDAO.createWire(wire);
+        return wiresOnInstallationDAO.addWireToInstallation(newWire, id);
+    }
+
+    public List<Wire> getWiresFromInstallation(int id) throws DALException {
+        return wiresOnInstallationDAO.getWiresFromInstallation(id);
     }
 }

@@ -4,8 +4,13 @@ import be.WireType;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IWireTypeDAO;
+import exceptions.DALException;
 import javafx.scene.paint.Color;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,16 +42,53 @@ public class WireTypeDAO implements IWireTypeDAO {
     @Override
     public List<WireType> getAllWireTypes() throws Exception {
 
-        System.out.println("you got all devices from db  " + l.size());
+        //return l; //todo get all method from wireType... look at devicetypeDAO
 
-        return l; //todo get all method from wireType... look at devicetypeDAO
+        String sql = "SELECT Name, Color FROM WireType";
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            List<WireType> allWireTypes = new ArrayList<>();
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("Name");
+                String color = resultSet.getString("Color");
+
+                allWireTypes.add(new WireType(name, Color.web(color)));
+            }
+
+            return allWireTypes;
+        }
+        catch (SQLException e) {
+            DALException dalException = new DALException("Failed to get all device types", e);
+            e.printStackTrace();
+            throw dalException;
+        }
     }
 
     @Override
     public boolean createWireType(WireType wireType) throws Exception {
-        //todo test data
-        l.add(wireType);
-        System.out.println("DAO class got: " + wireType.getName() + "  in this Color:  " + wireType.getColor().toString());
-        return false; //todo make create methode look at device type..
+        String sql = "INSERT INTO WireType " +
+                "(Name, Color) " +
+                "VALUES (?, ?)";
+
+
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, wireType.getName());
+            statement.setString(2, String.valueOf(wireType.getColor()));
+
+            int createdTuples = statement.executeUpdate();
+
+            return createdTuples == 1;
+        }
+        catch (SQLException e) {
+            DALException dalException = new DALException("Failed to create new wire type", e);
+            dalException.printStackTrace();
+            throw dalException;
+        }
     }
 }

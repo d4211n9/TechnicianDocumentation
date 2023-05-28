@@ -1,11 +1,9 @@
 package bll.managers;
 
-import be.Device;
-import be.DeviceLogin;
-import be.DeviceType;
-import be.WireType;
+import be.*;
 import bll.interfaces.IDrawingManager;
 import dal.facades.DrawingFacade;
+import exceptions.DALException;
 
 import java.util.List;
 
@@ -64,5 +62,20 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public List<WireType> getAllWireTypes() throws Exception {
         return drawingFacade.getAllWireTypes();
+    }
+
+    @Override
+    public boolean removeWireFromInstallation(int id) throws DALException {
+        return drawingFacade.removeWiresFromInstallation(id);
+    }
+
+    @Override
+    public boolean addWireToInstallation(Wire wire, int id) throws DALException {
+        return drawingFacade.addWireToInstallation(wire, id);
+    }
+
+    @Override
+    public List<Wire> getWiresFromInstallation(int id) throws DALException {
+        return drawingFacade.getWiresFromInstallation(id);
     }
 }

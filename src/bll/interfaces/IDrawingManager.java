@@ -1,9 +1,7 @@
 package bll.interfaces;
 
-import be.Device;
-import be.DeviceLogin;
-import be.DeviceType;
-import be.WireType;
+import be.*;
+import exceptions.DALException;
 
 import java.util.List;
 
@@ -20,4 +18,10 @@ public interface IDrawingManager {
     boolean createWireType(WireType wireType) throws Exception;
 
     List<WireType> getAllWireTypes() throws Exception;
+
+    boolean removeWireFromInstallation(int id) throws DALException;
+
+    boolean addWireToInstallation(Wire wire, int id) throws DALException;
+
+    List<Wire>  getWiresFromInstallation(int id) throws DALException;
 }
