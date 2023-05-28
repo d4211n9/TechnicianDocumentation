@@ -55,7 +55,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </JFXButton>
-                                    <VBox fx:id="sideBarWires" prefHeight="0.0" prefWidth="0.0" />
+                                    <VBox fx:id="sideBarWires" prefHeight="0.0" prefWidth="0.0" spacing="10.0" />
                                  </children>
                               </VBox>
                            </content>

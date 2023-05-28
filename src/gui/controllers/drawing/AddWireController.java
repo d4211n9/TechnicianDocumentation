@@ -2,6 +2,8 @@ package gui.controllers.drawing;
 
 import be.WireType;
 import gui.controllers.BaseController;
+import gui.util.TaskExecutor;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -22,12 +24,19 @@ public class AddWireController extends BaseController {
     DrawingController drawingController;
 
     public void handleConfirm() throws Exception {
-        WireType newWireType = createWireTypeFromFields();//todo skal bindes på metoder til at lave en wireTypened gennem lagene
+        WireType newWireType = createWireTypeFromFields();
 
         if(newWireType != null) {
-            getModelsHandler().getDrawingModel().createWireType(newWireType);
+            Task<Boolean> createWireTask = getModelsHandler()
+                    .getDrawingModel().createWireType(newWireType);
+
+            drawingController.loadWireTypes();
+
+            createWireTask.setOnFailed(event -> displayError(createWireTask.getException()));
+
+            TaskExecutor.executeTask(createWireTask);
+            handleBack();
         }
-        handleBack();
     }
 
 

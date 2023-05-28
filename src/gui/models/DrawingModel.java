@@ -73,17 +73,16 @@ public class DrawingModel {
         }
     }
 
-    private void updateAllWireTypes() throws Exception {
-        List<WireType> allWireTypes = drawingManager.getAllWireTypes();
+    public void updateAllWireTypes() throws Exception {
+        List<WireType> allWireTypes1 = drawingManager.getAllWireTypes();
 
         if (this.allWireTypes == null) {
-            this.allWireTypes = FXCollections.observableList(allWireTypes);
+            this.allWireTypes = FXCollections.observableList(allWireTypes1);
         }
         else {
             this.allWireTypes.clear();
-            this.allWireTypes.addAll(allWireTypes);
+            this.allWireTypes.addAll(allWireTypes1);
         }
-
     }
 
     public DataFormat getDataFormat() {
@@ -131,21 +130,23 @@ public class DrawingModel {
         return drawingManager.removeDevicesFromInstallation(installationID);
     }
 
-    public void createWireType(WireType wireType) {
+    public Task<Boolean> createWireType(WireType wireType) {
         Task<Boolean> createDeviceTypeTask = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
                 boolean successfullyCreatedDeviceType = drawingManager.createWireType(wireType);
 
                 updateValue(successfullyCreatedDeviceType);
-
                 return successfullyCreatedDeviceType;
             }
         };
-        createDeviceTypeTask.run();//todo should maybe be called in another way
+
+        allWireTypes.add(wireType);
+
+        return createDeviceTypeTask;
     }
 
-    public ObservableList<WireType> getAllWireTypes() {
+    public ObservableList<WireType> getAllWireTypes() throws Exception {
         return allWireTypes;
     }
 }

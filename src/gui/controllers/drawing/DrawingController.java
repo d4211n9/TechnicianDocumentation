@@ -114,24 +114,28 @@ public class DrawingController extends BaseController implements Initializable {
         }
     }
 
-    private void loadWireTypes() {
+    public void loadWireTypes() {
         sideBarWires.getChildren().clear();
 
         try {
             for(WireType wireType : getModelsHandler().getDrawingModel().getAllWireTypes()) {
-
                 FXMLLoader loader = loadView(ViewPaths.WIRE_CARD_VIEW);
                 WireCardController controller = loader.getController();
                 controller.setContent(wireType);
 
                 HBox wireCard = loader.getRoot();
                 sideBarWires.getChildren().add(0, wireCard);
-                //addDeviceCardListener(loader, deviceType); todo should have an method like load cardtype
-
+                addWireCardListener(loader, wireType);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void addWireCardListener(FXMLLoader loader, WireType wireType) {
+        handleAddLineTest(loader, wireType);
+        System.out.println(wireType.getName());
+
     }
 
 
@@ -315,6 +319,39 @@ public class DrawingController extends BaseController implements Initializable {
                 e.consume();
             }
         });
+    }
+
+    public void handleAddLineTest(FXMLLoader loader, WireType wireType) {
+        Node wireCard = loader.getRoot();
+        wireCard.setOnMousePressed(event -> {
+            pane.setOnMousePressed(e -> {
+                source = (Node)e.getPickResult().getIntersectedNode();
+                if(!source.equals(pane)) {
+                    currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
+                    currentLine.setStrokeWidth(5.0);
+                    currentLine.setStroke(wireType.getColor());
+                    //todo listener til hvis de klikker på den senere (delete funktion)
+                    pane.getChildren().add(currentLine);
+
+                    pane.setOnMousePressed(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            Node source = (Node) event.getPickResult().getIntersectedNode();
+                            if (!source.equals(pane)) {
+                                currentLine.setEndX(event.getX());
+                                currentLine.setEndY(event.getY());
+
+                                Wire newWire = new Wire(currentLine.getStartX(), currentLine.getStartY(), currentLine.getEndX(), currentLine.getEndY(), wireType.getColor());
+                                wiresOnDrawing.add(newWire);//todo
+                                System.out.println("all lines" + wiresOnDrawing.size());
+                                pane.setOnMousePressed(null);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
     }
 
 
