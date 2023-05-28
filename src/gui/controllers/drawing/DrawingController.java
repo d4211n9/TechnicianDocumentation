@@ -1,13 +1,12 @@
 package gui.controllers.drawing;
 
-import be.Device;
-import be.DeviceType;
-import be.Installation;
+import be.*;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import gui.util.TaskExecutor;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +30,7 @@ import java.util.ResourceBundle;
 public class DrawingController extends BaseController implements Initializable {
 
 
+    public VBox sideBarWires;
     @FXML
     private VBox background, objectInfo, sidebarDevice;
     @FXML
@@ -46,18 +46,23 @@ public class DrawingController extends BaseController implements Initializable {
     private Node source;
     private Line currentLine;
     ArrayList<Device> devicesOnDrawing;
+
+    ArrayList<Wire> wiresOnDrawing;
     private Installation installation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadDeviceTypes();
+        loadWireTypes();
 
         try {
             devicesOnDrawing = new ArrayList<>();
+            wiresOnDrawing = new ArrayList<>();
         } catch (Exception e) {
             displayError(e);
         }
     }
+
 
     public void setInstallation(Installation installation) {
         this.installation = installation;
@@ -108,6 +113,27 @@ public class DrawingController extends BaseController implements Initializable {
             displayError(e);
         }
     }
+
+    private void loadWireTypes() {
+        sideBarWires.getChildren().clear();
+
+        try {
+            for(WireType wireType : getModelsHandler().getDrawingModel().getAllWireTypes()) {
+
+                FXMLLoader loader = loadView(ViewPaths.WIRE_CARD_VIEW);
+                WireCardController controller = loader.getController();
+                controller.setContent(wireType);
+
+                HBox wireCard = loader.getRoot();
+                sideBarWires.getChildren().add(0, wireCard);
+                //addDeviceCardListener(loader, deviceType); todo should have an method like load cardtype
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void loadDeviceInPane(Device device) throws Exception {
         FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
@@ -204,7 +230,7 @@ public class DrawingController extends BaseController implements Initializable {
         hbox.setSpacing(10);
         objectInfo.getChildren().add(hbox);
 
-
+        //creates the pos Y filed
         Label posY = new Label("PosY   ");
         TextField txtField = new TextField();
         txtField.setText(String.valueOf(device.getPosY()));
@@ -355,6 +381,12 @@ public class DrawingController extends BaseController implements Initializable {
     private int getIndex(){
         index += 1;
         return index;
+    }
+
+    public void handleAddWire(ActionEvent actionEvent) {
+        FXMLLoader loader = openStage(ViewPaths.WIRE_VIEW, "Create Wire");
+        AddWireController addWireController = loader.getController();
+        addWireController.setDrawingController(this);
     }
 }
 

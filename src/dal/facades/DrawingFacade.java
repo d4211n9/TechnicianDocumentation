@@ -3,14 +3,9 @@ package dal.facades;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
-import dal.dao.DeviceDAO;
-import dal.dao.DeviceLoginDAO;
-import dal.dao.DeviceOnInstallationDAO;
-import dal.dao.DeviceTypeDAO;
-import dal.interfaces.IDeviceDAO;
-import dal.interfaces.IDeviceLoginDAO;
-import dal.interfaces.IDeviceOnInstallationDAO;
-import dal.interfaces.IDeviceTypeDAO;
+import be.WireType;
+import dal.dao.*;
+import dal.interfaces.*;
 
 import java.util.List;
 
@@ -20,11 +15,14 @@ public class DrawingFacade {
     private IDeviceLoginDAO deviceLoginDAO;
     private IDeviceOnInstallationDAO deviceOnInstallationDAO;
 
+    private IWireTypeDAO wireTypeDAO;
+
     public DrawingFacade() throws Exception {
         deviceTypeDAO = new DeviceTypeDAO();
         deviceDAO = new DeviceDAO();
         deviceLoginDAO = new DeviceLoginDAO();
         deviceOnInstallationDAO = new DeviceOnInstallationDAO();
+        wireTypeDAO = new WireTypeDAO();
     }
 
     public List<DeviceType> getAllDeviceTypes() throws Exception {
@@ -58,5 +56,14 @@ public class DrawingFacade {
 
     public boolean removeDevicesFromInstallation(int installationID) throws Exception {
         return deviceOnInstallationDAO.removeDevicesFromInstallation(installationID);
+    }
+
+    public boolean createWireType(WireType wireType) throws Exception {
+        return wireTypeDAO.createWireType(wireType);
+    }
+
+    public List<WireType> getAllWireTypes() throws Exception {
+
+        return wireTypeDAO.getAllWireTypes();
     }
 }

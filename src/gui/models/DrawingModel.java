@@ -3,6 +3,7 @@ package gui.models;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
+import be.WireType;
 import bll.interfaces.IDrawingManager;
 import bll.managers.DrawingManager;
 import javafx.collections.FXCollections;
@@ -13,9 +14,12 @@ import javafx.scene.input.DataFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DrawingModel {
     private IDrawingManager drawingManager;
     private ObservableList<DeviceType> allDeviceTypes;
+
+    private ObservableList<WireType> allWireTypes;
     private List<Device> devices;
     private DataFormat dataFormat = new DataFormat("DragDropFormat1");
 
@@ -24,7 +28,10 @@ public class DrawingModel {
         devices = new ArrayList<>();
 
         updateAllDeviceTypes();
+        updateAllWireTypes();
     }
+
+
 
     public void addDeviceToDrawing(Device device){
         devices.add(device);
@@ -64,6 +71,19 @@ public class DrawingModel {
             this.allDeviceTypes.clear();
             this.allDeviceTypes.addAll(allDeviceTypes);
         }
+    }
+
+    private void updateAllWireTypes() throws Exception {
+        List<WireType> allWireTypes = drawingManager.getAllWireTypes();
+
+        if (this.allWireTypes == null) {
+            this.allWireTypes = FXCollections.observableList(allWireTypes);
+        }
+        else {
+            this.allWireTypes.clear();
+            this.allWireTypes.addAll(allWireTypes);
+        }
+
     }
 
     public DataFormat getDataFormat() {
@@ -109,5 +129,23 @@ public class DrawingModel {
 
     public boolean removeDevicesFromInstallation(int installationID) throws Exception {
         return drawingManager.removeDevicesFromInstallation(installationID);
+    }
+
+    public void createWireType(WireType wireType) {
+        Task<Boolean> createDeviceTypeTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                boolean successfullyCreatedDeviceType = drawingManager.createWireType(wireType);
+
+                updateValue(successfullyCreatedDeviceType);
+
+                return successfullyCreatedDeviceType;
+            }
+        };
+        createDeviceTypeTask.run();//todo should maybe be called in another way
+    }
+
+    public ObservableList<WireType> getAllWireTypes() {
+        return allWireTypes;
     }
 }

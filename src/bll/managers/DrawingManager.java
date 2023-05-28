@@ -3,6 +3,7 @@ package bll.managers;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
+import be.WireType;
 import bll.interfaces.IDrawingManager;
 import dal.facades.DrawingFacade;
 
@@ -53,5 +54,15 @@ public class DrawingManager implements IDrawingManager {
     @Override
     public boolean removeDevicesFromInstallation(int installationID) throws Exception {
         return drawingFacade.removeDevicesFromInstallation(installationID);
+    }
+
+    @Override
+    public boolean createWireType(WireType wireType) throws Exception {
+        return drawingFacade.createWireType(wireType);
+    }
+
+    @Override
+    public List<WireType> getAllWireTypes() throws Exception {
+        return drawingFacade.getAllWireTypes();
     }
 }

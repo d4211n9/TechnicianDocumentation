@@ -4,6 +4,8 @@ public class Wire {
     private int id;
     private double startX, startY, endX, endY;
 
+
+
     public Wire(int id, double startX, double startY, double endX, double endY) {
         this.id = id;
         this.startX = startX;

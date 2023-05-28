@@ -148,10 +148,7 @@ public class SystemUserDAO implements ISystemUserDAO {
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setTimestamp(1, lastUpdateTime);
-
-
             ResultSet rs = statement.executeQuery();
 
             while(rs.next()) {

@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import util.InputValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -140,6 +139,7 @@ public class AddDeviceController extends BaseController implements Initializable
             allDeviceIcons.add(new DeviceType(file.getName(), "/device_icons/" + file.getName(), false));
         }
     }
+
 
     class ListCellImage extends ListCell<DeviceType> {
         @Override

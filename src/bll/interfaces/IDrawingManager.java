@@ -3,6 +3,7 @@ package bll.interfaces;
 import be.Device;
 import be.DeviceLogin;
 import be.DeviceType;
+import be.WireType;
 
 import java.util.List;
 
@@ -15,4 +16,8 @@ public interface IDrawingManager {
     boolean addDeviceToInstallation(Device device, int installationID) throws Exception;
     List<Device> getDevicesFromInstallation(int installationID) throws Exception;
     boolean removeDevicesFromInstallation(int installationID) throws Exception;
+
+    boolean createWireType(WireType wireType) throws Exception;
+
+    List<WireType> getAllWireTypes() throws Exception;
 }

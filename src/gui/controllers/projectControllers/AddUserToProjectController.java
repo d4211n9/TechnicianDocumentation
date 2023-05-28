@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -40,11 +39,11 @@ public class AddUserToProjectController extends TableViewController implements I
     private void tableViewListener() {
         tableView.setOnMouseClicked(event -> {
             try {
-                SystemUser s = ((SystemUser)tableView.getSelectionModel().getSelectedItem());
-                Task t = getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(), s);
+                SystemUser user = ((SystemUser)tableView.getSelectionModel().getSelectedItem());
+                Task task = getModelsHandler().getProjectModel().assignSystemUserToProject(project.getID(), user);
                 tableView.setDisable(true);
-                t.run();
-                t.setOnSucceeded(event1 -> {
+                task.run();
+                task.setOnSucceeded(event1 -> {
                     loadTableView();
                     tableView.setDisable(false);
                 });
@@ -83,10 +82,10 @@ public class AddUserToProjectController extends TableViewController implements I
     }
 
     private void addDoneButton() {
-        Button b = createButton("✅ Done");
-        b.setOnMousePressed(event -> {
+        Button button = createButton("✅ Done");
+        button.setOnMousePressed(event -> {
             handleBack();
         });
-        buttonArea.getChildren().add(0, b);
+        buttonArea.getChildren().add(0, button);
     }
 }

@@ -23,6 +23,9 @@ public class ViewPaths {
     public static final String DEVICE_CARD = "/gui/views/drawing/DeviceCard.fxml";
     public static final String DEVICE_VIEW = "/gui/views/drawing/DeviceView.fxml";
 
+    public static final String WIRE_VIEW = "/gui/views/drawing/AddWireView.fxml";
+    public static final String WIRE_CARD_VIEW = "/gui/views/drawing/WireDeviceCard.fxml";
+
 
     private ViewPaths() {}
 }

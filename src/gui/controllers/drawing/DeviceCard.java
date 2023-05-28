@@ -26,16 +26,6 @@ public class DeviceCard implements Initializable {
 
     }
 
-    public void setContent(Device device){
-        //todo skal sætte finde billede og tekst fra device..
-        Image img = new Image("images/WUAV_logo.jpg");
-        imgView.setImage(img);
-
-        lbl.setText("højtaler");
-
-        this.device = device;
-    }
-
     public void setTypeContent(DeviceType deviceType) {
         lbl.setText(deviceType.getName());
         imgView.setImage(new Image(deviceType.getImagePath()));

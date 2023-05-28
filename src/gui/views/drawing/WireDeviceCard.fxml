@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<HBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.WireCardController">
+   <children>
+      <Label fx:id="color" prefHeight="23.0" prefWidth="25.0" />
+       <JFXButton fx:id="name" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="105.0" text="Name" textOverrun="CLIP" wrapText="true" HBox.hgrow="NEVER">
+           <HBox.margin>
+               <Insets />
+           </HBox.margin>
+           <font>
+               <Font size="14.0" />
+           </font>
+       </JFXButton>
+   </children>
+</HBox>
