@@ -345,6 +345,11 @@ public class DrawingController extends BaseController implements Initializable {
                                 wiresOnDrawing.add(newWire);//todo
                                 System.out.println("all lines" + wiresOnDrawing.size());
                                 pane.setOnMousePressed(null);
+
+                                currentLine.setOnMousePressed(event1 -> {
+                                    pane.getChildren().remove(currentLine);
+                                    // todo  should remove wire
+                                });
                             }
                         }
                     });
