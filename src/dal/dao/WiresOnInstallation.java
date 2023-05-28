@@ -93,6 +93,13 @@ public class WiresOnInstallation implements IWiresOnInstallationDAO {
                 //todo map wire
 
                 int wireId = resultSet.getInt(3);
+                int starX = resultSet.getInt(5);
+                int starY = resultSet.getInt(6);
+                int endX = resultSet.getInt(7);
+                int endY = resultSet.getInt(8);
+
+                Wire wire = new Wire(wireId, starX, starY, endX, endY, wireType1);
+                wiresFromInstallation.add(wire);
                 /***
                 String name = resultSet.getString(10);
                 String imagePath = resultSet.getString(11);

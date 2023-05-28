@@ -6,25 +6,31 @@ import gui.controllers.BaseController;
 import gui.util.TaskExecutor;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import util.ViewPaths;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DrawingController extends BaseController implements Initializable {
@@ -32,13 +38,17 @@ public class DrawingController extends BaseController implements Initializable {
 
     public VBox sideBarWires;
     @FXML
-    private VBox background, objectInfo, sidebarDevice;
+    private VBox background;
+    @FXML
+    VBox objectInfo;
+    @FXML
+    private VBox sidebarDevice;
     @FXML
     private Button button;
     @FXML
     private ScrollPane contentArea;
     @FXML
-    private Pane pane;
+    Pane pane;
     @FXML
     private ImageView selectedElementImg;
 
@@ -49,6 +59,8 @@ public class DrawingController extends BaseController implements Initializable {
 
     ArrayList<Wire> wiresOnDrawing;
     private Installation installation;
+
+    public int index = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,66 +75,60 @@ public class DrawingController extends BaseController implements Initializable {
         }
     }
 
-
+    /**
+     * loads all devices and wires into the pane
+     */
     public void setInstallation(Installation installation) {
         this.installation = installation;
-
         try {
-            devicesOnDrawing.clear();
-            pane.getChildren().clear();
-
-            Task<ObservableList<Device>> allDevicesTask = getModelsHandler()
-                    .getDrawingModel()
-                    .getDevicesFromInstallation(installation.getID());
-
-            allDevicesTask.valueProperty().addListener((observable, oldValue, newValue) ->  {
-                ObservableList<Device> allDevices = newValue;
-
-                for(Device device : allDevices) {
-                    devicesOnDrawing.add(device);
-                    try {
-                        loadDeviceInPane(device);
-                    } catch (Exception e) {
-                        displayError(e);
-                    }
-                }
-            });
-            TaskExecutor.executeTask(allDevicesTask);
-
-            Task<ObservableList<Wire>> allWiresTask = getModelsHandler()
-                    .getDrawingModel()
-                    .getWiresFromInstallation(installation.getID());
-
-            allWiresTask.valueProperty().addListener((observable, oldValue, newValue) ->  {
-                ObservableList<Wire> allWires = newValue;
-                System.out.println(allWires.size());
-
-                for(Wire wire : allWires) {
-                    wiresOnDrawing.add(wire);
-                    try {
-                        addWireToPane(wire);
-
-                        //todo make method for creating wire
-                    } catch (Exception e) {
-                        displayError(e);
-                    }
-                }
-            });
-            TaskExecutor.executeTask(allWiresTask);
-
-
+           addAllDevicesToPane();
+           addAllWiresToPane();
         } catch (Exception e) {
             displayError(e);
         }
     }
 
-    private void addWireToPane(Wire wire) {
-        currentLine = new Line(wire.getStartX(), wire.getStartY(), wire.getEndX(), wire.getEndY());
-        System.out.println(wire.getStartX() + "dwdwdwdwdwdwdwdwdwdw");
-        currentLine.setStrokeWidth(5.0);
-        currentLine.setStroke(wire.getWireType().getColor());
-        pane.getChildren().add(currentLine);
+    private void addAllWiresToPane() throws Exception {
+        Task<ObservableList<Wire>> allWiresTask = getModelsHandler()
+                .getDrawingModel()
+                .getWiresFromInstallation(installation.getID());
+
+        allWiresTask.valueProperty().addListener((observable, oldValue, newValue) ->  {
+            for(Wire wire : newValue) {
+                wiresOnDrawing.add(wire);
+                try {
+                    addWireToPane(wire);
+                } catch (Exception e) {
+                    displayError(e);
+                }
+            }
+        });
+        TaskExecutor.executeTask(allWiresTask);
     }
+
+    private void addAllDevicesToPane() throws Exception {
+        devicesOnDrawing.clear();
+        pane.getChildren().clear();
+
+        Task<ObservableList<Device>> allDevicesTask = getModelsHandler()
+                .getDrawingModel()
+                .getDevicesFromInstallation(installation.getID());
+
+        allDevicesTask.valueProperty().addListener((observable, oldValue, newValue) ->  {
+
+            for(Device device : newValue) {
+                devicesOnDrawing.add(device);
+                try {
+                    loadDeviceInPane(device);
+                } catch (Exception e) {
+                    displayError(e);
+                }
+            }
+        });
+        TaskExecutor.executeTask(allDevicesTask);
+
+    }
+
 
     public void loadDeviceTypes() {
         sidebarDevice.getChildren().clear();
@@ -152,38 +158,20 @@ public class DrawingController extends BaseController implements Initializable {
 
                 HBox wireCard = loader.getRoot();
                 sideBarWires.getChildren().add(0, wireCard);
-                addWireCardListener(loader, wireType);
+                handleAddLine(loader, wireType);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void addWireCardListener(FXMLLoader loader, WireType wireType) {
-        handleAddLineTest(loader, wireType);
-    }
-
 
     public void loadDeviceInPane(Device device) throws Exception {
-        FXMLLoader loader1 = loadView("/gui/views/drawing/DeviceView.fxml");
-        DeviceController controller1 = loader1.getController();
-        controller1.setContent(device);
+        FXMLLoader loader = loadView("/gui/views/drawing/DeviceView.fxml");
+        DeviceController controller = loader.getController();
+        controller.setContent(device);
 
-        ImageView deviceImg = controller1.getImgView();
-
-        deviceImg.setOnMousePressed(event1 -> {
-            selectedDevice = controller1;
-            showDeviceInfo(selectedDevice);
-            source = (Node)event1.getPickResult().getIntersectedNode();
-        });
-        selectedDevice = controller1;
-
-        deviceImg.setFitHeight(device.getHeight());
-        deviceImg.setFitWidth(device.getWidth());
-
-        deviceImg.setTranslateX(device.getPosX());
-        deviceImg.setTranslateY(device.getPosY());
-
+        ImageView deviceImg = createDeviceImage(controller, device);
 
         Tooltip imgName = new Tooltip(device.getDeviceType().getName());
         imgName.setShowDelay(Duration.millis(200));
@@ -195,7 +183,35 @@ public class DrawingController extends BaseController implements Initializable {
         pane.getChildren().add(deviceImg);
     }
 
-    private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {
+    private ImageView createDeviceImage(DeviceController controller, Device device) {
+        ImageView deviceImg = controller.getImgView();
+
+        deviceImg.setOnMousePressed(event -> {
+            selectedDevice = controller;
+            showDeviceInfo(selectedDevice);
+            source = (Node)event.getPickResult().getIntersectedNode();
+        });
+        selectedDevice = controller;
+
+        deviceImg.setFitHeight(device.getHeight());
+        deviceImg.setFitWidth(device.getWidth());
+
+        deviceImg.setTranslateX(device.getPosX());
+        deviceImg.setTranslateY(device.getPosY());
+        return deviceImg;
+    }
+
+    private void addWireToPane(Wire wire) {
+        currentLine = new Line(wire.getStartX(), wire.getStartY(), wire.getEndX(), wire.getEndY());
+        currentLine.setStrokeWidth(5.0);
+        currentLine.setStroke(wire.getWireType().getColor());
+
+        pane.getChildren().add(currentLine);
+        selectLineListener(wire);
+    }
+
+
+    private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {//todo maybe it could be moved to Device Controller
         Node deviceElement = loader.getRoot();
 
         deviceElement.setOnMousePressed(event -> {
@@ -238,82 +254,12 @@ public class DrawingController extends BaseController implements Initializable {
         });
     }
 
-    private void showDeviceInfo(DeviceController controller){
-        Device device = controller.getDevice();
+    private void showDeviceInfo(DeviceController controller){//todo maybe it could be moved to other controller
+       List<Node> infoNodes = controller.getInfoNodes((ImageView) source, this);
         objectInfo.getChildren().clear();
-
-        Label name = new Label(device.getDeviceType().getName());
-        objectInfo.getChildren().add(name);
-
-        //creates the pos x filed
-        Label label = new Label("PosX   ");
-        TextField txtFiled = new TextField();
-        txtFiled.setText(String.valueOf(device.getPosX()));
-        txtFiled.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(!Objects.equals(newVal, "")){
-                device.setPosX(Double.parseDouble(newVal));
-                controller.imgView.setTranslateX(Double.parseDouble(newVal));
-            }
-        });
-        HBox hbox = new HBox(label, txtFiled);
-        hbox.setSpacing(10);
-        objectInfo.getChildren().add(hbox);
-
-        //creates the pos Y filed
-        Label posY = new Label("PosY   ");
-        TextField txtField = new TextField();
-        txtField.setText(String.valueOf(device.getPosY()));
-        txtField.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(!Objects.equals(newVal, "")){
-                device.setPosY(Double.parseDouble(newVal));
-                controller.imgView.setTranslateY(Double.parseDouble(newVal));
-            }
-        });
-        HBox hboxPosY = new HBox(posY, txtField);
-        hboxPosY.setSpacing(10);
-        objectInfo.getChildren().add(hboxPosY);
-
-
-        Label lblHeight = new Label("Height");
-        TextField txtFieldHeight = new TextField();
-        txtFieldHeight.setText(String.valueOf(device.getHeight()));
-        txtFieldHeight.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(!Objects.equals(newVal, "")){
-                device.setHeight(Double.parseDouble(newVal));
-                controller.settingImgHeight(Double.valueOf(newVal));
-                source.getParent().prefHeight(Double.parseDouble(newVal));
-            }
-        });
-        HBox hboxHeight = new HBox(lblHeight, txtFieldHeight);
-        hboxHeight.setSpacing(10);
-        objectInfo.getChildren().add(hboxHeight);
-
-        Label lblWidth = new Label("Width ");
-        TextField txtFieldWidth = new TextField();
-        txtFieldWidth.setText(String.valueOf(device.getWidth()));
-        txtFieldWidth.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(!Objects.equals(newVal, "")){
-                device.setWidth(Double.parseDouble(newVal));
-                controller.settingImgHeight(Double.valueOf(newVal));
-                source.getParent().prefWidth(Double.parseDouble(newVal));
-            }
-        });
-        HBox hboxWidth = new HBox(lblWidth, txtFieldWidth);
-        hboxWidth.setSpacing(10);
-        objectInfo.getChildren().add(hboxWidth);
-
-        JFXButton deleteBtn = createButton("delete");
-        deleteBtn.setOnMouseClicked(event -> {
-            pane.getChildren().remove(source);
-            devicesOnDrawing.remove(controller.getDevice());
-            try {
-                save();
-            } catch (Exception e) {
-                displayError(e);
-            }
-            objectInfo.getChildren().clear();
-        });
-        objectInfo.getChildren().add(deleteBtn);
+        for (Node infoNode: infoNodes) {
+            objectInfo.getChildren().add(infoNode);
+        }
     }
 
     public void handleAddDevice() {
@@ -322,66 +268,62 @@ public class DrawingController extends BaseController implements Initializable {
         addDeviceController.setDrawingController(this);
     }
 
-    public void handleAddLine() {
-        pane.setOnMousePressed(e -> {
+    public void handleAddLine(FXMLLoader loader, WireType wireType) {
+        Node wireCard = loader.getRoot();
+        wireCard.setOnMousePressed(event -> {
+           addLineListener(wireType);
+        });
+
+    }
+
+    private void addLineListener(WireType wireType) {
+        pane.setOnMousePressed(e -> {//sets the starting point of the wire
             source = (Node)e.getPickResult().getIntersectedNode();
             if(!source.equals(pane)) {
                 currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
+                currentLine.setStrokeWidth(5.0);
+                currentLine.setStroke(wireType.getColor());
                 pane.getChildren().add(currentLine);
 
-                pane.setOnMousePressed(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Node source = (Node) event.getPickResult().getIntersectedNode();
-                        if (!source.equals(pane)) {
+                pane.setOnMousePressed(event1 -> {//sets the end point of the wire
+                    Node source = (Node) event1.getPickResult().getIntersectedNode();
+                    if (!source.equals(pane)) {
+                        currentLine.setEndX(event1.getX());
+                        currentLine.setEndY(event1.getY());
 
-                            currentLine.setEndX(event.getX());
-                            currentLine.setEndY(event.getY());
-                            pane.setOnMousePressed(null);
-                        }
+                        Wire newWire = new Wire(currentLine.getStartX(), currentLine.getStartY(), currentLine.getEndX(), currentLine.getEndY(), wireType);
+                        wiresOnDrawing.add(newWire);
+                        pane.setOnMousePressed(null);
+
+                        selectLineListener(newWire);
                     }
                 });
-                e.consume();
             }
         });
     }
 
-    public void handleAddLineTest(FXMLLoader loader, WireType wireType) {
-        Node wireCard = loader.getRoot();
-        wireCard.setOnMousePressed(event -> {
-            pane.setOnMousePressed(e -> {
-                source = (Node)e.getPickResult().getIntersectedNode();
-                if(!source.equals(pane)) {
-                    currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
-                    currentLine.setStrokeWidth(5.0);
-                    currentLine.setStroke(wireType.getColor());
-                    pane.getChildren().add(currentLine);
+    private void selectLineListener(Wire newWire) {
+        currentLine.setOnMousePressed(event1 -> {
+            objectInfo.getChildren().clear();
 
-                    pane.setOnMousePressed(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            Node source = (Node) event.getPickResult().getIntersectedNode();
-                            if (!source.equals(pane)) {
-                                currentLine.setEndX(event.getX());
-                                currentLine.setEndY(event.getY());
+            Label label = new Label(newWire.getWireType().getName());
+            objectInfo.getChildren().add(label);
 
-                                Wire newWire = new Wire(currentLine.getStartX(), currentLine.getStartY(), currentLine.getEndX(), currentLine.getEndY(), wireType);
-                                wiresOnDrawing.add(newWire);//todo should also add them in model
-                                pane.setOnMousePressed(null);
+            Label label1 = new Label();
+            label1.setBackground(Background.fill(newWire.getWireType().getColor()));
+            label.setFont(new Font("Arial", 16));
+            label1.setMinWidth(120);
+            label1.setMinHeight(30);
+            objectInfo.getChildren().add(label1);
 
-                                currentLine.setOnMousePressed(event1 -> {
-                                    Line line = (Line) event1.getTarget();
-                                    pane.getChildren().remove(line);
-                                    wiresOnDrawing.remove(newWire);
-                                    // todo  should remove wire in model
-                                });
-                            }
-                        }
-                    });
-                }
+            JFXButton deleteBtn = createButton("delete");
+            deleteBtn.setOnMouseClicked(event -> {
+                Line line = (Line) event1.getTarget();
+                pane.getChildren().remove(line);
+                wiresOnDrawing.remove(newWire);
             });
+            objectInfo.getChildren().add(deleteBtn);
         });
-
     }
 
 
@@ -433,7 +375,6 @@ public class DrawingController extends BaseController implements Initializable {
             getModelsHandler().getDrawingModel().addDeviceToInstallation(device, installation.getID());
         }
 
-        //todo maybe this should be done for wires also
         //Clear the list and make sure it now reflects the changes from DB
         devicesOnDrawing.clear();
 
@@ -450,14 +391,12 @@ public class DrawingController extends BaseController implements Initializable {
         TaskExecutor.executeTask(allDevicesTask);
     }
 
-    public int index = 0;
-
     private int getIndex(){
         index += 1;
         return index;
     }
 
-    public void handleAddWire(ActionEvent actionEvent) {
+    public void handleAddWire() {
         FXMLLoader loader = openStage(ViewPaths.WIRE_VIEW, "Create Wire");
         AddWireController addWireController = loader.getController();
         addWireController.setDrawingController(this);
