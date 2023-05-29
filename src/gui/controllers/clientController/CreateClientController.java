@@ -79,12 +79,6 @@ public class CreateClientController extends BaseController implements Initializa
     }
 
     private boolean isTextFieldInfoValid() {
-        System.out.println("navn "+InputValidator.isName(txtfName.getText()));
-        System.out.println("email " + InputValidator.isEmail(txtfEmail.getText()));
-        System.out.println("tlf " + InputValidator.isPhone(txtfPhone.getText()));
-        System.out.println("adresse " + InputValidator.isStreet(txtfAddress.getText()));
-        System.out.println("postnr " + InputValidator.isPostalCode(Integer.parseInt(txtfPostalCode.getText())));
-        System.out.println("by " + InputValidator.isCity(txtfCity.getText()));
 
         return InputValidator.isName(txtfName.getText()) &&
                 InputValidator.isEmail(txtfEmail.getText()) &&
