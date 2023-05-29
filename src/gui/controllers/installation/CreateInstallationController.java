@@ -99,7 +99,7 @@ public class CreateInstallationController extends BaseController {
     private void openInstallationInfo(Installation installation) {
         FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
         VBox installationInfo = infoLoader.getRoot();
-        InstallationInfoController infoController = infoLoader.getController();
+        InstallationInfoController infoController = (InstallationInfoController) infoLoader.getController();
         infoController.setContent(installation);
         getMainController().mainBorderPane.setCenter(installationInfo);
     }

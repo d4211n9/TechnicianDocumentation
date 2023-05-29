@@ -10,9 +10,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
-import gui.controllers.installation.CreateInstallationController;
-import gui.controllers.installation.InstallationCardController;
-import gui.controllers.installation.InstallationInfoController;
+import gui.controllers.installation.*;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
@@ -25,10 +23,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -117,7 +111,7 @@ public class ProjectInfoController extends BaseController implements Initializab
                 printButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.SalesPerson));
         printButton.setOnMouseClicked(event -> {
-            File destination = new DirectoryChooser().showDialog(projectsView.getParent().getScene().getWindow());
+            File destination = new DirectoryChooser().showDialog(projectInfoView.getParent().getScene().getWindow());
             if (destination != null) {
                 try {
                     PDFGenerator.generateProjectPdf(project, installations, destination.getAbsolutePath());
@@ -183,12 +177,12 @@ public class ProjectInfoController extends BaseController implements Initializab
         assignUser = createButton("➕👤 Add");
         buttonAccessLevel.addNodeAccessLevel(
                 assignUser,
-                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager)); //TODO Korrekt accesslevel?
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         addAssignedButton(assignUser);
 
         assignUser.setOnMouseClicked(event -> {
                 FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
-                AddUserToProjectController controller = loader.getController();
+                AddUserToProjectController controller = (AddUserToProjectController) loader.getController();
                 loadInMainView(loader.getRoot(), projectInfoView);
                 controller.setProject(project);
         });
@@ -255,7 +249,7 @@ public class ProjectInfoController extends BaseController implements Initializab
             }
 
             FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
-            InstallationInfoController infoController = infoLoader.getController();
+            InstallationInfoController infoController = (InstallationInfoController) infoLoader.getController();
             infoController.setContent(i);
 
             getMainController().mainBorderPane.setCenter(infoLoader.getRoot());
