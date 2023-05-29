@@ -5,6 +5,7 @@ import be.Project;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
+import gui.controllers.installation.*;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -62,14 +63,13 @@ public class CreateInstallationController extends BaseController {
         try {
             Task<Installation> updateInstallationTask = getModelsHandler().getInstallationModel().updateInstallation(installation);
 
-            updateInstallationTask.setOnSucceeded(event -> {
-                FXMLLoader loader = loadView(ViewPaths.PROJECTS_VIEW);
-                loadInMainView(loader.getRoot(), null);
-            });
-
             updateInstallationTask.setOnFailed(failedEvent -> displayError(updateInstallationTask.getException()));
 
             TaskExecutor.executeTask(updateInstallationTask);
+
+            updateInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                openInstallationInfo(newValue);
+            });
         } catch (Exception e) {
             displayError(e);
         }
@@ -88,14 +88,13 @@ public class CreateInstallationController extends BaseController {
                     .getInstallationModel()
                     .createInstallation(installation);
 
-            createInstallationTask.setOnSucceeded(event -> {
-                FXMLLoader loader = loadView(ViewPaths.PROJECTS_VIEW);
-                loadInMainView(loader.getRoot(), null);
-            });
-
             createInstallationTask.setOnFailed(event -> displayError(createInstallationTask.getException()));
 
             TaskExecutor.executeTask(createInstallationTask);
+
+            createInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                openInstallationInfo(newValue);
+            });
         } catch (Exception e) {
             displayError(e);
         }
