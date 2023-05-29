@@ -175,15 +175,4 @@ public class PDFGenerator {
     private static float getMargin()  {
         return 20f;
     }
-
-    public static void main(String[] args) {
-        try {
-            ProjectManager projectManager = new ProjectManager();
-
-            generateProjectPdf(projectManager.getAllProjects().get(0), null, "C:\\Users\\kaosk\\Desktop");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
