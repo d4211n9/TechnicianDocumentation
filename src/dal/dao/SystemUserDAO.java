@@ -6,10 +6,8 @@ import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.ISystemUserDAO;
 import exceptions.DALException;
-import javafx.util.converter.LocalDateTimeStringConverter;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,10 +72,9 @@ public class SystemUserDAO implements ISystemUserDAO {
             statement.setString(2, systemUser.getPassword());
             statement.setString(3, systemUser.getRole().getRole());
             statement.setString(4, systemUser.getName());
-            statement.setTimestamp(5, systemUser.getDeleted());
-            statement.setDate(6, null);
+            statement.setDate(5, null);
             Timestamp t = new Timestamp(System.currentTimeMillis());
-            statement.setTimestamp(7, t);
+            statement.setTimestamp(6, t);
             statement.executeUpdate();
 
             user = systemUser;
@@ -123,7 +120,7 @@ public class SystemUserDAO implements ISystemUserDAO {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());//todo
+            statement.setString(2, user.getPassword());
             statement.setString(3, user.getRole().toString());
             statement.setString(4, user.getName());
             statement.setTimestamp(5, user.getDeleted());
@@ -151,10 +148,7 @@ public class SystemUserDAO implements ISystemUserDAO {
 
         try (Connection connection = connector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setTimestamp(1, lastUpdateTime);
-
-
             ResultSet rs = statement.executeQuery();
 
             while(rs.next()) {

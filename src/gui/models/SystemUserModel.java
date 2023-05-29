@@ -133,8 +133,6 @@ public class SystemUserModel implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("user update");
-
         List<SystemUser> updatedSystemUsers;
         try {
             updatedSystemUsers = systemUserManager.getAllModifiedUsers(lastUpdatedTime);
@@ -144,7 +142,6 @@ public class SystemUserModel implements Runnable {
                 allUsers = retrieveAllUsers();
                 search(searchString);
             }
-            Thread.sleep(300);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

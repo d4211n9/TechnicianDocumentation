@@ -112,7 +112,7 @@ public class CreateClientController extends BaseController implements Initializa
         txtfCity.setText(selectedItem.getAddress().getCity());
         cbType.getSelectionModel().select(selectedItem.getClientType());
 
-        lblCreateUser.setText("Edit Client");
+        lblCreateUser.setText("Edit Customer");
 
         addEditBtn();
         buttonArea.getChildren().remove(btnConfirm);

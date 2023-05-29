@@ -38,6 +38,11 @@ public class InputValidator {
         return phone.matches("\\D*(?:\\d\\D*){8,}");
     }
 
+    /**
+     * Must include min. 1 character for street name and min. 1 digit for street no.
+     * @param street, the user input to validate
+     * @return true if street input matches pattern
+     */
     public static boolean isStreet(String street) {
         return !street.isBlank();
         //return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$"); ??

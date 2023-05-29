@@ -71,6 +71,10 @@
     -fx-background-color: #333333;
 }
 
+#lbl {
+    -fx-text-fill: black;
+}
+
 .table-view {
     -fx-background-color: transparent;
     -fx-border-color: #D9D9D9;

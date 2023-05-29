@@ -5,6 +5,7 @@ import be.Installation;
 import be.SystemUser;
 import com.jfoenix.controls.JFXListView;
 import gui.controllers.BaseController;
+import gui.controllers.drawing.DrawingController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
@@ -28,7 +29,13 @@ import java.util.ResourceBundle;
 public class InstallationInfoController extends BaseController implements Initializable {
 
     @FXML
-    private VBox installationInfo;
+    private DeviceTabController deviceTabController;
+    @FXML
+    private LoginTabController loginTabController;
+    @FXML
+    private DrawingController backgroundController;
+    @FXML
+    private VBox installationInfo, vbUserBtnArea;
     @FXML
     private HBox infoBtnArea;
     @FXML
@@ -126,5 +133,19 @@ public class InstallationInfoController extends BaseController implements Initia
 
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
+    }
+
+    public void handleDeviceTab() {
+        deviceTabController.setInstallation(installation);
+        deviceTabController.loadTableView();
+    }
+
+    public void handleLoginTab() {
+        loginTabController.setInstallation(installation);
+        loginTabController.loadTableView();
+    }
+
+    public void handleDrawingTab() {
+        backgroundController.setInstallation(installation);
     }
 }

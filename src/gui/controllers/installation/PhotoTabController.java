@@ -7,6 +7,7 @@ import gui.controllers.BaseController;
 import gui.controllers.photo.PhotoCardController;
 import gui.controllers.photo.PhotoController;
 import gui.util.TaskExecutor;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -67,15 +68,26 @@ public class PhotoTabController extends BaseController implements Initializable 
     public void loadPhotosToInstallation() {
         fpPhotos.getChildren().clear();
         try{
-            photos = getModelsHandler().getPhotoModel().getPhotoFromInstallation(installation.getID());
+            Task<ObservableList<Photo>> allPhotosTask = getModelsHandler()
+                    .getPhotoModel()
+                    .getPhotoFromInstallation(installation.getID());
+
+            allPhotosTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                photos = newValue;
+
+                if (photos != null) {
+                    for (Photo p : photos) {
+                        showPhotoCard(p);
+                    }
+                }
+            });
+
+            allPhotosTask.setOnFailed(event -> displayError(allPhotosTask.getException()));
+
+            TaskExecutor.executeTask(allPhotosTask);
+
         } catch (Exception e) {
-            e.printStackTrace();
             displayError(e);
-        }
-        if (photos != null) {
-            for (Photo p : photos) {
-                showPhotoCard(p);
-            }
         }
     }
 

@@ -110,11 +110,11 @@ public class CreateInstallationController extends BaseController {
             String description = txtDescription.getText();
 
             if(installationToEditId != -1) {
-                return new Installation(installationToEditId, installation.getProjectID(), name, description,
-                        installation.getDrawingBytes(), installation.getIsDone());
+                return new Installation(installationToEditId, installation.getProjectID(),
+                        name, description, installation.getIsDone());
             }
 
-            return new Installation(project.getID(), name, description, null,false);
+            return new Installation(project.getID(), name, description,false);
         }
         return null;
     }

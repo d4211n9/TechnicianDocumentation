@@ -12,6 +12,7 @@ public class ModelsHandler {
     private InstallationModel installationModel;
     private AddressModel addressModel;
     private PhotoModel photoModel;
+    private DrawingModel drawingModel;
 
 
     private ModelsHandler() throws Exception {
@@ -29,6 +30,7 @@ public class ModelsHandler {
             installationModel = installationModelFuture.get();
             addressModel =  addressModelFuture.get();
             photoModel = photoModelFuture.get();
+            drawingModel = new DrawingModel();
         }
     }
 
@@ -55,6 +57,10 @@ public class ModelsHandler {
     }
     public AddressModel getAddressModel() {
         return addressModel;
+    }
+
+    public DrawingModel getDrawingModel() {
+        return drawingModel;
     }
 
     public PhotoModel getPhotoModel() {

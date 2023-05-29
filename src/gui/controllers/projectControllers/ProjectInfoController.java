@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -39,6 +40,8 @@ public class ProjectInfoController extends BaseController implements Initializab
     private VBox projectInfoView;
     @FXML
     private FlowPane fpInstallations;
+    @FXML
+    private ScrollPane spInstallation;
     @FXML
     private HBox hbUserBtnArea, hbProjectDescription;
     @FXML
@@ -61,6 +64,8 @@ public class ProjectInfoController extends BaseController implements Initializab
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
         projectInfoView.getChildren().add(addButtons());
+
+        fpInstallations.prefWrapLengthProperty().bind(spInstallation.widthProperty());
     }
 
     public void setContent(Project project) {
@@ -134,7 +139,6 @@ public class ProjectInfoController extends BaseController implements Initializab
         hbProjectDescription.getChildren().add(btnEditSaveDescription);
     }
 
-
     private void addCreateInstallationBtn() {
         Button btnAddInstallation = createButton("➕🛠 Installation");
         buttonAccessLevel.addNodeAccessLevel(
@@ -195,7 +199,11 @@ public class ProjectInfoController extends BaseController implements Initializab
                 installations = newValue;
 
                 for (Installation i : installations) {
-                    showInstallation(i);
+                    try {
+                        showInstallation(i);
+                    } catch (Exception e) {
+                        displayError(e);
+                    }
                 }
             });
 

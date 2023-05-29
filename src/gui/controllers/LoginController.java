@@ -101,7 +101,8 @@ public class LoginController extends BaseController implements Initializable {
                     .valueProperty()
                     .addListener((observable, oldValue, newValue) -> {
                         if (newValue) {
-                            MainControllerHandler.getInstance().getController();
+                            MainController mainController = MainControllerHandler.getInstance().getController();
+                            mainController.setLandingPage();
                             close();
                         } else {
                             //TODO Show that something went wrong

@@ -42,10 +42,6 @@ public class ProjectFacade {
         return photoDAO.updatePhoto(photo);
     }
 
-    public Project softDeleteProject(Project project) throws Exception {
-        return projectDAO.softDeleteProject(project);
-    }
-
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
         return systemUsersAssignedToProjectsDAO.getSystemUsersAssignedToProject(projectId);
     }
@@ -102,15 +98,7 @@ public class ProjectFacade {
         return photoDAO.getPhotoFromInstallation(installationID);
     }
 
-    /*
-    public List<Photo> getAllModifiedPhotos(Timestamp lastCheck) throws Exception {
-        return null;
-    }
-     */
-
     public void deletePhoto(Photo photo) throws Exception{
         photoDAO.deletePhoto(photo);
     }
-
-
 }

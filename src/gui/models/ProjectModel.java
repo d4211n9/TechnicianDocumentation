@@ -149,7 +149,6 @@ public class ProjectModel implements Runnable {
     }
 
     public Task<Void> assignSystemUserToProject(int projectId, SystemUser user) {
-
         Task<Void> assignUserToProjectTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
@@ -157,7 +156,6 @@ public class ProjectModel implements Runnable {
                 return null;
             }
         };
-
         return assignUserToProjectTask;
     }
 

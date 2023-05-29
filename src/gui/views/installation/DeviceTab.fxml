@@ -6,13 +6,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbDeviceTab" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="150.0" prefHeight="444.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.installation.DeviceTabController">
+<VBox fx:id="deviceTab" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="150.0" prefHeight="444.0" prefWidth="840.0" stylesheets="@../../stylesheets/installation/InstallationInfo.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.installation.DeviceTabController">
    <children>
       <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <columns>
-            <TableColumn fx:id="tcName" prefWidth="179.5" text="Name" />
-            <TableColumn fx:id="tcDescription" prefWidth="463.5" text="Description" />
-            <TableColumn fx:id="tcPrice" minWidth="0.0" prefWidth="143.0" text="Price" />
+            <TableColumn fx:id="tcName" prefWidth="360.5" text="Name" />
+            <TableColumn fx:id="tcID" prefWidth="64.0" text="ID" />
          </columns>
       </TableView>
       <HBox fx:id="deviceBtnArea" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="60.0" prefWidth="820.0" VBox.vgrow="ALWAYS">

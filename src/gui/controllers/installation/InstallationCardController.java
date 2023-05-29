@@ -8,35 +8,25 @@ import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import util.SymbolPaths;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class InstallationCardController extends BaseController implements Initializable {
+public class InstallationCardController extends BaseController {
     @FXML
     private Label lblName, lblDescription;
     @FXML
     private ImageView imgInstallation;
     @FXML
     private JFXListView listUsers;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        imgInstallation.setImage(new Image(SymbolPaths.LOGO));
-    }
     
     public void setContent(Installation installation) {
         lblName.setText(installation.getName());
         lblDescription.setText(installation.getDescription());
+        imgInstallation.setImage(new Image(SymbolPaths.DRAWING));
 
         loadAssignedUsers(installation.getID());
     }
