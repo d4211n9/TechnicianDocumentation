@@ -1,0 +1,27 @@
+På Erhvervsakademi Sydvest afsluttes Datamatikeruddannelsens 2. semester med et eksamensprojekt, der dækker over hele pensum fra første år. Projektet bygger på en case fra den virkelig verden, hvor en virksomhed stiller sig til rådighed for os som udviklingsteam. Her vil vi via den agile udviklingsmetode Scrum, udvikle et system med en arkitektur og datamodel, der nemt kan vedligeholdes og videreudvikles. Her ser vi samtidigt en god mulighed for at få lov til at anvende teori fra 1. og 2. semesters pensum i praksis.
+
+I denne README-fil går vi igennem de generalle setup punkter, for at programmet kører som det skal.
+
+JDK: liberica-19.0.2
+
+--- Maven Biblioteker  ---
+com.itextpdf:kernel:8.0.0
+com.itextpdf:layout:7.2.5
+com.jfoenix:jfoenix:9.0.10
+org.junit.jupiter:junit-jupiter:5.9.0
+com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre8
+org.slf4j:slf4j-simple:1.7.36
+
+--- Config Setup ---
+I programmets resources/config mappe, skal der oprettes en sql_config.txt tekstfil.
+Denne teksfil skal indeholde følgende for at programmet kan forbinde til databasen:
+Server=*server ip*
+Name=*database navn*
+User=*brugernavn*
+Password=*kodeord*
+
+De overstående værdier indrammet med ** erstattes med de svarene oplysninger.
+Disse oplysninger kan findes i den tilsvarende rapport under sektionen 9. Bilag - 9.2 Database Oplysninger.
+
+--- Login Informationer ---
+Login informationer til programmet kan findes i den tilsvarende rapport under sektionen 9. Bilag - 9.3 Login Oplysninger
