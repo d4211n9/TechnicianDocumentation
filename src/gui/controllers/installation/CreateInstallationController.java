@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import gui.controllers.BaseController;
 import gui.controllers.installation.*;
+import gui.controllers.projectControllers.ProjectInfoController;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import util.InputValidator;
 import util.ViewPaths;
 
 public class CreateInstallationController extends BaseController {
@@ -29,16 +31,20 @@ public class CreateInstallationController extends BaseController {
     private Project project;
     private Installation installation;
     private int installationToEditId = -1;
+    private ProjectInfoController projectInfoController;
 
 
-    public void setContent(Project project) {
+    public void setContent(Project project, ProjectInfoController projectInfoController) {
         this.project = project;
+        this.projectInfoController = projectInfoController;
     }
 
-    public void setEditContent(Installation installation) {
+    public void setEditContent(Installation installation, ProjectInfoController projectInfoController) {
+        this.installation = installation;
+        this.projectInfoController = projectInfoController;
+
         buttonArea.getChildren().remove(btnConfirm);
 
-        this.installation = installation;
         installationToEditId = installation.getID();
         txtfName.setText(installation.getName());
         txtDescription.setText(installation.getDescription());
@@ -68,6 +74,7 @@ public class CreateInstallationController extends BaseController {
             TaskExecutor.executeTask(updateInstallationTask);
 
             updateInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+                projectInfoController.loadInstallations();
                 openInstallationInfo(newValue);
             });
         } catch (Exception e) {
@@ -101,6 +108,8 @@ public class CreateInstallationController extends BaseController {
                 }
 
                 openInstallationInfo(newValue);
+
+                projectInfoController.loadInstallations();
             });
         } catch (Exception e) {
             displayError(e);
@@ -111,7 +120,7 @@ public class CreateInstallationController extends BaseController {
         FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
         VBox installationInfo = infoLoader.getRoot();
         InstallationInfoController infoController = (InstallationInfoController) infoLoader.getController();
-        infoController.setContent(installation);
+        infoController.setContent(installation, projectInfoController);
         getMainController().mainBorderPane.setCenter(installationInfo);
     }
 
@@ -131,8 +140,7 @@ public class CreateInstallationController extends BaseController {
     }
 
     private boolean validateInput() {
-        //TODO Validér input
-        return true;
+        return InputValidator.isName(txtfName.getText());
     }
 
     public void handleBack() {

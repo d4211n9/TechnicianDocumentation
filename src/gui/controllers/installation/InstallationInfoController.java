@@ -6,6 +6,7 @@ import be.SystemUser;
 import com.jfoenix.controls.JFXListView;
 import gui.controllers.BaseController;
 import gui.controllers.drawing.DrawingController;
+import gui.controllers.projectControllers.ProjectInfoController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
 import javafx.collections.FXCollections;
@@ -42,6 +43,8 @@ public class InstallationInfoController extends BaseController implements Initia
     private Label lblName, lblDescription;
     @FXML
     private JFXListView listUsers;
+
+    private ProjectInfoController projectInfoController;
     private NodeAccessLevel buttonAccessLevel;
     private Installation installation;
     private ObservableList<SystemUser> obsAssignedUsers = null;
@@ -62,8 +65,10 @@ public class InstallationInfoController extends BaseController implements Initia
         }
     }
 
-    public void setContent(Installation installation) {
+    public void setContent(Installation installation, ProjectInfoController projectInfoController) {
         this.installation = installation;
+        this.projectInfoController = projectInfoController;
+
         lblName.setText(installation.getName());
         lblDescription.setText(installation.getDescription());
 
@@ -84,6 +89,21 @@ public class InstallationInfoController extends BaseController implements Initia
         buttonAccessLevel = new NodeAccessLevel();
 
         addEditBtn();
+        addDeleteBtn();
+    }
+
+    private void addDeleteBtn() {
+        Button btnDelete = createButton("🗑 Delete");
+        buttonAccessLevel.addNodeAccessLevel(
+                btnDelete,
+                Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
+        addInfoButton(btnDelete);
+
+        btnDelete.setOnAction(event -> {
+            if(showQuestionDialog(installation.getName(), true)) {
+                handleDelete();
+            }
+        });
     }
 
     private void addEditBtn() {
@@ -96,8 +116,8 @@ public class InstallationInfoController extends BaseController implements Initia
         btnEditInfo.setOnAction(event -> {
             FXMLLoader loader = loadView(ViewPaths.CREATE_INSTALLATION);
             CreateInstallationController controller = loader.getController();
-            controller.setEditContent(installation);
-            loadInMainView(loader.getRoot(), installationInfo);
+            controller.setEditContent(installation, projectInfoController);
+            loadInMainView(loader.getRoot(), projectInfoController.projectInfoView);
         });
     }
 
@@ -129,6 +149,23 @@ public class InstallationInfoController extends BaseController implements Initia
 
     private void addInfoButton(Button button) {
         infoBtnArea.getChildren().add(button);
+    }
+
+    private void handleDelete() {
+        try {
+            Task<Void> deleteInstallationTask = getModelsHandler().getInstallationModel().deleteInstallation(installation);
+
+            deleteInstallationTask.setOnSucceeded(event -> {
+                projectInfoController.loadInstallations();
+                handleBack();
+            });
+
+            deleteInstallationTask.setOnFailed(event -> displayError(deleteInstallationTask.getException()));
+
+            TaskExecutor.executeTask(deleteInstallationTask);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     public void handleBack() {

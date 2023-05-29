@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
 
 public class ProjectInfoController extends BaseController implements Initializable {
     @FXML
-    private VBox projectInfoView;
+    public VBox projectInfoView;
     @FXML
     private FlowPane fpInstallations;
     @FXML
@@ -167,7 +167,7 @@ public class ProjectInfoController extends BaseController implements Initializab
             FXMLLoader createLoader = loadView(ViewPaths.CREATE_INSTALLATION);
             VBox createInstallation = createLoader.getRoot();
             CreateInstallationController controller = createLoader.getController();
-            controller.setContent(project);
+            controller.setContent(project, this);
             getMainController().mainBorderPane.setCenter(createInstallation);
             getMainController().saveLastView(projectInfoView);
         });
@@ -208,7 +208,9 @@ public class ProjectInfoController extends BaseController implements Initializab
     }
 
 
-    private void loadInstallations() {
+    public void loadInstallations() {
+        fpInstallations.getChildren().clear();
+
         try {
             Task<ObservableList<Installation>> allInstallationsTask = getModelsHandler()
                     .getInstallationModel()
@@ -250,7 +252,7 @@ public class ProjectInfoController extends BaseController implements Initializab
 
             FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
             InstallationInfoController infoController = (InstallationInfoController) infoLoader.getController();
-            infoController.setContent(i);
+            infoController.setContent(i, this);
 
             getMainController().mainBorderPane.setCenter(infoLoader.getRoot());
             getMainController().saveLastView(projectInfoView);

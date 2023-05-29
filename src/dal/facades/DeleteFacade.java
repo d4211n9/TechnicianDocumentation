@@ -33,13 +33,13 @@ public class DeleteFacade {
     }
 
     public void deleteInstallation(Installation deletedInstallation) throws Exception {
+        deletedInstallation.setDeleted(new Timestamp(System.currentTimeMillis()));
         installationDAO.updateInstallation(deletedInstallation);
     }
 
     public void deleteProject(Project deletedProject) throws Exception {
         for (Installation i : installationDAO.getInstallationsFromProject(deletedProject.getID())) {
-            i.setDeleted(new Timestamp(System.currentTimeMillis()));
-            installationDAO.updateInstallation(i);
+            deleteInstallation(i);
         }
         deletedProject.setDeleted(new Timestamp(System.currentTimeMillis()));
         projectDAO.updateProject(deletedProject);
