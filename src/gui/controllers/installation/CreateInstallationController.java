@@ -62,7 +62,11 @@ public class CreateInstallationController extends BaseController {
         try {
             Task<Installation> updateInstallationTask = getModelsHandler().getInstallationModel().updateInstallation(installation);
 
-            updateInstallationTask.setOnSucceeded(event -> openInstallationInfo(installation));
+            updateInstallationTask.setOnSucceeded(event -> {
+                FXMLLoader loader = loadView(ViewPaths.PROJECTS_VIEW);
+                loadInMainView(loader.getRoot(), null);
+            });
+
             updateInstallationTask.setOnFailed(failedEvent -> displayError(updateInstallationTask.getException()));
 
             TaskExecutor.executeTask(updateInstallationTask);
@@ -84,8 +88,9 @@ public class CreateInstallationController extends BaseController {
                     .getInstallationModel()
                     .createInstallation(installation);
 
-            createInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
-                openInstallationInfo(installation);
+            createInstallationTask.setOnSucceeded(event -> {
+                FXMLLoader loader = loadView(ViewPaths.PROJECTS_VIEW);
+                loadInMainView(loader.getRoot(), null);
             });
 
             createInstallationTask.setOnFailed(event -> displayError(createInstallationTask.getException()));
