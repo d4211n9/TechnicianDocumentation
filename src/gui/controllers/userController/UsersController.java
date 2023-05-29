@@ -70,12 +70,12 @@ public class UsersController extends TableViewController implements Initializabl
         addEditBtn();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕👤 Add User", ViewPaths.CREATE_USER_VIEW, usersView),
+                loadButton("➕👤 Add", ViewPaths.CREATE_USER_VIEW, usersView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
     private void addEditBtn() {
-        editButton = createButton("✏ Edit User");
+        editButton = createButton("✏ Edit");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -89,7 +89,7 @@ public class UsersController extends TableViewController implements Initializabl
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("🗑 Delete User");
+        deleteButton = createButton("🗑 Delete");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);

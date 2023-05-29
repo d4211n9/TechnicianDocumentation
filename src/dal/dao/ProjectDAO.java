@@ -2,6 +2,7 @@ package dal.dao;
 
 import be.Address;
 import be.Client;
+import be.Enum.ClientType;
 import be.Enum.ProjectStatus;
 import be.Project;
 import dal.connectors.AbstractConnector;
@@ -110,7 +111,7 @@ public class ProjectDAO implements IProjectDAO {
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
 
-                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, ClientType.getClientType(type));
 
                 //Mapping the project address
                 int projectAddressID = resultSet.getInt("ProjectAddressID");
@@ -205,7 +206,7 @@ public class ProjectDAO implements IProjectDAO {
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
 
-                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, ClientType.getClientType(type));
 
                 //Mapping the project address
                 int projectAddressID = resultSet.getInt("ProjectAddressID");
@@ -270,7 +271,7 @@ public class ProjectDAO implements IProjectDAO {
                 String phone = resultSet.getString("ClientPhone");
                 String type = resultSet.getString("ClientType");
 
-                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, ClientType.getClientType(type));
 
                 //Mapping the project address
                 int projectAddressID = resultSet.getInt("ProjectAddressID");

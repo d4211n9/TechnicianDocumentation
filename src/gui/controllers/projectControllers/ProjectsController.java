@@ -62,12 +62,12 @@ public class ProjectsController extends TableViewController implements Initializ
         addEditBtn();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕📄 Add Project", ViewPaths.ADD_PROJECT_VIEW, projectsView),
+                loadButton("➕📄 Add", ViewPaths.ADD_PROJECT_VIEW, projectsView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
     private void addEditBtn() {
-        editButton = createButton("✏ Edit Project");
+        editButton = createButton("✏ Edit");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -81,7 +81,7 @@ public class ProjectsController extends TableViewController implements Initializ
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("🗑 Delete Project");
+        deleteButton = createButton("🗑 Delete");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);

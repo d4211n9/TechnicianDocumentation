@@ -74,7 +74,7 @@ public class Project implements Searchable<Project> {
 
     @Override
     public Project search(String query) {
-        String searchableFields = (ID + name + clientName + projectAddress + created).toLowerCase(); //TODO Re-add address after normalizing
+        String searchableFields = (ID + name + clientName + projectAddress.toString() + created).toLowerCase();
         String lowerCaseQuery = query.toLowerCase();
 
         if (searchableFields.contains(lowerCaseQuery)) return this;

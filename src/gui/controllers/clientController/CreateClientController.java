@@ -2,14 +2,18 @@ package gui.controllers.clientController;
 
 import be.Address;
 import be.Client;
+import be.Enum.ClientType;
 import be.Enum.SystemRole;
 import be.SystemUser;
 import com.jfoenix.controls.JFXButton;
 import gui.controllers.BaseController;
 import gui.util.TaskExecutor;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -17,7 +21,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import util.InputValidator;
 
-public class CreateClientController extends BaseController {
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class CreateClientController extends BaseController implements Initializable {
     @FXML
     private TextField txtfName, txtfPhone, txtfEmail, txtfAddress, txtfCity, txtfPostalCode;
     @FXML
@@ -26,11 +35,26 @@ public class CreateClientController extends BaseController {
     private HBox buttonArea;
     @FXML
     private JFXButton btnConfirm;
+    @FXML
+    private ComboBox<ClientType> cbType;
 
     Client selectedClient;
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        createComboBoxContent();
+    }
+
+    private void createComboBoxContent() {
+        List<ClientType> clientTypes = new ArrayList<>();
+        clientTypes.add(ClientType.Consumer);
+        clientTypes.add(ClientType.Business);
+        clientTypes.add(ClientType.Government);
+        cbType.setItems(FXCollections.observableArrayList(clientTypes));
+    }
 
     public void handleConfirm() {
-        if(isTextFieldInfoValid()){
+        if(isTextFieldInfoValid()){ //TODO: fix input validation og brug isTextFieldInfoValid()
 
             Client client = bindClientInfo();
 
@@ -55,6 +79,7 @@ public class CreateClientController extends BaseController {
     }
 
     private boolean isTextFieldInfoValid() {
+
         return InputValidator.isName(txtfName.getText()) &&
                 InputValidator.isEmail(txtfEmail.getText()) &&
                 InputValidator.isPhone(txtfPhone.getText()) &&
@@ -79,8 +104,9 @@ public class CreateClientController extends BaseController {
         txtfAddress.setText(selectedItem.getAddress().getStreet());
         txtfPostalCode.setText(selectedItem.getAddress().getPostalCode());
         txtfCity.setText(selectedItem.getAddress().getCity());
+        cbType.getSelectionModel().select(selectedItem.getClientType());
 
-        lblCreateUser.setText("Edit Client");
+        lblCreateUser.setText("Edit Customer");
 
         addEditBtn();
         buttonArea.getChildren().remove(btnConfirm);
@@ -92,7 +118,7 @@ public class CreateClientController extends BaseController {
         buttonArea.getChildren().add(0, button);
 
         button.setOnMouseClicked(event -> {
-            if(isTextFieldInfoValid()) {
+            if(isTextFieldInfoValid()) { //TODO: fix input validation og brug isTextFieldInfoValid()
                 Client client = bindClientInfo();
                 client = bindClientID(client);
 
@@ -127,6 +153,8 @@ public class CreateClientController extends BaseController {
         String street = txtfAddress.getText();
         String postalCode = txtfPostalCode.getText();
 
+        ClientType clientType = cbType.getSelectionModel().getSelectedItem();
+
         Address address = null;
         try {
             address = getModelsHandler().getAddressModel().createAddress(new Address(street, postalCode, city));
@@ -134,13 +162,11 @@ public class CreateClientController extends BaseController {
             displayError(e);
         }
 
-        return new Client(name, address, email, phone, "b2b");
-        //TODO type burde være en enum...
-        //TODO Type skal også tilføjes til .fxml så man kan vælge ved create og edit
+        return new Client(name, address, email, phone, clientType);
     }
 
     private Client bindClientID(Client client) {
         return new Client(selectedClient.getID(), client.getName(), client.getAddress(),
-                client.getEmail(), client.getPhone(), "b2b");
+                client.getEmail(), client.getPhone(), client.getClientType());
     }
 }

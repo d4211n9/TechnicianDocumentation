@@ -9,7 +9,6 @@ import bll.util.PDFGenerator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXToggleButton;
 import gui.controllers.BaseController;
 import gui.controllers.installation.CreateInstallationController;
 import gui.controllers.installation.InstallationCardController;
@@ -25,6 +24,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -40,20 +44,20 @@ import java.util.ResourceBundle;
 
 public class ProjectInfoController extends BaseController implements Initializable {
     @FXML
-    private VBox projectsView;
+    private VBox projectInfoView;
     @FXML
     private FlowPane fpInstallations;
+    @FXML
+    private ScrollPane spInstallation;
     @FXML
     private HBox hbUserBtnArea, hbProjectDescription;
     @FXML
     private JFXListView listUsers;
     @FXML
-    private JFXToggleButton toggleUsers;
-    @FXML
     private ComboBox cbStatus;
     @FXML
     private Label lblProjectTitle, lblClientName, lblClientLocation, lblClientType, lblClientEmail, lblClientPhone,
-            lblCreated, lblProjectLocation, lblAssignedUsers;
+            lblCreated, lblProjectLocation;
     @FXML
     private JFXTextArea txtaDescription;
 
@@ -62,12 +66,13 @@ public class ProjectInfoController extends BaseController implements Initializab
     private List<Installation> installations;
     private JFXButton assignUser, unAssignUser;
     private ObservableList<SystemUser> obsAssignedUsers = null;
-    private ObservableList<SystemUser> obsUnAssignedUsers = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeButtonAccessLevels();
-        projectsView.getChildren().add(addButtons());
+        projectInfoView.getChildren().add(addButtons());
+
+        fpInstallations.prefWrapLengthProperty().bind(spInstallation.widthProperty());
     }
 
     public void setContent(Project project) {
@@ -89,7 +94,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         cbStatus.getSelectionModel().select(project.getStatus());
 
         loadInstallations();
-        loadUsers();
+        loadAssignedUsers();
     }
     public void handleBack() {
         getMainController().mainBorderPane.setCenter(getMainController().getLastView());
@@ -100,8 +105,8 @@ public class ProjectInfoController extends BaseController implements Initializab
         buttonAccessLevel = new NodeAccessLevel();
 
         addPrintButton();
-        addAssignUserBtn();
         addUnAssignUserBtn();
+        addAssignUserBtn();
         addCreateInstallationBtn();
         addEditSaveDescriptionBtn();
     }
@@ -165,12 +170,12 @@ public class ProjectInfoController extends BaseController implements Initializab
                 btnAddInstallation,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager, SystemRole.Technician));
         btnAddInstallation.setOnMouseClicked(event -> {
-            getMainController().saveLastView(projectsView);
             FXMLLoader createLoader = loadView(ViewPaths.CREATE_INSTALLATION);
             VBox createInstallation = createLoader.getRoot();
             CreateInstallationController controller = createLoader.getController();
             controller.setContent(project);
             getMainController().mainBorderPane.setCenter(createInstallation);
+            getMainController().saveLastView(projectInfoView);
         });
     }
 
@@ -184,7 +189,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         assignUser.setOnMouseClicked(event -> {
                 FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
                 AddUserToProjectController controller = loader.getController();
-                loadInMainView(loader.getRoot(), projectsView);
+                loadInMainView(loader.getRoot(), projectInfoView);
                 controller.setProject(project);
         });
     }
@@ -199,7 +204,7 @@ public class ProjectInfoController extends BaseController implements Initializab
         unAssignUser.setOnAction(event -> {
             FXMLLoader loader = loadView(ViewPaths.REMOVE_FROM_PROJECT);
             RemoveUserFromProject controller = loader.getController();
-            loadInMainView(loader.getRoot(), projectsView);
+            loadInMainView(loader.getRoot(), projectInfoView);
             controller.setContent(project);
         });
     }
@@ -219,7 +224,11 @@ public class ProjectInfoController extends BaseController implements Initializab
                 installations = newValue;
 
                 for (Installation i : installations) {
-                    showInstallation(i);
+                    try {
+                        showInstallation(i);
+                    } catch (Exception e) {
+                        displayError(e);
+                    }
                 }
             });
 
@@ -237,20 +246,22 @@ public class ProjectInfoController extends BaseController implements Initializab
         Pane installationCard = cardLoader.getRoot();
         InstallationCardController cardController = cardLoader.getController();
         cardController.setContent(i);
+
         installationCard.setOnMouseClicked(event -> {
-            getMainController().saveLastView(projectsView);
+            try {
+                getModelsHandler().getInstallationModel().setSelectedInstallation(i);
+            } catch (Exception e) {
+                displayError(e);
+            }
 
             FXMLLoader infoLoader = loadView(ViewPaths.INSTALLATION_INFO);
-            VBox installationInfo = infoLoader.getRoot();
             InstallationInfoController infoController = infoLoader.getController();
             infoController.setContent(i);
-            getMainController().mainBorderPane.setCenter(installationInfo);
+
+            getMainController().mainBorderPane.setCenter(infoLoader.getRoot());
+            getMainController().saveLastView(projectInfoView);
         });
         fpInstallations.getChildren().add(installationCard);
-    }
-
-    private void loadUsers() {
-        loadAssignedUsers();
     }
 
     private void loadAssignedUsers() {

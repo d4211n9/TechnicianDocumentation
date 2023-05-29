@@ -11,21 +11,26 @@ public class ModelsHandler {
     private ClientModel clientModel;
     private InstallationModel installationModel;
     private AddressModel addressModel;
+    private PhotoModel photoModel;
+    private DrawingModel drawingModel;
 
 
     private ModelsHandler() throws Exception {
-        try (ExecutorService executorService = Executors.newFixedThreadPool(4)) {
+        try (ExecutorService executorService = Executors.newFixedThreadPool(6)) {
             Future<SystemUserModel> systemUserModelFuture = executorService.submit(SystemUserModel::new);
             Future<ProjectModel> projectModelFuture = executorService.submit(ProjectModel::new);
             Future<ClientModel> clientModelFuture = executorService.submit(ClientModel::new);
             Future<InstallationModel> installationModelFuture = executorService.submit(InstallationModel::new);
             Future<AddressModel> addressModelFuture = executorService.submit(AddressModel::new);
+            Future<PhotoModel> photoModelFuture = executorService.submit(PhotoModel::new);
 
             systemUserModel = systemUserModelFuture.get();
             projectModel = projectModelFuture.get();
             clientModel = clientModelFuture.get();
             installationModel = installationModelFuture.get();
             addressModel =  addressModelFuture.get();
+            photoModel = photoModelFuture.get();
+            drawingModel = new DrawingModel();
         }
     }
 
@@ -52,5 +57,13 @@ public class ModelsHandler {
     }
     public AddressModel getAddressModel() {
         return addressModel;
+    }
+
+    public DrawingModel getDrawingModel() {
+        return drawingModel;
+    }
+
+    public PhotoModel getPhotoModel() {
+        return photoModel;
     }
 }

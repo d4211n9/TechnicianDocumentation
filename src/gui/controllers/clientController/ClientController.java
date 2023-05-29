@@ -2,7 +2,6 @@ package gui.controllers.clientController;
 
 import be.Client;
 import be.Enum.SystemRole;
-import be.Project;
 import gui.controllers.TableViewController;
 import gui.util.NodeAccessLevel;
 import gui.util.TaskExecutor;
@@ -18,7 +17,6 @@ import util.ViewPaths;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,7 +24,7 @@ import java.util.ResourceBundle;
 public class ClientController extends TableViewController implements Initializable {
 
     @FXML
-    private TableColumn<Client, String> tcName, tcEmail, tcPhone, tcStreet, tcPostalCode, tcCity;
+    private TableColumn<Client, String> tcName, tcEmail, tcPhone, tcStreet, tcPostalCode, tcCity, tcType;
     @FXML
     private VBox clientView;
     @FXML
@@ -59,6 +57,8 @@ public class ClientController extends TableViewController implements Initializab
         tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tcType.setCellValueFactory(new PropertyValueFactory<>("type"));
+
         try {
             tableView.setItems(getModelsHandler().getClientModel().getAllClients());
         } catch (Exception e) {
@@ -73,12 +73,12 @@ public class ClientController extends TableViewController implements Initializab
         addEditBtn();
 
         buttonAccessLevel.addNodeAccessLevel(
-                loadButton("➕💰 Add Client", ViewPaths.CREATE_CLIENTS_VIEW, clientView),
+                loadButton("➕👨‍💼 Add", ViewPaths.CREATE_CLIENTS_VIEW, clientView),
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
     }
 
     private void addEditBtn() {
-        editButton = createButton("✏ Edit Client");
+        editButton = createButton("✏ Edit");
         buttonAccessLevel.addNodeAccessLevel(editButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         editButton.setDisable(true);
@@ -92,7 +92,7 @@ public class ClientController extends TableViewController implements Initializab
     }
 
     private void addDeleteBtn() {
-        deleteButton = createButton("🗑 Delete Client");
+        deleteButton = createButton("🗑 Delete");
         buttonAccessLevel.addNodeAccessLevel(deleteButton,
                 Arrays.asList(SystemRole.Administrator, SystemRole.ProjectManager));
         deleteButton.setDisable(true);

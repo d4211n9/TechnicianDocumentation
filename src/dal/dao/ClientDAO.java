@@ -2,6 +2,7 @@ package dal.dao;
 
 import be.Address;
 import be.Client;
+import be.Enum.ClientType;
 import dal.connectors.AbstractConnector;
 import dal.connectors.SqlConnector;
 import dal.interfaces.IClientDAO;
@@ -40,7 +41,7 @@ public class ClientDAO implements IClientDAO {
 
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
-                newClient = new Client(id, client.getName(), client.getAddress(), client.getEmail(), client.getPhone(), client.getType());
+                newClient = new Client(id, client.getName(), client.getAddress(), client.getEmail(), client.getPhone(), client.getClientType());
             }
         }
         catch (Exception e) {
@@ -79,7 +80,7 @@ public class ClientDAO implements IClientDAO {
                 String phone = resultSet.getString(5);
                 String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, ClientType.getClientType(type));
 
                 allClients.add(client);
             }
@@ -146,7 +147,7 @@ public class ClientDAO implements IClientDAO {
                 String phone = resultSet.getString(5);
                 String type = resultSet.getString(6);
 
-                Client client = new Client(clientID, clientName, clientAddress, email, phone, type);
+                Client client = new Client(clientID, clientName, clientAddress, email, phone, ClientType.getClientType(type));
 
                 allClients.add(client);
             }

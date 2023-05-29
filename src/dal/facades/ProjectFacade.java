@@ -1,16 +1,11 @@
 package dal.facades;
 
 import be.Installation;
+import be.Photo;
 import be.Project;
 import be.SystemUser;
-import dal.dao.InstallationDAO;
-import dal.dao.ProjectDAO;
-import dal.dao.SystemUserAssignedToInstallationDAO;
-import dal.dao.SystemUsersAssignedToProjectsDAO;
-import dal.interfaces.IInstallationDAO;
-import dal.interfaces.IProjectDAO;
-import dal.interfaces.ISystemUserAssignedToInstallationDAO;
-import dal.interfaces.ISystemUsersAssignedToProjectsDAO;
+import dal.dao.*;
+import dal.interfaces.*;
 import exceptions.DALException;
 
 import java.sql.Timestamp;
@@ -21,12 +16,14 @@ public class ProjectFacade {
     private ISystemUsersAssignedToProjectsDAO systemUsersAssignedToProjectsDAO;
     private IInstallationDAO installationDAO;
     private ISystemUserAssignedToInstallationDAO systemUsersAssignedToInstallationDAO;
+    private IPhotoDAO photoDAO;
 
     public ProjectFacade() throws Exception {
         projectDAO = new ProjectDAO();
         systemUsersAssignedToProjectsDAO = new SystemUsersAssignedToProjectsDAO();
         installationDAO = new InstallationDAO();
         systemUsersAssignedToInstallationDAO = new SystemUserAssignedToInstallationDAO();
+        photoDAO = new PhotoDAO();
     }
 
     public Project createProject(Project project) throws Exception {
@@ -41,8 +38,8 @@ public class ProjectFacade {
         return projectDAO.updateProject(project);
     }
 
-    public Project softDeleteProject(Project project) throws Exception {
-        return projectDAO.softDeleteProject(project);
+    public Photo updatePhoto(Photo photo) throws Exception {
+        return photoDAO.updatePhoto(photo);
     }
 
     public List<SystemUser> getSystemUsersAssignedToProject(int projectId) throws Exception {
@@ -92,5 +89,16 @@ public class ProjectFacade {
 
     public List<Project> getAllProjectsAssignedToUser(String systemUserID) throws DALException{
         return projectDAO.getAllProjectsAssignedToUser(systemUserID);
+    }
+
+    public Photo uploadPhoto(Photo photo) throws Exception {
+        return photoDAO.uploadPhoto(photo);
+    }
+    public List<Photo> getPhotoFromInstallation(int installationID) throws Exception {
+        return photoDAO.getPhotoFromInstallation(installationID);
+    }
+
+    public void deletePhoto(Photo photo) throws Exception{
+        photoDAO.deletePhoto(photo);
     }
 }

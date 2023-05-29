@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="background" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.DrawingController">
+   <children>
+      <HBox prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+         <children>
+            <ScrollPane fx:id="contentArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1000.0" HBox.hgrow="ALWAYS">
+               <content>
+                  <Pane fx:id="pane" prefHeight="1000.0" prefWidth="1000.0" />
+               </content>
+            </ScrollPane>
+            <VBox alignment="TOP_CENTER" minWidth="200.0" prefHeight="400.0" prefWidth="200.0" HBox.hgrow="NEVER">
+               <children>
+                  <Accordion>
+                    <panes>
+                      <TitledPane animated="false" text="Devices">
+                           <content>
+                              <ScrollPane>
+                                 <content>
+                                    <VBox alignment="TOP_CENTER">
+                                       <children>
+                                          <JFXButton fx:id="btnBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddDevice" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                          </JFXButton>
+                                          <VBox fx:id="sidebarDevice" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0" />
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </content>
+                        </TitledPane>
+                        <TitledPane prefHeight="200.0" prefWidth="200.0" text="Wires">
+                           <content>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <VBox fx:id="sidebarLine" alignment="TOP_CENTER" prefWidth="197.0" spacing="10.0" />
+                                    <JFXButton fx:id="btnBack1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddWire" prefHeight="35.0" prefWidth="90.0" text="Add" textOverrun="CLIP">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <VBox fx:id="sideBarWires" prefHeight="0.0" prefWidth="0.0" spacing="10.0" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                    </panes>
+                  </Accordion>
+                  <VBox fx:id="objectInfo" alignment="TOP_CENTER" prefHeight="117.0" prefWidth="200.0" spacing="10.0" />
+                  <Pane prefHeight="0.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                   <JFXButton buttonType="RAISED" onAction="#save" prefHeight="40.0" prefWidth="100.0" text="Save">
+                       <VBox.margin>
+                           <Insets top="25.0" />
+                       </VBox.margin>
+                       <font>
+                           <Font size="16.0" />
+                       </font>
+                   </JFXButton>
+               </children></VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

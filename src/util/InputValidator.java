@@ -24,10 +24,9 @@ public class InputValidator {
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$") && !password.isEmpty();
     }
 
-
-    //todo make validation
     public static boolean isName(String name){
-        return name.matches("[A-Z][a-zA-Z]*");
+        return !name.isBlank();
+        //return name.matches("[A-Z][a-zA-Z]*"); ??
     }
 
     /**
@@ -36,7 +35,7 @@ public class InputValidator {
      * @return true if the input matches a DK phone no.
      */
     public static boolean isPhone(String phone) {
-        return phone.matches("^\\D*(?:\\d\\D*){8,}$");
+        return phone.matches("\\D*(?:\\d\\D*){8,}");
     }
 
     /**
@@ -45,11 +44,13 @@ public class InputValidator {
      * @return true if street input matches pattern
      */
     public static boolean isStreet(String street) {
-        return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$");
+        return !street.isBlank();
+        //return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$"); ??
     }
 
     public static boolean isCity(String city) {
-        return city.matches("[A-Z][a-zA-Z]*");
+        return !city.isBlank();
+        //return city.matches("[A-Z][a-zA-Z]*"); ??
     }
 
     /**
