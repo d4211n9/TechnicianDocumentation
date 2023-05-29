@@ -74,7 +74,7 @@ public class RemoveUserFromProject extends TableViewController implements Initia
 
     public void handleAddUsers(MouseEvent mouseEvent) {
         FXMLLoader loader = loadView(ViewPaths.ADD_TO_PROJECT);
-        AddUserToProjectController controller = loader.getController();
+        AddUserToProjectController controller = (AddUserToProjectController) loader.getController();
         loadInMainView(loader.getRoot(), usersView);
         controller.setProject(project);
     }
