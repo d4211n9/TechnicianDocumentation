@@ -97,7 +97,6 @@ public class ClientModel implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("client update");
 
         List<Client> updatedClients;
         try {

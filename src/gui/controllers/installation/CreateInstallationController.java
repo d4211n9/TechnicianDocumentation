@@ -93,6 +93,13 @@ public class CreateInstallationController extends BaseController {
             TaskExecutor.executeTask(createInstallationTask);
 
             createInstallationTask.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+                try {
+                    getModelsHandler().getInstallationModel().setSelectedInstallation(newValue);
+                } catch (Exception e) {
+                    displayError(e);
+                }
+
                 openInstallationInfo(newValue);
             });
         } catch (Exception e) {
