@@ -29,7 +29,8 @@ public class DeleteFacade {
     }
 
     public void deleteSystemUser(SystemUser deletedSystemUser) throws Exception {
-        systemUserDAO.updateSystemUser(deletedSystemUser);
+        deletedSystemUser.setDeleted(new Timestamp(System.currentTimeMillis()));
+        systemUserDAO.deleteSystemUser(deletedSystemUser);
     }
 
     public void deleteInstallation(Installation deletedInstallation) throws Exception {

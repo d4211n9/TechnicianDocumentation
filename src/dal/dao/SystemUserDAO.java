@@ -142,6 +142,30 @@ public class SystemUserDAO implements ISystemUserDAO {
         return updatedUser;
     }
 
+    @Override
+    public SystemUser deleteSystemUser(SystemUser user) throws Exception {
+        SystemUser deletedUser = null;
+        String sql = "UPDATE SystemUser SET SoftDelete=?, LastModified=? WHERE Email=?;";
+        try (Connection connection = connector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setTimestamp(1, user.getDeleted());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            statement.setTimestamp(2, t);
+            statement.setString(3, user.getEmail());
+
+            statement.executeUpdate();
+
+            deletedUser = user;
+        } catch (SQLException e) {
+            DALException dalException = new DALException("Failed to delete the system user", e);
+            dalException.printStackTrace();
+            throw dalException;
+        }
+
+        return deletedUser;
+    }
+
     public List<SystemUser> getAllModifiedUsers(Timestamp lastUpdateTime) throws Exception {
         ArrayList<SystemUser> allUsers = new ArrayList<>();
         String sql = "SELECT * FROM SystemUser WHERE LastModified>?;";
