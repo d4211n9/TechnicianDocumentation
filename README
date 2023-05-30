@@ -1,3 +1,5 @@
+Github: https://github.com/d4211n9/TechnicianDocumentation
+
 På Erhvervsakademi Sydvest afsluttes Datamatikeruddannelsens 2. semester med et eksamensprojekt, der dækker over hele pensum fra første år. Projektet bygger på en case fra den virkelig verden, hvor en virksomhed stiller sig til rådighed for os som udviklingsteam. Her vil vi via den agile udviklingsmetode Scrum, udvikle et system med en arkitektur og datamodel, der nemt kan vedligeholdes og videreudvikles. Her ser vi samtidigt en god mulighed for at få lov til at anvende teori fra 1. og 2. semesters pensum i praksis.
 
 I denne README-fil går vi igennem de generalle setup punkter, for at programmet kører som det skal.
