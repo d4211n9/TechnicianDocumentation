@@ -26,7 +26,6 @@ public class InputValidator {
 
     public static boolean isName(String name){
         return !name.isBlank();
-        //return name.matches("[A-Z][a-zA-Z]*"); ??
     }
 
     /**
@@ -45,12 +44,10 @@ public class InputValidator {
      */
     public static boolean isStreet(String street) {
         return !street.isBlank();
-        //return street.matches("^(?=.*[a-zA-Z])(?=.*[0-9])$"); ??
     }
 
     public static boolean isCity(String city) {
         return !city.isBlank();
-        //return city.matches("[A-Z][a-zA-Z]*"); ??
     }
 
     /**
