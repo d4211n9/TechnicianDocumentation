@@ -15,7 +15,7 @@ com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre8
 org.slf4j:slf4j-simple:1.7.36
 
 --- Config Setup ---
-I programmets resources/config mappe, skal der oprettes en sql_config.txt tekstfil.
+I programmets resources/config mappe, skal der oprettes en sql_dev_config.txt tekstfil.
 Denne teksfil skal indeholde følgende for at programmet kan forbinde til databasen:
 Server=*server ip*
 Name=*database navn*
