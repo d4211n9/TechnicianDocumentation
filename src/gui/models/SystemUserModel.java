@@ -24,7 +24,6 @@ public class SystemUserModel implements Runnable {
     private String searchString;
     private ObservableList<SystemUser> filteredUserList;
     private  List<SystemUser> copyAllUsers;
-
     private Timestamp lastUpdatedTime;
 
     public SystemUserModel() throws Exception {
@@ -36,44 +35,6 @@ public class SystemUserModel implements Runnable {
 
         filteredUserList = FXCollections.observableList(copyAllUsers);
         lastUpdatedTime = new Timestamp(System.currentTimeMillis());
-    }
-
-    public List<SystemUser> retrieveAllUsers() throws Exception {
-        copyAllUsers = new ArrayList<>(systemUserManager.getAllSystemUsers());
-        return copyAllUsers;
-    }
-
-    public Task<Boolean> SystemUserValidLogin(SystemUser user, boolean rememberLogin) {
-        Task<Boolean> validLoginTask = new Task<>() {
-            @Override
-            protected Boolean call() throws Exception {
-                loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user, rememberLogin));
-
-                boolean isValidLogin = loggedInSystemUser.get() != null;
-
-                updateValue(isValidLogin);
-
-                return isValidLogin;
-            }
-        };
-
-        return validLoginTask;
-    }
-
-    public SystemUser isLoginRemembered() {
-        return systemUserManager.isLoginRemembered();
-    }
-
-    public void deleteRememberedLogin() {
-        systemUserManager.deleteRememberedLogin();
-    }
-
-    public ObservableValue<SystemUser> getLoggedInSystemUser() {
-        return loggedInSystemUser;
-    }
-
-    public ObservableList<SystemUser> getAllUsers() {
-        return filteredUserList;
     }
 
     public void search(String query){
@@ -103,6 +64,43 @@ public class SystemUserModel implements Runnable {
         };
 
         return createSystemUserTask;
+    }
+
+    public List<SystemUser> retrieveAllUsers() throws Exception {
+        copyAllUsers = new ArrayList<>(systemUserManager.getAllSystemUsers());
+        return copyAllUsers;
+    }
+
+    public Task<Boolean> SystemUserValidLogin(SystemUser user, boolean rememberLogin) {
+        Task<Boolean> validLoginTask = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                loggedInSystemUser = new SimpleObjectProperty<>(systemUserManager.systemUserValidLogin(user, rememberLogin));
+
+                boolean isValidLogin = loggedInSystemUser.get() != null;
+
+                updateValue(isValidLogin);
+
+                return isValidLogin;
+            }
+        };
+        return validLoginTask;
+    }
+
+    public SystemUser isLoginRemembered() {
+        return systemUserManager.isLoginRemembered();
+    }
+
+    public void deleteRememberedLogin() {
+        systemUserManager.deleteRememberedLogin();
+    }
+
+    public ObservableValue<SystemUser> getLoggedInSystemUser() {
+        return loggedInSystemUser;
+    }
+
+    public ObservableList<SystemUser> getAllUsers() {
+        return filteredUserList;
     }
 
     public ObservableList<SystemRole> getAllRoles(){

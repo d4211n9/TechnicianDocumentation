@@ -12,6 +12,31 @@ public class AutoCompleteBox implements EventHandler{
     final private ObservableList data;
     private Integer sid;
 
+    private void moveCaret(int textLength) {
+        this.comboBox.getEditor().positionCaret(textLength);
+    }
+
+    @Override
+    public void handle(Event event) {
+        setItems();
+    }
+
+    private void setItems() {
+        ObservableList list = FXCollections.observableArrayList();
+
+        for (Object datum : this.data) {
+            String s = this.comboBox.getEditor().getText().toLowerCase();
+            if (datum.toString().toLowerCase().contains(s.toLowerCase())) {
+                list.add(datum.toString());
+            }
+        }
+
+        if(list.isEmpty()) this.comboBox.hide();
+
+        this.comboBox.setItems(list);
+        this.comboBox.show();
+    }
+
     public AutoCompleteBox(final ComboBox comboBox) {
         this.comboBox = comboBox;
         this.data = comboBox.getItems();
@@ -55,30 +80,4 @@ public class AutoCompleteBox implements EventHandler{
         if(this.sid!=null)
             this.comboBox.getSelectionModel().select(this.sid);
     }
-
-    @Override
-    public void handle(Event event) {
-        setItems();
-    }
-
-    private void setItems() {
-        ObservableList list = FXCollections.observableArrayList();
-
-        for (Object datum : this.data) {
-            String s = this.comboBox.getEditor().getText().toLowerCase();
-            if (datum.toString().toLowerCase().contains(s.toLowerCase())) {
-                list.add(datum.toString());
-            }
-        }
-
-        if(list.isEmpty()) this.comboBox.hide();
-
-        this.comboBox.setItems(list);
-        this.comboBox.show();
-    }
-
-    private void moveCaret(int textLength) {
-        this.comboBox.getEditor().positionCaret(textLength);
-    }
-
 }

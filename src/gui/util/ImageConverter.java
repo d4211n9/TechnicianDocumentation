@@ -7,10 +7,8 @@ import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-
-import java.io.*;
-
-
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class ImageConverter {
 
@@ -31,11 +29,3 @@ public class ImageConverter {
         return new ImageView(wr).getImage();
     }
 }
-
-
-
-
-
-
-
-

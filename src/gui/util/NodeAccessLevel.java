@@ -2,7 +2,6 @@ package gui.util;
 
 import be.Enum.SystemRole;
 import javafx.scene.Node;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
