@@ -178,7 +178,7 @@ public class DrawingController extends BaseController implements Initializable {
         Tooltip.install(deviceImg, imgName);
         device.setId(getIndex());
 
-        problem(deviceImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), device, deviceImg);
+        makeDraggable(deviceImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), device, deviceImg);
 
         pane.getChildren().add(deviceImg);
     }
@@ -211,7 +211,7 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
 
-    private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {//todo maybe it could be moved to Device Controller
+    private void addDeviceCardListener(FXMLLoader loader, DeviceType deviceType) {
         Node deviceElement = loader.getRoot();
 
         deviceElement.setOnMousePressed(event -> {
@@ -242,12 +242,12 @@ public class DrawingController extends BaseController implements Initializable {
 
             pane.getChildren().add(selectedElementImg);
             try {
-                problem(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, deviceElement);
+                makeDraggable(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, deviceElement);
 
                 devicesOnDrawing.add(d);
                 getModelsHandler().getDrawingModel().addDeviceToInstallation(d, installation.getID());
 
-                problem(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, selectedElementImg);
+                makeDraggable(selectedElementImg, contentArea, pane, getModelsHandler().getDrawingModel().getDataFormat(), d, selectedElementImg);
             } catch (Exception e) {
                 displayError(e);
             }
@@ -327,23 +327,21 @@ public class DrawingController extends BaseController implements Initializable {
     }
 
 
-    public void problem(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
+    public void makeDraggable(Node node, ScrollPane scrollPane, Pane pane, DataFormat dataFormat, Device d, Node card) {
         card.setOnDragDetected(event -> {
             Dragboard db = node.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
-            content.put(dataFormat, d.getId()); // normally, ID of node
+            content.put(dataFormat, d.getId());
+            content.put(dataFormat, d.getId());
             db.setContent(content);
             event.consume();
         });
 
-
         pane.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             if(db.hasContent(dataFormat) && db.getContent(dataFormat) instanceof Integer){
-                int index = (Integer) db.getContent(dataFormat);
                 Node node1 = (Node) selectedDevice.getImgView();
                 node1.setManaged(false);
-                // this is the problematic part
                 node1.setTranslateX(event.getX() - node1.getLayoutX() - (node1.getBoundsInParent().getHeight() / 2));
                 node1.setTranslateY(event.getY() - node1.getLayoutY() - (node1.getBoundsInParent().getWidth() / 2));
                 selectedDevice.getDevice().setPosX(node1.getTranslateX());

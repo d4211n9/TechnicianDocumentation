@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<HBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.WireCardController">
+<HBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0" spacing="15.0" style="-fx-background-color: #a4a4a4; -fx-background-radius: 50;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.drawing.WireCardController">
    <children>
       <Label fx:id="color" prefHeight="23.0" prefWidth="25.0" />
-      <Label fx:id="name" layoutX="72.0" layoutY="19.0" prefHeight="23.0" prefWidth="88.0">
+      <Label fx:id="name" layoutX="72.0" layoutY="19.0" prefHeight="23.0" prefWidth="88.0" style="-fx-text-fill: Black;">
          <font>
             <Font size="14.0" />
          </font></Label>

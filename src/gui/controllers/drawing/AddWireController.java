@@ -5,6 +5,7 @@ import gui.controllers.BaseController;
 import gui.util.TaskExecutor;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,8 +14,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class AddWireController extends BaseController {
+
+public class AddWireController extends BaseController implements Initializable {
 
     public VBox wireColorDisplay;
     public ColorPicker colorPicker;
@@ -59,5 +63,10 @@ public class AddWireController extends BaseController {
     public void handleColorPicker(ActionEvent actionEvent) {
         Color chosenColor = colorPicker.getValue();
         selectedColorView.setBackground(Background.fill(chosenColor));
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        selectedColorView.setBackground(Background.fill(Color.WHITE));
     }
 }
